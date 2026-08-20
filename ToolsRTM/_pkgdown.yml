@@ -13,3 +13,14 @@ navbar:
     scopeinr:
       text: "SCOPEinR"
       href: ../scopeinr/index.html
+
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - ToolsRTM
+  - Getting-LUTs
+  - course-pipeline
+  - InversionOpt
+  - model-comparison-and-sensitivity
+  - marmit-soil-in-canopy
