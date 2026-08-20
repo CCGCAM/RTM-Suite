@@ -115,6 +115,12 @@ footer { background: #08202e; color: #b9cbd6; padding: 34px 24px; font-size: 12.
 .code-figure { background: #fff; padding: 14px 20px 18px; border-top: 1px solid var(--border-soft); }
 .code-figure img { width: 100%; max-width: 480px; border-radius: 10px; display: block; margin: 0 auto; }
 .code-figure-caption { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 8px; }
+
+/* App screenshots */
+.shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; margin-top: 28px; }
+.shot-card { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-lg); padding: 12px; box-shadow: var(--card-shadow); }
+.shot-card img { width: 100%; border-radius: 10px; display: block; border: 1px solid var(--border-soft); }
+.shot-caption { font-size: 12.5px; color: var(--text-muted); text-align: center; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -344,6 +350,21 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
         <div class="card-links">
           <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/STAC" target="_blank"><img src="https://img.shields.io/badge/GitHub-Apps%2FSTAC-181717?logo=github&logoColor=white" alt="Apps/STAC on GitHub"></a>
         </div>
+      </div>
+    </div>
+
+    <div class="shot-grid">
+      <div class="shot-card">
+        <img src="assets/shiny_app1.png" alt="Apps/RTMs Model Explorer tab: fourSAIL + PROSPECT-D canopy reflectance simulated live from slider inputs">
+        <div class="shot-caption">Model Explorer — pick any of 3 canopy models × 5 leaf models, see the reflectance spectrum update live.</div>
+      </div>
+      <div class="shot-card">
+        <img src="assets/shiny_app_satellite.png" alt="Apps/RTMs PROSAIL-WithSatellite tab: native 1nm spectrum vs. Sentinel-2A band reflectance, with FWHM shown">
+        <div class="shot-caption">PROSAIL-WithSatellite — resample the same simulation onto a real sensor's bands.</div>
+      </div>
+      <div class="shot-card">
+        <img src="assets/shiny_app_sens.png" alt="Apps/RTMs Sensitivity tab: canopy and fluorescence-added leaf reflectance sensitivity to Cab, color-coded">
+        <div class="shot-caption">Sensitivity — sweep any trait and watch the whole spectrum (and SIF) respond.</div>
       </div>
     </div>
   </div>

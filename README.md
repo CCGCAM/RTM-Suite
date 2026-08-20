@@ -338,11 +338,27 @@ Two point-and-click Shiny apps, no code required:
 
 <p align="center">
 
-<img src="assets/app_rtms_sensitivity.png" alt="A sensitivity sweep figure produced by the app&apos;s Model Explorer tab" width="80%"/>
+<img src="assets/shiny_app1.png" alt="Apps/RTMs Model Explorer tab: fourSAIL + PROSPECT-D canopy reflectance simulated live from slider inputs" width="90%"/>
 
 </p>
 
-***Figure 5.** One of the figures `Apps/RTMs` itself produces (Model Explorer → Sensitivity), not a full UI screenshot — this environment can't capture a live browser screenshot of the running app.*
+***Figure 5.** `Apps/RTMs` — Model Explorer tab: pick any of 3 canopy models × 5 leaf models, see the reflectance spectrum update live.*
+
+<p align="center">
+
+<img src="assets/shiny_app_satellite.png" alt="Apps/RTMs PROSAIL-WithSatellite tab: native 1nm spectrum vs. Sentinel-2A band reflectance, with FWHM shown" width="90%"/>
+
+</p>
+
+***Figure 6.** `Apps/RTMs` — PROSAIL-WithSatellite tab: resample the same simulation onto a real sensor's bands (Sentinel-2A shown, grey bands = FWHM).*
+
+<p align="center">
+
+<img src="assets/shiny_app_sens.png" alt="Apps/RTMs Sensitivity tab: canopy and fluorescence-added leaf reflectance sensitivity to Cab, color-coded" width="90%"/>
+
+</p>
+
+***Figure 7.** `Apps/RTMs` — Sensitivity tab: sweep any trait (Cab shown) and watch the whole spectrum, including SIF, respond.*
 
 **Run either from an R console:**
 
