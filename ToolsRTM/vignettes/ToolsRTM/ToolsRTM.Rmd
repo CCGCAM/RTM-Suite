@@ -26,8 +26,6 @@ text-align: justify}
 </style>
 ```
 ```{r, echo = FALSE, message = FALSE}
-# Install and load ggplot2 quietly
-if (!require(ggplot2)) install.packages("ggplot2")
 library(ggplot2)
 # Load necessary libraries
 library(knitr)

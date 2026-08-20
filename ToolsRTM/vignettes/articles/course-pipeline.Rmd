@@ -1,8 +1,8 @@
 ---
-title: "Course pipeline: simulate, convolve, and invert"
+title: "Full pipeline: simulate, convolve, invert"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Course pipeline: simulate, convolve, and invert}
+  %\VignetteIndexEntry{Full pipeline: simulate, convolve, invert}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
