@@ -1,7 +1,11 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>/404.html</loc></url>
+<url><loc>/articles/getting-luts-scope.html</loc></url>
 <url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/inversion-scope.html</loc></url>
 <url><loc>/articles/scope-pipeline.html</loc></url>
+<url><loc>/articles/SCOPEinR.html</loc></url>
+<url><loc>/articles/sensitivity-scope.html</loc></url>
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/reference/aggreg.html</loc></url>
@@ -93,5 +97,6 @@
 <url><loc>/reference/Soil_Inertia1.html</loc></url>
 <url><loc>/reference/soil_respiration.html</loc></url>
 <url><loc>/reference/tav.html</loc></url>
+<url><loc>/THIRD_PARTY_LICENSES.html</loc></url>
 </urlset>
 

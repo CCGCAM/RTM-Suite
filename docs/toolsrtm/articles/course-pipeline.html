@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Course pipeline: simulate, convolve, and invert • ToolsRTM</title>
+<title>Full pipeline: simulate, convolve, invert • ToolsRTM</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Course pipeline: simulate, convolve, and invert">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Full pipeline: simulate, convolve, invert">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,12 +33,12 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/course-pipeline.html">Course pipeline: simulate, convolve, and invert</a></li>
+<li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
     <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
-    <li><a class="dropdown-item" href="../articles/InversionOpt.html">Introduction to InversionOpt</a></li>
+    <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
+    <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
     <li><a class="dropdown-item" href="../articles/model-comparison-and-sensitivity.html">Model comparison and sensitivity analysis</a></li>
-    <li><a class="dropdown-item" href="../articles/SCOPEinR/SCOPEinR.html">The SCOPEinR package</a></li>
-    <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/marmit-soil-in-canopy.html">MARMIT + PROSAIL: realistic soil moisture in canopy simulations</a></li>
   </ul>
 </li>
       </ul>
@@ -61,7 +61,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Course pipeline: simulate, convolve, and invert</h1>
+      <h1>Full pipeline: simulate, convolve, invert</h1>
             
       
 
@@ -283,6 +283,16 @@ physical knobs are <code>L</code> (surface water film thickness, cm) and
 <code>eps</code> (fraction of the surface that’s wet); the single target
 trait is <code>SMC</code> (gravimetric soil moisture %, MARMIT’s own
 physical output via <code><a href="../reference/sigmoid.soil.html">sigmoid.soil()</a></code>).</p>
+<p>This pipeline runs on the bundled <code>Bablet_2016</code> soil
+database. All 8 official MARMIT databases (Bablet 2016, Dupiau 2020,
+Humper 2015, Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot
+2014 – see the <a href="https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit" class="external-link">MARMIT
+GitLab</a>) are available directly from this monorepo’s own
+<code>databases/</code> folder (repo root) – pass
+<code>db_root = "databases"</code> and
+<code>database = "&lt;name&gt;"</code> to
+<code><a href="../reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code> to use any of them, no download
+needed.</p>
 <p><img src="figures/course-pipeline/marmit_reflectance_bySMC.png" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>Textbook-correct: reflectance darkens monotonically with increasing
 soil moisture, with deepening water-absorption dips (~1450nm/1950nm) for

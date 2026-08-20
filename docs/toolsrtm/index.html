@@ -35,12 +35,12 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/course-pipeline.html">Course pipeline: simulate, convolve, and invert</a></li>
+<li><a class="dropdown-item" href="articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
     <li><a class="dropdown-item" href="articles/Getting-LUTs.html">Getting-LUTs</a></li>
-    <li><a class="dropdown-item" href="articles/InversionOpt.html">Introduction to InversionOpt</a></li>
+    <li><a class="dropdown-item" href="articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
+    <li><a class="dropdown-item" href="articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
     <li><a class="dropdown-item" href="articles/model-comparison-and-sensitivity.html">Model comparison and sensitivity analysis</a></li>
-    <li><a class="dropdown-item" href="articles/SCOPEinR/SCOPEinR.html">The SCOPEinR package</a></li>
-    <li><a class="dropdown-item" href="articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="articles/marmit-soil-in-canopy.html">MARMIT + PROSAIL: realistic soil moisture in canopy simulations</a></li>
   </ul>
 </li>
       </ul>
@@ -60,65 +60,136 @@
   <main id="main" class="col-md-9"><div class="section level3">
 <h3 id="toolsrtm-package">ToolsRTM package<a class="anchor" aria-label="anchor" href="#toolsrtm-package"></a>
 </h3>
+<p><a href="https://www.r-project.org/" class="external-link"><img src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&amp;logoColor=white" alt="R &gt;= 4.3"></a> <a href="https://gitlab.com/caminoccg/toolsrtm" class="external-link"><img src="https://img.shields.io/badge/GitLab-ToolsRTM-FC6D26?logo=gitlab&amp;logoColor=white" alt="ToolsRTM on GitLab"></a> <a href="https://github.com/CCGCAM/RTM-Suite" class="external-link"><img src="https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&amp;logoColor=white" alt="RTM–Suite on GitHub"></a> <a href="https://github.com/CCGCAM/ToolsRTMinPython" class="external-link"><img src="https://img.shields.io/badge/GitHub-toolsrtm%20(Python)-181717?logo=github&amp;logoColor=white" alt="toolsrtm (Python port) on GitHub"></a></p>
 <p>The <strong>ToolsRTM</strong> package provides a comprehensive suite of tools for simulating canopy reflectance using various radiative transfer (RT) models at multiple satellite resolutions. Currently in the testing phase, this package is designed to facilitate detailed simulations, enabling versatile and accurate analyses of canopy reflectance characteristics.</p>
 <p>For canopy-level simulations, the package features models such as <strong>INFORM</strong>, <strong>fourSAIL</strong>, and <strong>fourSAIL2</strong>. When it comes to leaf-level simulations, it includes the <strong>PROSPECT</strong> model (with D and PRO variants), <strong>Liberty</strong>, and <strong>FLUSPECT</strong> (B-Cx). These models empower users to conduct sophisticated simulations that capture the intricate dynamics of reflectance behavior in both leaf and canopy contexts.</p>
 <p>Additionally, the <strong>SPART</strong> model (Soil-Plant-Atmosphere Radiative Transfer model) is tailored for satellite measurements in the solar spectrum. It integrates three computationally efficient RT models: the <strong>BSM</strong> model for soil, <strong>PROSAIL</strong> for vegetation canopies, and <strong>SMAC</strong> for the atmosphere. These components are interconnected using the four-stream theory and the adding method, allowing SPART to simulate directional top-of-atmosphere (TOA) spectral observations. This approach accounts for significant effects, such as sun-observer geometries and the non-Lambertian reflectance of the land surface.</p>
-<p>This package specifically simulates the <strong>MARMIT</strong> (Multilayer rAdiative tRansfer Model of soIl reflecTance), a radiative transfer model that predicts the spectral reflectance of bare soil across the solar domain, from 400 nm to 2500 nm with a 1 nm resolution, based on its surface water content. To run the MARMIT model, use the <code>get.marmit1</code> and <code>get.marmit2</code> functions.</p>
-<p>The necessary datasets for running these models can be downloaded from the corresponding databases. Each of the eight database directories (Bablet-2016, Dupiau-2020, Humper-2015, Lesaignoux-2008, Liu-2002, Lobell-2002, Marcq-2012, and Philpot-2014) contains essential data for model validation and simulations.</p>
+<p>This package specifically simulates the <strong>MARMIT</strong> (Multilayer rAdiative tRansfer Model of soIl reflecTance), a radiative transfer model that predicts the spectral reflectance of bare soil across the solar domain, from 400 nm to 2500 nm with a 1 nm resolution, based on its surface water content. The high-level <code><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code> wrapper (built on <code>get.marmit1</code>/<code>get.marmit2</code>) loads a soil’s dry reference spectrum and runs MARMIT directly.</p>
+<p>Only the <strong>Bablet 2016</strong> soil database ships with the package, to keep install size small. The other 7 MARMIT databases (Dupiau 2020, Humper 2015, Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014) live in this monorepo’s own <a href="../databases/"><code>databases/</code></a> folder (repo root, ~200MB total). Point <code><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code> at it directly with <code>db_root</code>, no copying required:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu"><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil</a></span><span class="op">(</span>database <span class="op">=</span> <span class="st">"Liu_2002"</span>, id <span class="op">=</span> <span class="fl">1</span>, db_root <span class="op">=</span> <span class="st">"databases"</span><span class="op">)</span></span></code></pre></div>
+<p>(run from the repo root, or pass an absolute path to <code>databases/</code>).</p>
 <p>For more information, please visit: MARMIT <a href="https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit" class="external-link">GitLab</a></p>
 <p><img src="reference/figures/rtm_sims.png"></p>
 <p><strong>Fig. 1.</strong> Simulations performed with ToolsRTM Package for several radiative transfer models .</p>
+<p><strong>ToolsRTM</strong> is one library within <a href="https://ccgcam.github.io/RTM-Suite/" class="external-link"><strong>RTM-Suite</strong></a>, which links both the R packages (<code>ToolsRTM</code>, <code>SCOPEinR</code>) and their Python ports (<code>toolsrtm</code>, <code>scopeinpython</code>) behind one common site — with reference manuals, worked tutorials, and runnable example pipelines for both languages side by side.</p>
+<div class="float">
+<img src="reference/figures/Website_rtm-suite.png" alt="RTM-Suite website"><div class="figcaption">RTM-Suite website</div>
+</div>
+<p><strong>Fig. 2.</strong> The <a href="https://ccgcam.github.io/RTM-Suite/" class="external-link">RTM-Suite website</a> — see <strong>Documentation</strong> for R/Python reference manuals, <strong>Tutorials</strong> for step-by-step walkthroughs (R and Python side by side), and <strong>Examples</strong> for copy-paste runnable code with real generated figures.</p>
 </div>
 <div class="section level3">
-<h3 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
-<p>The ToolsRTM package offers utilities for radiative transfer workflows, including spectral resampling, band simulation, and visualization. Install the ToolsRTM package, please follow these steps in R session:</p>
-<pre><code><span><span class="co">## Install additional SCOPEinR package.</span></span>
-<span><span class="co"># Only install if not available</span></span>
+<p>ToolsRTM requires R 4.3 or newer. Install the development version directly from GitLab:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ToolsRTM"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>  <span class="co"># just in case remotes isn't there</span></span>
 <span>  <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"caminoccg/toolsrtm"</span>, upgrade <span class="op">=</span> <span class="st">"never"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre>
-<p>Alternatively, install the ToolsRTM package from a downloaded <strong>.tar.gz</strong> file:</p>
-<pre><code><span><span class="co"># install ToolsRTM</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'pathWithFile/toolsrtm-main.tar.gz'</span>,repos <span class="op">=</span> <span class="cn">NULL</span>,type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span></code></pre>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Alternatively, install a downloaded source archive:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span></span>
+<span>  <span class="st">"path/to/toolsrtm-main.tar.gz"</span>,</span>
+<span>  repos <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"source"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Check the installed version:</p>
-<pre><code><span><span class="co"># Check the version of ToolsRTM</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"ToolsRTM"</span><span class="op">)</span></span></code></pre>
-<p>Note: The last version is 0.62.5</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"ToolsRTM"</span><span class="op">)</span></span></code></pre></div>
+<p>The version described by this README is 0.62.5.</p>
 </div>
 <div class="section level3">
-<h3 id="installing-the-scopeinr-package">Installing the SCOPEinR Package<a class="anchor" aria-label="anchor" href="#installing-the-scopeinr-package"></a>
+<h3 id="quick-example">Quick example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
 </h3>
-<p>The <strong>SCOPEinR</strong> package is required for running the Soil Canopy Observation, Photochemistry and Energy fluxes (SCOPE) model, which simulates soil, canopy observation, photochemistry, and energy fluxes (SCOPE, Van der Tol et al., 2009; Yang et al., 2020).</p>
-<p>This R package enables to run the SCOPE model developed in MATLAB by Van der Tol at al. (2009), Yang et al. (2020)</p>
-<pre><code><span><span class="co">## Install additional SCOPEinR package using remote.</span></span>
+<p>The following example creates a small lookup table and runs PROSPECT-PRO coupled to fourSAIL. Both <code><a href="reference/getLUT.html">getLUT()</a></code> and <code><a href="reference/simulate_RTM.html">simulate_RTM()</a></code> are exported by the current package.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">inputs</span> <span class="op">&lt;-</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va">inputsPROSAIL</span></span>
+<span><span class="va">lut</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span></span>
+<span>  <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu"><a href="reference/getLUT.html">getLUT</a></span><span class="op">(</span>inputs <span class="op">=</span> <span class="va">inputs</span>, nLUT <span class="op">=</span> <span class="fl">30</span>, setseed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">rsoil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">2101</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">simulation</span> <span class="op">&lt;-</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu"><a href="reference/simulate_RTM.html">simulate_RTM</a></span><span class="op">(</span></span>
+<span>  inputLUT <span class="op">=</span> <span class="va">lut</span><span class="op">[</span><span class="fl">1</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,</span>
+<span>  rsoil <span class="op">=</span> <span class="va">rsoil</span>,</span>
+<span>  leaf.model <span class="op">=</span> <span class="st">"PROSPECT-PRO"</span>,</span>
+<span>  canopy.model <span class="op">=</span> <span class="st">"fourSAIL"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="scopeinr">SCOPEinR<a class="anchor" aria-label="anchor" href="#scopeinr"></a>
+</h3>
+<p>Install <a href="https://gitlab.com/caminoccg/scopeinr" class="external-link">SCOPEinR</a> when the workflow requires the SCOPE model. ToolsRTM is installed first because SCOPEinR imports it.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"caminoccg/toolsrtm"</span>, upgrade <span class="op">=</span> <span class="st">"never"</span><span class="op">)</span></span>
-<span><span class="co"># Alternative</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'pathWithFile/scopeinr-main.tar.gz'</span>,repos <span class="op">=</span> <span class="cn">NULL</span>,type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"caminoccg/scopeinr"</span>, upgrade <span class="op">=</span> <span class="st">"never"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"SCOPEinR"</span><span class="op">)</span></span></code></pre></div>
+<p>For an offline installation, replace the second <code>install_gitlab()</code> call with:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span></span>
+<span>  <span class="st">"path/to/scopeinr-main.tar.gz"</span>,</span>
+<span>  repos <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"source"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="manuals">Manuals<a class="anchor" aria-label="anchor" href="#manuals"></a>
+<h3 id="manuals-and-rtm-suite-resources">Manuals and RTM-Suite resources<a class="anchor" aria-label="anchor" href="#manuals-and-rtm-suite-resources"></a>
 </h3>
-<p>The manuals are accessible through the <a href="https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/" class="external-link">Shiny app</a> or directly within the <a href="https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/_w_ef4421a7/Notebooks/R/ToolsRTM/ToolsRTM.html" class="external-link">ToolsRTM</a> and <a href="https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/_w_ef4421a7/Notebooks/R/SCOPEinR/SCOPEinR.html" class="external-link">SCOPEinR</a> packages. See also the <strong>Articles</strong> on the <a href="articles/index.html">pkgdown site</a> — “Course pipeline: simulate, convolve, and invert” and “Model comparison and sensitivity analysis” — narrative walkthroughs with real figures.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Resource</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="../docs/index.html">RTM-Suite documentation</a></td>
+<td>Entry point for the complete R suite</td>
+</tr>
+<tr>
+<td><a href="../docs/toolsrtm/index.html">ToolsRTM reference</a></td>
+<td>Function reference and package articles</td>
+</tr>
+<tr>
+<td><a href="../docs/toolsrtm/articles/course-pipeline.html">Course pipeline</a></td>
+<td>Simulation, spectral convolution and inversion</td>
+</tr>
+<tr>
+<td><a href="../docs/toolsrtm/articles/model-comparison-and-sensitivity.html">Model comparison and sensitivity</a></td>
+<td>Comparison and sensitivity workflows</td>
+</tr>
+<tr>
+<td><a href="../docs/scopeinr/index.html">SCOPEinR reference</a></td>
+<td>SCOPE model documentation</td>
+</tr>
+<tr>
+<td><a href="../Tutorials/">Tutorials</a></td>
+<td>Reproducible R tutorials included in RTM-Suite</td>
+</tr>
+<tr>
+<td><a href="../Scripts/R/Pipeline/">Pipeline scripts</a></td>
+<td>Adaptable simulate-to-invert workflows</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="runnable-pipeline-scripts">Runnable pipeline scripts<a class="anchor" aria-label="anchor" href="#runnable-pipeline-scripts"></a>
+<h3 id="interactive-application">Interactive application<a class="anchor" aria-label="anchor" href="#interactive-application"></a>
 </h3>
-<p>Prefer scripts over a Shiny app? <a href="https://gitlab.com/caminoccg/toolsrtm/-/tree/main/Scripts/Pipeline" class="external-link"><code>Scripts/Pipeline/</code></a> in the suite repo has a ready-to-adapt simulate → convolve (Sentinel-2A/2B or PRISMA) → compute indices → invert (12 ML algorithms or CNN/deep learning) workflow, covering all three canopy models (fourSAIL, foursail2, INFORM) via a single <code>canopy.model</code> setting.</p>
-</div>
-<div class="section level3">
-<h3 id="shiny-application">Shiny application<a class="anchor" aria-label="anchor" href="#shiny-application"></a>
-</h3>
-<p>This package includes a Shiny app designed for running simulations using various functions available in <code>get.simulator</code>. The app provides an intuitive interface for configuring parameters and visualizing simulation results, making it easy to explore different model setups and their outcomes. Users can seamlessly interact with radiative transfer models, such as PROSPECT, SAIL, and MARMIT, without needing to write complex scripts.</p>
-<p>The manuals for the models and simulations can be accessed directly from the Shiny app or through the ToolsRTM and SCOPEinR packages, and the pkgdown site’s Articles (see Manuals above).</p>
-<p>Here’s some examples of how the Shiny app integrates with the <code>get.simulator</code> function:</p>
-<pre><code><span><span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu">get.simulator</span><span class="op">(</span>app<span class="op">=</span><span class="st">'SCOPE'</span><span class="op">)</span></span>
-<span><span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu">get.simulator</span><span class="op">(</span>app<span class="op">=</span><span class="st">'PROSAIL-BRDF'</span><span class="op">)</span></span>
-<span><span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu">get.simulator</span><span class="op">(</span>app<span class="op">=</span><span class="st">'getLUT'</span><span class="op">)</span></span>
-<span><span class="op">?</span><span class="va">get.simulator</span> <span class="co"># to see more options</span></span></code></pre>
+<p>Use the <a href="https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/" class="external-link">online RT-Simulator</a> to configure models and inspect simulations interactively. Its source code is maintained separately in the <a href="https://gitlab.com/caminoccg/toolsrtm-simulator" class="external-link">RT-Simulator GitLab repository</a>; the Shiny application is not launched through the core ToolsRTM API.</p>
 <p><img src="reference/figures/shiny.png"></p>
-<p><strong>Fig. 2.</strong> Interactive reflectance simulator using PROSAIL model based on shiny app.</p>
+<p><strong>Fig. 3.</strong> Interactive reflectance simulator using PROSAIL model based on shiny app.</p>
 </div>
 <div class="section level3">
 <h3 id="citation-of-the-main-radiative-transfer-models">Citation of the main radiative transfer models<a class="anchor" aria-label="anchor" href="#citation-of-the-main-radiative-transfer-models"></a>
@@ -130,7 +201,7 @@
 <p>Féret J-B, Gitelson AA, Noble SD &amp; Jacquemoud S, 2017. PROSPECT-D: Towards modeling leaf optical properties through a complete lifecycle. Remote Sensing of Environment, 193, 204–215. <a href="https://doi.org/10.1016/j.rse.2017.03.004" class="external-link uri">https://doi.org/10.1016/j.rse.2017.03.004</a></p>
 <p>Féret, J.B., Berger, K., de Boissieu, F., Malenovský, Z., 2021. PROSPECT-PRO for estimating content of nitrogen-containing leaf proteins and other carbon-based constituents. Remote Sens. Environ. 252. <a href="https://doi.org/10.1016/j.rse.2020.112173" class="external-link uri">https://doi.org/10.1016/j.rse.2020.112173</a></p>
 <p>Jacquemoud S, Baret F, Hanocq J-F, 1992. Modeling spectral and bidirectional soil reflectance. Remote Sensing of Environment, 41, 123–132. <a href="https://doi.org/10.1016/0034-4257(92)90072-R" class="external-link uri">https://doi.org/10.1016/0034-4257(92)90072-R</a></p>
-<p>Jacquemoud, S., Baret, F., 1990. PROSPECT: a model of leaf optical properties spectra. Remote Sens. Environ. 34, 75–91. <a href="https://doi.org/10.1016/0034-4257" class="external-link uri">https://doi.org/10.1016/0034-4257</a> (90)90100-Z.</p>
+<p>Jacquemoud, S., Baret, F., 1990. PROSPECT: a model of leaf optical properties spectra. Remote Sens. Environ. 34, 75–91. <a href="https://doi.org/10.1016/0034-4257(90)90100-Z" class="external-link uri">https://doi.org/10.1016/0034-4257(90)90100-Z</a>.</p>
 <p>More info: <a href="http://teledetection.ipgp.fr/prosail/" class="external-link uri">http://teledetection.ipgp.fr/prosail/</a></p>
 </div>
 <div class="section level4">
@@ -185,8 +256,16 @@
 <div class="section level3">
 <h3 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h3>
-<p><img src="https://img.shields.io/badge/License-MIT-yellow.svg"></p>
-<p>The <strong>ToolsRTM</strong> package is licensed under the MIT License, allowing for free use, modification, and distribution. This package is available on GitLab, and we encourage contributions and collaborations from the community. For more details, please refer to the LICENSE file in the repository.</p>
+<p><a href="#id_0"><img src="https://img.shields.io/badge/RTM--Suite%20code-MIT-yellow.svg" alt="RTM-Suite code: MIT"></a> <a href="#id_0"><img src="https://img.shields.io/badge/Ported%20GPL%20models-GPL--3.0-blue.svg" alt="Ported GPL models: GPL--3.0"></a> <a href="#id_0"><img src="https://img.shields.io/badge/Per--model%20licenses-THIRD__PARTY__LICENSES.md-informational.svg" alt="Model licenses"></a></p>
+<p><strong>ToolsRTM</strong> is a port of several radiative transfer models bundled behind one common R interface, and not all of them carry the same license. Three of the bundled models – <strong>Fluspect-B</strong>, <strong>fourSAIL2</strong>, and <strong>SPART</strong> – are ports of GPL-3.0-licensed original models, and GPL-3.0 requires any combined work incorporating GPL-3.0 code to be distributed as GPL-3.0 as a whole. <code>ToolsRTM</code> is therefore distributed under <strong>GPL-3.0</strong> (<code>License: GPL-3</code> in <code>DESCRIPTION</code>), matching its Python port <code>toolsrtm</code>’s own license.</p>
+<p>Within that GPL-3.0 distribution, two kinds of code coexist:</p>
+<ul>
+<li>
+<strong>The ported radiative transfer models themselves</strong> (leaf and canopy functions listed in <a href="THIRD_PARTY_LICENSES.html"><code>THIRD_PARTY_LICENSES.md</code></a>) – GPL-3.0 for the three GPL-derived ports above, and independently MIT-licensable for the rest (e.g. PROSPECT-D/-PRO).</li>
+<li>
+<strong>Original utilities developed in this package</strong>– LUT generation (<code>getLUT</code>, <code>getLUTs</code>, <code>getLUT_liberty</code>), spectral indices (<code>getIndices</code>, <code>getIndices_SE2*</code>, <code>getSpectraIndices</code>), sensor convolution wrappers (<code>Spectral.convolution</code>, <code>get.spectral.convolution.*</code>, <code>get.smac</code>, <code>get.coef.SMAC</code>), sensitivity analysis (<code>get.sobol.indices</code>), and the trait-inversion tooling (<code>get.inversion</code>, <code>get.inversionOpt</code>, <code>hybrid_inversion</code>, <code>hybrid_inversionE</code>, <code>carspls</code>, <code>get.cars.pls</code>, <code>getVIF</code>) – are original, independent work and are <strong>MIT</strong> individually. Because GPL-3.0 requires the combined, distributed package to be GPL-3.0 as a whole, the package you install is still <code>License: GPL-3</code> end to end; the MIT notice above is about authorship/reuse of those specific original files on their own, not a separate installable subset.</li>
+</ul>
+<p>See <a href="THIRD_PARTY_LICENSES.html"><code>THIRD_PARTY_LICENSES.md</code></a> for the license and source-code provenance of every individual model this package implements. Always cite the original publication(s) of each model you use, in addition to citing RTM-Suite/ToolsRTM.</p>
 </div>
 
   </main><aside class="col-md-3"><div class="license">

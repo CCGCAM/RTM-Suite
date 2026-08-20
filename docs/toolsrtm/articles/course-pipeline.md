@@ -1,4 +1,4 @@
-# Course pipeline: simulate, convolve, and invert
+# Full pipeline: simulate, convolve, invert
 
 This article walks through the `Scripts/For*/` course pipeline shipped
 in the [0-RTM-Suite repo](https://gitlab.com/caminoccg) alongside this
@@ -230,6 +230,16 @@ are `L` (surface water film thickness, cm) and `eps` (fraction of the
 surface that’s wet); the single target trait is `SMC` (gravimetric soil
 moisture %, MARMIT’s own physical output via
 [`sigmoid.soil()`](../reference/sigmoid.soil.md)).
+
+This pipeline runs on the bundled `Bablet_2016` soil database. All 8
+official MARMIT databases (Bablet 2016, Dupiau 2020, Humper 2015,
+Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014 – see
+the [MARMIT
+GitLab](https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit))
+are available directly from this monorepo’s own `databases/` folder
+(repo root) – pass `db_root = "databases"` and `database = "<name>"` to
+[`get.marmit.rsoil()`](../reference/get.marmit.rsoil.md) to use any of
+them, no download needed.
 
 ![](figures/course-pipeline/marmit_reflectance_bySMC.png)
 

@@ -84,8 +84,10 @@ and that correlation is exactly what real SIF-Vcmax remote-sensing
 studies rely on as their proxy signal. Sampled at random here, there’s
 no such signal for *any* method, SIF or otherwise, to find. If you want
 a fair test of the SIF-Vcmax hypothesis, correlate `Vcmax25` with `Cab`
-first (the same `correlatedValue()` mechanism `ForPROSAIL` uses for
-`Car`~`Cab`) before re-running this comparison.
+first (the same
+[`correlatedValue()`](https://rdrr.io/pkg/ToolsRTM/man/correlatedValue.html)
+mechanism `ForPROSAIL` uses for `Car`~`Cab`) before re-running this
+comparison.
 
 ## 4. Energy balance convergence
 

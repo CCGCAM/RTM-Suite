@@ -1,5 +1,14 @@
 ### ToolsRTM package
 
+[![R \>=
+4.3](https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white)](https://www.r-project.org/)
+[![ToolsRTM on
+GitLab](https://img.shields.io/badge/GitLab-ToolsRTM-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/toolsrtm)
+[![RTM–Suite on
+GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite)
+[![toolsrtm (Python port) on
+GitHub](https://img.shields.io/badge/GitHub-toolsrtm%20(Python)-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/ToolsRTMinPython)
+
 The **ToolsRTM** package provides a comprehensive suite of tools for
 simulating canopy reflectance using various radiative transfer (RT)
 models at multiple satellite resolutions. Currently in the testing
@@ -28,14 +37,25 @@ This package specifically simulates the **MARMIT** (Multilayer rAdiative
 tRansfer Model of soIl reflecTance), a radiative transfer model that
 predicts the spectral reflectance of bare soil across the solar domain,
 from 400 nm to 2500 nm with a 1 nm resolution, based on its surface
-water content. To run the MARMIT model, use the `get.marmit1` and
-`get.marmit2` functions.
+water content. The high-level
+[`get.marmit.rsoil()`](reference/get.marmit.rsoil.md) wrapper (built on
+`get.marmit1`/`get.marmit2`) loads a soil’s dry reference spectrum and
+runs MARMIT directly.
 
-The necessary datasets for running these models can be downloaded from
-the corresponding databases. Each of the eight database directories
-(Bablet-2016, Dupiau-2020, Humper-2015, Lesaignoux-2008, Liu-2002,
-Lobell-2002, Marcq-2012, and Philpot-2014) contains essential data for
-model validation and simulations.
+Only the **Bablet 2016** soil database ships with the package, to keep
+install size small. The other 7 MARMIT databases (Dupiau 2020, Humper
+2015, Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014)
+live in this monorepo’s own [`databases/`](../databases/) folder (repo
+root, ~200MB total). Point
+[`get.marmit.rsoil()`](reference/get.marmit.rsoil.md) at it directly
+with `db_root`, no copying required:
+
+``` r
+
+soil <- ToolsRTM::get.marmit.rsoil(database = "Liu_2002", id = 1, db_root = "databases")
+```
+
+(run from the repo root, or pass an absolute path to `databases/`).
 
 For more information, please visit: MARMIT
 [GitLab](https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit)
@@ -45,94 +65,134 @@ For more information, please visit: MARMIT
 **Fig. 1.** Simulations performed with ToolsRTM Package for several
 radiative transfer models .
 
-### Getting started
+**ToolsRTM** is one library within
+[**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/), which links both
+the R packages (`ToolsRTM`, `SCOPEinR`) and their Python ports
+(`toolsrtm`, `scopeinpython`) behind one common site — with reference
+manuals, worked tutorials, and runnable example pipelines for both
+languages side by side.
 
-The ToolsRTM package offers utilities for radiative transfer workflows,
-including spectral resampling, band simulation, and visualization.
-Install the ToolsRTM package, please follow these steps in R session:
+![RTM-Suite website](reference/figures/Website_rtm-suite.png)
 
-    ## Install additional SCOPEinR package.
-    # Only install if not available
-    if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
-      install.packages("remotes")  # just in case remotes isn't there
-      remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
-    }
+RTM-Suite website
 
-Alternatively, install the ToolsRTM package from a downloaded
-**.tar.gz** file:
+**Fig. 2.** The [RTM-Suite website](https://ccgcam.github.io/RTM-Suite/)
+— see **Documentation** for R/Python reference manuals, **Tutorials**
+for step-by-step walkthroughs (R and Python side by side), and
+**Examples** for copy-paste runnable code with real generated figures.
 
-    # install ToolsRTM
-    install.packages('pathWithFile/toolsrtm-main.tar.gz',repos = NULL,type = "source")
+### Installation
+
+ToolsRTM requires R 4.3 or newer. Install the development version
+directly from GitLab:
+
+``` r
+
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
+}
+```
+
+Alternatively, install a downloaded source archive:
+
+``` r
+
+install.packages(
+  "path/to/toolsrtm-main.tar.gz",
+  repos = NULL,
+  type = "source"
+)
+```
 
 Check the installed version:
 
-    # Check the version of ToolsRTM
-    packageVersion("ToolsRTM")
+``` r
 
-Note: The last version is 0.62.5
+packageVersion("ToolsRTM")
+```
 
-### Installing the SCOPEinR Package
+The version described by this README is 0.62.5.
 
-The **SCOPEinR** package is required for running the Soil Canopy
-Observation, Photochemistry and Energy fluxes (SCOPE) model, which
-simulates soil, canopy observation, photochemistry, and energy fluxes
-(SCOPE, Van der Tol et al., 2009; Yang et al., 2020).
+### Quick example
 
-This R package enables to run the SCOPE model developed in MATLAB by Van
-der Tol at al. (2009), Yang et al. (2020)
+The following example creates a small lookup table and runs PROSPECT-PRO
+coupled to fourSAIL. Both [`getLUT()`](reference/getLUT.md) and
+[`simulate_RTM()`](reference/simulate_RTM.md) are exported by the
+current package.
 
-    ## Install additional SCOPEinR package using remote.
-    remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
-    # Alternative
-    install.packages('pathWithFile/scopeinr-main.tar.gz',repos = NULL,type = "source")
+``` r
 
-### Manuals
+inputs <- ToolsRTM::inputsPROSAIL
+lut <- as.data.frame(
+  ToolsRTM::getLUT(inputs = inputs, nLUT = 30, setseed = 1234)
+)
+rsoil <- rep(0.2, 2101)
 
-The manuals are accessible through the [Shiny
-app](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/) or
-directly within the
-[ToolsRTM](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/_w_ef4421a7/Notebooks/R/ToolsRTM/ToolsRTM.html)
-and
-[SCOPEinR](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/_w_ef4421a7/Notebooks/R/SCOPEinR/SCOPEinR.html)
-packages. See also the **Articles** on the [pkgdown
-site](../docs/toolsrtm/index.md) — “Course pipeline: simulate, convolve,
-and invert” and “Model comparison and sensitivity analysis” — narrative
-walkthroughs with real figures.
+simulation <- ToolsRTM::simulate_RTM(
+  inputLUT = lut[1, , drop = FALSE],
+  rsoil = rsoil,
+  leaf.model = "PROSPECT-PRO",
+  canopy.model = "fourSAIL"
+)
+```
 
-### Runnable pipeline scripts
+### SCOPEinR
 
-Prefer scripts over a Shiny app?
-[`Scripts/Pipeline/`](https://gitlab.com/caminoccg/toolsrtm/-/tree/main/Scripts/Pipeline)
-in the suite repo has a ready-to-adapt simulate → convolve
-(Sentinel-2A/2B or PRISMA) → compute indices → invert (12 ML algorithms
-or CNN/deep learning) workflow, covering all three canopy models
-(fourSAIL, foursail2, INFORM) via a single `canopy.model` setting.
+Install [SCOPEinR](https://gitlab.com/caminoccg/scopeinr) when the
+workflow requires the SCOPE model. ToolsRTM is installed first because
+SCOPEinR imports it.
 
-### Shiny application
+``` r
 
-This package includes a Shiny app designed for running simulations using
-various functions available in `get.simulator`. The app provides an
-intuitive interface for configuring parameters and visualizing
-simulation results, making it easy to explore different model setups and
-their outcomes. Users can seamlessly interact with radiative transfer
-models, such as PROSPECT, SAIL, and MARMIT, without needing to write
-complex scripts.
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
 
-The manuals for the models and simulations can be accessed directly from
-the Shiny app or through the ToolsRTM and SCOPEinR packages, and the
-pkgdown site’s Articles (see Manuals above).
+remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
+remotes::install_gitlab("caminoccg/scopeinr", upgrade = "never")
+packageVersion("SCOPEinR")
+```
 
-Here’s some examples of how the Shiny app integrates with the
-`get.simulator` function:
+For an offline installation, replace the second `install_gitlab()` call
+with:
 
-    ToolsRTM::get.simulator(app='SCOPE')
-    ToolsRTM::get.simulator(app='PROSAIL-BRDF')
-    ToolsRTM::get.simulator(app='getLUT')
-    ?get.simulator # to see more options
+``` r
+
+install.packages(
+  "path/to/scopeinr-main.tar.gz",
+  repos = NULL,
+  type = "source"
+)
+```
+
+### Manuals and RTM-Suite resources
+
+| Resource | Description |
+|----|----|
+| [RTM-Suite documentation](../docs/index.md) | Entry point for the complete R suite |
+| [ToolsRTM reference](../docs/toolsrtm/index.md) | Function reference and package articles |
+| [Course pipeline](../docs/toolsrtm/articles/course-pipeline.md) | Simulation, spectral convolution and inversion |
+| [Model comparison and sensitivity](../docs/toolsrtm/articles/model-comparison-and-sensitivity.md) | Comparison and sensitivity workflows |
+| [SCOPEinR reference](../docs/scopeinr/index.md) | SCOPE model documentation |
+| [Tutorials](../Tutorials/) | Reproducible R tutorials included in RTM-Suite |
+| [Pipeline scripts](../Scripts/R/Pipeline/) | Adaptable simulate-to-invert workflows |
+
+### Interactive application
+
+Use the [online
+RT-Simulator](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/)
+to configure models and inspect simulations interactively. Its source
+code is maintained separately in the [RT-Simulator GitLab
+repository](https://gitlab.com/caminoccg/toolsrtm-simulator); the Shiny
+application is not launched through the core ToolsRTM API.
 
 ![](reference/figures/shiny.png)
 
-**Fig. 2.** Interactive reflectance simulator using PROSAIL model based
+**Fig. 3.** Interactive reflectance simulator using PROSAIL model based
 on shiny app.
 
 ### Citation of the main radiative transfer models
@@ -158,7 +218,7 @@ bidirectional soil reflectance. Remote Sensing of Environment, 41,
 
 Jacquemoud, S., Baret, F., 1990. PROSPECT: a model of leaf optical
 properties spectra. Remote Sens. Environ. 34, 75–91.
-<https://doi.org/10.1016/0034-4257> (90)90100-Z.
+<https://doi.org/10.1016/0034-4257(90)90100-Z>.
 
 More info: <http://teledetection.ipgp.fr/prosail/>
 
@@ -276,10 +336,44 @@ Environment, 272:112951. <https://doi.org/10.1016/j.rse.2022.112951>.
 
 ### License
 
-![](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![RTM-Suite code:
+MIT](https://img.shields.io/badge/RTM--Suite%20code-MIT-yellow.svg)](#id_0)
+[![Ported GPL models:
+GPL--3.0](https://img.shields.io/badge/Ported%20GPL%20models-GPL--3.0-blue.svg)](#id_0)
+[![Model
+licenses](https://img.shields.io/badge/Per--model%20licenses-THIRD__PARTY__LICENSES.md-informational.svg)](#id_0)
 
-The **ToolsRTM** package is licensed under the MIT License, allowing for
-free use, modification, and distribution. This package is available on
-GitLab, and we encourage contributions and collaborations from the
-community. For more details, please refer to the LICENSE file in the
-repository.
+**ToolsRTM** is a port of several radiative transfer models bundled
+behind one common R interface, and not all of them carry the same
+license. Three of the bundled models – **Fluspect-B**, **fourSAIL2**,
+and **SPART** – are ports of GPL-3.0-licensed original models, and
+GPL-3.0 requires any combined work incorporating GPL-3.0 code to be
+distributed as GPL-3.0 as a whole. `ToolsRTM` is therefore distributed
+under **GPL-3.0** (`License: GPL-3` in `DESCRIPTION`), matching its
+Python port `toolsrtm`’s own license.
+
+Within that GPL-3.0 distribution, two kinds of code coexist:
+
+- **The ported radiative transfer models themselves** (leaf and canopy
+  functions listed in
+  [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)) – GPL-3.0 for
+  the three GPL-derived ports above, and independently MIT-licensable
+  for the rest (e.g. PROSPECT-D/-PRO).
+- **Original utilities developed in this package**– LUT generation
+  (`getLUT`, `getLUTs`, `getLUT_liberty`), spectral indices
+  (`getIndices`, `getIndices_SE2*`, `getSpectraIndices`), sensor
+  convolution wrappers (`Spectral.convolution`,
+  `get.spectral.convolution.*`, `get.smac`, `get.coef.SMAC`),
+  sensitivity analysis (`get.sobol.indices`), and the trait-inversion
+  tooling (`get.inversion`, `get.inversionOpt`, `hybrid_inversion`,
+  `hybrid_inversionE`, `carspls`, `get.cars.pls`, `getVIF`) – are
+  original, independent work and are **MIT** individually. Because
+  GPL-3.0 requires the combined, distributed package to be GPL-3.0 as a
+  whole, the package you install is still `License: GPL-3` end to end;
+  the MIT notice above is about authorship/reuse of those specific
+  original files on their own, not a separate installable subset.
+
+See [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) for the license
+and source-code provenance of every individual model this package
+implements. Always cite the original publication(s) of each model you
+use, in addition to citing RTM-Suite/ToolsRTM.

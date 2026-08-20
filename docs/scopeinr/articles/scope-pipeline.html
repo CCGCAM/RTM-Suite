@@ -33,7 +33,11 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/scope-pipeline.html">SCOPE course pipeline: energy balance, fluorescence, and trait inversion</a></li>
+<li><a class="dropdown-item" href="../articles/SCOPEinR.html">The SCOPEinR package</a></li>
+    <li><a class="dropdown-item" href="../articles/getting-luts-scope.html">Getting LUTs for SCOPE</a></li>
+    <li><a class="dropdown-item" href="../articles/scope-pipeline.html">SCOPE course pipeline: energy balance, fluorescence, and trait inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/sensitivity-scope.html">Sensitivity analysis for SCOPE</a></li>
+    <li><a class="dropdown-item" href="../articles/inversion-scope.html">Trait inversion from SCOPE reflectance</a></li>
   </ul>
 </li>
       </ul>
@@ -139,7 +143,7 @@ that correlation is exactly what real SIF-Vcmax remote-sensing studies
 rely on as their proxy signal. Sampled at random here, there’s no such
 signal for <em>any</em> method, SIF or otherwise, to find. If you want a
 fair test of the SIF-Vcmax hypothesis, correlate <code>Vcmax25</code>
-with <code>Cab</code> first (the same <code>correlatedValue()</code>
+with <code>Cab</code> first (the same <code><a href="https://rdrr.io/pkg/ToolsRTM/man/correlatedValue.html" class="external-link">correlatedValue()</a></code>
 mechanism <code>ForPROSAIL</code> uses for
 <code>Car</code>~<code>Cab</code>) before re-running this
 comparison.</p>
