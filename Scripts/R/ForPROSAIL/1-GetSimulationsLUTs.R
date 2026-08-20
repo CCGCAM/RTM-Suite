@@ -150,9 +150,10 @@ sim.canopy<-do.call(rbind,sims)
 data <- ToolsRTM::dataSpec_PDB
 wave<-data[,1]
 IDs<-c(1:nSamples)
-keep.simula <- mask_wavelengths(wave, c(300,470,841,2600))
+# keep only the 470-841nm VNIR range (excludes [300,470] and [841,2600])
+keep.simula <- !(wave >= 300 & wave <= 470) & !(wave >= 841 & wave <= 2600)
 #plot at 1 nm
-#plot_spectra(sim.canopy[, keep.simula, drop = FALSE], wave[keep.simula], xlim=c(440,850),ylim=c(0,0.6))
+#matplot(wave[keep.simula], t(sim.canopy[, keep.simula, drop = FALSE]), type = "l", lty = 1, xlim=c(440,850),ylim=c(0,0.6))
 
 ##############################################################################################################################
 # 4b.  Save the native-resolution simulated LUT + indices  ----
