@@ -86,8 +86,9 @@ section { padding: 64px 24px; scroll-margin-top: 70px; }
 .tut-row-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .tut-row .tut-name { font-weight: 600; color: var(--brand); font-size: 14px; }
 .tut-row .tut-desc { color: var(--text-muted); font-size: 13px; }
-.tut-row .tut-links a { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-light); font-weight: 600; margin-left: 14px; }
+.tut-row .tut-links a { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-light); font-weight: 600; margin-left: 14px; display: inline-flex; align-items: center; gap: 5px; }
 .tut-row .tut-links a:hover { text-decoration: underline; }
+.tut-badge { height: 15px; display: block; }
 .tut-shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 14px; }
 .tut-shot summary { list-style: none; cursor: pointer; color: var(--brand-light); font-size: 12.5px; font-weight: 600; padding: 4px 0; }
 .tut-shot summary::-webkit-details-marker { display: none; }
