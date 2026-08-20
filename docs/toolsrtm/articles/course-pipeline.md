@@ -1,6 +1,6 @@
 # Full pipeline: simulate, convolve, invert
 
-This article walks through the `Scripts/For*/` course pipeline shipped
+This article walks through the `Scripts/R/For*/` course pipeline shipped
 in the [0-RTM-Suite repo](https://gitlab.com/caminoccg) alongside this
 package: a consistent simulate → convolve → index → invert workflow, one
 folder per canopy model (`ForPROSAIL`, `ForFoursail2`, `ForINFORM`),
@@ -15,10 +15,11 @@ If you just want to run something, the fastest path is:
 
 ``` r
 
-devtools::load_all("ToolsRTM/R")   # or library(ToolsRTM) once installed
-source("Scripts/ForPROSAIL/3-simulate_LUT.R")   # ~10s, 100 simulations
-source("Scripts/ForPROSAIL/4-inversion_ML.R")   # a few minutes, 11 algorithms x 3 traits
-source("Scripts/ForPROSAIL/5-inversion_DL.R")   # a few minutes, needs Scripts/Pipeline/0-setup_python_env.R run once first
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) remotes::install_gitlab("caminoccg/toolsrtm")
+library(ToolsRTM)
+source("Scripts/R/ForPROSAIL/3-simulate_LUT.R")   # ~10s, 100 simulations
+source("Scripts/R/ForPROSAIL/4-inversion_ML.R")   # a few minutes, 11 algorithms x 3 traits
+source("Scripts/R/ForPROSAIL/5-inversion_DL.R")   # a few minutes, needs Scripts/R/Pipeline/0-setup_python_env.R run once first
 ```
 
 Everything below explains what each step actually does and why, using
@@ -101,9 +102,9 @@ not just the ensemble.
 PRISMA (green) is dense enough to nearly retrace the native curve;
 Sentinel-2A (blue) is 13 discrete bands. This is the same
 [`get.spectra.convolved()`](../reference/get.spectra.convolved.md) used
-throughout the suite – `Scripts/compare_RTM_models.R`,
-`Scripts/Pipeline/1-simulate_LUT.R`, and every `ForXXX` folder all call
-it the same way.
+throughout the suite – `Scripts/R/Comparison/compare_RTM_models.R`,
+`Scripts/R/Pipeline/1-simulate_LUT.R`, and every `ForXXX` folder all
+call it the same way.
 
 ## 2. Classic ML inversion
 
@@ -145,7 +146,7 @@ not a crash).
 `5-inversion_DL.R` is the same idea via
 [`getMLmodel()`](../reference/getMLmodel.md), training both
 `'Hidden-layers'` and `'CNN'` architectures per trait (TensorFlow/Keras
-backend – run `Scripts/Pipeline/0-setup_python_env.R` once first to
+backend – run `Scripts/R/Pipeline/0-setup_python_env.R` once first to
 provision the Python environment `reticulate` needs). One thing worth
 calling out because it cost real debugging time while building this:
 [`getMLmodel()`](../reference/getMLmodel.md) calls
@@ -170,7 +171,7 @@ library(keras)
 ## 4. Same pipeline, different canopy model
 
 `canopy.model` is a single variable at the top of `1-simulate_LUT.R` –
-there is no separate script per model in `Scripts/Pipeline/`, and the
+there is no separate script per model in `Scripts/R/Pipeline/`, and the
 per-folder `ForFoursail2`/`ForINFORM` scripts differ from `ForPROSAIL`’s
 only in that one line (plus `leaf.model`, since foursail2/INFORM
 additionally need a handful of crown/canopy-geometry LUT columns
@@ -256,8 +257,8 @@ canopy reflectance usually is.
 
 ## Where to go next
 
-- `Scripts/Pipeline/README.md` – the underlying generic simulate/invert
-  scripts these course folders are built on.
+- `Scripts/R/Pipeline/README.md` – the underlying generic
+  simulate/invert scripts these course folders are built on.
 - `vignettes/articles/model-comparison-and-sensitivity.html` – comparing
   models directly against each other, and which traits actually drive
   which wavelengths (Sobol/Johnson sensitivity indices).

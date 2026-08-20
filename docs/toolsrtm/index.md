@@ -183,12 +183,12 @@ install.packages(
 
 ### Interactive application
 
-Use the [online
-RT-Simulator](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/)
-to configure models and inspect simulations interactively. Its source
-code is maintained separately in the [RT-Simulator GitLab
-repository](https://gitlab.com/caminoccg/toolsrtm-simulator); the Shiny
-application is not launched through the core ToolsRTM API.
+Use
+[`Apps/RTMs`](https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs)
+(run locally via `shiny::runApp("Apps/RTMs")`) to configure models and
+inspect simulations interactively, no code required. Its source lives
+alongside the rest of RTM-Suite; the Shiny application is not launched
+through the core ToolsRTM API.
 
 ![](reference/figures/shiny.png)
 

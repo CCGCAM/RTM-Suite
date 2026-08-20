@@ -54,41 +54,37 @@ functions within the server.
     R environment, offering users the flexibility to harness its
     capabilities for in-depth analysis.
 
-The online RT-platform and R packages are available under GNU license.
-The online RT-simulator is currently accessible at
-<https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/>
+**ToolsRTM** and **SCOPEinR** are both part of
+[**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/), which also ships a
+point-and-click Shiny app (no code required) covering the same models –
+see
+[`Apps/RTMs`](https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs),
+runnable locally via `shiny::runApp("Apps/RTMs")`. Both R packages are
+distributed under GPL-3.0 (see each package’s own
+`LICENSE`/`THIRD_PARTY_LICENSES.md` for the per-model breakdown).
 
-The repositories for accessing the packages and platform are as follows:
+The repositories for accessing the R packages are as follows:
 
 - The **ToolsRTM** package: <https://gitlab.com/caminoccg/toolsrtm>
 
-- The **SCOPEinR** packages:
-  [https://gitlab.com/caminoccg/](https://gitlab.com/caminoccg/toolsrtm)[scopeinr](https://gitlab.com/caminoccg/scopeinr)
+- The **SCOPEinR** package: <https://gitlab.com/caminoccg/scopeinr>
 
-- The online **RT-platform**:
-  [https://gitlab.com/caminoccg/](https://gitlab.com/caminoccg/toolsrtm)[toolsrtm-simulator](https://gitlab.com/caminoccg/toolsrtm-simulator)
-
-***Note***: These modules are currently being tested before public
-release. For access, please contact us at caminoccg@gmail.com.
+- The monorepo (both packages, their Python ports, tutorials, and the
+  Shiny apps together): <https://github.com/CCGCAM/RTM-Suite>
 
 **Citation**: Camino et al. (2024): **DOI:**
 [10.1109/IGARSS53475.2024.10642442](https://doi.org/10.1109/IGARSS53475.2024.10642442)
 
 ## 2. ToolsRTM package
 
-### 2.1 Install using gitlab repository
+### 2.1 Install from GitLab
 
-To install the ToolsRTM package, please follow these steps within your R
-session:
+``` r
 
-1.  Download the ToolsRTM package as a `.tar.gz` file from the GitLab
-    repository.
-
-2.  After downloading, execute the following code:
-
-&nbsp;
-
-    install.packages('pathWithFile/toolsrtm-main.tar.gz',repos = NULL,type = "source")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) remotes::install_gitlab("caminoccg/toolsrtm")
+library(ToolsRTM)
+```
 
 ### 2.2 Understanding the spectral profiles
 

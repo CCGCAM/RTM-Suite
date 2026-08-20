@@ -70,7 +70,7 @@
 
     
     
-<p>This article walks through the <code>Scripts/For*/</code> course
+<p>This article walks through the <code>Scripts/R/For*/</code> course
 pipeline shipped in the <a href="https://gitlab.com/caminoccg" class="external-link">0-RTM-Suite repo</a> alongside this
 package: a consistent simulate → convolve → index → invert workflow, one
 folder per canopy model (<code>ForPROSAIL</code>,
@@ -83,10 +83,11 @@ code chunks are shown but not re-executed when this article is built
 copy-paste starting points against your own installed package.</p>
 <p>If you just want to run something, the fastest path is:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">"ToolsRTM/R"</span><span class="op">)</span>   <span class="co"># or library(ToolsRTM) once installed</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/ForPROSAIL/3-simulate_LUT.R"</span><span class="op">)</span>   <span class="co"># ~10s, 100 simulations</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/ForPROSAIL/4-inversion_ML.R"</span><span class="op">)</span>   <span class="co"># a few minutes, 11 algorithms x 3 traits</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/ForPROSAIL/5-inversion_DL.R"</span><span class="op">)</span>   <span class="co"># a few minutes, needs Scripts/Pipeline/0-setup_python_env.R run once first</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ToolsRTM"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"caminoccg/toolsrtm"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ToolsRTM</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/R/ForPROSAIL/3-simulate_LUT.R"</span><span class="op">)</span>   <span class="co"># ~10s, 100 simulations</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/R/ForPROSAIL/4-inversion_ML.R"</span><span class="op">)</span>   <span class="co"># a few minutes, 11 algorithms x 3 traits</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/R/ForPROSAIL/5-inversion_DL.R"</span><span class="op">)</span>   <span class="co"># a few minutes, needs Scripts/R/Pipeline/0-setup_python_env.R run once first</span></span></code></pre></div>
 <p>Everything below explains what each step actually does and why, using
 <code>ForPROSAIL</code> (fourSAIL canopy model) as the running example,
 then shows how the <em>same</em> pipeline looks for the other four
@@ -158,8 +159,8 @@ ensemble.</p>
 <p>PRISMA (green) is dense enough to nearly retrace the native curve;
 Sentinel-2A (blue) is 13 discrete bands. This is the same
 <code><a href="../reference/get.spectra.convolved.html">get.spectra.convolved()</a></code> used throughout the suite –
-<code>Scripts/compare_RTM_models.R</code>,
-<code>Scripts/Pipeline/1-simulate_LUT.R</code>, and every
+<code>Scripts/R/Comparison/compare_RTM_models.R</code>,
+<code>Scripts/R/Pipeline/1-simulate_LUT.R</code>, and every
 <code>ForXXX</code> folder all call it the same way.</p>
 </div>
 </div>
@@ -201,7 +202,7 @@ not a crash).</p>
 <p><code>5-inversion_DL.R</code> is the same idea via
 <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code>, training both <code>'Hidden-layers'</code>
 and <code>'CNN'</code> architectures per trait (TensorFlow/Keras backend
-– run <code>Scripts/Pipeline/0-setup_python_env.R</code> once first to
+– run <code>Scripts/R/Pipeline/0-setup_python_env.R</code> once first to
 provision the Python environment <code>reticulate</code> needs). One
 thing worth calling out because it cost real debugging time while
 building this: <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> calls
@@ -225,7 +226,7 @@ that reason:</p>
 </h2>
 <p><code>canopy.model</code> is a single variable at the top of
 <code>1-simulate_LUT.R</code> – there is no separate script per model in
-<code>Scripts/Pipeline/</code>, and the per-folder
+<code>Scripts/R/Pipeline/</code>, and the per-folder
 <code>ForFoursail2</code>/<code>ForINFORM</code> scripts differ from
 <code>ForPROSAIL</code>’s only in that one line (plus
 <code>leaf.model</code>, since foursail2/INFORM additionally need a
@@ -308,7 +309,7 @@ canopy reflectance usually is.</p>
 </h2>
 <ul>
 <li>
-<code>Scripts/Pipeline/README.md</code> – the underlying generic
+<code>Scripts/R/Pipeline/README.md</code> – the underlying generic
 simulate/invert scripts these course folders are built on.</li>
 <li>
 <code>vignettes/articles/model-comparison-and-sensitivity.html</code>
