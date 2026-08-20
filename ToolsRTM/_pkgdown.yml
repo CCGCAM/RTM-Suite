@@ -18,9 +18,9 @@ articles:
 - title: Articles
   navbar: ~
   contents:
-  - ToolsRTM
-  - Getting-LUTs
-  - course-pipeline
-  - InversionOpt
-  - model-comparison-and-sensitivity
-  - marmit-soil-in-canopy
+  - "ToolsRTM/ToolsRTM"
+  - "Getting-LUTs"
+  - "articles/course-pipeline"
+  - "InversionOpt"
+  - "articles/model-comparison-and-sensitivity"
+  - "articles/marmit-soil-in-canopy"

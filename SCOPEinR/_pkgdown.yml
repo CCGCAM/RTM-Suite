@@ -18,8 +18,8 @@ articles:
 - title: Articles
   navbar: ~
   contents:
-  - SCOPEinR
-  - getting-luts-scope
-  - scope-pipeline
-  - sensitivity-scope
-  - inversion-scope
+  - "articles/SCOPEinR"
+  - "articles/getting-luts-scope"
+  - "articles/scope-pipeline"
+  - "articles/sensitivity-scope"
+  - "articles/inversion-scope"

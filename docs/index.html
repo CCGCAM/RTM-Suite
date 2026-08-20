@@ -82,11 +82,14 @@ section { padding: 64px 24px; scroll-margin-top: 70px; }
 .doc-card p { color: var(--text-muted); font-size: 13.5px; }
 
 .tut-list { display: flex; flex-direction: column; gap: 12px; }
-.tut-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 14px 20px; }
+.tut-row { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 14px 20px; }
+.tut-row-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .tut-row .tut-name { font-weight: 600; color: var(--brand); font-size: 14px; }
 .tut-row .tut-desc { color: var(--text-muted); font-size: 13px; }
 .tut-row .tut-links a { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-light); font-weight: 600; margin-left: 14px; }
 .tut-row .tut-links a:hover { text-decoration: underline; }
+.tut-shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 14px; }
+.tut-shots img { width: 100%; border-radius: 8px; border: 1px solid var(--border-soft); display: block; }
 
 footer { background: #08202e; color: #b9cbd6; padding: 34px 24px; font-size: 12.5px; }
 .footer-inner { max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
@@ -378,18 +381,32 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
     <div class="tut-list">
 
       <div class="tut-row">
-        <div><div class="tut-name">How in R / How in Python</div><div class="tut-desc">Shorter on-ramp: one simulation &rarr; sensitivity &rarr; sensor convolution &rarr; ML inversion.</div></div>
-        <div class="tut-links">
-          <a href="Tutorials/How-in-R.html">R (rendered)</a>
-          <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python.ipynb" target="_blank">Python (notebook)</a>
+        <div class="tut-row-header">
+          <div><div class="tut-name">How in R / How in Python</div><div class="tut-desc">Shorter on-ramp: one simulation &rarr; sensitivity &rarr; sensor convolution &rarr; ML inversion.</div></div>
+          <div class="tut-links">
+            <a href="Tutorials/How-in-R.html">R (rendered)</a>
+            <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python.ipynb" target="_blank">Python (notebook)</a>
+          </div>
+        </div>
+        <div class="tut-shots">
+          <img src="Tutorials/images/tutorial_sensor_convolution.png" alt="Native 1nm spectrum vs. Sentinel-2A band reflectance">
+          <img src="Tutorials/images/tutorial_sensitivity.png" alt="Canopy reflectance sensitivity to Cab and EWT">
+          <img src="Tutorials/images/tutorial_ml_inversion.png" alt="Cab retrieved from Sentinel-2A bands via Random Forest">
         </div>
       </div>
 
       <div class="tut-row">
-        <div><div class="tut-name">How in R / How in Python — SCOPEinR</div><div class="tut-desc">The SCOPE equivalent: energy balance, fluorescence, a small LUT.</div></div>
-        <div class="tut-links">
-          <a href="Tutorials/How-in-R-SCOPEinR.html">R (rendered)</a>
-          <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python-SCOPEinR.ipynb" target="_blank">Python (notebook)</a>
+        <div class="tut-row-header">
+          <div><div class="tut-name">How in R / How in Python — SCOPEinR</div><div class="tut-desc">The SCOPE equivalent: energy balance, fluorescence, a 100-row LUT, ML inversion.</div></div>
+          <div class="tut-links">
+            <a href="Tutorials/How-in-R-SCOPEinR.html">R (rendered)</a>
+            <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python-SCOPEinR.ipynb" target="_blank">Python (notebook)</a>
+          </div>
+        </div>
+        <div class="tut-shots">
+          <img src="Tutorials/images/scope_reflectance_fluorescence.png" alt="SCOPE TOC reflectance components and fluorescence spectrum">
+          <img src="Tutorials/images/scope_photosynthesis_sif.png" alt="SCOPE canopy photosynthesis vs Vcmax25 and SIF vs Cab">
+          <img src="Tutorials/images/scope_lai_inversion.png" alt="LAI retrieved from Sentinel-2A bands, SCOPE apparent reflectance">
         </div>
       </div>
 
