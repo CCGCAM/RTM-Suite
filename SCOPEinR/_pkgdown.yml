@@ -1,0 +1,15 @@
+url: ~
+template:
+  bootstrap: 5
+navbar:
+  structure:
+    left: [reference, articles]
+    right: [suite_home, toolsrtm, search]
+  components:
+    suite_home:
+      text: "Suite Home"
+      href: ../index.html
+      icon: fa-house
+    toolsrtm:
+      text: "ToolsRTM"
+      href: ../toolsrtm/index.html

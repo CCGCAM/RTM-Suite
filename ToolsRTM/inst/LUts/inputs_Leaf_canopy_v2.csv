@@ -1,0 +1,41 @@
+﻿variable,lower,upper,units,model,Distribution,Mean_D,Std_D,Dependencies,use.default,default
+Cab,0,60,ug cm-2,PROSPECT,Gaussian,50,20,No,1,40
+Car,0,20,ug cm-2,PROSPECT,Uniform,-,-,Yes,1,10
+Anth,0,4.5,-,PROSPECT,Uniform,-,-,No,1,0
+Cbrown,0,1,-,PROSPECT,Uniform,-,-,No,1,0
+Prot,0.00001,0.03,g cm-2,PROSPECT,Uniform,-,-,No,1,0
+CBC,0.00001,0.03,g cm-2,PROSPECT,Uniform,-,-,No,1,0
+N,1.5,2.5,-,PROSPECT,Uniform,-,-,No,1,1.5
+Cs,0,1,-,PROSPECT,Uniform,-,-,No,1,0
+Cx,0,1,-,Fluspect,Uniform,-,-,No,1,1.5
+fqe,0,0.05,-,Fluspect,Uniform,-,-,No,1,0.01
+alpha,0,90,-,PROSPECT,Uniform,-,-,No,0,40
+cell.d,20,100,m-6,Liberty,Uniform,-,-,No,1,40
+inter.c,0.01,0.1,-,Liberty,Uniform,-,-,No,1,0.045
+baseline.abs,0.0004,0.0006,-,Liberty,Uniform,-,-,No,1,0.0004
+leaf.thick,1,10,-,Liberty,Uniform,-,-,No,1,1.6
+albino.abs,0,4,-,Liberty,Uniform,-,-,No,1,2
+lign.cell,1,8,ug cm-2,Liberty,Uniform,-,-,No,1,4
+Nitrogen,0.3,2,g m-2,Liberty,Uniform,-,-,No,1,4
+EWT,0.0001,0.05,cm,PROSPECT,Uniform,-,-,No,1,0.009
+LMA,0.001,0.035,g cm-2,PROSPECT,Uniform,-,-,No,0,0
+LIDFa,30,70,degree,fourSAIL,Uniform,-,-,No,1,45
+LIDFb,0,0,degree,fourSAIL,Uniform,-,-,No,0,0
+TypeLidf,1,2,-,fourSAIL,Uniform,-,-,No,0,2
+LAI,2,5,m2 m-2,fourSAIL,Uniform,-,-,No,1,3
+hspot,0,1,-,fourSAIL,Uniform,-,-,No,0,0
+tts,0,0,deg,fourSAIL,Uniform,-,-,No,0,0
+tto,15,30,deg,fourSAIL,Uniform,-,-,No,1,0
+psi,0,180,deg,fourSAIL,Uniform,-,-,No,0,0
+LAIu,0,0.8,m2 m-2,INFORM,Uniform,-,-,No,1,0.1
+sd,200,1000,-,INFORM,Uniform,-,-,No,1,640
+h,5,25,m,INFORM,Uniform,-,-,No,0,20
+cd,0.2,7,m ,INFORM,Uniform,-,-,No,0,4.5
+psoil,0,1,-,All,Uniform,-,-,No,0,0
+skyl,0,1,-,INFORM,Uniform,-,-,No,0,0.1
+Pa,400,1300,hPa,SPART,Uniform,-,-,No,1,-999
+aot550,0,2.5,,SPART,Uniform,-,-,No,1,0.3246
+uo3,0,5,cm,SPART,Uniform,-,-,No,1,0.348
+uh2o,0,5,g/cm2,SPART,Uniform,-,-,No,1,1.4116
+alt_m,-1000,6000,m ,SPART,Uniform,-,-,No,1,0
+Pa0,900,1100,hPa,SPART,Uniform,-,-,No,1,1013.25

@@ -1,0 +1,107 @@
+﻿ID,Name,Origin,Refl_file,Specular,SMCg,Clay,Fine_silt,Coarse_silt,Silt,Fine_sand,Coarse_sand,Sand,OM,CaCO3,Fe,N,OC,CEC,CEC_met,Hv,pH,P,L,eps,d,K,a,psi,Slope,Intercept
+1,685-Lebna 18,4,bab16_001.csv,1,42.8,362,nan,nan,222,nan,nan,416,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0506,0.49,0.0000,47.08,11.59,181.50,1.1714,0.0140
+1,685-Lebna 18,4,bab16_002.csv,0,30.6,362,nan,nan,222,nan,nan,416,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0331,0.52,0.0050,47.08,11.59,181.50,1.1714,0.0140
+1,685-Lebna 18,4,bab16_003.csv,0,21.4,362,nan,nan,222,nan,nan,416,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0267,0.48,0.0067,47.08,11.59,181.50,1.1714,0.0140
+1,685-Lebna 18,4,bab16_004.csv,0,15.3,362,nan,nan,222,nan,nan,416,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0183,0.47,0.0026,47.08,11.59,181.50,1.1714,0.0140
+1,685-Lebna 18,4,bab16_005.csv,0,9.2,362,nan,nan,222,nan,nan,416,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0135,0.41,0.0000,47.08,11.59,181.50,1.1714,0.0140
+1,685-Lebna 18,4,bab16_006.csv,0,3.7,362,nan,nan,222,nan,nan,416,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0108,0.11,0.0000,47.08,11.59,181.50,1.1714,0.0140
+1,685-Lebna 18,4,bab16_007.csv,0,0,362,nan,nan,222,nan,nan,416,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,47.08,11.59,181.50,1.1714,0.0140
+2,724-Lebna 57,4,bab16_008.csv,1,45.5,738,nan,nan,194,nan,nan,68,15.6,10.9,1.9,nan,nan,nan,nan,nan,nan,nan,0.0608,0.34,0.0000,46.61,48.81,384.19,1.1116,0.0131
+2,724-Lebna 57,4,bab16_009.csv,1,30.8,738,nan,nan,194,nan,nan,68,15.6,10.9,1.9,nan,nan,nan,nan,nan,nan,nan,0.0361,0.30,0.0000,46.61,48.81,384.19,1.1116,0.0131
+2,724-Lebna 57,4,bab16_010.csv,0,21.1,738,nan,nan,194,nan,nan,68,15.6,10.9,1.9,nan,nan,nan,nan,nan,nan,nan,0.0257,0.39,0.0000,46.61,48.81,384.19,1.1116,0.0131
+2,724-Lebna 57,4,bab16_011.csv,0,16,738,nan,nan,194,nan,nan,68,15.6,10.9,1.9,nan,nan,nan,nan,nan,nan,nan,0.0229,0.41,0.0095,46.61,48.81,384.19,1.1116,0.0131
+2,724-Lebna 57,4,bab16_012.csv,0,10.7,738,nan,nan,194,nan,nan,68,15.6,10.9,1.9,nan,nan,nan,nan,nan,nan,nan,0.0172,0.39,0.0317,46.61,48.81,384.19,1.1116,0.0131
+2,724-Lebna 57,4,bab16_013.csv,0,5,738,nan,nan,194,nan,nan,68,15.6,10.9,1.9,nan,nan,nan,nan,nan,nan,nan,0.0086,0.20,0.0024,46.61,48.81,384.19,1.1116,0.0131
+2,724-Lebna 57,4,bab16_014.csv,0,0,738,nan,nan,194,nan,nan,68,15.6,10.9,1.9,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,46.61,48.81,384.19,1.1116,0.0131
+3,730-Lebna 63,4,bab16_015.csv,1,51.7,511,nan,nan,261,nan,nan,228,16.8,42.5,1.68,nan,nan,nan,nan,nan,nan,nan,0.0521,0.60,0.0000,55.95,8.05,149.82,1.2224,0.0059
+3,730-Lebna 63,4,bab16_016.csv,0,38,511,nan,nan,261,nan,nan,228,16.8,42.5,1.68,nan,nan,nan,nan,nan,nan,nan,0.0324,0.50,0.0000,55.95,8.05,149.82,1.2224,0.0059
+3,730-Lebna 63,4,bab16_017.csv,0,24.8,511,nan,nan,261,nan,nan,228,16.8,42.5,1.68,nan,nan,nan,nan,nan,nan,nan,0.0300,0.47,0.0038,55.95,8.05,149.82,1.2224,0.0059
+3,730-Lebna 63,4,bab16_018.csv,0,19.2,511,nan,nan,261,nan,nan,228,16.8,42.5,1.68,nan,nan,nan,nan,nan,nan,nan,0.0280,0.44,0.0073,55.95,8.05,149.82,1.2224,0.0059
+3,730-Lebna 63,4,bab16_019.csv,0,22.1,511,nan,nan,261,nan,nan,228,16.8,42.5,1.68,nan,nan,nan,nan,nan,nan,nan,0.0183,0.42,0.0050,55.95,8.05,149.82,1.2224,0.0059
+3,730-Lebna 63,4,bab16_020.csv,0,5.8,511,nan,nan,261,nan,nan,228,16.8,42.5,1.68,nan,nan,nan,nan,nan,nan,nan,0.0112,0.18,0.0000,55.95,8.05,149.82,1.2224,0.0059
+3,730-Lebna 63,4,bab16_021.csv,0,0,511,nan,nan,261,nan,nan,228,16.8,42.5,1.68,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,55.95,8.05,149.82,1.2224,0.0059
+4,Alumine G-E5,0,bab16_022.csv,0,59.8,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0677,0.76,0.0000,60.67,15.56,387.59,0.9890,0.0168
+4,Alumine G-E5,0,bab16_023.csv,0,46.2,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0242,0.38,0.0024,60.67,15.56,387.59,0.9890,0.0168
+4,Alumine G-E5,0,bab16_024.csv,0,27.7,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0189,0.38,0.0023,60.67,15.56,387.59,0.9890,0.0168
+4,Alumine G-E5,0,bab16_025.csv,0,20,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0146,0.38,0.0052,60.67,15.56,387.59,0.9890,0.0168
+4,Alumine G-E5,0,bab16_026.csv,0,9.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0022,0.11,0.1488,60.67,15.56,387.59,0.9890,0.0168
+4,Alumine G-E5,0,bab16_027.csv,0,0,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,60.67,15.56,387.59,0.9890,0.0168
+5,Argile POC2 ,0,bab16_028.csv,0,45.2,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0620,0.71,0.0163,45.18,9.84,335.00,1.0625,0.0162
+5,Argile POC2 ,0,bab16_029.csv,0,29.8,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0173,0.51,0.1227,45.18,9.84,335.00,1.0625,0.0162
+5,Argile POC2 ,0,bab16_030.csv,0,16.9,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0101,0.52,0.1696,45.18,9.84,335.00,1.0625,0.0162
+5,Argile POC2 ,0,bab16_031.csv,0,9.6,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0066,0.41,0.2154,45.18,9.84,335.00,1.0625,0.0162
+5,Argile POC2 ,0,bab16_032.csv,0,4.3,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0077,0.07,0.0445,45.18,9.84,335.00,1.0625,0.0162
+5,Argile POC2 ,0,bab16_033.csv,0,0,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,45.18,9.84,335.00,1.0625,0.0162
+6,Bauxite G-E6,0,bab16_034.csv,1,27.9,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0337,0.60,0.0000,28.51,1.31,200.58,1.0744,0.0210
+6,Bauxite G-E6,0,bab16_035.csv,0,19.7,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0040,0.63,0.0296,28.51,1.31,200.58,1.0744,0.0210
+6,Bauxite G-E6,0,bab16_036.csv,0,12.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0048,0.53,0.0662,28.51,1.31,200.58,1.0744,0.0210
+6,Bauxite G-E6,0,bab16_037.csv,0,0,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,28.51,1.31,200.58,1.0744,0.0210
+7,Calcosol 19d2,1,bab16_038.csv,1,55.3,nan,nan,nan,nan,nan,nan,nan,34.2,269,0.603,1.83,19.7,21,16,30.3,8.16,0.238,0.0398,0.46,0.0000,55.36,27.41,476.84,1.0085,0.0274
+7,Calcosol 19d2,1,bab16_039.csv,0,43.3,nan,nan,nan,nan,nan,nan,nan,34.2,269,0.603,1.83,19.7,21,16,30.3,8.16,0.238,0.0169,0.58,0.0146,55.36,27.41,476.84,1.0085,0.0274
+7,Calcosol 19d2,1,bab16_040.csv,0,32.5,nan,nan,nan,nan,nan,nan,nan,34.2,269,0.603,1.83,19.7,21,16,30.3,8.16,0.238,0.0140,0.55,0.0222,55.36,27.41,476.84,1.0085,0.0274
+7,Calcosol 19d2,1,bab16_041.csv,0,25.8,nan,nan,nan,nan,nan,nan,nan,34.2,269,0.603,1.83,19.7,21,16,30.3,8.16,0.238,0.0119,0.54,0.0267,55.36,27.41,476.84,1.0085,0.0274
+7,Calcosol 19d2,1,bab16_042.csv,0,19.3,nan,nan,nan,nan,nan,nan,nan,34.2,269,0.603,1.83,19.7,21,16,30.3,8.16,0.238,0.0107,0.53,0.0263,55.36,27.41,476.84,1.0085,0.0274
+7,Calcosol 19d2,1,bab16_043.csv,0,10,nan,nan,nan,nan,nan,nan,nan,34.2,269,0.603,1.83,19.7,21,16,30.3,8.16,0.238,0.0086,0.46,0.0309,55.36,27.41,476.84,1.0085,0.0274
+7,Calcosol 19d2,1,bab16_044.csv,0,0,nan,nan,nan,nan,nan,nan,nan,34.2,269,0.603,1.83,19.7,21,16,30.3,8.16,0.238,0.0000,0.00,0.0000,55.36,27.41,476.84,1.0085,0.0274
+8,Carbonate TH-E12,0,bab16_045.csv,0,79.2,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0793,0.75,0.0063,79.20,3.86,206.88,1.1181,0.0271
+8,Carbonate TH-E12,0,bab16_046.csv,0,62.3,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0233,0.54,0.0433,79.20,3.86,206.88,1.1181,0.0271
+8,Carbonate TH-E12,0,bab16_047.csv,0,47.7,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0159,0.57,0.0531,79.20,3.86,206.88,1.1181,0.0271
+8,Carbonate TH-E12,0,bab16_048.csv,0,33.2,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0077,0.56,0.0535,79.20,3.86,206.88,1.1181,0.0271
+8,Carbonate TH-E12,0,bab16_049.csv,0,18.4,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0044,0.31,0.0000,79.20,3.86,206.88,1.1181,0.0271
+8,Carbonate TH-E12,0,bab16_050.csv,0,0,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,79.20,3.86,206.88,1.1181,0.0271
+9,Colluviosol 26d1,1,bab16_051.csv,0,52.4,145,121,215,336,470,49,519,20.5,0,0.632,0.959,11.9,9.35,8.14,12.6,6.7,0.173,0.0643,0.83,0.0116,52.80,7.80,201.54,1.2011,0.0095
+9,Colluviosol 26d1,1,bab16_052.csv,0,39.3,145,121,215,336,470,49,519,20.5,0,0.632,0.959,11.9,9.35,8.14,12.6,6.7,0.173,0.0243,0.60,0.0591,52.80,7.80,201.54,1.2011,0.0095
+9,Colluviosol 26d1,1,bab16_053.csv,0,29.9,145,121,215,336,470,49,519,20.5,0,0.632,0.959,11.9,9.35,8.14,12.6,6.7,0.173,0.0205,0.58,0.0617,52.80,7.80,201.54,1.2011,0.0095
+9,Colluviosol 26d1,1,bab16_054.csv,0,17,145,121,215,336,470,49,519,20.5,0,0.632,0.959,11.9,9.35,8.14,12.6,6.7,0.173,0.0132,0.54,0.0734,52.80,7.80,201.54,1.2011,0.0095
+9,Colluviosol 26d1,1,bab16_055.csv,0,9.1,145,121,215,336,470,49,519,20.5,0,0.632,0.959,11.9,9.35,8.14,12.6,6.7,0.173,0.0092,0.09,0.0000,52.80,7.80,201.54,1.2011,0.0095
+9,Colluviosol 26d1,1,bab16_056.csv,0,0,145,121,215,336,470,49,519,20.5,0,0.632,0.959,11.9,9.35,8.14,12.6,6.7,0.173,0.0000,0.00,0.0000,52.80,7.80,201.54,1.2011,0.0095
+10,Gypse blanc TH-E1,0,bab16_057.csv,0,69,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.1133,0.74,0.0011,72.70,9.31,84.50,1.0082,0.0440
+10,Gypse blanc TH-E1,0,bab16_058.csv,0,56.2,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.1446,0.29,0.0052,72.70,9.31,84.50,1.0082,0.0440
+10,Gypse blanc TH-E1,0,bab16_059.csv,0,40,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.1237,0.23,0.0059,72.70,9.31,84.50,1.0082,0.0440
+10,Gypse blanc TH-E1,0,bab16_060.csv,0,24.3,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0663,0.21,0.0063,72.70,9.31,84.50,1.0082,0.0440
+10,Gypse blanc TH-E1,0,bab16_061.csv,0,9.6,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0271,0.16,0.0087,72.70,9.31,84.50,1.0082,0.0440
+10,Gypse blanc TH-E1,0,bab16_062.csv,0,0,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,72.70,9.31,84.50,1.0082,0.0440
+11,Gypse rouge TH-E2,0,bab16_063.csv,0,52.3,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0886,0.54,0.0015,52.45,8.74,1358.14,1.1689,0.0187
+11,Gypse rouge TH-E2,0,bab16_064.csv,0,39.6,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0032,0.75,0.0000,52.45,8.74,1358.14,1.1689,0.0187
+11,Gypse rouge TH-E2,0,bab16_065.csv,0,27.9,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0022,0.81,0.0000,52.45,8.74,1358.14,1.1689,0.0187
+11,Gypse rouge TH-E2,0,bab16_066.csv,0,16.5,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0016,0.62,0.0000,52.45,8.74,1358.14,1.1689,0.0187
+11,Gypse rouge TH-E2,0,bab16_067.csv,0,7.6,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0088,0.03,0.0000,52.45,8.74,1358.14,1.1689,0.0187
+11,Gypse rouge TH-E2,0,bab16_068.csv,0,0,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,52.45,8.74,1358.14,1.1689,0.0187
+12,Hymed-Fr 7,2,bab16_069.csv,0,54.7,256,nan,nan,341,nan,nan,403,13.2,69.8,0.687,nan,nan,nan,nan,nan,nan,nan,0.0329,0.53,0.0459,60.17,2.88,134.40,1.1294,0.0107
+12,Hymed-Fr 7,2,bab16_070.csv,0,43.4,256,nan,nan,341,nan,nan,403,13.2,69.8,0.687,nan,nan,nan,nan,nan,nan,nan,0.0316,0.53,0.0530,60.17,2.88,134.40,1.1294,0.0107
+12,Hymed-Fr 7,2,bab16_071.csv,0,34.4,256,nan,nan,341,nan,nan,403,13.2,69.8,0.687,nan,nan,nan,nan,nan,nan,nan,0.0253,0.52,0.0628,60.17,2.88,134.40,1.1294,0.0107
+12,Hymed-Fr 7,2,bab16_072.csv,0,24.2,256,nan,nan,341,nan,nan,403,13.2,69.8,0.687,nan,nan,nan,nan,nan,nan,nan,0.0031,0.92,0.0260,60.17,2.88,134.40,1.1294,0.0107
+12,Hymed-Fr 7,2,bab16_073.csv,0,14.7,256,nan,nan,341,nan,nan,403,13.2,69.8,0.687,nan,nan,nan,nan,nan,nan,nan,0.0084,0.10,0.0000,60.17,2.88,134.40,1.1294,0.0107
+12,Hymed-Fr 7,2,bab16_074.csv,0,0,256,nan,nan,341,nan,nan,403,13.2,69.8,0.687,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,60.17,2.88,134.40,1.1294,0.0107
+13,Hymed-Fr 34,2,bab16_075.csv,0,55.4,304,nan,nan,333,nan,nan,363,15.9,131,0.762,nan,nan,nan,nan,nan,nan,nan,0.0294,0.56,0.0258,60.94,3.53,158.82,1.1430,0.0160
+13,Hymed-Fr 34,2,bab16_076.csv,0,43.8,304,nan,nan,333,nan,nan,363,15.9,131,0.762,nan,nan,nan,nan,nan,nan,nan,0.0271,0.56,0.0302,60.94,3.53,158.82,1.1430,0.0160
+13,Hymed-Fr 34,2,bab16_077.csv,0,35.2,304,nan,nan,333,nan,nan,363,15.9,131,0.762,nan,nan,nan,nan,nan,nan,nan,0.0217,0.54,0.0342,60.94,3.53,158.82,1.1430,0.0160
+13,Hymed-Fr 34,2,bab16_078.csv,0,25.8,304,nan,nan,333,nan,nan,363,15.9,131,0.762,nan,nan,nan,nan,nan,nan,nan,0.0121,0.53,0.0357,60.94,3.53,158.82,1.1430,0.0160
+13,Hymed-Fr 34,2,bab16_079.csv,0,18.6,304,nan,nan,333,nan,nan,363,15.9,131,0.762,nan,nan,nan,nan,nan,nan,nan,0.0072,0.20,0.0000,60.94,3.53,158.82,1.1430,0.0160
+13,Hymed-Fr 34,2,bab16_080.csv,0,0,304,nan,nan,333,nan,nan,363,15.9,131,0.762,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,60.94,3.53,158.82,1.1430,0.0160
+14,Hymed-Fr 95,2,bab16_081.csv,0,49.5,167,nan,nan,529,nan,nan,304,12.5,376,0.682,nan,nan,nan,nan,nan,nan,nan,0.0354,0.74,0.0090,50.24,12.07,295.90,1.0370,0.0326
+14,Hymed-Fr 95,2,bab16_082.csv,0,35.6,167,nan,nan,529,nan,nan,304,12.5,376,0.682,nan,nan,nan,nan,nan,nan,nan,0.0192,0.54,0.0461,50.24,12.07,295.90,1.0370,0.0326
+14,Hymed-Fr 95,2,bab16_083.csv,0,26.1,167,nan,nan,529,nan,nan,304,12.5,376,0.682,nan,nan,nan,nan,nan,nan,nan,0.0172,0.53,0.0567,50.24,12.07,295.90,1.0370,0.0326
+14,Hymed-Fr 95,2,bab16_084.csv,0,15.6,167,nan,nan,529,nan,nan,304,12.5,376,0.682,nan,nan,nan,nan,nan,nan,nan,0.0134,0.49,0.0743,50.24,12.07,295.90,1.0370,0.0326
+14,Hymed-Fr 95,2,bab16_085.csv,0,8.2,167,nan,nan,529,nan,nan,304,12.5,376,0.682,nan,nan,nan,nan,nan,nan,nan,0.0084,0.09,0.0000,50.24,12.07,295.90,1.0370,0.0326
+14,Hymed-Fr 95,2,bab16_086.csv,0,0,167,nan,nan,529,nan,nan,304,12.5,376,0.682,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,50.24,12.07,295.90,1.0370,0.0326
+15,Hymed-Fr 147,2,bab16_087.csv,0,40.8,172,nan,nan,269,nan,nan,559,10.3,2.5,1.19,nan,nan,nan,nan,nan,nan,nan,0.0730,0.83,0.0078,40.97,7.78,193.63,1.1161,0.0149
+15,Hymed-Fr 147,2,bab16_088.csv,0,29.4,172,nan,nan,269,nan,nan,559,10.3,2.5,1.19,nan,nan,nan,nan,nan,nan,nan,0.0247,0.55,0.0530,40.97,7.78,193.63,1.1161,0.0149
+15,Hymed-Fr 147,2,bab16_089.csv,0,20.3,172,nan,nan,269,nan,nan,559,10.3,2.5,1.19,nan,nan,nan,nan,nan,nan,nan,0.0240,0.51,0.0600,40.97,7.78,193.63,1.1161,0.0149
+15,Hymed-Fr 147,2,bab16_090.csv,0,10.2,172,nan,nan,269,nan,nan,559,10.3,2.5,1.19,nan,nan,nan,nan,nan,nan,nan,0.0093,0.49,0.0909,40.97,7.78,193.63,1.1161,0.0149
+15,Hymed-Fr 147,2,bab16_091.csv,0,5.3,172,nan,nan,269,nan,nan,559,10.3,2.5,1.19,nan,nan,nan,nan,nan,nan,nan,0.0064,0.06,0.0000,40.97,7.78,193.63,1.1161,0.0149
+15,Hymed-Fr 147,2,bab16_092.csv,0,0,172,nan,nan,269,nan,nan,559,10.3,2.5,1.19,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,40.97,7.78,193.63,1.1161,0.0149
+16,Luvisol 208TE,1,bab16_093.csv,0,41.8,156,271,524,795,38,11,49,19.2,0,0.787,1.04,11.1,9.89,7.94,12.1,7.54,0.088,0.0716,0.84,0.0106,41.51,8.17,213.81,1.1022,0.0234
+16,Luvisol 208TE,1,bab16_094.csv,0,27.9,156,271,524,795,38,11,49,19.2,0,0.787,1.04,11.1,9.89,7.94,12.1,7.54,0.088,0.0250,0.55,0.0711,41.51,8.17,213.81,1.1022,0.0234
+16,Luvisol 208TE,1,bab16_095.csv,0,15.8,156,271,524,795,38,11,49,19.2,0,0.787,1.04,11.1,9.89,7.94,12.1,7.54,0.088,0.0135,0.51,0.0918,41.51,8.17,213.81,1.1022,0.0234
+16,Luvisol 208TE,1,bab16_096.csv,0,9.3,156,271,524,795,38,11,49,19.2,0,0.787,1.04,11.1,9.89,7.94,12.1,7.54,0.088,0.0067,0.46,0.0981,41.51,8.17,213.81,1.1022,0.0234
+16,Luvisol 208TE,1,bab16_097.csv,0,4.5,156,271,524,795,38,11,49,19.2,0,0.787,1.04,11.1,9.89,7.94,12.1,7.54,0.088,0.0011,0.14,0.0000,41.51,8.17,213.81,1.1022,0.0234
+16,Luvisol 208TE,1,bab16_098.csv,0,1.5,156,271,524,795,38,11,49,19.2,0,0.787,1.04,11.1,9.89,7.94,12.1,7.54,0.088,0.0009,0.12,0.0000,41.51,8.17,213.81,1.1022,0.0234
+16,Luvisol 208TE,1,bab16_099.csv,0,0,156,271,524,795,38,11,49,19.2,0,0.787,1.04,11.1,9.89,7.94,12.1,7.54,0.088,0.0000,0.00,0.0000,41.51,8.17,213.81,1.1022,0.0234
+17,Sable blanc POC1,0,bab16_100.csv,0,19.2,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.1235,0.83,0.0015,19.11,8.60,63.89,1.0182,0.0335
+17,Sable blanc POC1,0,bab16_101.csv,0,12.2,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0897,0.52,0.0043,19.11,8.60,63.89,1.0182,0.0335
+17,Sable blanc POC1,0,bab16_102.csv,0,8.3,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0525,0.48,0.0045,19.11,8.60,63.89,1.0182,0.0335
+17,Sable blanc POC1,0,bab16_103.csv,0,6,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0376,0.46,0.0039,19.11,8.60,63.89,1.0182,0.0335
+17,Sable blanc POC1,0,bab16_104.csv,0,1.7,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0113,0.34,0.0000,19.11,8.60,63.89,1.0182,0.0335
+17,Sable blanc POC1,0,bab16_105.csv,0,0.2,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0008,0.06,0.0000,19.11,8.60,63.89,1.0182,0.0335
+17,Sable blanc POC1,0,bab16_106.csv,0,0,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,19.11,8.60,63.89,1.0182,0.0335

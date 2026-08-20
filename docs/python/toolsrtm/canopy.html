@@ -1,0 +1,803 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>toolsrtm.canopy &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="toolsrtm.inform" href="inform.html" />
+    <link rel="prev" title="toolsrtm.liberty" href="liberty.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    
+    <a href="../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+    
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">toolsrtm</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="leaf.html#toolsrtm.leaf.calctav"><code class="docutils literal notranslate"><span class="pre">calctav()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="leaf.html#toolsrtm.leaf.LeafOptics"><code class="docutils literal notranslate"><span class="pre">LeafOptics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="leaf.html#toolsrtm.leaf.prospect_d"><code class="docutils literal notranslate"><span class="pre">prospect_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="leaf.html#toolsrtm.leaf.prospect_pro"><code class="docutils literal notranslate"><span class="pre">prospect_pro()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fluspect.html#toolsrtm.fluspect.FluspectBResult"><code class="docutils literal notranslate"><span class="pre">FluspectBResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fluspect.html#toolsrtm.fluspect.FluspectCxResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fluspect.html#toolsrtm.fluspect.fluspect_b"><code class="docutils literal notranslate"><span class="pre">fluspect_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fluspect.html#toolsrtm.fluspect.fluspect_cx"><code class="docutils literal notranslate"><span class="pre">fluspect_cx()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="liberty.html#toolsrtm.liberty.LibertyResult"><code class="docutils literal notranslate"><span class="pre">LibertyResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="liberty.html#toolsrtm.liberty.liberty"><code class="docutils literal notranslate"><span class="pre">liberty()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.volscatt"><code class="docutils literal notranslate"><span class="pre">volscatt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.campbell"><code class="docutils literal notranslate"><span class="pre">campbell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.dladgen"><code class="docutils literal notranslate"><span class="pre">dladgen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.dcum"><code class="docutils literal notranslate"><span class="pre">dcum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.jfunc1"><code class="docutils literal notranslate"><span class="pre">jfunc1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.jfunc2"><code class="docutils literal notranslate"><span class="pre">jfunc2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.jfunc4"><code class="docutils literal notranslate"><span class="pre">jfunc4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.non_conservative_scattering"><code class="docutils literal notranslate"><span class="pre">non_conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.conservative_scattering"><code class="docutils literal notranslate"><span class="pre">conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.scattering"><code class="docutils literal notranslate"><span class="pre">scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.LeafAngleDistribution"><code class="docutils literal notranslate"><span class="pre">LeafAngleDistribution</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.FourSAILResult"><code class="docutils literal notranslate"><span class="pre">FourSAILResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.foursail_core"><code class="docutils literal notranslate"><span class="pre">foursail_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.foursail"><code class="docutils literal notranslate"><span class="pre">foursail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.FourSAIL2Result"><code class="docutils literal notranslate"><span class="pre">FourSAIL2Result</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.foursail2_core"><code class="docutils literal notranslate"><span class="pre">foursail2_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.canopy.foursail2"><code class="docutils literal notranslate"><span class="pre">foursail2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.compute_brf"><code class="docutils literal notranslate"><span class="pre">compute_brf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.foursail_inform"><code class="docutils literal notranslate"><span class="pre">foursail_inform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.foursail_inf"><code class="docutils literal notranslate"><span class="pre">foursail_inf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.foursail_t_s"><code class="docutils literal notranslate"><span class="pre">foursail_t_s()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.foursail_t_o"><code class="docutils literal notranslate"><span class="pre">foursail_t_o()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.inform"><code class="docutils literal notranslate"><span class="pre">inform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="spart.html#toolsrtm.spart.spart_toc"><code class="docutils literal notranslate"><span class="pre">spart_toc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="spart.html#toolsrtm.spart.SpartToaResult"><code class="docutils literal notranslate"><span class="pre">SpartToaResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="spart.html#toolsrtm.spart.spart_toa"><code class="docutils literal notranslate"><span class="pre">spart_toa()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smac.html">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.SmacSensor"><code class="docutils literal notranslate"><span class="pre">SmacSensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.SENSORS"><code class="docutils literal notranslate"><span class="pre">SENSORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.get_sensor"><code class="docutils literal notranslate"><span class="pre">get_sensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.sentinel2a_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2a_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.sentinel2b_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2b_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.sentinel3a_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3a_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.sentinel3b_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3b_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.landsat4_tm"><code class="docutils literal notranslate"><span class="pre">landsat4_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.landsat5_tm"><code class="docutils literal notranslate"><span class="pre">landsat5_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.landsat7_etm"><code class="docutils literal notranslate"><span class="pre">landsat7_etm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.landsat8_oli"><code class="docutils literal notranslate"><span class="pre">landsat8_oli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.terra_aqua_modis"><code class="docutils literal notranslate"><span class="pre">terra_aqua_modis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.SmacAtmosphere"><code class="docutils literal notranslate"><span class="pre">SmacAtmosphere</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.get_smac"><code class="docutils literal notranslate"><span class="pre">get_smac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smac.html#toolsrtm.smac.spectral_convolution"><code class="docutils literal notranslate"><span class="pre">spectral_convolution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.SrfTable"><code class="docutils literal notranslate"><span class="pre">SrfTable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.SrfConvolutionResult"><code class="docutils literal notranslate"><span class="pre">SrfConvolutionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.srf_prisma"><code class="docutils literal notranslate"><span class="pre">srf_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.fwhm_prisma"><code class="docutils literal notranslate"><span class="pre">fwhm_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.srf_sentinel2a"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.srf_sentinel2b"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.spectral_convolution_srf"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_srf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.enmap_characteristics"><code class="docutils literal notranslate"><span class="pre">enmap_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.sensor_characteristics"><code class="docutils literal notranslate"><span class="pre">sensor_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.spectral_convolution_gaussian"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_gaussian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="indices.html#toolsrtm.indices.get_indices"><code class="docutils literal notranslate"><span class="pre">get_indices()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.MarmitSoil"><code class="docutils literal notranslate"><span class="pre">MarmitSoil</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.marmit1"><code class="docutils literal notranslate"><span class="pre">marmit1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.marmit2"><code class="docutils literal notranslate"><span class="pre">marmit2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.sigmoid_soil"><code class="docutils literal notranslate"><span class="pre">sigmoid_soil()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.get_marmit_rsoil"><code class="docutils literal notranslate"><span class="pre">get_marmit_rsoil()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="satellite.html#toolsrtm.satellite.COLLECTION_ASSETS"><code class="docutils literal notranslate"><span class="pre">COLLECTION_ASSETS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="satellite.html#toolsrtm.satellite.SatelliteCollection"><code class="docutils literal notranslate"><span class="pre">SatelliteCollection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="satellite.html#toolsrtm.satellite.get_satellite_collection"><code class="docutils literal notranslate"><span class="pre">get_satellite_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="satellite.html#toolsrtm.satellite.get_sentinel2_cube"><code class="docutils literal notranslate"><span class="pre">get_sentinel2_cube()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.CarsPlsResult"><code class="docutils literal notranslate"><span class="pre">CarsPlsResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.carspls"><code class="docutils literal notranslate"><span class="pre">carspls()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.get_vif"><code class="docutils literal notranslate"><span class="pre">get_vif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.InversionOptResult"><code class="docutils literal notranslate"><span class="pre">InversionOptResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.get_inversion_opt"><code class="docutils literal notranslate"><span class="pre">get_inversion_opt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.ALGORITHMS"><code class="docutils literal notranslate"><span class="pre">ALGORITHMS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.InversionResult"><code class="docutils literal notranslate"><span class="pre">InversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.get_inversion"><code class="docutils literal notranslate"><span class="pre">get_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.HybridInversionResult"><code class="docutils literal notranslate"><span class="pre">HybridInversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.hybrid_inversion"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.hybrid_inversion_ensemble"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion_ensemble()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deep_learning.html#toolsrtm.deep_learning.MLModelResult"><code class="docutils literal notranslate"><span class="pre">MLModelResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deep_learning.html#toolsrtm.deep_learning.get_ml_model"><code class="docutils literal notranslate"><span class="pre">get_ml_model()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/soil.html#scopeinpython.soil.SoilParams"><code class="docutils literal notranslate"><span class="pre">SoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/soil.html#scopeinpython.soil.WettingParams"><code class="docutils literal notranslate"><span class="pre">WettingParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/soil.html#scopeinpython.soil.get_bsm"><code class="docutils literal notranslate"><span class="pre">get_bsm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/soil.html#scopeinpython.soil.soilwat"><code class="docutils literal notranslate"><span class="pre">soilwat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/spectral.html#scopeinpython.spectral.SpectralConfig"><code class="docutils literal notranslate"><span class="pre">SpectralConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/spectral.html#scopeinpython.spectral.get_spectra_scope"><code class="docutils literal notranslate"><span class="pre">get_spectra_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.get_volscatt_scope"><code class="docutils literal notranslate"><span class="pre">get_volscatt_scope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.get_pso"><code class="docutils literal notranslate"><span class="pre">get_pso()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.get_reflectances"><code class="docutils literal notranslate"><span class="pre">get_reflectances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.get_fluxprofile"><code class="docutils literal notranslate"><span class="pre">get_fluxprofile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.CanopyStructure"><code class="docutils literal notranslate"><span class="pre">CanopyStructure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult"><code class="docutils literal notranslate"><span class="pre">RTMoResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.run_rtmo"><code class="docutils literal notranslate"><span class="pre">run_rtmo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.NetRadiationLite"><code class="docutils literal notranslate"><span class="pre">NetRadiationLite</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.net_radiation_lite"><code class="docutils literal notranslate"><span class="pre">net_radiation_lite()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.LeafBio"><code class="docutils literal notranslate"><span class="pre">LeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.MeteoLeaf"><code class="docutils literal notranslate"><span class="pre">MeteoLeaf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.BiochemResult"><code class="docutils literal notranslate"><span class="pre">BiochemResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.sel_root"><code class="docutils literal notranslate"><span class="pre">sel_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_gs_fun"><code class="docutils literal notranslate"><span class="pre">get_gs_fun()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ball_berry"><code class="docutils literal notranslate"><span class="pre">get_ball_berry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_temperature_function_c3"><code class="docutils literal notranslate"><span class="pre">get_temperature_function_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_high_temp_inhibtion_c3"><code class="docutils literal notranslate"><span class="pre">get_high_temp_inhibtion_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_fluorescence_model"><code class="docutils literal notranslate"><span class="pre">get_fluorescence_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ci_next"><code class="docutils literal notranslate"><span class="pre">get_ci_next()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_compute_a"><code class="docutils literal notranslate"><span class="pre">get_compute_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_biochemical"><code class="docutils literal notranslate"><span class="pre">get_biochemical()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect.html#scopeinpython.fluspect.FluspectCxScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect.html#scopeinpython.fluspect.get_fluspect_cx_scope"><code class="docutils literal notranslate"><span class="pre">get_fluspect_cx_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.MultiLayerLeafBio"><code class="docutils literal notranslate"><span class="pre">MultiLayerLeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.FluspectMScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectMScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.fluspect_mscope"><code class="docutils literal notranslate"><span class="pre">fluspect_mscope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmf.html#scopeinpython.rtmf.RTMfResult"><code class="docutils literal notranslate"><span class="pre">RTMfResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmf.html#scopeinpython.rtmf.rtmf"><code class="docutils literal notranslate"><span class="pre">rtmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmz.html#scopeinpython.rtmz.RTMzResult"><code class="docutils literal notranslate"><span class="pre">RTMzResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmz.html#scopeinpython.rtmz.rtmz"><code class="docutils literal notranslate"><span class="pre">rtmz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.stefan_boltzmann"><code class="docutils literal notranslate"><span class="pre">stefan_boltzmann()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.monin_obukhov"><code class="docutils literal notranslate"><span class="pre">monin_obukhov()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.psim"><code class="docutils literal notranslate"><span class="pre">psim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.psih"><code class="docutils literal notranslate"><span class="pre">psih()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.phstar"><code class="docutils literal notranslate"><span class="pre">phstar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.ResistanceParams"><code class="docutils literal notranslate"><span class="pre">ResistanceParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.Resistances"><code class="docutils literal notranslate"><span class="pre">Resistances</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.get_resistances"><code class="docutils literal notranslate"><span class="pre">get_resistances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.HeatFluxes"><code class="docutils literal notranslate"><span class="pre">HeatFluxes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.get_heatfluxes"><code class="docutils literal notranslate"><span class="pre">get_heatfluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.RTMtSbResult"><code class="docutils literal notranslate"><span class="pre">RTMtSbResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.rtmt_sb"><code class="docutils literal notranslate"><span class="pre">rtmt_sb()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.EbalMeteo"><code class="docutils literal notranslate"><span class="pre">EbalMeteo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.EbalCanopyParams"><code class="docutils literal notranslate"><span class="pre">EbalCanopyParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.EbalSoilParams"><code class="docutils literal notranslate"><span class="pre">EbalSoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.EbalResult"><code class="docutils literal notranslate"><span class="pre">EbalResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.aggregator_ebal"><code class="docutils literal notranslate"><span class="pre">aggregator_ebal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.ebal"><code class="docutils literal notranslate"><span class="pre">ebal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.TDP_DEFAULT"><code class="docutils literal notranslate"><span class="pre">TDP_DEFAULT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.get_zo_and_d"><code class="docutils literal notranslate"><span class="pre">get_zo_and_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.ScopeOptions"><code class="docutils literal notranslate"><span class="pre">ScopeOptions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.ScopeResult"><code class="docutils literal notranslate"><span class="pre">ScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.get_scope"><code class="docutils literal notranslate"><span class="pre">get_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.sint"><code class="docutils literal notranslate"><span class="pre">sint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.get_ephoton"><code class="docutils literal notranslate"><span class="pre">get_ephoton()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.get_e2phot"><code class="docutils literal notranslate"><span class="pre">get_e2phot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.get_planck"><code class="docutils literal notranslate"><span class="pre">get_planck()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.satvap"><code class="docutils literal notranslate"><span class="pre">satvap()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">toolsrtm</a></li>
+      <li class="breadcrumb-item active">toolsrtm.canopy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/toolsrtm/canopy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="toolsrtm-canopy">
+<h1>toolsrtm.canopy<a class="headerlink" href="#toolsrtm-canopy" title="Link to this heading"></a></h1>
+<p>Leaf-angle distributions (<code class="docutils literal notranslate"><span class="pre">dladgen</span></code>, <code class="docutils literal notranslate"><span class="pre">campbell</span></code>), volume-scattering
+geometry (<code class="docutils literal notranslate"><span class="pre">volscatt</span></code>), the SAIL scattering solutions (conservative and
+non-conservative), and the fourSAIL / fourSAIL2 canopy BRDF models.
+Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM/R/dladgen.R</span></code>, <code class="docutils literal notranslate"><span class="pre">campbell.R</span></code>, <code class="docutils literal notranslate"><span class="pre">volscatt.R</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Jfunc1-4.R</span></code>, <code class="docutils literal notranslate"><span class="pre">NonConservativeScatering.R</span></code>, <code class="docutils literal notranslate"><span class="pre">ConservativeScattering.R</span></code>,
+<code class="docutils literal notranslate"><span class="pre">foursail.R</span></code>, <code class="docutils literal notranslate"><span class="pre">foursail2.R</span></code>.</p>
+<p id="module-toolsrtm.canopy">fourSAIL canopy radiative transfer model and its supporting leaf-angle
+distribution / scattering-geometry helpers.</p>
+<dl class="simple">
+<dt>Direct, function-by-function port of:</dt><dd><ul class="simple">
+<li><p>ToolsRTM/R/volscatt.R</p></li>
+<li><p>ToolsRTM/R/campbell.R</p></li>
+<li><p>ToolsRTM/R/dladgen.R</p></li>
+<li><p>ToolsRTM/R/dcum.R</p></li>
+<li><p>ToolsRTM/R/Jfunc1.R, Jfunc2.R, Jfunc4.R</p></li>
+<li><p>ToolsRTM/R/NonConservativeScatering.R</p></li>
+<li><p>ToolsRTM/R/foursail.R  (single-layer canopy; all 5 leaf models ToolsRTM
+itself supports – PROSPECT-D/-PRO, Liberty, Fluspect-B/-B-Cx – are
+wired in via <code class="docutils literal notranslate"><span class="pre">_leaf_optics</span></code>, matching R’s own dispatch)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Verhoef W &amp; Bach H, 2007. Coupled soil-leaf-canopy and atmosphere radiative
+transfer modeling … Remote Sensing of Environment, 109:166-182.
+Verhoef, Jia, Xiao &amp; Su, 2007. Unified optical-thermal four-stream
+radiative transfer theory for homogeneous vegetation canopies. IEEE TGRS
+45:1808-1822.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.volscatt">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">volscatt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ttl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#volscatt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.volscatt" title="Link to this definition"></a></dt>
+<dd><p>Volume scattering functions and interception coefficients for given
+solar zenith, viewing zenith, azimuth and (scalar) leaf inclination
+angle. Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::volscatt</span></code> (scalar-<code class="docutils literal notranslate"><span class="pre">ttl</span></code> variant,
+called once per leaf-angle class inside <a class="reference internal" href="#toolsrtm.canopy.foursail_core" title="toolsrtm.canopy.foursail_core"><code class="xref py py-func docutils literal notranslate"><span class="pre">foursail_core()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(chi_s, chi_o, frho, ftau)</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>tts</strong> (<em>float</em>)</p></li>
+<li><p><strong>tto</strong> (<em>float</em>)</p></li>
+<li><p><strong>psi</strong> (<em>float</em>)</p></li>
+<li><p><strong>ttl</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.campbell">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">campbell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ala</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#campbell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.campbell" title="Link to this definition"></a></dt>
+<dd><p>Ellipsoidal leaf angle distribution (Campbell, 1986), parametrised
+by the average leaf inclination angle <code class="docutils literal notranslate"><span class="pre">ala</span></code> (degrees).</p>
+<p>Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::campbell</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ala</strong> (<em>float</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#toolsrtm.canopy.LeafAngleDistribution" title="toolsrtm.canopy.LeafAngleDistribution"><em>LeafAngleDistribution</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.dladgen">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">dladgen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#dladgen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.dladgen" title="Link to this definition"></a></dt>
+<dd><p>Bimodal (Verhoef) leaf angle distribution function, from parameters
+a (average leaf slope) and b (bimodality). Direct port of
+<code class="docutils literal notranslate"><span class="pre">ToolsRTM::dladgen</span></code> (a.k.a. <code class="docutils literal notranslate"><span class="pre">SCOPEinR::leafangles</span></code>).</p>
+<p>Constraint: <code class="docutils literal notranslate"><span class="pre">abs(a)</span> <span class="pre">+</span> <span class="pre">abs(b)</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>float</em>)</p></li>
+<li><p><strong>b</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#toolsrtm.canopy.LeafAngleDistribution" title="toolsrtm.canopy.LeafAngleDistribution"><em>LeafAngleDistribution</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.dcum">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">dcum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#dcum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.dcum" title="Link to this definition"></a></dt>
+<dd><p>Cumulative leaf inclination distribution value at angle <code class="docutils literal notranslate"><span class="pre">t</span></code> (deg).</p>
+<p>Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::dcum</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>float</em>)</p></li>
+<li><p><strong>b</strong> (<em>float</em>)</p></li>
+<li><p><strong>t</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.jfunc1">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">jfunc1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#jfunc1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.jfunc1" title="Link to this definition"></a></dt>
+<dd><p>J1 function with avoidance of singularity problem. Port of
+<code class="docutils literal notranslate"><span class="pre">ToolsRTM::Jfunc1</span></code> (<code class="docutils literal notranslate"><span class="pre">k</span></code>, <code class="docutils literal notranslate"><span class="pre">t</span></code> scalars; <code class="docutils literal notranslate"><span class="pre">l</span></code> array over wavelength).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>)</p></li>
+<li><p><strong>l</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>t</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.jfunc2">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">jfunc2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#jfunc2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.jfunc2" title="Link to this definition"></a></dt>
+<dd><p>J2 function. Port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::Jfunc2</span></code>. <code class="docutils literal notranslate"><span class="pre">k</span></code>/<code class="docutils literal notranslate"><span class="pre">l</span></code> may be scalars
+or arrays (broadcastable); <code class="docutils literal notranslate"><span class="pre">t</span></code> a scalar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>)</p></li>
+<li><p><strong>t</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.jfunc4">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">jfunc4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#jfunc4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.jfunc4" title="Link to this definition"></a></dt>
+<dd><p>J4 function for treating (near) conservative scattering. Port of
+<code class="docutils literal notranslate"><span class="pre">ToolsRTM::Jfunc4</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>t</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.non_conservative_scattering">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">non_conservative_scattering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lai</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ko</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">too</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#non_conservative_scattering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.non_conservative_scattering" title="Link to this definition"></a></dt>
+<dd><p>Non-conservative scattering solution of the SAIL 4-stream equations.</p>
+<p>Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::NonConservativeScattering</span></code>. All spectral
+quantities (<code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">att</span></code>, <code class="docutils literal notranslate"><span class="pre">sigb</span></code>, <code class="docutils literal notranslate"><span class="pre">sf</span></code>, <code class="docutils literal notranslate"><span class="pre">sb</span></code>, <code class="docutils literal notranslate"><span class="pre">vf</span></code>, <code class="docutils literal notranslate"><span class="pre">vb</span></code>)
+are arrays over wavelength; <code class="docutils literal notranslate"><span class="pre">lai</span></code>, <code class="docutils literal notranslate"><span class="pre">ks</span></code>, <code class="docutils literal notranslate"><span class="pre">ko</span></code>, <code class="docutils literal notranslate"><span class="pre">tss</span></code>, <code class="docutils literal notranslate"><span class="pre">too</span></code>
+are scalars.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict with keys tdd, <a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult.rdd" title="scopeinpython.rtmo.RTMoResult.rdd">rdd</a>, tsd, <a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult.rsd" title="scopeinpython.rtmo.RTMoResult.rsd">rsd</a>, tdo, <a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult.rdo" title="scopeinpython.rtmo.RTMoResult.rdo">rdo</a>, rsod (arrays over wavelength).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.conservative_scattering">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">conservative_scattering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lai</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ko</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">too</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#conservative_scattering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.conservative_scattering" title="Link to this definition"></a></dt>
+<dd><p>Near/complete conservative scattering solution (m close to 0), used
+by foursail2/INFORM for wavelengths where non_conservative_scattering’s
+general exponential-decay formulation is numerically unstable.</p>
+<p>Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::ConservativeScattering</span></code>. Same argument/return
+shape as <a class="reference internal" href="#toolsrtm.canopy.non_conservative_scattering" title="toolsrtm.canopy.non_conservative_scattering"><code class="xref py py-func docutils literal notranslate"><span class="pre">non_conservative_scattering()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.scattering">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">scattering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lai</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ko</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">too</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#scattering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.scattering" title="Link to this definition"></a></dt>
+<dd><p>Dispatch per-wavelength between <a class="reference internal" href="#toolsrtm.canopy.conservative_scattering" title="toolsrtm.canopy.conservative_scattering"><code class="xref py py-func docutils literal notranslate"><span class="pre">conservative_scattering()</span></code></a>
+(<code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">&lt;=</span> <span class="pre">0.01</span></code>) and <a class="reference internal" href="#toolsrtm.canopy.non_conservative_scattering" title="toolsrtm.canopy.non_conservative_scattering"><code class="xref py py-func docutils literal notranslate"><span class="pre">non_conservative_scattering()</span></code></a> (<code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">0.01</span></code>),
+matching <code class="docutils literal notranslate"><span class="pre">foursail2.R</span></code>/<code class="docutils literal notranslate"><span class="pre">inform.R</span></code>’s <code class="docutils literal notranslate"><span class="pre">f_ConS</span></code>/<code class="docutils literal notranslate"><span class="pre">f_Non_ConS</span></code> index
+split – computed for every wavelength with both formulations, then
+selected with <code class="docutils literal notranslate"><span class="pre">np.where</span></code> (simpler and equally correct vs. subsetting
+arrays and reassembling, since both branches are vectorised already).
+plain <code class="docutils literal notranslate"><span class="pre">foursail()</span></code> never needs this: it always uses the non-conservative
+formulation unconditionally, matching <code class="docutils literal notranslate"><span class="pre">ToolsRTM::foursail.R</span></code> itself.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="toolsrtm.canopy.LeafAngleDistribution">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">LeafAngleDistribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lidf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">litab</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#LeafAngleDistribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.LeafAngleDistribution" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lidf</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>litab</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.LeafAngleDistribution.lidf">
+<span class="sig-name descname"><span class="pre">lidf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.LeafAngleDistribution.lidf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.LeafAngleDistribution.litab">
+<span class="sig-name descname"><span class="pre">litab</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.LeafAngleDistribution.litab" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAILResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">FourSAILResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rddt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsdt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#FourSAILResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.FourSAILResult" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rdot</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>rsot</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>rddt</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>rsdt</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAILResult.rdot">
+<span class="sig-name descname"><span class="pre">rdot</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAILResult.rdot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAILResult.rsot">
+<span class="sig-name descname"><span class="pre">rsot</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAILResult.rsot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAILResult.rddt">
+<span class="sig-name descname"><span class="pre">rddt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAILResult.rddt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAILResult.rsdt">
+<span class="sig-name descname"><span class="pre">rsdt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAILResult.rsdt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.foursail_core">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">foursail_core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsoil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LIDFa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LIDFb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TypeLidf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lai</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hotspot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#foursail_core"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.foursail_core" title="Link to this definition"></a></dt>
+<dd><p>fourSAIL canopy bidirectional reflectance, given precomputed leaf
+reflectance/transmittance spectra <code class="docutils literal notranslate"><span class="pre">rho</span></code>/<code class="docutils literal notranslate"><span class="pre">tau</span></code> and soil reflectance
+<code class="docutils literal notranslate"><span class="pre">rsoil</span></code> (all same length, over wavelength).</p>
+<p>This is the model-agnostic core of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::foursail</span></code> (the part
+after leaf-model dispatch): sections 1.2 onward of the R function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> (<em>array_like</em>) – Leaf hemispherical reflectance / transmittance spectra.</p></li>
+<li><p><strong>tau</strong> (<em>array_like</em>) – Leaf hemispherical reflectance / transmittance spectra.</p></li>
+<li><p><strong>rsoil</strong> (<em>array_like</em>) – Soil reflectance spectrum, same length as rho/tau.</p></li>
+<li><p><strong>LIDFa</strong> (<em>float</em>) – Leaf inclination distribution parameters (see <a class="reference internal" href="#toolsrtm.canopy.dladgen" title="toolsrtm.canopy.dladgen"><code class="xref py py-func docutils literal notranslate"><span class="pre">dladgen()</span></code></a>,
+<a class="reference internal" href="#toolsrtm.canopy.campbell" title="toolsrtm.canopy.campbell"><code class="xref py py-func docutils literal notranslate"><span class="pre">campbell()</span></code></a>).</p></li>
+<li><p><strong>LIDFb</strong> (<em>float</em>) – Leaf inclination distribution parameters (see <a class="reference internal" href="#toolsrtm.canopy.dladgen" title="toolsrtm.canopy.dladgen"><code class="xref py py-func docutils literal notranslate"><span class="pre">dladgen()</span></code></a>,
+<a class="reference internal" href="#toolsrtm.canopy.campbell" title="toolsrtm.canopy.campbell"><code class="xref py py-func docutils literal notranslate"><span class="pre">campbell()</span></code></a>).</p></li>
+<li><p><strong>TypeLidf</strong> (<em>{1</em><em>, </em><em>2}</em>) – 1: use <a class="reference internal" href="#toolsrtm.canopy.dladgen" title="toolsrtm.canopy.dladgen"><code class="xref py py-func docutils literal notranslate"><span class="pre">dladgen()</span></code></a> (LIDFa, LIDFb shape parameters);
+2: use <a class="reference internal" href="#toolsrtm.canopy.campbell" title="toolsrtm.canopy.campbell"><code class="xref py py-func docutils literal notranslate"><span class="pre">campbell()</span></code></a> (LIDFa = average leaf angle).</p></li>
+<li><p><strong>lai</strong> (<em>float</em>) – Leaf area index. If negative, canopy is bare soil (LAI=0 case).</p></li>
+<li><p><strong>hotspot</strong> (<em>float</em>) – Hot-spot size parameter.</p></li>
+<li><p><strong>tts</strong> (<em>float</em>) – Solar zenith, viewing zenith, relative azimuth (degrees).</p></li>
+<li><p><strong>tto</strong> (<em>float</em>) – Solar zenith, viewing zenith, relative azimuth (degrees).</p></li>
+<li><p><strong>psi</strong> (<em>float</em>) – Solar zenith, viewing zenith, relative azimuth (degrees).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>rdot, rsot, rddt, rsdt spectra.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.canopy.FourSAILResult" title="toolsrtm.canopy.FourSAILResult">FourSAILResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.foursail">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">foursail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputLUT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsoil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PROSPECT-PRO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectrum_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#foursail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.foursail" title="Link to this definition"></a></dt>
+<dd><p>fourSAIL simulation for a single set of input parameters, dispatching
+to a leaf model exactly as <code class="docutils literal notranslate"><span class="pre">ToolsRTM::foursail</span></code> does – all 5 leaf
+models ToolsRTM itself supports are ported and wired in here.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputLUT</strong> (<em>dict</em>) – Scalar input parameters. Must contain the fourSAIL geometry/canopy
+keys (<code class="docutils literal notranslate"><span class="pre">LIDFa</span></code>, <code class="docutils literal notranslate"><span class="pre">LIDFb</span></code>, <code class="docutils literal notranslate"><span class="pre">TypeLidf</span></code>, <code class="docutils literal notranslate"><span class="pre">LAI</span></code>, <code class="docutils literal notranslate"><span class="pre">hspot</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tts</span></code>, <code class="docutils literal notranslate"><span class="pre">tto</span></code>, <code class="docutils literal notranslate"><span class="pre">psi</span></code>) plus the leaf-model parameters: for
+PROSPECT-D/-PRO, <code class="docutils literal notranslate"><span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">Cab</span></code>, <code class="docutils literal notranslate"><span class="pre">Car</span></code>, <code class="docutils literal notranslate"><span class="pre">Anth</span></code>, <code class="docutils literal notranslate"><span class="pre">Cbrown</span></code>,
+<code class="docutils literal notranslate"><span class="pre">EWT</span></code>, <code class="docutils literal notranslate"><span class="pre">LMA</span></code>, <code class="docutils literal notranslate"><span class="pre">alpha</span></code> (PRO also <code class="docutils literal notranslate"><span class="pre">Prot</span></code>, <code class="docutils literal notranslate"><span class="pre">CBC</span></code>); for
+Liberty, <code class="docutils literal notranslate"><span class="pre">cell.d</span></code>, <code class="docutils literal notranslate"><span class="pre">inter.c</span></code>, <code class="docutils literal notranslate"><span class="pre">baseline.abs</span></code>, <code class="docutils literal notranslate"><span class="pre">leaf.thick</span></code>,
+<code class="docutils literal notranslate"><span class="pre">albino.abs</span></code>, <code class="docutils literal notranslate"><span class="pre">Cab</span></code>, <code class="docutils literal notranslate"><span class="pre">EWT</span></code>, <code class="docutils literal notranslate"><span class="pre">lign.cell</span></code>, <code class="docutils literal notranslate"><span class="pre">Nitrogen</span></code>; for
+Fluspect-B/-B-Cx, <code class="docutils literal notranslate"><span class="pre">Cab</span></code>, <code class="docutils literal notranslate"><span class="pre">Car</span></code>, <code class="docutils literal notranslate"><span class="pre">EWT</span></code>, <code class="docutils literal notranslate"><span class="pre">LMA</span></code>, <code class="docutils literal notranslate"><span class="pre">Cs</span></code>, <code class="docutils literal notranslate"><span class="pre">N</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fqe</span></code>, <code class="docutils literal notranslate"><span class="pre">Cx</span></code> (Cx also <code class="docutils literal notranslate"><span class="pre">Prot</span></code>, <code class="docutils literal notranslate"><span class="pre">CBC</span></code>, <code class="docutils literal notranslate"><span class="pre">Anth</span></code>). See
+<a class="reference internal" href="liberty.html#toolsrtm.liberty.liberty" title="toolsrtm.liberty.liberty"><code class="xref py py-func docutils literal notranslate"><span class="pre">toolsrtm.liberty.liberty()</span></code></a>/<a class="reference internal" href="fluspect.html#toolsrtm.fluspect.fluspect_b" title="toolsrtm.fluspect.fluspect_b"><code class="xref py py-func docutils literal notranslate"><span class="pre">toolsrtm.fluspect.fluspect_b()</span></code></a>/
+<a class="reference internal" href="fluspect.html#toolsrtm.fluspect.fluspect_cx" title="toolsrtm.fluspect.fluspect_cx"><code class="xref py py-func docutils literal notranslate"><span class="pre">toolsrtm.fluspect.fluspect_cx()</span></code></a> for parameter meanings.</p></li>
+<li><p><strong>rsoil</strong> (<em>array_like</em>) – Soil reflectance spectrum, 400-2500 nm (2101 values) if
+<code class="docutils literal notranslate"><span class="pre">spectrum_all</span></code> else 400-2400 nm (2001 values). Always truncated
+to 2001 for the Fluspect leaf models regardless of <code class="docutils literal notranslate"><span class="pre">spectrum_all</span></code>
+(see <code class="xref py py-func docutils literal notranslate"><span class="pre">_leaf_optics()</span></code>).</p></li>
+<li><p><strong>leaf_model</strong> (<em>{'PROSPECT-PRO'</em><em>, </em><em>'PROSPECT-D'</em><em>, </em><em>'Liberty'</em><em>, </em><em>'Fluspect-B'</em><em>, </em><em>'Fluspect-B-Cx'}</em>)</p></li>
+<li><p><strong>spectrum_all</strong> (<em>bool</em>) – True: full 400-2500 nm PROSPECT range (2101 pts). False: truncate
+to 400-2400 nm (2001 pts), as used inside SCOPE-style pipelines.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#toolsrtm.canopy.FourSAILResult" title="toolsrtm.canopy.FourSAILResult">FourSAILResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAIL2Result">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">FourSAIL2Result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rdot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rddt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsdt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alfast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alfadt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'np.ndarray'</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#FourSAIL2Result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.FourSAIL2Result" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rdot</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>rsot</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>rddt</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>rsdt</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>alfast</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>alfadt</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAIL2Result.rdot">
+<span class="sig-name descname"><span class="pre">rdot</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAIL2Result.rdot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAIL2Result.rsot">
+<span class="sig-name descname"><span class="pre">rsot</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAIL2Result.rsot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAIL2Result.rddt">
+<span class="sig-name descname"><span class="pre">rddt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAIL2Result.rddt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAIL2Result.rsdt">
+<span class="sig-name descname"><span class="pre">rsdt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAIL2Result.rsdt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAIL2Result.alfast">
+<span class="sig-name descname"><span class="pre">alfast</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAIL2Result.alfast" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.canopy.FourSAIL2Result.alfadt">
+<span class="sig-name descname"><span class="pre">alfadt</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.canopy.FourSAIL2Result.alfadt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.foursail2_core">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">foursail2_core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho_green</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_green</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_brown</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_brown</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsoil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LIDFa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LIDFb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TypeLidf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lai</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hotspot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction_brown</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zeta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#foursail2_core"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.foursail2_core" title="Link to this definition"></a></dt>
+<dd><p>Two-layer (green over brown/senescent) canopy bidirectional
+reflectance, given precomputed leaf optics for each layer.</p>
+<p>Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::foursail2</span></code>’s model-agnostic core (the part
+after leaf-model dispatch) – non-Lambertian soil is not supported here
+either, matching the R version’s own documented limitation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho_green</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>tau_green</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>rho_brown</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>tau_brown</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>rsoil</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>LIDFa</strong> (<em>float</em>)</p></li>
+<li><p><strong>LIDFb</strong> (<em>float</em>)</p></li>
+<li><p><strong>TypeLidf</strong> (<em>Literal</em><em>[</em><em>1</em><em>, </em><em>2</em><em>]</em>)</p></li>
+<li><p><strong>lai</strong> (<em>float</em>)</p></li>
+<li><p><strong>hotspot</strong> (<em>float</em>)</p></li>
+<li><p><strong>tts</strong> (<em>float</em>)</p></li>
+<li><p><strong>tto</strong> (<em>float</em>)</p></li>
+<li><p><strong>psi</strong> (<em>float</em>)</p></li>
+<li><p><strong>fraction_brown</strong> (<em>float</em>)</p></li>
+<li><p><strong>diss</strong> (<em>float</em>)</p></li>
+<li><p><strong>Cv</strong> (<em>float</em>)</p></li>
+<li><p><strong>Zeta</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#toolsrtm.canopy.FourSAIL2Result" title="toolsrtm.canopy.FourSAIL2Result"><em>FourSAIL2Result</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.canopy.foursail2">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.canopy.</span></span><span class="sig-name descname"><span class="pre">foursail2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputLUT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsoil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PROSPECT-PRO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectrum_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/canopy.html#foursail2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.canopy.foursail2" title="Link to this definition"></a></dt>
+<dd><p>foursail2 (two-layer green/brown canopy) for a single set of input
+parameters, dispatching to a leaf model exactly as
+<code class="docutils literal notranslate"><span class="pre">ToolsRTM::foursail2</span></code>’s <code class="docutils literal notranslate"><span class="pre">get.foursail2.leafopt</span></code> does – all 5 leaf
+models are wired in (see <a class="reference internal" href="#toolsrtm.canopy.foursail" title="toolsrtm.canopy.foursail"><code class="xref py py-func docutils literal notranslate"><span class="pre">foursail()</span></code></a> for the full parameter list
+per leaf model). Green-vegetation leaf optics come from <code class="docutils literal notranslate"><span class="pre">inputLUT</span></code>
+itself (matching <code class="docutils literal notranslate"><span class="pre">ToolsRTM::foursail2</span></code>’s default <code class="docutils literal notranslate"><span class="pre">FieldObserv=NULL</span></code>
+behaviour); brown-vegetation leaf optics use the illustrative default
+senescent spectrum (<code class="docutils literal notranslate"><span class="pre">_BROWN_LEAF_DEFAULT_*</span></code>) the R function also falls
+back to when no field-observed <code class="docutils literal notranslate"><span class="pre">LUT_GB</span></code> is supplied.</p>
+<p>Extra <code class="docutils literal notranslate"><span class="pre">inputLUT</span></code> keys beyond plain <a class="reference internal" href="#toolsrtm.canopy.foursail" title="toolsrtm.canopy.foursail"><code class="xref py py-func docutils literal notranslate"><span class="pre">foursail()</span></code></a>: <code class="docutils literal notranslate"><span class="pre">fraction_brown</span></code>
+(0-1), <code class="docutils literal notranslate"><span class="pre">diss</span></code> (layer dissociation factor), <code class="docutils literal notranslate"><span class="pre">Cv</span></code> (vertical crown
+cover fraction), <code class="docutils literal notranslate"><span class="pre">Zeta</span></code> (tree shape factor, crown diameter / height).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputLUT</strong> (<em>dict</em>)</p></li>
+<li><p><strong>rsoil</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>leaf_model</strong> (<em>Literal</em><em>[</em><em>'PROSPECT-PRO'</em><em>, </em><em>'PROSPECT-D'</em><em>, </em><em>'Liberty'</em><em>, </em><em>'Fluspect-B'</em><em>, </em><em>'Fluspect-B-Cx'</em><em>]</em>)</p></li>
+<li><p><strong>spectrum_all</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#toolsrtm.canopy.FourSAIL2Result" title="toolsrtm.canopy.FourSAIL2Result"><em>FourSAIL2Result</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="liberty.html" class="btn btn-neutral float-left" title="toolsrtm.liberty" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="inform.html" class="btn btn-neutral float-right" title="toolsrtm.inform" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,680 @@
+### ToolsRTM package
+
+The **ToolsRTM** package provides a comprehensive suite of tools for
+simulating canopy reflectance using various radiative transfer (RT)
+models at multiple satellite resolutions. Currently in the testing
+phase, this package is designed to facilitate detailed simulations,
+enabling versatile and accurate analyses of canopy reflectance
+characteristics.
+
+For canopy-level simulations, the package features models such as
+**INFORM**, **fourSAIL**, and **fourSAIL2**. When it comes to leaf-level
+simulations, it includes the **PROSPECT** model (with D and PRO
+variants), **Liberty**, and **FLUSPECT** (B-Cx). These models empower
+users to conduct sophisticated simulations that capture the intricate
+dynamics of reflectance behavior in both leaf and canopy contexts.
+
+Additionally, the **SPART** model (Soil-Plant-Atmosphere Radiative
+Transfer model) is tailored for satellite measurements in the solar
+spectrum. It integrates three computationally efficient RT models: the
+**BSM** model for soil, **PROSAIL** for vegetation canopies, and
+**SMAC** for the atmosphere. These components are interconnected using
+the four-stream theory and the adding method, allowing SPART to simulate
+directional top-of-atmosphere (TOA) spectral observations. This approach
+accounts for significant effects, such as sun-observer geometries and
+the non-Lambertian reflectance of the land surface.
+
+This package specifically simulates the **MARMIT** (Multilayer rAdiative
+tRansfer Model of soIl reflecTance), a radiative transfer model that
+predicts the spectral reflectance of bare soil across the solar domain,
+from 400 nm to 2500 nm with a 1 nm resolution, based on its surface
+water content. To run the MARMIT model, use the `get.marmit1` and
+`get.marmit2` functions.
+
+The necessary datasets for running these models can be downloaded from
+the corresponding databases. Each of the eight database directories
+(Bablet-2016, Dupiau-2020, Humper-2015, Lesaignoux-2008, Liu-2002,
+Lobell-2002, Marcq-2012, and Philpot-2014) contains essential data for
+model validation and simulations.
+
+For more information, please visit: MARMIT
+[GitLab](https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit)
+
+![](reference/figures/rtm_sims.png)
+
+**Fig. 1.** Simulations performed with ToolsRTM Package for several
+radiative transfer models .
+
+### Getting started
+
+The ToolsRTM package offers utilities for radiative transfer workflows,
+including spectral resampling, band simulation, and visualization.
+Install the ToolsRTM package, please follow these steps in R session:
+
+    ## Install additional SCOPEinR package.
+    # Only install if not available
+    if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+      install.packages("remotes")  # just in case remotes isn't there
+      remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
+    }
+
+Alternatively, install the ToolsRTM package from a downloaded
+**.tar.gz** file:
+
+    # install ToolsRTM
+    install.packages('pathWithFile/toolsrtm-main.tar.gz',repos = NULL,type = "source")
+
+Check the installed version:
+
+    # Check the version of ToolsRTM
+    packageVersion("ToolsRTM")
+
+Note: The last version is 0.62.5
+
+### Installing the SCOPEinR Package
+
+The **SCOPEinR** package is required for running the Soil Canopy
+Observation, Photochemistry and Energy fluxes (SCOPE) model, which
+simulates soil, canopy observation, photochemistry, and energy fluxes
+(SCOPE, Van der Tol et al., 2009; Yang et al., 2020).
+
+This R package enables to run the SCOPE model developed in MATLAB by Van
+der Tol at al. (2009), Yang et al. (2020)
+
+    ## Install additional SCOPEinR package using remote.
+    remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
+    # Alternative
+    install.packages('pathWithFile/scopeinr-main.tar.gz',repos = NULL,type = "source")
+
+### Manuals
+
+The manuals are accessible through the [Shiny
+app](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/) or
+directly within the
+[ToolsRTM](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/_w_ef4421a7/Notebooks/R/ToolsRTM/ToolsRTM.html)
+and
+[SCOPEinR](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/_w_ef4421a7/Notebooks/R/SCOPEinR/SCOPEinR.html)
+packages. See also the **Articles** on the [pkgdown
+site](../docs/toolsrtm/index.md) — “Course pipeline: simulate, convolve,
+and invert” and “Model comparison and sensitivity analysis” — narrative
+walkthroughs with real figures.
+
+### Runnable pipeline scripts
+
+Prefer scripts over a Shiny app?
+[`Scripts/Pipeline/`](https://gitlab.com/caminoccg/toolsrtm/-/tree/main/Scripts/Pipeline)
+in the suite repo has a ready-to-adapt simulate → convolve
+(Sentinel-2A/2B or PRISMA) → compute indices → invert (12 ML algorithms
+or CNN/deep learning) workflow, covering all three canopy models
+(fourSAIL, foursail2, INFORM) via a single `canopy.model` setting.
+
+### Shiny application
+
+This package includes a Shiny app designed for running simulations using
+various functions available in `get.simulator`. The app provides an
+intuitive interface for configuring parameters and visualizing
+simulation results, making it easy to explore different model setups and
+their outcomes. Users can seamlessly interact with radiative transfer
+models, such as PROSPECT, SAIL, and MARMIT, without needing to write
+complex scripts.
+
+The manuals for the models and simulations can be accessed directly from
+the Shiny app or through the ToolsRTM and SCOPEinR packages, and the
+pkgdown site’s Articles (see Manuals above).
+
+Here’s some examples of how the Shiny app integrates with the
+`get.simulator` function:
+
+    ToolsRTM::get.simulator(app='SCOPE')
+    ToolsRTM::get.simulator(app='PROSAIL-BRDF')
+    ToolsRTM::get.simulator(app='getLUT')
+    ?get.simulator # to see more options
+
+![](reference/figures/shiny.png)
+
+**Fig. 2.** Interactive reflectance simulator using PROSAIL model based
+on shiny app.
+
+### Citation of the main radiative transfer models
+
+For further details on the the radiative transfer modelsl, please refer
+to the original publications by the authors.
+
+#### PROSPECT model
+
+Féret J-B, Gitelson AA, Noble SD & Jacquemoud S, 2017. PROSPECT-D:
+Towards modeling leaf optical properties through a complete lifecycle.
+Remote Sensing of Environment, 193, 204–215.
+<https://doi.org/10.1016/j.rse.2017.03.004>
+
+Féret, J.B., Berger, K., de Boissieu, F., Malenovský, Z., 2021.
+PROSPECT-PRO for estimating content of nitrogen-containing leaf proteins
+and other carbon-based constituents. Remote Sens. Environ. 252.
+<https://doi.org/10.1016/j.rse.2020.112173>
+
+Jacquemoud S, Baret F, Hanocq J-F, 1992. Modeling spectral and
+bidirectional soil reflectance. Remote Sensing of Environment, 41,
+123–132. <https://doi.org/10.1016/0034-4257(92)90072-R>
+
+Jacquemoud, S., Baret, F., 1990. PROSPECT: a model of leaf optical
+properties spectra. Remote Sens. Environ. 34, 75–91.
+<https://doi.org/10.1016/0034-4257> (90)90100-Z.
+
+More info: <http://teledetection.ipgp.fr/prosail/>
+
+#### FLUSPECT model
+
+Vilfan, N., van der Tol, C., Muller, O., Rascher, U., Verhoef, W., 2016.
+Fluspect-B: A model for leaf fluorescence, reflectance and transmittance
+spectra. Remote Sens. Environ. 186, 596?615.
+<doi:10.1016/j.rse.2016.09.017>
+
+#### Liberty model
+
+Dawson, T. P., Curran, P. J., & Plummer, S. E. (1998). LIBERTY—Modeling
+the Effects of Leaf Biochemical Concentration on Reflectance Spectra.
+Remote Sensing of Environment, 65(1), 50–60.
+<https://doi.org/10.1016/S0034-4257(98)00007-8>
+
+Di Vittorio, A. V. (2009). Enhancing a leaf radiative transfer model to
+estimate concentrations and in vivo specific absorption coefficients of
+total carotenoids and chlorophylls a and b from single-needle
+reflectance and transmittance. Remote Sensing of Environment, 113(9),
+1948–1966. <https://doi.org/10.1016/j.rse.2009.05.002>
+
+#### fourSAIL & fourSAIL-2 models
+
+Verhoef W & Bach H, 2007. Coupled soil–leaf-canopy and atmosphere
+radiative transfer modeling to simulate hyperspectral multi-angular
+surface reflectance and TOA radiance data. Remote Sensing of
+Environment, 109:166-182. <doi:10.1016/j.rse.2006.12.013>
+
+Verhoef W, Jia L, Xiao Q & Su Z, 2007. Unified optical-thermal
+four-stream radiative transfer theory for homogeneous vegetation
+canopies. IEEE Transactions in Geosciences and Remote Sensing,
+45:1808–1822. <https://doi.org/10.1109/TGRS.2007.895844> PROSAIL
+
+Jacquemoud S, Verhoef W, Baret F, Bacour C, Zarco-Tejada PJ, Asner GP,
+François C & Ustin SL, 2009. PROSPECT+ SAIL models: A review of use for
+vegetation characterization. Remote Sensing of Environment, 113:S56–S66.
+<https://doi.org/doi:10.1016/j.rse.2008.01.026>
+
+Berger K, Atzberger C, Danner M, D’Urso G, Mauser W, Vuolo F & Hank T
+2018. Evaluation of the PROSAIL Model Capabilities for Future
+Hyperspectral Model Environments: A Review Study. Remote Sensing, 10:85.
+<https://doi.org/10.3390/rs10010085>
+
+#### Invertible Forest Reflectance Model
+
+Atzberger, C., 2000. Development of an Invertible Forest Reflectance
+Model: The INFOR- model.
+
+Schlerf, M., Atzberger, C., 2006. Inversion of a forest reflectance
+model to estimate structural canopy variables from hyperspectral remote
+sensing data. Remote Sens. Environ. 100, 281–294.
+<https://doi.org/10.1016/j.rse.2005.10.006>.
+
+Atzberger, C. 2000: Development of an invertible forest reflectance
+model: The INFOR-Model.In: Buchroithner (Ed.): A decade of
+trans-european remote sensing cooperation. Proceedings of the 20th
+EARSeL Symposium Dresden, Germany, 14.-16. June 2000: 39-44.
+
+Rosema, A., Verhoef, W., Noorbergen, H. 1992: A new forest light
+interaction model in support of forest monitoring. Remote Sensing of
+Environment, 42: 23-41.
+
+Jacquemoud S., Ustin S.L., Verdebout J., Schmuck G., Andreoli G.,
+Hosgood B. (1996): Estimating leaf biochemistry using the PROSPECT leaf
+optical properties model, Remote Sens. Environ., 56:194-202.
+
+Verhoef, W. 1984: Light scattering by leaf layers with application to
+canopy reflectance modeling: The SAIL model. Remote Sensing of
+Environment, 16: 125-141.
+
+Basic version of INFORM: Clement Atzberger, 1999 INFORM modifications
+and validation: Martin Schlerf, 2004-2007
+
+#### The SPART model: a soil-plant-atmosphere radiative transfer model for satellite measurements in the solar spectrum
+
+Yang, P., van der Tol, C., Yin, T., & Verhoef, W. (2020). The SPART
+model: A soil-plant-atmosphere radiative transfer model for satellite
+measurements in the solar spectrum. Remote Sensing of Environment, 247,
+111870.
+
+#### SCOPE model: The Soil Canopy Observation, Photochemistry and Energy fluxes model
+
+Yang, P., Verhoef, W., & van der Tol, C. (2017). The mSCOPE model: A
+simple adaptation to the SCOPE model to describe reflectance,
+fluorescence and photosynthesis of vertically heterogeneous canopies.
+Remote sensing of environment, 201, 1-11.
+
+Yang, P., Prikaziuk, E., Verhoef, W., & Van der Tol, C. (2021). **SCOPE
+2.0: A model to simulate vegetated land surface fluxes and satellite
+signals**. *Geoscientific Model Development*, 14, 4697–4712.
+<https://doi.org/10.5194/gmd-14-4697-2021>.
+
+Van der Tol, C., Verhoef, W., Timmermans, J., Verhoef, A., & Su, Z.
+(2009). **An integrated model of soil-canopy spectral radiances,
+photosynthesis, fluorescence, temperature, and energy balance**.
+*Biogeosciences*, 6(12), 3109–3129.
+<https://doi.org/10.5194/bg-6-3109-2009>.
+
+#### MARMIT model (Multilayer rAdiative tRansfer Model of soIl reflecTance)
+
+Bablet A., Vu P.V.H., Jacquemoud S., Viallefont-Robinet F., Fabre S.,
+Briottet X., Sadeghi M., Whiting M.L., Baret F. and Tian J. (2018),
+MARMIT: a multilayer radiative transfer model of soil reflectance to
+estimate surface soil moisture content in the solar domain (400–2500
+nm), Remote Sensing of Environment, 217:1-17.
+<https://doi.org/10.1016/j.rse.2018.07.031>.
+
+Dupiau A., Jacquemoud S., Briottet X., Fabre S., Viallefont-Robinet F.,
+Philpot W., Di Biagio C., Hébert H. and Formenti P. (2022), MARMIT-2: an
+improved version of the MARMIT model to predict soil reflectance as a
+function of surface water content in the solar domain, Remote Sensing of
+Environment, 272:112951. <https://doi.org/10.1016/j.rse.2022.112951>.
+
+### License
+
+![](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+The **ToolsRTM** package is licensed under the MIT License, allowing for
+free use, modification, and distribution. This package is available on
+GitLab, and we encourage contributions and collaborations from the
+community. For more details, please refer to the LICENSE file in the
+repository.
+
+# Package index
+
+## All functions
+
+- [`calctav()`](calctav.md) : Computation of transmissivity of a
+  dielectric plane surface, averaged over all directions of incidence
+  and over all polarizations.
+
+- [`calc_fluspect_bcar()`](calc_fluspect_bcar.md) : calc_fluspect_bcar
+  function
+
+- [`campbell()`](campbell.md) : Campbell function
+
+- [`color.gradient()`](color.gradient.md) : Gradient scale Map a numeric
+  vector to a color gradient
+
+- [`Compute_BRF()`](Compute_BRF.md) : Computes bidirectional reflectance
+  factor based on outputs from PRO-4SAIL and sun position
+
+- [`compute_stats()`](compute_stats.md) : Compute statistical metrics
+  for model performance
+
+- [`ConservativeScattering()`](ConservativeScattering.md) : computes
+  conservative scattering conditions
+
+- [`correlatedValue()`](correlatedValue.md) : Generate a variable
+  correlated with an existing one
+
+- [`COST_4Fluspect()`](COST_4Fluspect.md) : Cost function for Fluspect
+  parameter fitting
+
+- [`dcum()`](dcum.md) : dcum function
+
+- [`define_bands()`](define_bands.md) : define spectral region
+
+- [`define_constants()`](define_constants.md) : Define constant for
+  FLuxPesp
+
+- [`dladgen()`](dladgen.md) : Computes the leaf angle distribution
+  function value (freq)
+
+- [`ephoton()`](ephoton.md) : Function for calculating the energy of a
+  single photon given its wavelength.
+
+- [`exp1_base()`](exp1_base.md) : Compute Exponential Integral E1(x)
+
+- [`extract_dates_from_tiff_files()`](extract_dates_from_tiff_files.md)
+  : Extract acquisition dates from a set of TIFF file names
+
+- [`filter_outliers()`](filter_outliers.md) : remove outliers
+
+- [`foursail.inf()`](foursail.inf.md) :
+
+  `foursail.inf` The foursail (or 4SAIL) radiative transfer model is a
+  RT model uses for simulating bidirectional reflectance distribution
+  functions within vegetation canopies
+
+- [`foursail.inform()`](foursail.inform.md) : Performs PROSAIL
+  simulation based on a set of combinations of input parameters for
+  estimating understorey reflectance
+
+- [`foursail()`](foursail.md) : fourSAIL model coupled with several leaf
+  models
+
+- [`foursail2()`](foursail2.md) : Performs fourSAIL2 + PROSPECT
+  simulation based on a set of combinations of input parameters
+
+- [`foursail_t_o()`](foursail_t_o.md) : Performs PROSAIL simulation
+  based on a set of combinations of input parameters
+
+- [`foursail_t_s()`](foursail_t_s.md) : Performs PROSAIL simulation
+  based on a set of combinations of input parameters
+
+- [`gauss_byMin_Max()`](gauss_byMin_Max.md) : Gaussion distribution
+
+- [`get.Altitude2Pa()`](get.Altitude2Pa.md) : Get atmospheric pressure
+  (in hPa) as a function of altitude
+
+- [`get.cars.pls()`](get.cars.pls.md) : Perform CARS-PLS analysis.
+
+- [`get.coef.SMAC()`](get.coef.SMAC.md) : Get the coefficients for the
+  SMAC model
+
+- [`get.Extraterrestrial_radiance()`](get.Extraterrestrial_radiance.md)
+  : get.Extraterrestrial_radiance
+
+- [`get.indices.v2()`](get.indices.v2.md) : Compute vegetation indices
+  from reflectance spectra (v2, expanded index set)
+
+- [`get.inversion()`](get.inversion.md) : get.inversion of the plant
+  traits using different machine learning models
+
+- [`get.inversionOpt()`](get.inversionOpt.md) : LUT inversion using a
+  RTM
+
+- [`get.LUTfromRanges()`](get.LUTfromRanges.md) : Get a LUT based on a
+  table with Min and Max ranges
+
+- [`get.marmit.rsoil()`](get.marmit.rsoil.md) : Build a
+  canopy-model-ready soil reflectance spectrum from MARMIT
+
+- [`get.marmit1()`](get.marmit1.md) : Calculate Spectral Reflectance for
+  Wet Soils Using MARMIT-1
+
+- [`get.marmit2()`](get.marmit2.md) : Simulation of Spectral Reflectance
+  of Wet Soils in the Solar Domain using MARMIT-2
+
+- [`get.packages()`](get.packages.md) : Get the packages
+
+- [`get.plot.cars.pls()`](get.plot.cars.pls.md) : Generate plot for
+  CARSPLS analysis.
+
+- [`get.plot.ML()`](get.plot.ML.md) : This function plots predictions
+  from a machine learning (ML) model on both training and testing
+  datasets.
+
+- [`get.plot.plsr()`](get.plot.plsr.md) : Plot Predictions from PLSR
+  Model
+
+- [`get.plots()`](get.plots.md) : Get a plot with simulations
+
+- [`get.RTM()`](get.RTM.md) : get.RTM - Run Radiative Transfer Model
+  (RTM)
+
+- [`get.satellite_collection()`](get.satellite_collection.md) : Retrieve
+  Satellite Collections
+
+- [`get.sentinel2_cube()`](get.sentinel2_cube.md) : Create and Process a
+  Sentinel-2 Data Cube
+
+- [`get.smac()`](get.smac.md) : Apply an atmospheric correction using
+  SMAC method (Rahman and Dedieu, 1994)
+
+- [`get.sobol.indices()`](get.sobol.indices.md) : Get first and total
+  Sobol indices by Carlos Camino
+
+- [`get.spectra.convolved()`](get.spectra.convolved.md) : Get Convolved
+  Spectra
+
+- [`get.spectra.spart()`](get.spectra.spart.md) : Get Spectral
+  Characteristics for the SPART Model
+
+- [`get.spectral.convolution()`](get.spectral.convolution.md) :
+  get.spectral.convolution
+
+- [`get.spectral.convolution.rfl()`](get.spectral.convolution.rfl.md) :
+  Get Spectral Convolution for Reflectance
+
+- [`get.spectral.derivative()`](get.spectral.derivative.md) : Calculate
+  spectral derivative
+
+- [`get.spectral()`](get.spectral.md) : Get spectral bandset for
+  interpolation
+
+- [`get.spectral.sensitivity()`](get.spectral.sensitivity.md) : Spectral
+  global sensitivity analysis (Sobol total index per wavelength)
+
+- [`get.srf.from_fwhm()`](get.srf.from_fwhm.md) : Generate Spectral
+  Response Function from Full Width at Half Maximum (FWHM)
+
+- [`get.stats.ind()`](get.stats.ind.md) : Get Statistical Scores between
+  measurd and predicted single variable
+
+- [`get.stats.plsr()`](get.stats.plsr.md) : Get Statistical Scores for
+  PLSR Model
+
+- [`get.stats()`](get.stats.md) : Get Statistical Scores for ML Models
+
+- [`getBSM.toolsRTM()`](getBSM.toolsRTM.md) : Brightness-Shape-Moisture
+  soil model
+
+- [`getCor()`](getCor.md) : Generate multiple mutually-correlated
+  variables at a target correlation level
+
+- [`getCWSI()`](getCWSI.md) : Get CWSI for almonds
+
+- [`getFLD2()`](getFLD2.md) : Get FLD2
+
+- [`getFLD2_SE()`](getFLD2_SE.md) : Get FLD2
+
+- [`getFluspect.B()`](getFluspect.B.md) : Leaf FLUSPECT-B model
+
+- [`getFluspect.Cx()`](getFluspect.Cx.md) : Leaf FLUSPECT-B-Cx model
+
+- [`getIndices()`](getIndices.md) : GetIndices: A Function to Estimate
+  Common Spectral Indices
+
+- [`getIndicesSE2.ML()`](getIndicesSE2.ML.md) : extract spectral indices
+  at Sentinel-2 resolution a sort number of indices
+
+- [`getIndicesSE2()`](getIndicesSE2.md) : extract spectral indices at
+  Sentinel-2 resolution
+
+- [`getKmeans()`](getKmeans.md) : K-means Classification on a
+  RasterStack This function performs a k-means unsupervised
+  classification of a stack of rasters. Number of clusters can be
+  specified, as well as number of iterations and starting sets. An
+  optional geographic weighting system can be turned on that constrains
+  clusters to a geographic area, by including coordinates in the
+  clustering. All variables are normalized before clustering is
+  performed.
+  https://rdrr.io/github/ozjimbob/ecbtools/man/raster.kmeans.html
+
+- [`getLUT()`](getLUT.md) : Get LUT for radiative transfer models
+
+- [`getLUTs()`](getLUTs.md) : Get LUTs for radiative transfer models
+
+- [`getLUT_liberty()`](getLUT_liberty.md) : Get LUT for radiative
+  transfer models
+
+- [`getMLmodel()`](getMLmodel.md) : getMLmodel with a prefixed
+  configuration
+
+- [`getMLmodel.withRetrain()`](getMLmodel.withRetrain.md) : getMLmodel
+  is a function for retrain a deep model with a prefixed configuration
+
+- [`GetMosaics()`](GetMosaics.md) : Get a Mosaic from TIFFs Tiles from
+  (Forest type 2018 later from COPERNICUS)
+
+- [`getPredicts()`](getPredicts.md) : getPredicts
+
+- [`getReverse.trans()`](getReverse.trans.md) : Reverse a caret
+  preProcess transformation and round the result
+
+- [`getSeries()`](getSeries.md) : get series in a dataframe from rasters
+
+- [`getSim_fromLUT()`](getSim_fromLUT.md) : Simulate reflectance spectra
+  while sweeping one trait, all others fixed
+
+- [`getSpatialTrait()`](getSpatialTrait.md) : function for Spatial
+  mapping of the main traits
+
+- [`getSpatial_index()`](getSpatial_index.md) : this function produces
+  Spatial maps of the spectral index
+
+- [`getSpectraIndices()`](getSpectraIndices.md) : this function produces
+  Spatial maps of the spectral indices
+
+- [`GetSpectralseries()`](GetSpectralseries.md) : Extract all bands from
+  SE images (adapted to NETCDF dataset)
+
+- [`getSplitData()`](getSplitData.md) : getSplitData for ML models
+
+- [`getSplitData_noMessages()`](getSplitData_noMessages.md) :
+  getSplitData for ML models with no messages
+
+- [`getStacks()`](getStacks.md) : Get TIFF from a folder and generate
+  the stack.
+
+- [`getTIFFs()`](getTIFFs.md) : Extract all bands from SE images
+  (adapted to NETCDF dataset)
+
+- [`getVIF()`](getVIF.md) : Calculate Variance Inflation Factor (VIF)
+
+- [`get_append()`](get_append.md) : Append tables
+
+- [`get_bounding_box()`](get_bounding_box.md) : Define a Bounding Box
+  Around a Scenario Centroid
+
+- [`get_data()`](get_data.md) : get random plant traits using a uniform
+  distribution
+
+- [`get_distributionLUT()`](get_distributionLUT.md) : Build a LUT with a
+  per-trait distribution choice (Uniform or Gaussian) and an optional
+  Car~Cab correlation
+
+- [`get_response.R()`](get_response.R.md) : spectral response function
+
+- [`get_simulations()`](get_simulations.md) : Simulate spectra with RT
+  models
+
+- [`hybrid_inversion()`](hybrid_inversion.md) : Inversion of plant
+  traits using ML models
+
+- [`hybrid_inversionE()`](hybrid_inversionE.md) : Inversion of plant
+  traits using ML models (Ensemble variant)
+
+- [`inform()`](inform.md) : The INvertible FOrest Reflectance Model
+  coupled with leaf models
+
+- [`Jfunc1()`](Jfunc1.md) : edit 2017 12 28: change sampling of angles
+  to match with Jfunc1.m
+
+- [`jfunc1_()`](jfunc1_.md) : Title
+
+- [`Jfunc2()`](Jfunc2.md) : J2 function with avoidance of singularity
+  problem edit 2017 12 28: change sampling of angles to match with
+  Jfunc2.m
+
+- [`Jfunc3()`](Jfunc3.md) : J3 function with avoidance of singularity
+  problem edit 2017 12 28: change sampling of angles to match with
+  Jfunc3.m
+
+- [`Jfunc4()`](Jfunc4.md) : J4 function for treating (near) conservative
+  scattering edit 2021 11 28: change sampling of angles to match with
+  Jfunc4
+
+- [`liberty()`](liberty.md) : LIBERTY model
+
+- [`MAE()`](MAE.md) : Function that returns Mean Absolute Error
+
+- [`NonConservativeScattering()`](NonConservativeScattering.md) :
+  computes non conservative scattering conditions
+
+- [`normalize()`](normalize.md) : Normalize
+
+- [`numjacobian()`](numjacobian.md) : num-jacobian function
+
+- [`plotspectra()`](plotspectra.md) : Plot one or more spectra from a
+  data frame
+
+- [`plotspectra_image()`](plotspectra_image.md) : Plot the spectra in
+  points over the image
+
+- [`plotspectra_SE()`](plotspectra_SE.md) : Plot spectra as discrete
+  points at Sentinel band positions
+
+- [`prospect_DB()`](prospect_DB.md) : PROSPECT-Dynamic with brown
+  pigments
+
+- [`prospect_PRO()`](prospect_PRO.md) : PROSPECT-PRO
+
+- [`rbinomcor()`](rbinomcor.md) : Generate a vector from a binomial
+  distribution correlated with another distribution
+
+- [`rchisqcor()`](rchisqcor.md) : Generate a vector from a chi-square
+  distribution correlated with another distribution
+
+- [`resample_fun()`](resample_fun.md) : Generate a normalized Gaussian
+  spectral response function
+
+- [`rgammacor()`](rgammacor.md) : Generate a vector from a Gamma
+  distribution correlated with another distribution
+
+- [`rlnormcor()`](rlnormcor.md) : Generate a single variable from a
+  distribution correlated with another distribution
+
+- [`RMSE()`](RMSE.md) : Function that returns Root Mean Square Error
+
+- [`rnegbinomcor()`](rnegbinomcor.md) : Generate a vector from a
+  negative binomial distribution correlated with another distribution
+
+- [`rnormcor()`](rnormcor.md) : Generate a single variable from a
+  distribution correlated with another distribution
+
+- [`rnormcorV()`](rnormcorV.md) : Generate a vector from a normal
+  distribution correlated with another distribution
+
+- [`rpoiscor()`](rpoiscor.md) : Generate a vector from a Poisson
+  distribution correlated with another distribution
+
+- [`runifcor.cor()`](runifcor.cor.md) : Generate a vector from a uniform
+  distribution correlated with another distribution
+
+- [`run_simulation()`](run_simulation.md) : Run a vegetation
+  reflectance/energy-balance simulation, choosing models interactively
+
+- [`rweibullcor()`](rweibullcor.md) : Generate a vector from a Weibull
+  distribution correlated with another distribution
+
+- [`sigmoid.soil()`](sigmoid.soil.md) : Calculate Soil Moisture Content
+  Using a Sigmoid Model
+
+- [`simulate_RTM()`](simulate_RTM.md) : Simulate canopy reflectance with
+  any supported leaf model + any supported canopy model
+
+- [`Sint()`](Sint.md) : Simpson integration
+
+- [`soilwat()`](soilwat.md) :
+
+  soilwat function `soilwat` In this model it is assumed that the water
+  film area is built up
+
+- [`SPART()`](SPART.md) : Compute Top-of-Canopy and Top-of-Atmosphere
+  Reflectance and Radiance
+
+- [`SPART.simN()`](SPART.simN.md) : Compute Top-of-Canopy and
+  Top-of-Atmosphere Reflectance and Radiance with Simulations
+
+- [`volscatt()`](volscatt.md) : Compute volume scattering functions and
+  interception coefficients for given solar zenith, viewing zenith,
+  azimuth and leaf inclination angle.
+
+# Articles
+
+### All vignettes
+
+- [Course pipeline: simulate, convolve, and invert](course-pipeline.md):
+- [Getting-LUTs](Getting-LUTs.md):
+- [Introduction to InversionOpt](InversionOpt.md):
+- [Model comparison and sensitivity
+  analysis](model-comparison-and-sensitivity.md):
+- [The SCOPEinR package](SCOPEinR/SCOPEinR.md):
+- [The ToolsRTM package](ToolsRTM/ToolsRTM.md):

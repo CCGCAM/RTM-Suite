@@ -1,0 +1,7 @@
+load("/Volumes/LaCie/Drive/Workspace/Gitlab/toolsrtm/data/InputsLUT_INFORM.rda")
+InputsLUT_INFORM
+ls()
+inputsINF
+load("/Volumes/LaCie/Drive/Workspace/Gitlab/toolsrtm/data/Refl_CAN.rda")
+ls()
+Refl_CAN

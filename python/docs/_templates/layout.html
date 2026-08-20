@@ -1,0 +1,11 @@
+{% extends "!layout.html" %}
+{% block sidebartitle %}
+  {{ super() }}
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    {% if pagename == 'index' %}
+    <a href="../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+    {% else %}
+    <a href="../{{ pathto('index') }}" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+    {% endif %}
+  </div>
+{% endblock %}

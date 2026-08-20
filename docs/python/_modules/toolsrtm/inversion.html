@@ -1,0 +1,1127 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>toolsrtm.inversion &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    
+    <a href="../../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+    
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../toolsrtm/index.html">toolsrtm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.calctav"><code class="docutils literal notranslate"><span class="pre">calctav()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.LeafOptics"><code class="docutils literal notranslate"><span class="pre">LeafOptics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.prospect_d"><code class="docutils literal notranslate"><span class="pre">prospect_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.prospect_pro"><code class="docutils literal notranslate"><span class="pre">prospect_pro()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.FluspectBResult"><code class="docutils literal notranslate"><span class="pre">FluspectBResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.FluspectCxResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.fluspect_b"><code class="docutils literal notranslate"><span class="pre">fluspect_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.fluspect_cx"><code class="docutils literal notranslate"><span class="pre">fluspect_cx()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/liberty.html#toolsrtm.liberty.LibertyResult"><code class="docutils literal notranslate"><span class="pre">LibertyResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/liberty.html#toolsrtm.liberty.liberty"><code class="docutils literal notranslate"><span class="pre">liberty()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/canopy.html">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.volscatt"><code class="docutils literal notranslate"><span class="pre">volscatt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.campbell"><code class="docutils literal notranslate"><span class="pre">campbell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.dladgen"><code class="docutils literal notranslate"><span class="pre">dladgen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.dcum"><code class="docutils literal notranslate"><span class="pre">dcum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc1"><code class="docutils literal notranslate"><span class="pre">jfunc1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc2"><code class="docutils literal notranslate"><span class="pre">jfunc2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc4"><code class="docutils literal notranslate"><span class="pre">jfunc4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.non_conservative_scattering"><code class="docutils literal notranslate"><span class="pre">non_conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.conservative_scattering"><code class="docutils literal notranslate"><span class="pre">conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.scattering"><code class="docutils literal notranslate"><span class="pre">scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.LeafAngleDistribution"><code class="docutils literal notranslate"><span class="pre">LeafAngleDistribution</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.FourSAILResult"><code class="docutils literal notranslate"><span class="pre">FourSAILResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail_core"><code class="docutils literal notranslate"><span class="pre">foursail_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail"><code class="docutils literal notranslate"><span class="pre">foursail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.FourSAIL2Result"><code class="docutils literal notranslate"><span class="pre">FourSAIL2Result</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail2_core"><code class="docutils literal notranslate"><span class="pre">foursail2_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail2"><code class="docutils literal notranslate"><span class="pre">foursail2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.compute_brf"><code class="docutils literal notranslate"><span class="pre">compute_brf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_inform"><code class="docutils literal notranslate"><span class="pre">foursail_inform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_inf"><code class="docutils literal notranslate"><span class="pre">foursail_inf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_t_s"><code class="docutils literal notranslate"><span class="pre">foursail_t_s()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_t_o"><code class="docutils literal notranslate"><span class="pre">foursail_t_o()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.inform"><code class="docutils literal notranslate"><span class="pre">inform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.spart_toc"><code class="docutils literal notranslate"><span class="pre">spart_toc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.SpartToaResult"><code class="docutils literal notranslate"><span class="pre">SpartToaResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.spart_toa"><code class="docutils literal notranslate"><span class="pre">spart_toa()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/smac.html">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SmacSensor"><code class="docutils literal notranslate"><span class="pre">SmacSensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SENSORS"><code class="docutils literal notranslate"><span class="pre">SENSORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.get_sensor"><code class="docutils literal notranslate"><span class="pre">get_sensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel2a_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2a_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel2b_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2b_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel3a_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3a_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel3b_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3b_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat4_tm"><code class="docutils literal notranslate"><span class="pre">landsat4_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat5_tm"><code class="docutils literal notranslate"><span class="pre">landsat5_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat7_etm"><code class="docutils literal notranslate"><span class="pre">landsat7_etm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat8_oli"><code class="docutils literal notranslate"><span class="pre">landsat8_oli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.terra_aqua_modis"><code class="docutils literal notranslate"><span class="pre">terra_aqua_modis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SmacAtmosphere"><code class="docutils literal notranslate"><span class="pre">SmacAtmosphere</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.get_smac"><code class="docutils literal notranslate"><span class="pre">get_smac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.spectral_convolution"><code class="docutils literal notranslate"><span class="pre">spectral_convolution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.SrfTable"><code class="docutils literal notranslate"><span class="pre">SrfTable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.SrfConvolutionResult"><code class="docutils literal notranslate"><span class="pre">SrfConvolutionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_prisma"><code class="docutils literal notranslate"><span class="pre">srf_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.fwhm_prisma"><code class="docutils literal notranslate"><span class="pre">fwhm_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_sentinel2a"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_sentinel2b"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_srf"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_srf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.enmap_characteristics"><code class="docutils literal notranslate"><span class="pre">enmap_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.sensor_characteristics"><code class="docutils literal notranslate"><span class="pre">sensor_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_gaussian"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_gaussian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/indices.html#toolsrtm.indices.get_indices"><code class="docutils literal notranslate"><span class="pre">get_indices()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.MarmitSoil"><code class="docutils literal notranslate"><span class="pre">MarmitSoil</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.marmit1"><code class="docutils literal notranslate"><span class="pre">marmit1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.marmit2"><code class="docutils literal notranslate"><span class="pre">marmit2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.sigmoid_soil"><code class="docutils literal notranslate"><span class="pre">sigmoid_soil()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.get_marmit_rsoil"><code class="docutils literal notranslate"><span class="pre">get_marmit_rsoil()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.COLLECTION_ASSETS"><code class="docutils literal notranslate"><span class="pre">COLLECTION_ASSETS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.SatelliteCollection"><code class="docutils literal notranslate"><span class="pre">SatelliteCollection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.get_satellite_collection"><code class="docutils literal notranslate"><span class="pre">get_satellite_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.get_sentinel2_cube"><code class="docutils literal notranslate"><span class="pre">get_sentinel2_cube()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.CarsPlsResult"><code class="docutils literal notranslate"><span class="pre">CarsPlsResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.carspls"><code class="docutils literal notranslate"><span class="pre">carspls()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_vif"><code class="docutils literal notranslate"><span class="pre">get_vif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.InversionOptResult"><code class="docutils literal notranslate"><span class="pre">InversionOptResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_inversion_opt"><code class="docutils literal notranslate"><span class="pre">get_inversion_opt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.ALGORITHMS"><code class="docutils literal notranslate"><span class="pre">ALGORITHMS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.InversionResult"><code class="docutils literal notranslate"><span class="pre">InversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_inversion"><code class="docutils literal notranslate"><span class="pre">get_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.HybridInversionResult"><code class="docutils literal notranslate"><span class="pre">HybridInversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.hybrid_inversion"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.hybrid_inversion_ensemble"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion_ensemble()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/deep_learning.html#toolsrtm.deep_learning.MLModelResult"><code class="docutils literal notranslate"><span class="pre">MLModelResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/deep_learning.html#toolsrtm.deep_learning.get_ml_model"><code class="docutils literal notranslate"><span class="pre">get_ml_model()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.SoilParams"><code class="docutils literal notranslate"><span class="pre">SoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.WettingParams"><code class="docutils literal notranslate"><span class="pre">WettingParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.get_bsm"><code class="docutils literal notranslate"><span class="pre">get_bsm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.soilwat"><code class="docutils literal notranslate"><span class="pre">soilwat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/spectral.html#scopeinpython.spectral.SpectralConfig"><code class="docutils literal notranslate"><span class="pre">SpectralConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/spectral.html#scopeinpython.spectral.get_spectra_scope"><code class="docutils literal notranslate"><span class="pre">get_spectra_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_volscatt_scope"><code class="docutils literal notranslate"><span class="pre">get_volscatt_scope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_pso"><code class="docutils literal notranslate"><span class="pre">get_pso()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_reflectances"><code class="docutils literal notranslate"><span class="pre">get_reflectances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_fluxprofile"><code class="docutils literal notranslate"><span class="pre">get_fluxprofile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.CanopyStructure"><code class="docutils literal notranslate"><span class="pre">CanopyStructure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult"><code class="docutils literal notranslate"><span class="pre">RTMoResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.run_rtmo"><code class="docutils literal notranslate"><span class="pre">run_rtmo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.NetRadiationLite"><code class="docutils literal notranslate"><span class="pre">NetRadiationLite</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.net_radiation_lite"><code class="docutils literal notranslate"><span class="pre">net_radiation_lite()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.LeafBio"><code class="docutils literal notranslate"><span class="pre">LeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.MeteoLeaf"><code class="docutils literal notranslate"><span class="pre">MeteoLeaf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.BiochemResult"><code class="docutils literal notranslate"><span class="pre">BiochemResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.sel_root"><code class="docutils literal notranslate"><span class="pre">sel_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_gs_fun"><code class="docutils literal notranslate"><span class="pre">get_gs_fun()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ball_berry"><code class="docutils literal notranslate"><span class="pre">get_ball_berry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_temperature_function_c3"><code class="docutils literal notranslate"><span class="pre">get_temperature_function_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_high_temp_inhibtion_c3"><code class="docutils literal notranslate"><span class="pre">get_high_temp_inhibtion_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_fluorescence_model"><code class="docutils literal notranslate"><span class="pre">get_fluorescence_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ci_next"><code class="docutils literal notranslate"><span class="pre">get_ci_next()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_compute_a"><code class="docutils literal notranslate"><span class="pre">get_compute_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_biochemical"><code class="docutils literal notranslate"><span class="pre">get_biochemical()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect.html#scopeinpython.fluspect.FluspectCxScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect.html#scopeinpython.fluspect.get_fluspect_cx_scope"><code class="docutils literal notranslate"><span class="pre">get_fluspect_cx_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.MultiLayerLeafBio"><code class="docutils literal notranslate"><span class="pre">MultiLayerLeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.FluspectMScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectMScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.fluspect_mscope"><code class="docutils literal notranslate"><span class="pre">fluspect_mscope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmf.html#scopeinpython.rtmf.RTMfResult"><code class="docutils literal notranslate"><span class="pre">RTMfResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmf.html#scopeinpython.rtmf.rtmf"><code class="docutils literal notranslate"><span class="pre">rtmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmz.html#scopeinpython.rtmz.RTMzResult"><code class="docutils literal notranslate"><span class="pre">RTMzResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmz.html#scopeinpython.rtmz.rtmz"><code class="docutils literal notranslate"><span class="pre">rtmz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.stefan_boltzmann"><code class="docutils literal notranslate"><span class="pre">stefan_boltzmann()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.monin_obukhov"><code class="docutils literal notranslate"><span class="pre">monin_obukhov()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.psim"><code class="docutils literal notranslate"><span class="pre">psim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.psih"><code class="docutils literal notranslate"><span class="pre">psih()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.phstar"><code class="docutils literal notranslate"><span class="pre">phstar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.ResistanceParams"><code class="docutils literal notranslate"><span class="pre">ResistanceParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.Resistances"><code class="docutils literal notranslate"><span class="pre">Resistances</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.get_resistances"><code class="docutils literal notranslate"><span class="pre">get_resistances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.HeatFluxes"><code class="docutils literal notranslate"><span class="pre">HeatFluxes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.get_heatfluxes"><code class="docutils literal notranslate"><span class="pre">get_heatfluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.RTMtSbResult"><code class="docutils literal notranslate"><span class="pre">RTMtSbResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.rtmt_sb"><code class="docutils literal notranslate"><span class="pre">rtmt_sb()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalMeteo"><code class="docutils literal notranslate"><span class="pre">EbalMeteo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalCanopyParams"><code class="docutils literal notranslate"><span class="pre">EbalCanopyParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalSoilParams"><code class="docutils literal notranslate"><span class="pre">EbalSoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalResult"><code class="docutils literal notranslate"><span class="pre">EbalResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.aggregator_ebal"><code class="docutils literal notranslate"><span class="pre">aggregator_ebal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.ebal"><code class="docutils literal notranslate"><span class="pre">ebal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.TDP_DEFAULT"><code class="docutils literal notranslate"><span class="pre">TDP_DEFAULT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.get_zo_and_d"><code class="docutils literal notranslate"><span class="pre">get_zo_and_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.ScopeOptions"><code class="docutils literal notranslate"><span class="pre">ScopeOptions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.ScopeResult"><code class="docutils literal notranslate"><span class="pre">ScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.get_scope"><code class="docutils literal notranslate"><span class="pre">get_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.sint"><code class="docutils literal notranslate"><span class="pre">sint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_ephoton"><code class="docutils literal notranslate"><span class="pre">get_ephoton()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_e2phot"><code class="docutils literal notranslate"><span class="pre">get_e2phot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_planck"><code class="docutils literal notranslate"><span class="pre">get_planck()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.satvap"><code class="docutils literal notranslate"><span class="pre">satvap()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">toolsrtm.inversion</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for toolsrtm.inversion</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Trait-inversion tools: CARS-PLS feature selection, VIF-based collinearity</span>
+<span class="sd">pruning, LUT nearest-neighbour (&quot;merit function&quot;) inversion, and a</span>
+<span class="sd">multi-algorithm ML dispatcher.</span>
+
+<span class="sd">Python port of ``ToolsRTM/R/carspls.R`` / ``get.cars.pls.R``, ``getVIF.R``,</span>
+<span class="sd">``get.inversion.R``, ``hybrid_inversion.R`` / ``hybrid_inversionE.R``, and</span>
+<span class="sd">``get.inversionOpt.R``. Needs the optional ``ml`` extra</span>
+<span class="sd">(``pip install toolsrtm[ml]``: scikit-learn, xgboost) -- none of these</span>
+<span class="sd">functions are imported by ``toolsrtm/__init__.py`` at import time, and each</span>
+<span class="sd">imports its own ML dependencies lazily so a plain ``import toolsrtm`` never</span>
+<span class="sd">requires scikit-learn/xgboost to be installed.</span>
+
+<span class="sd">R&#39;s ``get.inversion``/``hybrid_inversion`` dispatch by name to specific</span>
+<span class="sd">``caret`` methods (bartMachine, rqlasso, rvmLinear, AdaBag, brnn, ...). Several</span>
+<span class="sd">of those have no direct scikit-learn/xgboost equivalent; where that&#39;s the</span>
+<span class="sd">case the docstring of the relevant function says exactly which estimator was</span>
+<span class="sd">substituted and why. Unlike the pure radiative-transfer math ported</span>
+<span class="sd">elsewhere in this package, none of this module is verified to floating-point</span>
+<span class="sd">precision against R -- ``caret``&#39;s own cross-validated tuning is stochastic,</span>
+<span class="sd">so a Python port using different (but comparable) estimators and search</span>
+<span class="sd">grids will not reproduce R&#39;s numbers bit-for-bit even in principle. What&#39;s</span>
+<span class="sd">verified instead: each algorithm runs end-to-end on held-out data and</span>
+<span class="sd">produces sane, comparable-magnitude accuracy metrics (see</span>
+<span class="sd">``tests/test_inversion.py``).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># CARS-PLS (Competitive Adaptive Reweighted Sampling for PLS)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="CarsPlsResult">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.CarsPlsResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CarsPlsResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of :func:`carspls`. Mirrors the R ``CARS`` list 1:1 except</span>
+<span class="sd">    ``selected_variables`` is 0-indexed (Python) instead of 1-indexed (R).&quot;&quot;&quot;</span>
+
+    <span class="n">coef</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1">#: (n_vars, iteration) coefficient path</span>
+    <span class="n">n_var</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1">#: (iteration,) number of retained variables per iteration</span>
+    <span class="n">rmsecv</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1">#: (iteration,) cross-validated RMSE per iteration</span>
+    <span class="n">num_lv</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1">#: (iteration,) best number of latent variables per iteration</span>
+    <span class="n">optimal_iteration</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1">#: 1-indexed iteration with the lowest RMSECV (matches R)</span>
+    <span class="n">min_error</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">selected_variables</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1">#: 0-indexed column positions into the original X</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pls_press_by_ncomp</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">max_ncomp</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">partition_type</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of squared cross-validated prediction errors for n_components in</span>
+<span class="sd">    1..max_ncomp, matching ``pls::crossval``&#39;s per-component PRESS.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cross_decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PLSRegression</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">partition_type</span> <span class="o">==</span> <span class="s2">&quot;interleaved&quot;</span><span class="p">:</span>
+        <span class="n">folds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">%</span> <span class="n">fold</span>
+    <span class="k">elif</span> <span class="n">partition_type</span> <span class="o">==</span> <span class="s2">&quot;consecutive&quot;</span><span class="p">:</span>
+        <span class="n">folds</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">fold</span><span class="p">)</span> <span class="o">//</span> <span class="n">n</span>
+    <span class="k">elif</span> <span class="n">partition_type</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+        <span class="n">folds</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">fold</span><span class="p">)</span> <span class="o">//</span> <span class="n">n</span>
+        <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+        <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">folds</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;partition_type must be &#39;interleaved&#39;, &#39;consecutive&#39;, or &#39;random&#39;&quot;</span><span class="p">)</span>
+
+    <span class="n">press</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">max_ncomp</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fold</span><span class="p">):</span>
+        <span class="n">test_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">folds</span> <span class="o">==</span> <span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">train_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">folds</span> <span class="o">!=</span> <span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_idx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_idx</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_ncomp</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_ncomp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">PLSRegression</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">train_idx</span><span class="p">])</span>
+            <span class="n">pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]))</span>
+            <span class="n">press</span><span class="p">[</span><span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">test_idx</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">press</span>
+
+
+<div class="viewcode-block" id="carspls">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.carspls">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">carspls</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">n_lv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">fold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">scale_pretreat</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">iteration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="n">partition_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;interleaved&quot;</span><span class="p">,</span> <span class="s2">&quot;consecutive&quot;</span><span class="p">,</span> <span class="s2">&quot;random&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;interleaved&quot;</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CarsPlsResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Competitive Adaptive Reweighted Sampling for PLS variable selection.</span>
+
+<span class="sd">    Python port of ``carspls``/``get.cars.pls`` (R, original algorithm by</span>
+<span class="sd">    Yizeng Liang &amp; Hongdong Li, MATLAB-&gt;R port by Hongdong Li 2009). At each</span>
+<span class="sd">    of ``iteration`` rounds: fits a PLS model on the currently-retained</span>
+<span class="sd">    variables, cross-validates it to get an RMSECV curve over 1..n_lv</span>
+<span class="sd">    components, records the coefficient-magnitude-ranked variable importance, and</span>
+<span class="sd">    forcibly eliminates the lowest-ranked variables via an exponentially</span>
+<span class="sd">    decreasing retention schedule (Monte-Carlo/EDF sampling). The iteration</span>
+<span class="sd">    with the lowest RMSECV gives the final selected variable set.</span>
+
+<span class="sd">    :param X: (n_samples, n_vars) predictor matrix.</span>
+<span class="sd">    :param y: (n_samples,) response vector.</span>
+<span class="sd">    :param n_lv: number of PLS latent variables (components) to fit/tune over.</span>
+<span class="sd">    :param fold: number of cross-validation segments.</span>
+<span class="sd">    :param scale_pretreat: if True, scale (not just center) each predictor.</span>
+<span class="sd">    :param iteration: number of CARS-PLS elimination rounds.</span>
+<span class="sd">    :param partition_type: cross-validation fold assignment: ``&quot;interleaved&quot;``</span>
+<span class="sd">        (round-robin), ``&quot;consecutive&quot;`` (contiguous blocks), or ``&quot;random&quot;``.</span>
+<span class="sd">    :param verbose: print progress per iteration (matches R&#39;s own screen output).</span>
+<span class="sd">    :return: :class:`CarsPlsResult`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cross_decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PLSRegression</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;stable&quot;</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+
+    <span class="n">rmsecv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span>
+    <span class="n">num_lv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">iteration</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">coef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_col</span><span class="p">,</span> <span class="n">iteration</span><span class="p">))</span>
+    <span class="n">n_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">iteration</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">subset_variable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_col</span><span class="p">)</span>
+
+    <span class="n">ratio0</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">ratio1</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="n">n_col</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">ratio0</span> <span class="o">/</span> <span class="n">ratio1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">iteration</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">ratio0</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iteration</span><span class="p">):</span>
+        <span class="n">x_cal</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">subset_variable</span><span class="p">]</span>
+        <span class="n">n_lv</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n_lv</span><span class="p">,</span> <span class="n">x_cal</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_cal</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># persists across iterations, matches R</span>
+        <span class="n">ncomp</span> <span class="o">=</span> <span class="n">n_lv</span>
+
+        <span class="n">press</span> <span class="o">=</span> <span class="n">_pls_press_by_ncomp</span><span class="p">(</span><span class="n">x_cal</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ncomp</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">partition_type</span><span class="p">,</span> <span class="n">scale_pretreat</span><span class="p">)</span>
+        <span class="n">rmsecv_curve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">press</span> <span class="o">/</span> <span class="n">n_row</span><span class="p">)</span>
+        <span class="n">rmsecv</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmsecv_curve</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">num_lv</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">rmsecv_curve</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 1-indexed, matches R</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">PLSRegression</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">ncomp</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale_pretreat</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_cal</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">coef_iter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+
+        <span class="n">coef0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_col</span><span class="p">)</span>
+        <span class="n">coef0</span><span class="p">[</span><span class="n">subset_variable</span><span class="p">]</span> <span class="o">=</span> <span class="n">coef_iter</span>
+        <span class="n">coef</span><span class="p">[:,</span> <span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="n">coef0</span>
+        <span class="n">n_var</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">coef0</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">coef0</span><span class="p">)</span>
+        <span class="n">weight_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">weight</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;stable&quot;</span><span class="p">)</span>  <span class="c1"># descending, R&#39;s order(decreasing=TRUE)</span>
+
+        <span class="n">ratio_variable</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">*</span> <span class="p">(</span><span class="n">it</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># (it+1)+1: R&#39;s iter is 1-indexed</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n_col</span> <span class="o">*</span> <span class="n">ratio_variable</span><span class="p">)</span>
+        <span class="n">keep_idx</span> <span class="o">=</span> <span class="n">weight_order</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">new_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_col</span><span class="p">)</span>
+        <span class="n">new_weight</span><span class="p">[</span><span class="n">keep_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span><span class="p">[</span><span class="n">keep_idx</span><span class="p">]</span>
+
+        <span class="n">subset_variable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">new_weight</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">it</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">th CARS-PLS iteration finished.&quot;</span><span class="p">)</span>
+
+    <span class="n">min_error</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rmsecv</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="n">opt_candidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rmsecv</span> <span class="o">==</span> <span class="n">min_error</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">opt_iteration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">opt_candidates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># last tie, matches R&#39;s OPT.iter[length(OPT.iter)]</span>
+    <span class="n">selected_variables</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">coef</span><span class="p">[:,</span> <span class="n">opt_iteration</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">CarsPlsResult</span><span class="p">(</span>
+        <span class="n">coef</span><span class="o">=</span><span class="n">coef</span><span class="p">,</span>
+        <span class="n">n_var</span><span class="o">=</span><span class="n">n_var</span><span class="p">,</span>
+        <span class="n">rmsecv</span><span class="o">=</span><span class="n">rmsecv</span><span class="p">,</span>
+        <span class="n">num_lv</span><span class="o">=</span><span class="n">num_lv</span><span class="p">,</span>
+        <span class="n">optimal_iteration</span><span class="o">=</span><span class="n">opt_iteration</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># report 1-indexed, matches R</span>
+        <span class="n">min_error</span><span class="o">=</span><span class="n">min_error</span><span class="p">,</span>
+        <span class="n">selected_variables</span><span class="o">=</span><span class="n">selected_variables</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># VIF-based stepwise collinearity pruning</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="get_vif">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_vif">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_vif</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">thresh</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+            <span class="n">trace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Backward-elimination variable selection by Variance Inflation Factor.</span>
+
+<span class="sd">    Python port of ``getVIF`` (R, VIF function originally from</span>
+<span class="sd">    https://beckmw.wordpress.com/2013/02/05/collinearity-and-stepwise-vif-selection/).</span>
+<span class="sd">    Iteratively regresses each remaining variable on all others; drops the</span>
+<span class="sd">    variable with the highest VIF (``1 / (1 - R^2)``) as long as any VIF</span>
+<span class="sd">    exceeds ``thresh``.</span>
+
+<span class="sd">    :param frame: (n_samples, n_vars) array, or a `pandas.DataFrame`.</span>
+<span class="sd">    :param columns: variable names, required if ``frame`` is a bare array;</span>
+<span class="sd">        ignored (and taken from ``frame.columns``) if ``frame`` is a DataFrame.</span>
+<span class="sd">    :param thresh: VIF threshold above which a variable is flagged as collinear.</span>
+<span class="sd">    :param trace: print each elimination step (matches R&#39;s own console output).</span>
+<span class="sd">    :return: names (or 0-indexed positions, if ``columns`` is None and</span>
+<span class="sd">        ``frame`` is a bare array) of the retained variables.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">):</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_vifs</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">mat</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">r2</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span> <span class="k">if</span> <span class="n">r2</span> <span class="o">&gt;=</span> <span class="mf">1.0</span> <span class="k">else</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">r2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">vifs</span> <span class="o">=</span> <span class="n">_vifs</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">mat</span><span class="p">)</span>
+        <span class="n">worst_name</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">vifs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">vifs</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+        <span class="n">worst_vif</span> <span class="o">=</span> <span class="n">vifs</span><span class="p">[</span><span class="n">worst_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">trace</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vifs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">worst_vif</span> <span class="o">&lt;</span> <span class="n">thresh</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">trace</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All variables have VIF &lt; </span><span class="si">{</span><span class="n">thresh</span><span class="si">}</span><span class="s2">, max VIF </span><span class="si">{</span><span class="n">worst_vif</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cols</span>
+        <span class="k">if</span> <span class="n">trace</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;removed: </span><span class="si">{</span><span class="n">worst_name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">worst_vif</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">drop_j</span> <span class="o">=</span> <span class="n">cols</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">worst_name</span><span class="p">)</span>
+        <span class="n">cols</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">drop_j</span><span class="p">)</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">drop_j</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cols</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># LUT nearest-neighbour (&quot;merit function&quot;) inversion</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">MERIT_FUNCTIONS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;merit-RMSE&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">sim</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">((</span><span class="n">sim</span> <span class="o">-</span> <span class="n">obs</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="s2">&quot;merit-NRMSE&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">sim</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">((</span><span class="n">sim</span> <span class="o">-</span> <span class="n">obs</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;merit-MAE&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">sim</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sim</span> <span class="o">-</span> <span class="n">obs</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="s2">&quot;merit-NMB&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">sim</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;merit-FGE&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">sim</span><span class="p">,</span> <span class="n">obs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sim</span> <span class="o">-</span> <span class="n">obs</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sim</span> <span class="o">+</span> <span class="n">obs</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="InversionOptResult">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.InversionOptResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InversionOptResult</span><span class="p">:</span>
+    <span class="n">rfl_best</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1">#: (n_obs, n_wave) best-matching (n_opt-averaged) simulated spectra</span>
+    <span class="n">lut_best</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span>  <span class="c1">#: (n_obs, n_lut_columns) n_opt-averaged LUT parameters per observation</span></div>
+
+
+
+<div class="viewcode-block" id="get_inversion_opt">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_inversion_opt">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_inversion_opt</span><span class="p">(</span>
+    <span class="n">rfl_sensor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">rfl_rtm</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">lut</span><span class="p">,</span>
+    <span class="n">wave</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;merit-RMSE&quot;</span><span class="p">,</span>
+    <span class="n">n_opt</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">custom_stat</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InversionOptResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LUT (look-up table) inversion by nearest-neighbour spectral matching.</span>
+
+<span class="sd">    Python port of ``get.inversionOpt`` (R). For each observed spectrum in</span>
+<span class="sd">    ``rfl_sensor``, ranks every simulated spectrum in ``rfl_rtm`` by a merit</span>
+<span class="sd">    (error) function and averages the ``n_opt`` best matches&#39; LUT parameters</span>
+<span class="sd">    and reflectance. Fully vectorized (broadcasts each observation against</span>
+<span class="sd">    the whole LUT at once) rather than R&#39;s nested per-row loop -- same</span>
+<span class="sd">    algorithm, no numerical differences expected for the built-in merit</span>
+<span class="sd">    functions (verified against a hand-computed reference below).</span>
+
+<span class="sd">    :param rfl_sensor: (n_obs, n_wave) observed/sensor reflectance.</span>
+<span class="sd">    :param rfl_rtm: (n_lut, n_wave) simulated reflectance from the LUT.</span>
+<span class="sd">    :param lut: (n_lut, n_params) `pandas.DataFrame` of the LUT&#39;s input parameters.</span>
+<span class="sd">    :param wave: wavelengths corresponding to columns of ``rfl_sensor``/``rfl_rtm``</span>
+<span class="sd">        (only used to name the returned reflectance columns; optional).</span>
+<span class="sd">    :param method: one of ``&quot;merit-RMSE&quot;``, ``&quot;merit-NRMSE&quot;``, ``&quot;merit-MAE&quot;``,</span>
+<span class="sd">        ``&quot;merit-NMB&quot;``, ``&quot;merit-FGE&quot;``, or ``&quot;merit-custom.metric&quot;`` (requires</span>
+<span class="sd">        ``custom_stat``).</span>
+<span class="sd">    :param n_opt: number of best-matching LUT rows to average per observation.</span>
+<span class="sd">    :param custom_stat: optional ``f(sim, obs) -&gt; error`` merit function,</span>
+<span class="sd">        broadcast over the last axis exactly like the built-in ones; overrides ``method``.</span>
+<span class="sd">    :return: :class:`InversionOptResult`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+    <span class="n">rfl_sensor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rfl_sensor</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+    <span class="n">rfl_rtm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rfl_rtm</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">n_obs</span> <span class="o">=</span> <span class="n">rfl_sensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">custom_stat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">merit_fn</span> <span class="o">=</span> <span class="n">custom_stat</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">MERIT_FUNCTIONS</span><span class="p">:</span>
+        <span class="n">merit_fn</span> <span class="o">=</span> <span class="n">MERIT_FUNCTIONS</span><span class="p">[</span><span class="n">method</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid method </span><span class="si">{</span><span class="n">method</span><span class="si">!r}</span><span class="s2">. Choose from </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">MERIT_FUNCTIONS</span><span class="p">)</span><span class="si">}</span><span class="s2"> or pass custom_stat.&quot;</span><span class="p">)</span>
+
+    <span class="n">rfl_best_rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lut_best_rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_obs</span><span class="p">):</span>
+        <span class="n">obs_i</span> <span class="o">=</span> <span class="n">rfl_sensor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="n">merit_fn</span><span class="p">(</span><span class="n">rfl_rtm</span><span class="p">,</span> <span class="n">obs_i</span><span class="p">)</span>  <span class="c1"># (n_lut,)</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+        <span class="n">best_idx</span> <span class="o">=</span> <span class="n">order</span><span class="p">[:</span><span class="n">n_opt</span><span class="p">]</span>
+        <span class="n">rfl_best_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rfl_rtm</span><span class="p">[</span><span class="n">best_idx</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">lut_best_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lut</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">best_idx</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">rfl_best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">rfl_best_rows</span><span class="p">)</span>
+    <span class="n">lut_best</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lut_best_rows</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">wave</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>  <span class="c1"># wave is accepted for R-signature parity; not needed to build the result here</span>
+
+    <span class="k">return</span> <span class="n">InversionOptResult</span><span class="p">(</span><span class="n">rfl_best</span><span class="o">=</span><span class="n">rfl_best</span><span class="p">,</span> <span class="n">lut_best</span><span class="o">=</span><span class="n">lut_best</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># get_inversion: multi-algorithm ML dispatcher</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1">#: R&#39;s caret-method name each algorithm dispatches to, and, where scikit-learn/</span>
+<span class="c1">#: xgboost has no direct equivalent, the substitution actually used here.</span>
+<span class="n">ALGORITHMS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;PLSR&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn PLSRegression, n_components tuned by 5-fold CV (matches caret method &#39;pls&#39;)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SVM&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn SVR(kernel=&#39;rbf&#39;), gamma/C tuned by grid search (matches caret method &#39;svmRadial&#39; via e1071::tune.svm)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RF&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn RandomForestRegressor, max_features tuned (matches caret method &#39;rf&#39;)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GB&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn GradientBoostingRegressor (matches caret method &#39;gbm&#39;)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NN&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn MLPRegressor, single hidden layer (matches caret method &#39;nnet&#39;)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Bayesian&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn BayesianRidge -- substitute: no BART implementation in sklearn/xgboost; &quot;</span>
+                <span class="s2">&quot;BayesianRidge is a Bayesian *linear* model, not R&#39;s bartMachine (Bayesian additive trees)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AdaBag&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn AdaBoostRegressor over shallow DecisionTreeRegressor stumps (matches caret method &#39;AdaBag&#39;)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BRNN&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn MLPRegressor with strong L2 (alpha) regularization -- substitute: approximates &quot;</span>
+            <span class="s2">&quot;&#39;Bayesian regularization&#39; via explicit weight decay, not R&#39;s brnn Gauss-Newton/Levenberg-Marquardt fit&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;xGB&quot;</span><span class="p">:</span> <span class="s2">&quot;xgboost XGBRegressor(booster=&#39;gblinear&#39;) (matches caret method &#39;xgbLinear&#39;)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RVM&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn BayesianRidge -- substitute: no Relevance Vector Machine in sklearn/xgboost; &quot;</span>
+           <span class="s2">&quot;BayesianRidge shares RVM&#39;s sparsity-favouring linear-Bayesian character&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;qLASSO&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn QuantileRegressor(quantile=0.5, solver=&#39;highs&#39;), L1-penalized (matches caret method &#39;rqlasso&#39;)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Ensemble&quot;</span><span class="p">:</span> <span class="s2">&quot;sklearn StackingRegressor(GB + SVR + MLP, final_estimator=LinearRegression) &quot;</span>
+                <span class="s2">&quot;(matches caretEnsemble::caretStack(..., method=&#39;glm&#39;))&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="InversionResult">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.InversionResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InversionResult</span><span class="p">:</span>
+    <span class="n">model_label</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">object</span>
+    <span class="n">predictions</span><span class="p">:</span> <span class="nb">dict</span>  <span class="c1">#: {&quot;train&quot;: np.ndarray, &quot;test&quot;: np.ndarray}</span>
+    <span class="n">statistics</span><span class="p">:</span> <span class="nb">dict</span>  <span class="c1">#: {&quot;train&quot;: {&quot;r2&quot;:.., &quot;rmse&quot;:.., &quot;mae&quot;:..}, &quot;test&quot;: {...}}</span>
+    <span class="n">importance</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>  <span class="c1">#: {input_name: importance}, or None if not available for this algorithm</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_regression_stats</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">y_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">ss_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_true</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">ss_res</span> <span class="o">/</span> <span class="n">ss_tot</span> <span class="k">if</span> <span class="n">ss_tot</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">rmse</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)))</span>
+    <span class="n">mae</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;r2&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">r2</span><span class="p">),</span> <span class="s2">&quot;rmse&quot;</span><span class="p">:</span> <span class="n">rmse</span><span class="p">,</span> <span class="s2">&quot;mae&quot;</span><span class="p">:</span> <span class="n">mae</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_permutation_importance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.inspection</span><span class="w"> </span><span class="kn">import</span> <span class="n">permutation_importance</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">feature_names</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">importances_mean</span><span class="p">)}</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fit_algorithm</span><span class="p">(</span><span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit one of :data:`ALGORITHMS`&#39; estimators on already-split training</span>
+<span class="sd">    data. Shared by :func:`get_inversion` and :func:`hybrid_inversion` so the</span>
+<span class="sd">    two functions (which, like their R originals, differ in train/test</span>
+<span class="sd">    splitting, feature selection and optional log-transform, not in the</span>
+<span class="sd">    underlying estimators) don&#39;t duplicate 12 tuning-grid blocks.</span>
+
+<span class="sd">    :return: ``(fitted_model, predict_fn, importance_or_None)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSearchCV</span>
+
+    <span class="n">importance</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;PLSR&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cross_decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PLSRegression</span>
+
+        <span class="n">max_comp</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">PLSRegression</span><span class="p">(),</span> <span class="p">{</span><span class="s2">&quot;n_components&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_comp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))},</span>
+                             <span class="n">cv</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_root_mean_squared_error&quot;</span><span class="p">)</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">best_estimator_</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">))}</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;SVM&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVR</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">SVR</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;rbf&quot;</span><span class="p">),</span>
+                             <span class="p">{</span><span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span> <span class="o">**</span> <span class="n">g</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">)],</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span> <span class="o">**</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]},</span>
+                             <span class="n">cv</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_root_mean_squared_error&quot;</span><span class="p">)</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">best_estimator_</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;RF&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+
+        <span class="n">n_features</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_features</span> <span class="o">//</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_features</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span> <span class="n">n_features</span><span class="p">})</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">),</span>
+                             <span class="p">{</span><span class="s2">&quot;max_features&quot;</span><span class="p">:</span> <span class="n">candidates</span><span class="p">},</span> <span class="n">cv</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                             <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_root_mean_squared_error&quot;</span><span class="p">)</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">best_estimator_</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)}</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;GB&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradientBoostingRegressor</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">GradientBoostingRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)}</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;NN&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPRegressor</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+
+        <span class="c1"># adam (MLPRegressor&#39;s default solver) needs mini-batch iteration to</span>
+        <span class="c1"># converge and underperforms badly on the small (~100-row) LUTs this</span>
+        <span class="c1"># is meant for; lbfgs is a full-batch solver well suited to small data.</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span>
+                               <span class="n">MLPRegressor</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+                                            <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;lbfgs&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;Bayesian&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BayesianRidge</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">BayesianRidge</span><span class="p">()</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)}</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;AdaBag&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdaBoostRegressor</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">AdaBoostRegressor</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)}</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;BRNN&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPRegressor</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span>
+                               <span class="n">MLPRegressor</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+                                            <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;lbfgs&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;xGB&quot;</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">xgboost</span>
+
+        <span class="c1"># shotgun (xgboost&#39;s default gblinear updater) converges poorly on</span>
+        <span class="c1"># small/medium datasets; coord_descent is deterministic and reliably</span>
+        <span class="c1"># matches a plain linear fit&#39;s accuracy here.</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">XGBRegressor</span><span class="p">(</span><span class="n">booster</span><span class="o">=</span><span class="s2">&quot;gblinear&quot;</span><span class="p">,</span> <span class="n">updater</span><span class="o">=</span><span class="s2">&quot;coord_descent&quot;</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+                                      <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">reg_lambda</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">reg_alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;RVM&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">BayesianRidge</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">BayesianRidge</span><span class="p">()</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)}</span>
+
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;qLASSO&quot;</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantileRegressor</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">QuantileRegressor</span><span class="p">(</span><span class="n">quantile</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;highs&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">)}</span>
+
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># Ensemble</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradientBoostingRegressor</span><span class="p">,</span> <span class="n">StackingRegressor</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPRegressor</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVR</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">StackingRegressor</span><span class="p">(</span>
+            <span class="n">estimators</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">(</span><span class="s2">&quot;gbm&quot;</span><span class="p">,</span> <span class="n">GradientBoostingRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">SVR</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;rbf&quot;</span><span class="p">))),</span>
+                <span class="p">(</span><span class="s2">&quot;nnet&quot;</span><span class="p">,</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">MLPRegressor</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,),</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+                                                                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;lbfgs&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">))),</span>
+            <span class="p">],</span>
+            <span class="n">final_estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+        <span class="n">predict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">predict</span><span class="p">,</span> <span class="n">importance</span>
+
+
+<div class="viewcode-block" id="get_inversion">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_inversion">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_inversion</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">dep_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PLSR&quot;</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">123</span><span class="p">,</span>
+    <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="n">test_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InversionResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit and evaluate a plant-trait inversion model with one of 12</span>
+<span class="sd">    algorithms, on a held-out train/test split.</span>
+
+<span class="sd">    Python port of ``get.inversion`` (R). See :data:`ALGORITHMS` for exactly</span>
+<span class="sd">    which scikit-learn/xgboost estimator each ``algorithm`` name dispatches</span>
+<span class="sd">    to, and, for the 4 algorithms with no direct equivalent (``Bayesian``,</span>
+<span class="sd">    ``BRNN``, ``RVM`` -- and note ``AdaBag``/``xGB``/``qLASSO`` *do* have</span>
+<span class="sd">    close matches), what was substituted and why. Unlike R&#39;s version, tuning</span>
+<span class="sd">    here is a single small grid search per algorithm (not caret&#39;s full</span>
+<span class="sd">    repeated-CV search), to keep this runnable as a demo rather than a</span>
+<span class="sd">    multi-hour job -- the same design choice already used by</span>
+<span class="sd">    ``Scripts/Python/*/2_inversion_ml.py``.</span>
+
+<span class="sd">    :param data: `pandas.DataFrame` containing ``dep_var`` and all ``inputs`` columns.</span>
+<span class="sd">    :param dep_var: name of the response column to predict.</span>
+<span class="sd">    :param inputs: names of the predictor columns.</span>
+<span class="sd">    :param algorithm: one of the keys of :data:`ALGORITHMS`.</span>
+<span class="sd">    :param seed: random seed for the train/test split and any stochastic estimator.</span>
+<span class="sd">    :param n_samples: if given and less than ``len(data)``, randomly subsample</span>
+<span class="sd">        this many rows before splitting (matches R&#39;s own tuning-sample-size argument).</span>
+<span class="sd">    :param test_size: fraction of (sub-sampled) data held out for testing.</span>
+<span class="sd">    :return: :class:`InversionResult`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+    <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ALGORITHMS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown algorithm </span><span class="si">{</span><span class="n">algorithm</span><span class="si">!r}</span><span class="s2">. Choose from </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">ALGORITHMS</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="k">if</span> <span class="n">n_samples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">inputs</span><span class="p">)]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">dep_var</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="p">,</span> <span class="n">predict</span><span class="p">,</span> <span class="n">importance</span> <span class="o">=</span> <span class="n">_fit_algorithm</span><span class="p">(</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+    <span class="n">pred_train</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+    <span class="n">pred_test</span> <span class="o">=</span> <span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">importance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">importance</span> <span class="o">=</span> <span class="n">_permutation_importance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">InversionResult</span><span class="p">(</span>
+        <span class="n">model_label</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">predictions</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">pred_train</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">pred_test</span><span class="p">},</span>
+        <span class="n">statistics</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">_regression_stats</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">),</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">_regression_stats</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred_test</span><span class="p">)},</span>
+        <span class="n">importance</span><span class="o">=</span><span class="n">importance</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># hybrid_inversion / hybrid_inversionE: feature-selection + single-family fit</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">_HYBRID_ALGORITHMS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;SVM&quot;</span><span class="p">:</span> <span class="s2">&quot;SVM&quot;</span><span class="p">,</span> <span class="s2">&quot;RF&quot;</span><span class="p">:</span> <span class="s2">&quot;RF&quot;</span><span class="p">,</span> <span class="s2">&quot;GB&quot;</span><span class="p">:</span> <span class="s2">&quot;GB&quot;</span><span class="p">,</span> <span class="s2">&quot;nnet&quot;</span><span class="p">:</span> <span class="s2">&quot;NN&quot;</span><span class="p">,</span> <span class="s2">&quot;Ensemble&quot;</span><span class="p">:</span> <span class="s2">&quot;Ensemble&quot;</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="HybridInversionResult">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.HybridInversionResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HybridInversionResult</span><span class="p">:</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">object</span>
+    <span class="n">keep_variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>  <span class="c1">#: predictor columns actually used, after pattern/collinearity selection</span>
+    <span class="n">statistics</span><span class="p">:</span> <span class="s2">&quot;pd.DataFrame&quot;</span>  <span class="c1">#: rows &quot;train&quot;/&quot;test&quot; (+ &quot;field&quot; if field_data given), columns r2/rmse/mae</span>
+    <span class="n">predictions</span><span class="p">:</span> <span class="nb">dict</span>  <span class="c1">#: {&quot;train&quot;: np.ndarray, &quot;test&quot;: np.ndarray[, &quot;field&quot;: np.ndarray]}, original (untransformed) scale</span></div>
+
+
+
+<div class="viewcode-block" id="hybrid_inversion">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.hybrid_inversion">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">hybrid_inversion</span><span class="p">(</span>
+    <span class="n">lut</span><span class="p">,</span>
+    <span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">split</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">collinearity</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;VIF&quot;</span><span class="p">,</span> <span class="s2">&quot;CARS&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">trans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">field_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">acron</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HybridInversionResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit a single-algorithm trait-inversion model with optional predictor</span>
+<span class="sd">    selection (by name pattern, then optionally VIF or CARS-PLS pruning) and</span>
+<span class="sd">    an optional log-transform of the response.</span>
+
+<span class="sd">    Python port of ``hybrid_inversion`` (R). ``method`` dispatches to the</span>
+<span class="sd">    same 5 estimators as :func:`get_inversion`&#39;s ``SVM``/``RF``/``GB``/``NN``/</span>
+<span class="sd">    ``Ensemble`` (``&quot;nnet&quot;`` here maps to ``&quot;NN&quot;`` there, matching R&#39;s own</span>
+<span class="sd">    caret method name) -- see :data:`ALGORITHMS` for what each one is. Note:</span>
+<span class="sd">    R&#39;s train/test split uses ``caret::createDataPartition`` (percentile-</span>
+<span class="sd">    stratified on the response); this port uses a plain random split via</span>
+<span class="sd">    scikit-learn, which is not percentile-stratified -- a documented</span>
+<span class="sd">    approximation, not expected to change results materially for the</span>
+<span class="sd">    LUT-sized (typically hundreds of rows) datasets this is meant for.</span>
+
+<span class="sd">    :param lut: `pandas.DataFrame` with the response column ``input`` and</span>
+<span class="sd">        candidate predictor columns.</span>
+<span class="sd">    :param input: name of the response column to predict.</span>
+<span class="sd">    :param split: train-fraction of the train/test split (R&#39;s own convention;</span>
+<span class="sd">        note this is the *train* fraction, unlike :func:`get_inversion`&#39;s ``test_size``).</span>
+<span class="sd">    :param seed: random seed.</span>
+<span class="sd">    :param method: one of ``&quot;SVM&quot;``, ``&quot;RF&quot;``, ``&quot;GB&quot;``, ``&quot;nnet&quot;``, ``&quot;Ensemble&quot;``.</span>
+<span class="sd">        Defaults to ``&quot;SVM&quot;`` (matches R&#39;s own default).</span>
+<span class="sd">    :param collinearity: ``None`` (use every ``pattern``-matched column),</span>
+<span class="sd">        ``&quot;VIF&quot;`` (prune via :func:`get_vif`), or ``&quot;CARS&quot;`` (select via :func:`carspls`).</span>
+<span class="sd">    :param pattern: substring that predictor column names must contain (e.g.</span>
+<span class="sd">        ``&quot;B&quot;`` for reflectance-band columns named ``B1``, ``B2``, ...);</span>
+<span class="sd">        if ``None``, every column except ``input`` is a candidate.</span>
+<span class="sd">    :param trans: log-transform ``input`` before fitting (matches R&#39;s own</span>
+<span class="sd">        default); predictions/statistics are reported back on the original scale.</span>
+<span class="sd">    :param field_data: optional `pandas.DataFrame` of field observations to</span>
+<span class="sd">        validate against, in addition to the LUT&#39;s own test split.</span>
+<span class="sd">    :param acron: suffix appended to ``input`` to find the observed column in</span>
+<span class="sd">        ``field_data`` (e.g. ``acron=&quot;_obsv&quot;`` looks for ``f&quot;{input}_obsv&quot;``).</span>
+<span class="sd">        Required if ``field_data`` is given.</span>
+<span class="sd">    :return: :class:`HybridInversionResult`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+    <span class="k">if</span> <span class="n">field_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">acron</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;acron is required when field_data is given.&quot;</span><span class="p">)</span>
+
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span> <span class="ow">or</span> <span class="s2">&quot;SVM&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_HYBRID_ALGORITHMS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown method </span><span class="si">{</span><span class="n">method</span><span class="si">!r}</span><span class="s2">. Choose from </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">_HYBRID_ALGORITHMS</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">lut</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">trans</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="nb">input</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="nb">input</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">c</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">!=</span> <span class="nb">input</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="nb">input</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">collinearity</span> <span class="o">==</span> <span class="s2">&quot;VIF&quot;</span><span class="p">:</span>
+        <span class="n">keep_variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">get_vif</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">candidates</span><span class="p">],</span> <span class="n">thresh</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">collinearity</span> <span class="o">==</span> <span class="s2">&quot;CARS&quot;</span><span class="p">:</span>
+        <span class="n">cars_res</span> <span class="o">=</span> <span class="n">carspls</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">candidates</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="nb">input</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">n_lv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">fold</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                            <span class="n">scale_pretreat</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">partition_type</span><span class="o">=</span><span class="s2">&quot;interleaved&quot;</span><span class="p">)</span>
+        <span class="n">keep_variables</span> <span class="o">=</span> <span class="p">[</span><span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cars_res</span><span class="o">.</span><span class="n">selected_variables</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">keep_variables</span> <span class="o">=</span> <span class="n">candidates</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">keep_variables</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="nb">input</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">split</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">_HYBRID_ALGORITHMS</span><span class="p">[</span><span class="n">method</span><span class="p">]</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">predict</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_fit_algorithm</span><span class="p">(</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">keep_variables</span><span class="p">,</span> <span class="n">seed</span> <span class="ow">or</span> <span class="mi">123</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_untransform</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="n">trans</span> <span class="k">else</span> <span class="n">v</span>
+
+    <span class="n">pred_train</span> <span class="o">=</span> <span class="n">_untransform</span><span class="p">(</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">))</span>
+    <span class="n">pred_test</span> <span class="o">=</span> <span class="n">_untransform</span><span class="p">(</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+    <span class="n">y_train_orig</span> <span class="o">=</span> <span class="n">_untransform</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+    <span class="n">y_test_orig</span> <span class="o">=</span> <span class="n">_untransform</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
+
+    <span class="n">stats_rows</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">_regression_stats</span><span class="p">(</span><span class="n">y_train_orig</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">),</span>
+        <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">_regression_stats</span><span class="p">(</span><span class="n">y_test_orig</span><span class="p">,</span> <span class="n">pred_test</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">pred_train</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">pred_test</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">field_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">X_field</span> <span class="o">=</span> <span class="n">field_data</span><span class="p">[</span><span class="n">keep_variables</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">pred_field</span> <span class="o">=</span> <span class="n">_untransform</span><span class="p">(</span><span class="n">predict</span><span class="p">(</span><span class="n">X_field</span><span class="p">))</span>
+        <span class="n">y_field</span> <span class="o">=</span> <span class="n">field_data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">input</span><span class="si">}{</span><span class="n">acron</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">stats_rows</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_regression_stats</span><span class="p">(</span><span class="n">y_field</span><span class="p">,</span> <span class="n">pred_field</span><span class="p">)</span>
+        <span class="n">predictions</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_field</span>
+
+    <span class="n">statistics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">stats_rows</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">[[</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span> <span class="s2">&quot;rmse&quot;</span><span class="p">,</span> <span class="s2">&quot;mae&quot;</span><span class="p">]]</span>
+
+    <span class="k">return</span> <span class="n">HybridInversionResult</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">keep_variables</span><span class="o">=</span><span class="n">keep_variables</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="n">statistics</span><span class="p">,</span>
+                                  <span class="n">predictions</span><span class="o">=</span><span class="n">predictions</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="hybrid_inversion_ensemble">
+<a class="viewcode-back" href="../../toolsrtm/inversion.html#toolsrtm.inversion.hybrid_inversion_ensemble">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">hybrid_inversion_ensemble</span><span class="p">(</span><span class="n">lut</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                               <span class="n">collinearity</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;VIF&quot;</span><span class="p">,</span> <span class="s2">&quot;CARS&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                               <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">field_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                               <span class="n">acron</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HybridInversionResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;:func:`hybrid_inversion` with ``method=&quot;Ensemble&quot;`` fixed.</span>
+
+<span class="sd">    Python port of ``hybrid_inversionE`` (R) -- the R function is</span>
+<span class="sd">    ``hybrid_inversion`` with the model choice hardcoded to the 3-model</span>
+<span class="sd">    (GB + SVM + neural net) stacking ensemble and no ``trans``/log-transform</span>
+<span class="sd">    option, which this wrapper matches (``trans=False``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hybrid_inversion</span><span class="p">(</span><span class="n">lut</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;Ensemble&quot;</span><span class="p">,</span>
+                             <span class="n">collinearity</span><span class="o">=</span><span class="n">collinearity</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">pattern</span><span class="p">,</span> <span class="n">trans</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">field_data</span><span class="o">=</span><span class="n">field_data</span><span class="p">,</span> <span class="n">acron</span><span class="o">=</span><span class="n">acron</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+Package: SCOPEinR
+Type: Package
+Title: SCOPE Model v(2.1) in R
+Version: 0.46
+Authors@R: person(given = "Carlos",
+           family = "Camino",
+           role = c("aut", "cre"),
+           email = "carlos.caminogonzalez@wur.nl",
+           comment = c(ORCID = "0000-0001-5188-4406"))
+Maintainer: Carlos Camino <carlos.caminogonzalez@wur.nl>
+Description: An R implementation of the SCOPE (Soil Canopy Observation,
+    Photochemistry and Energy fluxes) model v2.1, coupling radiative
+    transfer (via ToolsRTM leaf/canopy models) with a full canopy energy
+    balance to simulate reflectance, fluorescence, radiance, and energy
+    fluxes.
+Depends: R (>= 4.3.0)
+Imports: lhs, ToolsRTM, progress, signal, expint, doParallel, parallel, foreach, data.table, stats, pracma, lubridate, rlang, tidyr, ggplot2, dplyr, utils, grDevices
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+LazyDataCompression: xz
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Suggests:
+    knitr,
+    rmarkdown

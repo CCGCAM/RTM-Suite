@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ToolsRTM · Radiative Transfer Package (HYDRA-EO)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-card: #0b1220;
+      --accent: #4af3ff;
+      --accent-soft: #38bdf8;
+      --accent-gold: #f6c453;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --radius-xl: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 20px 40px rgba(0,0,0,0.45);
+      --maxw: 1040px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #0f172a 0%, #020617 60%, #000);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      padding: 1.5rem 1rem 2.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    main {
+      width: 100%;
+      max-width: var(--maxw);
+    }
+
+    /* HEADER */
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
+      gap: 1.6rem;
+      align-items: center;
+      margin-bottom: 2.2rem;
+    }
+
+    @media (max-width: 860px) {
+      header {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .hero-left h1 {
+      font-size: 2rem;
+      margin-bottom: 0.4rem;
+      font-weight: 650;
+    }
+
+    .hero-left h1 span {
+      color: var(--accent);
+    }
+
+    .hero-subtitle {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .tagline {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-gold);
+    }
+
+    .hero-badges {
+      margin-top: 0.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.18rem 0.7rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.7);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .hero-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      padding: 1rem 1.2rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.7rem;
+    }
+
+    .hero-logo img {
+      width: 140px;
+      border-radius: 14px;
+      background: #ffffffdd;
+      padding: 0.35rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* SECTIONS */
+
+    section {
+      margin-bottom: 2.3rem;
+    }
+
+    section h2 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-intro {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      text-align: justify;
+      text-justify: inter-word;
+      margin-bottom: 0.9rem;
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      padding: 1rem 1.1rem 1.2rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card h3 {
+      margin-bottom: 0.3rem;
+      font-size: 1rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .ref-block {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      margin-bottom: 0.8rem;
+      text-align: justify;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2rem;
+    }
+
+    /* DETAILS / CODE BLOCKS */
+
+    details.code-details {
+      margin-top: 0.6rem;
+      background: #0b1220;
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      padding: 0.35rem 0.75rem 0.75rem;
+    }
+
+    details.code-details[open] {
+      border-color: var(--accent-soft);
+    }
+
+    details.code-details > summary {
+      list-style: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      padding: 0.25rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    details.code-details > summary::marker,
+    details.code-details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .summary-icon {
+      color: var(--accent-soft);
+      font-size: 1rem;
+    }
+
+    .code-block {
+      position: relative;
+      margin-top: 0.5rem;
+    }
+
+    pre.pretty-code {
+      background: #0d1526;
+      padding: 1rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #9ae6ff;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      margin: 0;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      background: #162238;
+      border: 1px solid #3b4b66;
+      color: #a7b4c8;
+      cursor: pointer;
+    }
+
+    .copy-btn.copied {
+      color: #f6c453;
+      border-color: #f6c453;
+    }
+
+    a {
+      color: var(--accent-soft);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-gold);
+    }
+  </style>
+</head>
+
+<body>
+<main>
+
+  <!-- ===== HERO ===== -->
+  <header>
+    <div class="hero-left">
+      <h1><span>ToolsRTM</span> · Radiative Transfer Package</h1>
+      <p class="hero-subtitle">
+        ToolsRTM provides a unified interface to multiple radiative transfer models (RTMs)
+        for simulating leaf, canopy, soil and top-of-atmosphere optical signals.
+        The package is used within the <strong>ESA HYDRA-EO project</strong> to generate
+        spectral libraries, trait simulations and forward-modelling experiments for
+        hyperspectral, multispectral, fluorescence and thermal Earth Observation.
+      </p>
+      <div class="tagline">HYDRA-EO · ESA EXPRO+ · Action 1-12684</div>
+      <div class="hero-badges">
+        <div class="pill">Leaf Models</div>
+        <div class="pill">Canopy Models</div>
+        <div class="pill">Soil Models</div>
+        <div class="pill">SCOPE Integration</div>
+      </div>
+    </div>
+
+    <aside class="hero-card">
+      <div class="hero-logo">
+        <!-- Ajusta la ruta del logo si es necesario -->
+        <img src="assets/HyDRA-EO_logo.png" alt="HYDRA-EO logo">
+      </div>
+      <p>
+        This page summarises the main ToolsRTM routines described in the README, including
+        installation, simulator access, recommended citations, license and scientific
+        references for the underlying radiative transfer models.
+      </p>
+    </aside>
+  </header>
+
+  <!-- ===== OVERVIEW ===== -->
+  <section id="overview">
+    <h2>Overview</h2>
+    <p class="section-intro">
+      <strong>ToolsRTM</strong> integrates multiple radiative transfer models under a common
+      R interface. Leaf optical RTMs, canopy reflectance models, soil RTMs and
+      soil–plant–atmosphere couplings can be accessed via <code>get.simulator()</code>.
+      The package supports trait retrieval, LUT generation, forward modelling and EO
+      mission analysis within HYDRA-EO.
+    </p>
+
+    <div class="card-grid">
+      <article class="card">
+        <div class="pill">Leaf &amp; canopy</div>
+        <h3>Core RTMs</h3>
+        <p>
+          Access to leaf and canopy models such as PROSPECT, PROSAIL, FLUSPECT,
+          fourSAIL, fourSAIL2 and INFORM, enabling multi-scale simulation of
+          vegetation optical properties.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="pill">Soil &amp; TOA</div>
+        <h3>MARMIT &amp; SPART</h3>
+        <p>
+          Soil radiative transfer (MARMIT) and soil–plant–atmosphere TOA simulations
+          (SPART) support multi-sensor modelling and background correction for
+          agricultural and natural targets.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="pill">Integration</div>
+        <h3>SCOPEinR &amp; Shiny</h3>
+        <p>
+          ToolsRTM is designed to work together with <code>SCOPEinR</code> for
+          fluorescence and energy-balance simulations and includes a Shiny-based
+          interface for interactive model exploration (as described in the ToolsRTM
+          documentation).
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== INSTALLATION ===== -->
+  <section id="install">
+    <h2>Installation</h2>
+    <p class="section-intro">
+      The following installation snippets reproduce the examples given in the ToolsRTM README.
+    </p>
+
+    <div class="card">
+      <h3>Install ToolsRTM from GitLab</h3>
+
+      <details class="code-details">
+        <summary>
+          <span class="summary-label">Show installation code (GitLab / remotes)</span>
+          <span class="summary-icon">▾</span>
+        </summary>
+        <div class="code-block">
+          <button class="copy-btn" data-target="code-install-toolsrtm">Copy</button>
+          <pre class="pretty-code"><code id="code-install-toolsrtm">
+## Install ToolsRTM package.
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  install.packages("remotes")  # just in case remotes isn't there
+  remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
+}</code></pre>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Install ToolsRTM from local tar.gz</h3>
+
+      <details class="code-details">
+        <summary>
+          <span class="summary-label">Show installation code (.tar.gz)</span>
+          <span class="summary-icon">▾</span>
+        </summary>
+        <div class="code-block">
+          <button class="copy-btn" data-target="code-install-targz">Copy</button>
+          <pre class="pretty-code"><code id="code-install-targz">
+install.packages(
+  'pathWithFile/toolsrtm-main.tar.gz',
+  repos = NULL,
+  type  = "source"
+)</code></pre>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Install SCOPEinR</h3>
+
+      <details class="code-details">
+        <summary>
+          <span class="summary-label">Show SCOPEinR installation code</span>
+          <span class="summary-icon">▾</span>
+        </summary>
+        <div class="code-block">
+          <button class="copy-btn" data-target="code-install-scopeinr">Copy</button>
+          <pre class="pretty-code"><code id="code-install-scopeinr">
+## Install additional SCOPEinR package using remotes.
+remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
+
+# Alternative:
+install.packages(
+  'pathWithFile/scopeinr-main.tar.gz',
+  repos = NULL,
+  type = "source"
+)</code></pre>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== MAIN ROUTINES ===== -->
+  <section id="routines">
+    <h2>Main routines from the README</h2>
+    <p class="section-intro">
+      The ToolsRTM README highlights <code>ToolsRTM::get.simulator()</code> as the central
+      entry point to access radiative transfer models. Below you find the exact
+      snippet from the README and a simple PROSAIL example used in the HYDRA-EO
+      web materials.
+    </p>
+
+    <div class="card">
+      <div class="pill">R · ToolsRTM</div>
+      <h3>get.simulator() example from README</h3>
+
+      <details class="code-details">
+        <summary>
+          <span class="summary-label">Show get.simulator() calls</span>
+          <span class="summary-icon">▾</span>
+        </summary>
+        <div class="code-block">
+          <button class="copy-btn" data-target="code-getsim">Copy</button>
+          <pre class="pretty-code"><code id="code-getsim">
+ToolsRTM::get.simulator(app = "SCOPE")
+ToolsRTM::get.simulator(app = "PROSAIL-BRDF")
+ToolsRTM::get.simulator(app = "getLUT")
+?get.simulator  # to see more options</code></pre>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <div class="pill">R · ToolsRTM</div>
+      <h3>Basic PROSAIL simulation (HYDRA-EO example)</h3>
+
+      <p class="section-intro" style="margin-bottom:0.4rem;">
+        This minimal example (used in the HYDRA-EO web page) illustrates how to
+        obtain a PROSAIL simulator and plot a reflectance spectrum.
+      </p>
+
+      <details class="code-details">
+        <summary>
+          <span class="summary-label">Show PROSAIL code</span>
+          <span class="summary-icon">▾</span>
+        </summary>
+        <div class="code-block">
+          <button class="copy-btn" data-target="code-prosail-demo">Copy</button>
+          <pre class="pretty-code"><code id="code-prosail-demo">
+library(ToolsRTM)
+
+sim <- ToolsRTM::get.simulator(app = "PROSAIL")
+out <- sim(Cab = 45, LAI = 3.2)
+
+plot(out$wl, out$R, type = "l",
+     xlab = "Wavelength (nm)",
+     ylab = "Reflectance")</code></pre>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== CITATION ===== -->
+  <section id="citation">
+    <h2>How to cite ToolsRTM</h2>
+
+    <div class="card">
+      <p class="section-intro">
+        When using ToolsRTM in scientific work, please cite the following studies
+        describing the package and associated workflows:
+      </p>
+
+      <details class="code-details">
+        <summary>
+          <span class="summary-label">Show recommended citations</span>
+          <span class="summary-icon">▾</span>
+        </summary>
+        <div class="code-block">
+          <button class="copy-btn" data-target="cite-block">Copy</button>
+          <pre class="pretty-code"><code id="cite-block">
+Camino, C. L., et al. (2024).
+RT-Simulator: An Online Platform to Simulate Canopy Reflectance
+Using Radiative Transfer Models. IGARSS 2024.
+
+Arano, K., Camino, C. L., et al. (2024).
+Enhancing Chlorophyll Content Estimation with Sentinel-2 Imagery
+Using Hybrid Machine Learning and PROSAIL Simulations. IGARSS 2024.
+
+Camino, C. L., et al. (in preparation).
+Integrating Physiological Plant Traits with Sentinel-2 Imagery
+Using PROSAIL and Hybrid Inversion Approaches.</code></pre>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== LICENSE ===== -->
+  <section id="license">
+    <h2>License</h2>
+
+    <div class="card">
+      <h3>MIT License</h3>
+      <p class="section-intro">
+        ToolsRTM is released under the MIT License. The package provides wrappers
+        and interfaces to several radiative transfer models, whose original
+        formulations must be cited using the references listed below.
+      </p>
+
+      <details class="code-details">
+        <summary>
+          <span class="summary-label">Show MIT License summary</span>
+          <span class="summary-icon">▾</span>
+        </summary>
+        <div class="code-block">
+          <pre class="pretty-code"><code>
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the “Software”), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the customary MIT terms and conditions.</code></pre>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== REFERENCES ===== -->
+  <section id="references">
+    <h2>Scientific references</h2>
+    <p class="section-intro">
+      Key scientific references underpinning the radiative transfer models
+      accessed via ToolsRTM.
+    </p>
+
+    <div class="card">
+      <h3>Leaf optical models</h3>
+      <div class="ref-block">
+        Jacquemoud, S., &amp; Baret, F. (1990).
+        PROSPECT: A model of leaf optical properties.<br>
+        Vilfan, N., et al. (2016, 2018).
+        FLUSPECT-B and FLUSPECT-Cx for modelling chlorophyll fluorescence
+        emission and leaf optical properties.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Canopy reflectance models</h3>
+      <div class="ref-block">
+        Verhoef, W. (1984–1998). SAIL family of canopy reflectance models.<br>
+        Atzberger, C. (2000). INFORM: A canopy reflectance model integrating
+        leaf optics, canopy structure and background effects.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Soil radiative transfer</h3>
+      <div class="ref-block">
+        MARMIT-1 and MARMIT-2 soil radiative transfer models calibrated against
+        multiple soil spectral datasets (Bablet-2016, Dupiau-2020, Humper-2015,
+        Lesaignoux-2008, Liu-2002, Lobell-2002, Marcq-2012, Philpot-2014).
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Soil–plant–atmosphere (SPART)</h3>
+      <div class="ref-block">
+        SPART: Coupled soil BRDF, PROSAIL and atmospheric radiative transfer
+        for directional top-of-atmosphere reflectance and EO sensor simulation.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>SCOPE (energy balance and fluorescence)</h3>
+      <div class="ref-block">
+        Van der Tol, C., et al. (2009).
+        SCOPE: A model to simulate energy balance, fluorescence and reflectance
+        of a vegetated surface.<br>
+        Yang, P., et al. (2020).
+        Updates and extensions to the SCOPE model for improved canopy
+        energy-balance and SIF simulations.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    ToolsRTM · Radiative Transfer Package · HYDRA-EO (ESA EXPRO+)
+  </footer>
+</main>
+
+<!-- ===== JS SOLO PARA COPY (opcional) ===== -->
+<script>
+  document.querySelectorAll(".copy-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-target");
+      const el = document.getElementById(id);
+      if (!el) return;
+      const text = el.innerText;
+      if (!navigator.clipboard) return;  // por si el navegador no soporta
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add("copied");
+        btn.textContent = "Copied!";
+        setTimeout(() => {
+          btn.classList.remove("copied");
+          btn.textContent = "Copy";
+        }, 1200);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

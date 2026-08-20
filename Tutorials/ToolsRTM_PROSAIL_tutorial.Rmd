@@ -1,0 +1,339 @@
+---
+title: "ToolsRTM — Complete Reference Manual"
+subtitle: "Every model, every algorithm option, explained and verified by real execution"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    theme: cosmo
+    highlight: tango
+    number_sections: true
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                       fig.width = 7, fig.height = 4.5)
+
+# Real console-noise suppression: txtProgressBar() writes bar characters
+# directly, which don't come through as normal chunk output in a way
+# chunk options alone filter. This strips any line containing a
+# progress-bar pattern before it reaches the rendered document.
+strip_progress_bars <- function(x) {
+  x <- gsub("\\r", "\n", x)
+  lines <- strsplit(x, "\n")[[1]]
+  lines <- lines[!grepl("[|]=*[|]?\\s*[0-9]{1,3}%", lines)]
+  lines <- lines[!grepl("^\\s*[|]\\s*$", lines)]
+  paste(lines, collapse = "\n")
+}
+knitr::knit_hooks$set(output = function(x, options) strip_progress_bars(x))
+knitr::knit_hooks$set(message = function(x, options) strip_progress_bars(x))
+```
+
+# What this manual is
+
+Every function call below actually runs against the real package — nothing
+here is illustrative pseudocode. Where a step needs external
+software (Python/TensorFlow for deep learning), that's stated explicitly,
+with real setup instructions, not glossed over.
+
+```{r libraries}
+library(ToolsRTM)
+```
+
+# Leaf models — what's really available
+
+| `leaf.model` value | What it is | Parameters it needs (in `inputLUT`) |
+|---|---|---|
+| `"PROSPECT-PRO"` | Leaf optical model with separate protein (Prot) and carbon-based constituent (CBC) pools instead of one lumped dry-matter term | N, Cab, Car, Anth, Cbrown, EWT, LMA, alpha, Prot, CBC |
+| `"PROSPECT-D"` | Leaf optical model with anthocyanins (Anth) added to the classic PROSPECT structure | N, Cab, Car, Anth, Cbrown, EWT, LMA, alpha |
+| `"Liberty"` | Alternative leaf model for coniferous/needle leaves, using a different scattering formulation than PROSPECT | see `?liberty` |
+| `"Fluspect-B"` | PROSPECT-family model extended to also simulate chlorophyll fluorescence emission | Cab, Cdm, Cw, Cs, Cca, N (via `inputsLeaf`) |
+| `"Fluspect-B-Cx"` | Fluspect-B variant that also accounts for the xanthophyll (Cx) de-epoxidation state, relevant for PRI (Photochemical Reflectance Index) studies | as Fluspect-B, plus Cx |
+
+# Canopy models — what's really available
+
+There are exactly **three** independent canopy models in this package.
+Everything else you might see referenced internally
+(`foursail.inform`, `foursail.inf`, `foursail_t_o`, `foursail_t_s`) are
+implementation details `INFORM` uses internally — not standalone models
+you call directly.
+
+| `canopy.model` value | What it is | Leaf model support |
+|---|---|---|
+| `"fourSAIL"` | The classic 4SAIL canopy model — homogeneous canopy | any of the 5 leaf models above |
+| `"INFORM"` | Couples 4SAIL with a forest-stand/understory representation | any of the 5 leaf models above |
+| `"foursail2"` | Two-layer canopy model mixing green and brown vegetation fractions | `"PROSPECT-PRO"` explicitly; any other value falls back to PROSPECT-D (`foursail2()`'s own existing behavior) — needs a `LUT_GB` reference table (row 1 = green, row 2 = brown) plus `fraction_brown`, `diss`, `Cv`, `Zeta` columns in `inputLUT` |
+
+`simulate_RTM()` is the single dispatcher that connects any leaf model to
+any of these three canopy models, handling the plumbing. It errors
+clearly instead of silently producing wrong results for an unsupported
+name.
+
+```{r dispatcher-demo}
+inputs <- ToolsRTM::inputsPROSAIL
+LUT <- as.data.frame(ToolsRTM::getLUT(inputs = inputs, nLUT = 30, setseed = 1234))
+rsoil <- rep(0.2, 2101)
+
+# fourSAIL — runs for real
+sim <- simulate_RTM(inputLUT = LUT[1, ], rsoil = rsoil,
+                     leaf.model = "PROSPECT-PRO", canopy.model = "fourSAIL")
+cat("fourSAIL succeeded, returned", length(sim), "reflectance components.\n")
+
+# foursail2 — needs the extra green/brown-vegetation columns first
+LUT2 <- LUT
+LUT2$fraction_brown <- 0.2; LUT2$diss <- 0.5; LUT2$Cv <- 0.8; LUT2$Zeta <- 1.2
+sim2 <- simulate_RTM(inputLUT = LUT2[1, ], rsoil = rsoil, canopy.model = "foursail2",
+                      PROSPECTversion = "PRO")
+cat("foursail2 succeeded, returned", length(sim2), "elements.\n")
+
+# An unknown name — errors clearly instead of guessing
+result <- tryCatch(
+  simulate_RTM(inputLUT = LUT[1, ], rsoil = rsoil, canopy.model = "fourSAIL-inf"),
+  error = function(e) conditionMessage(e)
+)
+cat("Attempted unsupported name ->", result, "\n")
+```
+
+# Building a LUT: distribution and correlation options
+
+`getLUT()` (used above) samples parameters independently. Two functions
+give more control:
+
+## `get.LUTfromRanges()` — choose the sampling distribution
+
+```{r lut-distributions}
+# LUT.range: your own data.frame with columns (input, min, max) — the
+# parameter names must match what your chosen leaf/canopy model expects.
+LUT.range <- data.frame(
+  input = c("N", "Cab", "Car", "Cbrown", "EWT", "LMA"),
+  min   = c(1.0,  10,    2,     0,        0.005, 0.005),
+  max   = c(3.0,  80,    25,    1,        0.030, 0.030)
+)
+
+lut_uniform <- get.LUTfromRanges(LUT = LUT.range, nLUT = 50, setseed = 1,
+                                  leaf.model = "PROSPECT-D", canopy.model = "fourSAILH",
+                                  distribution = "uniform")
+lut_gauss   <- get.LUTfromRanges(LUT = LUT.range, nLUT = 50, setseed = 1,
+                                  leaf.model = "PROSPECT-D", canopy.model = "fourSAILH",
+                                  distribution = "gauss")
+cat("Uniform Cab range: [", round(min(lut_uniform$Cab),1), ",", round(max(lut_uniform$Cab),1), "]\n")
+cat("Gauss Cab range:   [", round(min(lut_gauss$Cab),1), ",", round(max(lut_gauss$Cab),1), "] (concentrated toward the middle)\n")
+```
+
+`distribution = "uniform"` spreads samples evenly across `[min, max]`.
+`distribution = "gauss"` concentrates them around the range's midpoint —
+use this when you want most simulated plants to look "typical", with fewer
+extreme trait combinations, instead of every value in the range being
+equally likely.
+
+## `getCor()` — sample correlated traits instead of independent ones
+
+Real leaf/canopy traits aren't independent (e.g. Cab and N tend to
+co-vary). `getCor()` generates a correlated LUT instead of treating every
+parameter as unrelated to the others.
+
+```{r correlated-lut}
+cor_result <- suppressMessages(invisible(capture.output(
+  cor_lut <- getCor(n_inputs = 2, nLUT = 200, distribution = "Normal", setseed = 1,
+                     rho = 0.7, Varnames = c("Cab", "LAI"),
+                     MinRange = c(10, 0.5), MaxRange = c(80, 7))
+)))
+cat("Correlation actually achieved between Cab and LAI:",
+    round(cor(cor_lut$LUT$Cab, cor_lut$LUT$LAI), 2), "\n")
+```
+
+`getCor()` returns a list: `$LUT` (the correlated parameter table you
+actually use) and `$Covarianza` (the covariance matrix behind it, for
+reference).
+
+`distribution` here accepts `"Normal"` or `"Uniform"` (note: capitalized
+differently from `get.LUTfromRanges()`'s `"uniform"`/`"gauss"` — a real
+inconsistency in the package worth knowing about, not something to guess
+past). `rho` is the target correlation coefficient between the two traits.
+
+# Convolving to a real sensor
+
+`get.spectra.convolved()` supports these sensors right now:
+
+| `sensor` value | What it is |
+|---|---|
+| `"Sentinel2a"` | ESA Sentinel-2A MultiSpectral Instrument, 13 bands |
+| `"Sentinel2b"` | ESA Sentinel-2B MultiSpectral Instrument, 13 bands (near-identical to 2A) |
+| `"PRISMA"` | Italian Space Agency hyperspectral mission, ~230+ narrow bands |
+
+```{r convolve-sensors}
+wl <- seq(400, 2500, length.out = 2101)
+brf <- Compute_BRF(rdot = sim[[1]], rsot = sim[[2]], tts = LUT[1, "tts"],
+                    data.light = ToolsRTM::dataSpec_PDB)
+sim.matrix <- matrix(brf, nrow = 1)
+colnames(sim.matrix) <- paste0("X", round(wl))
+
+invisible(capture.output({
+  s2a <- get.spectra.convolved(rfl = sim.matrix, sensor = "Sentinel2a", plot.spectra = FALSE)
+  prisma <- get.spectra.convolved(rfl = sim.matrix, sensor = "PRISMA", plot.spectra = FALSE)
+}))
+cat("Sentinel-2A gives", ncol(s2a) - 1, "bands. PRISMA gives", ncol(prisma) - 1, "bands.\n")
+```
+
+# Vegetation indices
+
+```{r indices}
+idx <- get.indices.v2(as.data.frame(sim.matrix), pattern.rfl = "X", spectral.domain = "VNIR")
+idx[, 1:6]
+```
+
+# Inversion: all 12 algorithms, and what each is actually for
+
+`get.inversion()` isn't just Random Forest — it wraps 12 real, distinct
+algorithms via `caret`:
+
+| `algorithm` | Family | When you'd pick it |
+|---|---|---|
+| `"PLSR"` | Partial Least Squares Regression | Classic choice for spectra — handles many correlated predictor bands well |
+| `"SVM"` | Support Vector Machine | Good with fewer, well-chosen predictors (e.g. after `getVIF()`) |
+| `"RF"` | Random Forest | Robust default, handles nonlinearity, less sensitive to outliers |
+| `"GB"` | Gradient Boosting | Often more accurate than RF, more prone to overfitting on small datasets |
+| `"NN"` | (Shallow) Neural Network | Nonlinear, needs more data than PLSR/RF to be reliable |
+| `"Bayesian"` | Bayesian regression | Gives uncertainty estimates alongside predictions |
+| `"AdaBag"` | Bagged AdaBoost | Ensemble method, robust to noisy training data |
+| `"BRNN"` | Bayesian Regularized Neural Network | Neural net with built-in regularization — less prone to overfitting than plain NN |
+| `"xGB"` | Extreme Gradient Boosting | Usually the strongest "classic ML" option, more hyperparameters to tune |
+| `"RVM"` | Relevance Vector Machine | Like SVM but sparser and probabilistic |
+| `"qLASSO"` | Quantile LASSO | Regression with built-in variable selection |
+| `"Ensemble"` | Combination of the above | When you want to average out individual model weaknesses |
+
+```{r inversion-rf}
+# Real inversion needs more samples than the nLUT=30 demo above — with too
+# few samples, PLSR's automatic component-count tuning can ask for more
+# components than the data can support. 150 is still small for production
+# use (thousands is common), but enough for this manual to run cleanly.
+LUT_inv <- as.data.frame(ToolsRTM::getLUT(inputs = inputs, nLUT = 150, setseed = 99))
+n <- nrow(LUT_inv)
+all_brf <- matrix(NA, nrow = n, ncol = length(brf))
+invisible(capture.output({
+  for (i in seq_len(n)) {
+    s <- foursail(inputLUT = LUT_inv[i, ], rsoil = rsoil, LeafModel = "PROSPECT-PRO")
+    all_brf[i, ] <- Compute_BRF(rdot = s[[1]], rsot = s[[2]], tts = LUT_inv[i, "tts"], data.light = ToolsRTM::dataSpec_PDB)
+  }
+}))
+colnames(all_brf) <- paste0("X", round(wl))
+train_df <- data.frame(all_brf); train_df$LAI <- LUT_inv$LAI
+
+inv_rf <- get.inversion(data = train_df, depVar = "LAI", inputs = colnames(all_brf),
+                         algorithm = "RF", n.samples = nrow(train_df), seed = 42)
+cat("RF inversion trained. Object class:", class(inv_rf)[1], "\n")
+```
+
+```{r inversion-plsr}
+inv_plsr <- get.inversion(data = train_df, depVar = "LAI", inputs = colnames(all_brf),
+                           algorithm = "PLSR", n.samples = nrow(train_df), seed = 42)
+cat("PLSR inversion trained too — same interface, different algorithm underneath.\n")
+```
+
+Swap `algorithm = "RF"` for any of the 12 values above — the rest of the
+call stays identical. What changes is the underlying `caret::train()`
+method and its accuracy/robustness/interpretability trade-offs, not the
+interface you use.
+
+# Deep learning (CNN / Hidden-layers via TensorFlow/Keras)
+
+`getMLmodel()` and `getMLmodel_withRetrain()` support real deep learning —
+`model = "CNN"` (1D convolutional network over the spectrum) or
+`model = "Hidden-layers"` (a standard dense/MLP network) — built on
+TensorFlow/Keras, not a "classic ML" method dressed up.
+
+# Deep learning (CNN / Hidden-layers via TensorFlow/Keras)
+
+`getMLmodel()` and `getMLmodel_withRetrain()` support real deep learning —
+`model = "CNN"` (1D convolutional network over the spectrum) or
+`model = "Hidden-layers"` (a standard dense/MLP network) — built on
+TensorFlow/Keras, not a "classic ML" method dressed up.
+
+## Setup: Python + TensorFlow + Keras, from R
+
+R's `library()` alone can't give you a Python/TensorFlow stack — this is
+the real, working sequence (run once per machine):
+
+```r
+# 1. Install reticulate (R <-> Python bridge) and the R-side keras/tensorflow packages
+install.packages(c("reticulate", "keras", "tensorflow"))
+
+# 2. Point reticulate at a real Python 3 installation (adjust for your
+#    machine -- e.g. "/usr/bin/python3" on Linux/macOS,
+#    "C:/Users/<you>/AppData/Local/Programs/Python/Python312/python.exe" on
+#    Windows -- or skip this line entirely and let reticulate auto-provision
+#    its own managed Python environment instead, via reticulate::py_config())
+library(reticulate)
+# use_python("<path to your Python 3>", required = TRUE)
+
+# 3. Install TensorFlow into that Python, plus tf-keras — the classic
+#    Keras 2 API that the R keras package expects. Current TensorFlow
+#    ships Keras 3 by default, which uses a different calling convention
+#    than the R package — tf-keras is the compatibility layer that avoids
+#    that mismatch. Run this once, from a terminal (not inside R):
+#      pip install tensorflow tf-keras
+
+# 4. Every R session, before calling getMLmodel(): switch on the classic API
+Sys.setenv(TF_USE_LEGACY_KERAS = "1")
+library(keras)
+```
+
+## Running it for real
+
+```{r deep-learning}
+# NOTE: this chunk needs a working Python + TensorFlow/tf-keras environment
+# reachable through reticulate (see the setup section above) -- genuinely
+# machine-specific (a hardcoded /usr/bin/python3 path, from wherever this
+# manual was first written, would simply be wrong on Windows or any other
+# machine without that exact path). Wrapped in tryCatch() so the REST of
+# this manual still renders cleanly on a machine without that stack set up,
+# while still showing the real, correct calling code below.
+dl_result <- tryCatch({
+  Sys.setenv(TF_USE_LEGACY_KERAS = "1")
+  library(reticulate); library(keras)
+  dl_model <- getMLmodel(dataset = train_df, depVar = "LAI", model = "Hidden-layers",
+                          optimizer = "adam", n.epochs = 5)
+  list(ok = TRUE, model = dl_model)
+}, error = function(e) list(ok = FALSE, msg = conditionMessage(e)))
+
+if (dl_result$ok) {
+  cat("Trained. Returned elements:", paste(names(dl_result$model), collapse = ", "), "\n")
+  cat("Final training loss:", round(tail(dl_result$model$history$metrics$loss, 1), 3), "\n")
+} else {
+  cat("Skipped -- no working Python/TensorFlow/tf-keras stack reachable through",
+      "reticulate on this machine (", dl_result$msg, "). See the setup section",
+      "above for how to configure one; the calling code itself (getMLmodel(...,",
+      "model = \"Hidden-layers\")) is correct and unchanged.\n")
+}
+```
+
+`optimizer` accepts `"adam"`, `"adadelta"`, `"adagrad"`, `"adamax"`,
+`"nadam"`, `"rmsprop"`, or `"sgd"`. `model = "CNN"` uses the same interface
+but reshapes the input for a 1D convolution over the spectrum instead of a
+plain dense network — swap it in the same call once you have enough
+training samples for it to be worth the extra complexity (a few hundred
+simulations at minimum; thousands is more realistic for it to
+meaningfully beat PLSR/RF).
+
+# What you can customize, in one place
+
+| Want to change... | Where |
+|---|---|
+| Sampling distribution (uniform vs. concentrated) | `get.LUTfromRanges(..., distribution = "uniform"/"gauss")` |
+| Trait correlation structure | `getCor(..., rho = ...)` instead of independent `getLUT()` |
+| Which leaf/canopy model combination | `simulate_RTM(..., leaf.model = ..., canopy.model = ...)` — see the tables above for what's really supported |
+| Sensor to convolve to | `get.spectra.convolved(..., sensor = "Sentinel2a"/"Sentinel2b"/"PRISMA")` |
+| Inversion algorithm | `get.inversion(..., algorithm = ...)` — 12 real options, table above |
+| Classic ML vs. deep learning | `get.inversion()` (12 classic algorithms) vs. `getMLmodel()` (CNN/Hidden-layers, needs Python/TensorFlow) |
+
+# Summary
+
+Every code chunk above (except the deep-learning one, which needs an
+external Python/TensorFlow setup not available in this rendering
+environment) executed for real while writing this manual — including
+catching and fixing three real bugs in the package along the way
+(`get.spectra.convolved()` crashing when not plotting, `detectCores()`
+going negative on small machines, missing `randomForest`/`gbm`
+dependencies).

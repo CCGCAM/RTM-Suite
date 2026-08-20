@@ -1,0 +1,22 @@
+# Example SCOPE input LUT and input border/range definitions
+
+`inputsSCOPE` is an example base look-up table of SCOPE input parameters
+(as read from `inst/input/inputs_SCOPE.csv`, used by
+[`getLUT.SCOPE`](getLUT.SCOPE.md) to generate randomized LUTs).
+`input_border` gives the valid minimum/maximum range for each input
+parameter.
+
+## Usage
+
+``` r
+inputsSCOPE
+
+input_border
+```
+
+## Format
+
+A data frame, one row per input parameter, with default value and (for
+`input_border`) min/max range columns.
+
+An object of class `data.frame` with 26 rows and 7 columns.

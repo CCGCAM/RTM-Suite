@@ -1,0 +1,15 @@
+url: ~
+template:
+  bootstrap: 5
+navbar:
+  structure:
+    left: [reference, articles]
+    right: [suite_home, scopeinr, search]
+  components:
+    suite_home:
+      text: "Suite Home"
+      href: ../index.html
+      icon: fa-house
+    scopeinr:
+      text: "SCOPEinR"
+      href: ../scopeinr/index.html

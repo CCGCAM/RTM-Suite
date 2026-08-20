@@ -1,0 +1,633 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>toolsrtm.inform &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    
+    <a href="../../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+    
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../toolsrtm/index.html">toolsrtm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.calctav"><code class="docutils literal notranslate"><span class="pre">calctav()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.LeafOptics"><code class="docutils literal notranslate"><span class="pre">LeafOptics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.prospect_d"><code class="docutils literal notranslate"><span class="pre">prospect_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.prospect_pro"><code class="docutils literal notranslate"><span class="pre">prospect_pro()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.FluspectBResult"><code class="docutils literal notranslate"><span class="pre">FluspectBResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.FluspectCxResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.fluspect_b"><code class="docutils literal notranslate"><span class="pre">fluspect_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.fluspect_cx"><code class="docutils literal notranslate"><span class="pre">fluspect_cx()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/liberty.html#toolsrtm.liberty.LibertyResult"><code class="docutils literal notranslate"><span class="pre">LibertyResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/liberty.html#toolsrtm.liberty.liberty"><code class="docutils literal notranslate"><span class="pre">liberty()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/canopy.html">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.volscatt"><code class="docutils literal notranslate"><span class="pre">volscatt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.campbell"><code class="docutils literal notranslate"><span class="pre">campbell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.dladgen"><code class="docutils literal notranslate"><span class="pre">dladgen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.dcum"><code class="docutils literal notranslate"><span class="pre">dcum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc1"><code class="docutils literal notranslate"><span class="pre">jfunc1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc2"><code class="docutils literal notranslate"><span class="pre">jfunc2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc4"><code class="docutils literal notranslate"><span class="pre">jfunc4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.non_conservative_scattering"><code class="docutils literal notranslate"><span class="pre">non_conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.conservative_scattering"><code class="docutils literal notranslate"><span class="pre">conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.scattering"><code class="docutils literal notranslate"><span class="pre">scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.LeafAngleDistribution"><code class="docutils literal notranslate"><span class="pre">LeafAngleDistribution</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.FourSAILResult"><code class="docutils literal notranslate"><span class="pre">FourSAILResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail_core"><code class="docutils literal notranslate"><span class="pre">foursail_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail"><code class="docutils literal notranslate"><span class="pre">foursail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.FourSAIL2Result"><code class="docutils literal notranslate"><span class="pre">FourSAIL2Result</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail2_core"><code class="docutils literal notranslate"><span class="pre">foursail2_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail2"><code class="docutils literal notranslate"><span class="pre">foursail2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.compute_brf"><code class="docutils literal notranslate"><span class="pre">compute_brf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_inform"><code class="docutils literal notranslate"><span class="pre">foursail_inform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_inf"><code class="docutils literal notranslate"><span class="pre">foursail_inf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_t_s"><code class="docutils literal notranslate"><span class="pre">foursail_t_s()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_t_o"><code class="docutils literal notranslate"><span class="pre">foursail_t_o()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.inform"><code class="docutils literal notranslate"><span class="pre">inform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.spart_toc"><code class="docutils literal notranslate"><span class="pre">spart_toc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.SpartToaResult"><code class="docutils literal notranslate"><span class="pre">SpartToaResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.spart_toa"><code class="docutils literal notranslate"><span class="pre">spart_toa()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/smac.html">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SmacSensor"><code class="docutils literal notranslate"><span class="pre">SmacSensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SENSORS"><code class="docutils literal notranslate"><span class="pre">SENSORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.get_sensor"><code class="docutils literal notranslate"><span class="pre">get_sensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel2a_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2a_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel2b_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2b_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel3a_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3a_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel3b_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3b_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat4_tm"><code class="docutils literal notranslate"><span class="pre">landsat4_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat5_tm"><code class="docutils literal notranslate"><span class="pre">landsat5_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat7_etm"><code class="docutils literal notranslate"><span class="pre">landsat7_etm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat8_oli"><code class="docutils literal notranslate"><span class="pre">landsat8_oli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.terra_aqua_modis"><code class="docutils literal notranslate"><span class="pre">terra_aqua_modis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SmacAtmosphere"><code class="docutils literal notranslate"><span class="pre">SmacAtmosphere</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.get_smac"><code class="docutils literal notranslate"><span class="pre">get_smac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.spectral_convolution"><code class="docutils literal notranslate"><span class="pre">spectral_convolution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.SrfTable"><code class="docutils literal notranslate"><span class="pre">SrfTable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.SrfConvolutionResult"><code class="docutils literal notranslate"><span class="pre">SrfConvolutionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_prisma"><code class="docutils literal notranslate"><span class="pre">srf_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.fwhm_prisma"><code class="docutils literal notranslate"><span class="pre">fwhm_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_sentinel2a"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_sentinel2b"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_srf"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_srf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.enmap_characteristics"><code class="docutils literal notranslate"><span class="pre">enmap_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.sensor_characteristics"><code class="docutils literal notranslate"><span class="pre">sensor_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_gaussian"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_gaussian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/indices.html#toolsrtm.indices.get_indices"><code class="docutils literal notranslate"><span class="pre">get_indices()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.MarmitSoil"><code class="docutils literal notranslate"><span class="pre">MarmitSoil</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.marmit1"><code class="docutils literal notranslate"><span class="pre">marmit1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.marmit2"><code class="docutils literal notranslate"><span class="pre">marmit2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.sigmoid_soil"><code class="docutils literal notranslate"><span class="pre">sigmoid_soil()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.get_marmit_rsoil"><code class="docutils literal notranslate"><span class="pre">get_marmit_rsoil()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.COLLECTION_ASSETS"><code class="docutils literal notranslate"><span class="pre">COLLECTION_ASSETS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.SatelliteCollection"><code class="docutils literal notranslate"><span class="pre">SatelliteCollection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.get_satellite_collection"><code class="docutils literal notranslate"><span class="pre">get_satellite_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.get_sentinel2_cube"><code class="docutils literal notranslate"><span class="pre">get_sentinel2_cube()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.CarsPlsResult"><code class="docutils literal notranslate"><span class="pre">CarsPlsResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.carspls"><code class="docutils literal notranslate"><span class="pre">carspls()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_vif"><code class="docutils literal notranslate"><span class="pre">get_vif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.InversionOptResult"><code class="docutils literal notranslate"><span class="pre">InversionOptResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_inversion_opt"><code class="docutils literal notranslate"><span class="pre">get_inversion_opt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.ALGORITHMS"><code class="docutils literal notranslate"><span class="pre">ALGORITHMS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.InversionResult"><code class="docutils literal notranslate"><span class="pre">InversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_inversion"><code class="docutils literal notranslate"><span class="pre">get_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.HybridInversionResult"><code class="docutils literal notranslate"><span class="pre">HybridInversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.hybrid_inversion"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.hybrid_inversion_ensemble"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion_ensemble()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/deep_learning.html#toolsrtm.deep_learning.MLModelResult"><code class="docutils literal notranslate"><span class="pre">MLModelResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/deep_learning.html#toolsrtm.deep_learning.get_ml_model"><code class="docutils literal notranslate"><span class="pre">get_ml_model()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.SoilParams"><code class="docutils literal notranslate"><span class="pre">SoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.WettingParams"><code class="docutils literal notranslate"><span class="pre">WettingParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.get_bsm"><code class="docutils literal notranslate"><span class="pre">get_bsm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.soilwat"><code class="docutils literal notranslate"><span class="pre">soilwat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/spectral.html#scopeinpython.spectral.SpectralConfig"><code class="docutils literal notranslate"><span class="pre">SpectralConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/spectral.html#scopeinpython.spectral.get_spectra_scope"><code class="docutils literal notranslate"><span class="pre">get_spectra_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_volscatt_scope"><code class="docutils literal notranslate"><span class="pre">get_volscatt_scope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_pso"><code class="docutils literal notranslate"><span class="pre">get_pso()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_reflectances"><code class="docutils literal notranslate"><span class="pre">get_reflectances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_fluxprofile"><code class="docutils literal notranslate"><span class="pre">get_fluxprofile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.CanopyStructure"><code class="docutils literal notranslate"><span class="pre">CanopyStructure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult"><code class="docutils literal notranslate"><span class="pre">RTMoResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.run_rtmo"><code class="docutils literal notranslate"><span class="pre">run_rtmo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.NetRadiationLite"><code class="docutils literal notranslate"><span class="pre">NetRadiationLite</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.net_radiation_lite"><code class="docutils literal notranslate"><span class="pre">net_radiation_lite()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.LeafBio"><code class="docutils literal notranslate"><span class="pre">LeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.MeteoLeaf"><code class="docutils literal notranslate"><span class="pre">MeteoLeaf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.BiochemResult"><code class="docutils literal notranslate"><span class="pre">BiochemResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.sel_root"><code class="docutils literal notranslate"><span class="pre">sel_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_gs_fun"><code class="docutils literal notranslate"><span class="pre">get_gs_fun()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ball_berry"><code class="docutils literal notranslate"><span class="pre">get_ball_berry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_temperature_function_c3"><code class="docutils literal notranslate"><span class="pre">get_temperature_function_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_high_temp_inhibtion_c3"><code class="docutils literal notranslate"><span class="pre">get_high_temp_inhibtion_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_fluorescence_model"><code class="docutils literal notranslate"><span class="pre">get_fluorescence_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ci_next"><code class="docutils literal notranslate"><span class="pre">get_ci_next()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_compute_a"><code class="docutils literal notranslate"><span class="pre">get_compute_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_biochemical"><code class="docutils literal notranslate"><span class="pre">get_biochemical()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect.html#scopeinpython.fluspect.FluspectCxScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect.html#scopeinpython.fluspect.get_fluspect_cx_scope"><code class="docutils literal notranslate"><span class="pre">get_fluspect_cx_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.MultiLayerLeafBio"><code class="docutils literal notranslate"><span class="pre">MultiLayerLeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.FluspectMScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectMScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.fluspect_mscope"><code class="docutils literal notranslate"><span class="pre">fluspect_mscope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmf.html#scopeinpython.rtmf.RTMfResult"><code class="docutils literal notranslate"><span class="pre">RTMfResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmf.html#scopeinpython.rtmf.rtmf"><code class="docutils literal notranslate"><span class="pre">rtmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmz.html#scopeinpython.rtmz.RTMzResult"><code class="docutils literal notranslate"><span class="pre">RTMzResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmz.html#scopeinpython.rtmz.rtmz"><code class="docutils literal notranslate"><span class="pre">rtmz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.stefan_boltzmann"><code class="docutils literal notranslate"><span class="pre">stefan_boltzmann()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.monin_obukhov"><code class="docutils literal notranslate"><span class="pre">monin_obukhov()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.psim"><code class="docutils literal notranslate"><span class="pre">psim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.psih"><code class="docutils literal notranslate"><span class="pre">psih()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.phstar"><code class="docutils literal notranslate"><span class="pre">phstar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.ResistanceParams"><code class="docutils literal notranslate"><span class="pre">ResistanceParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.Resistances"><code class="docutils literal notranslate"><span class="pre">Resistances</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.get_resistances"><code class="docutils literal notranslate"><span class="pre">get_resistances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.HeatFluxes"><code class="docutils literal notranslate"><span class="pre">HeatFluxes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.get_heatfluxes"><code class="docutils literal notranslate"><span class="pre">get_heatfluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.RTMtSbResult"><code class="docutils literal notranslate"><span class="pre">RTMtSbResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.rtmt_sb"><code class="docutils literal notranslate"><span class="pre">rtmt_sb()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalMeteo"><code class="docutils literal notranslate"><span class="pre">EbalMeteo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalCanopyParams"><code class="docutils literal notranslate"><span class="pre">EbalCanopyParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalSoilParams"><code class="docutils literal notranslate"><span class="pre">EbalSoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalResult"><code class="docutils literal notranslate"><span class="pre">EbalResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.aggregator_ebal"><code class="docutils literal notranslate"><span class="pre">aggregator_ebal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.ebal"><code class="docutils literal notranslate"><span class="pre">ebal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.TDP_DEFAULT"><code class="docutils literal notranslate"><span class="pre">TDP_DEFAULT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.get_zo_and_d"><code class="docutils literal notranslate"><span class="pre">get_zo_and_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.ScopeOptions"><code class="docutils literal notranslate"><span class="pre">ScopeOptions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.ScopeResult"><code class="docutils literal notranslate"><span class="pre">ScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.get_scope"><code class="docutils literal notranslate"><span class="pre">get_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.sint"><code class="docutils literal notranslate"><span class="pre">sint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_ephoton"><code class="docutils literal notranslate"><span class="pre">get_ephoton()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_e2phot"><code class="docutils literal notranslate"><span class="pre">get_e2phot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_planck"><code class="docutils literal notranslate"><span class="pre">get_planck()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.satvap"><code class="docutils literal notranslate"><span class="pre">satvap()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">toolsrtm.inform</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for toolsrtm.inform</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;INFORM: the INvertible FOrest Reflectance Model (Atzberger 2000;</span>
+<span class="sd">Schlerf &amp; Atzberger 2006), a FLIM (Rosema et al. 1992) + fourSAIL + PROSPECT</span>
+<span class="sd">combination for forest-stand bidirectional reflectance, 400-2500 nm.</span>
+
+<span class="sd">Direct port of ``ToolsRTM/R/inform.R`` and its internal helpers</span>
+<span class="sd">(``foursail.inform.R``, ``foursail.inf.R``, ``foursail_t_s.R``,</span>
+<span class="sd">``foursail_t_o.R``, ``Compute_BRF.R``), restricted to what ``inform()``</span>
+<span class="sd">itself actually exercises. All 5 leaf models ToolsRTM itself supports</span>
+<span class="sd">(PROSPECT-D/-PRO, Liberty, Fluspect-B/-B-Cx) are wired in via</span>
+<span class="sd">:func:`toolsrtm.canopy._leaf_optics`, the same dispatcher :func:`toolsrtm.canopy.foursail`</span>
+<span class="sd">uses.</span>
+
+<span class="sd">Two real quirks of the R source are reproduced exactly here rather than</span>
+<span class="sd">&quot;fixed&quot;, so results match R bit-for-bit -- see inline comments at</span>
+<span class="sd">``_INFORM_QUIRKY_LIDF`` and ``compute_brf``.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">._data</span><span class="w"> </span><span class="kn">import</span> <span class="n">data_spec_pdb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.canopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">_foursail_scattering_core</span><span class="p">,</span> <span class="n">_leaf_optics</span><span class="p">,</span> <span class="n">_LeafModel</span><span class="p">,</span> <span class="n">campbell</span><span class="p">,</span> <span class="n">foursail_core</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.leaf</span><span class="w"> </span><span class="kn">import</span> <span class="n">prospect_d</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;compute_brf&quot;</span><span class="p">,</span> <span class="s2">&quot;foursail_inform&quot;</span><span class="p">,</span> <span class="s2">&quot;foursail_inf&quot;</span><span class="p">,</span> <span class="s2">&quot;foursail_t_s&quot;</span><span class="p">,</span> <span class="s2">&quot;foursail_t_o&quot;</span><span class="p">,</span> <span class="s2">&quot;inform&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># LIDF quirk shared by foursail.inform / foursail_t_s / foursail_t_o</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># For TypeLidf == 1, the R source of these three functions (but NOT</span>
+<span class="c1"># foursail.inf, which calls dladgen() normally) has the proper</span>
+<span class="c1"># ``dladgen(LIDFa, LIDFb)`` call commented out and replaced with a</span>
+<span class="c1"># hardcoded 65-value literal -- of which only the first 13 are ever read,</span>
+<span class="c1"># because the weighted-sum loop runs over ``length(litab) == 13``. This is</span>
+<span class="c1"># reproduced verbatim (values copied from the R source) rather than fixed,</span>
+<span class="c1"># so TypeLidf==1 output matches R exactly.</span>
+<span class="n">_INFORM_QUIRKY_LIDF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="mf">0.015192247821401716</span><span class="p">,</span> <span class="mf">0.04511513125626976</span><span class="p">,</span> <span class="mf">0.07366721933874043</span><span class="p">,</span>
+    <span class="mf">0.09998095795183792</span><span class="p">,</span> <span class="mf">0.12325683701156054</span><span class="p">,</span> <span class="mf">0.14278760558390557</span><span class="p">,</span>
+    <span class="mf">0.1579798610972386</span><span class="p">,</span> <span class="mf">0.16837196070089022</span><span class="p">,</span> <span class="mf">0.034475081609994906</span><span class="p">,</span>
+    <span class="mf">0.034644632694447175</span><span class="p">,</span> <span class="mf">0.03477199446646273</span><span class="p">,</span> <span class="mf">0.03485697201080851</span><span class="p">,</span>
+    <span class="mf">0.03489949845644191</span><span class="p">,</span>
+<span class="p">])</span>
+<span class="n">_tx1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">90</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">_tx2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">88</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">_INFORM_QUIRKY_LITAB</span> <span class="o">=</span> <span class="p">(</span><span class="n">_tx1</span> <span class="o">+</span> <span class="n">_tx2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_inform_lidf</span><span class="p">(</span><span class="n">LIDFa</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LIDF source used by foursail.inform/foursail_t_s/foursail_t_o (the</span>
+<span class="sd">    quirky hardcoded table for TypeLidf==1, real campbell() for TypeLidf==2</span>
+<span class="sd">    -- LIDFb is not used by either branch here, matching the R source).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">TypeLidf</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_INFORM_QUIRKY_LIDF</span><span class="p">,</span> <span class="n">_INFORM_QUIRKY_LITAB</span>
+    <span class="k">elif</span> <span class="n">TypeLidf</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">ld</span> <span class="o">=</span> <span class="n">campbell</span><span class="p">(</span><span class="n">LIDFa</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ld</span><span class="o">.</span><span class="n">lidf</span><span class="p">,</span> <span class="n">ld</span><span class="o">.</span><span class="n">litab</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;TypeLidf must be 1 or 2&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="compute_brf">
+<a class="viewcode-back" href="../../toolsrtm/inform.html#toolsrtm.inform.compute_brf">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_brf</span><span class="p">(</span><span class="n">rdot</span><span class="p">,</span> <span class="n">rsot</span><span class="p">,</span> <span class="n">tts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">es</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">short_waves</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bidirectional reflectance factor from direct/diffuse light mixing.</span>
+
+<span class="sd">    Direct port of ``ToolsRTM::Compute_BRF``. That R function has two Es/Ed</span>
+<span class="sd">    sourcing paths gated on ``is.null(data.light)``: a positional</span>
+<span class="sd">    ``dataSpec_PDB[,11]``/``[,12]`` path (columns actually named</span>
+<span class="sd">    ``dry_soil``/``wet_soil`` -- unused dead code, since no call site in</span>
+<span class="sd">    the package ever omits ``data.light``) and a named ``data.light$</span>
+<span class="sd">    direct_light``/``data.light$diffuse_light`` path, which is the one</span>
+<span class="sd">    every real call site (``foursail.inform``, ``foursail.inf``) hits by</span>
+<span class="sd">    always passing ``data.light=ToolsRTM::dataSpec_PDB`` explicitly. ``es``/</span>
+<span class="sd">    ``ed`` here default to those ``direct_light``/``diffuse_light`` columns</span>
+<span class="sd">    to match.</span>
+
+<span class="sd">    ``es``/``ed`` are truncated to ``len(rdot)`` directly rather than being</span>
+<span class="sd">    gated on ``short_waves`` -- ``rdot``/``rsot`` are 2101 long for</span>
+<span class="sd">    PROSPECT-D/-PRO/Liberty but only 2001 long for Fluspect-B/-B-Cx (its</span>
+<span class="sd">    native 400-2400nm domain); a caller who passes mismatched-length</span>
+<span class="sd">    ``rdot``/``short_waves`` combinations (e.g. calling this directly on a</span>
+<span class="sd">    Fluspect-based ``foursail()`` result without also setting</span>
+<span class="sd">    ``short_waves=True``) would otherwise hit a hard NumPy broadcasting</span>
+<span class="sd">    error. This mirrors a real bug fixed in ``ToolsRTM::Compute_BRF`` itself</span>
+<span class="sd">    (see ``ToolsRTM/R/Compute_BRF.R``&#39;s own comment): the R function used to</span>
+<span class="sd">    have a ``missing(short.waves)`` guard that silently forced</span>
+<span class="sd">    ``short.waves`` to ``FALSE`` whenever the argument was omitted --</span>
+<span class="sd">    contradicting its own declared default and, for Fluspect-based</span>
+<span class="sd">    ``rdot``/``rsot``, silently *recycling* mismatched-length Es/Ed instead</span>
+<span class="sd">    of erroring, corrupting the last ~100nm of the result. R now matches</span>
+<span class="sd">    Es/Ed to ``rdot``&#39;s length the same way this port does; ``short_waves``</span>
+<span class="sd">    is kept only for backward API compatibility and no longer has any</span>
+<span class="sd">    effect.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rdot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rdot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">rsot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rsot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">rd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+
+    <span class="k">if</span> <span class="n">es</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">data_spec_pdb</span><span class="p">()</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">direct_light</span> <span class="k">if</span> <span class="n">es</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">es</span>
+        <span class="n">ed</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">diffuse_light</span> <span class="k">if</span> <span class="n">ed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ed</span>
+    <span class="n">es</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">es</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">rdot</span><span class="p">)]</span>
+    <span class="n">ed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ed</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)[:</span> <span class="nb">len</span><span class="p">(</span><span class="n">rdot</span><span class="p">)]</span>
+
+    <span class="n">sin90tts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="mf">90.0</span> <span class="o">-</span> <span class="n">tts</span><span class="p">)</span> <span class="o">*</span> <span class="n">rd</span><span class="p">)</span>
+    <span class="n">skyl</span> <span class="o">=</span> <span class="mf">0.847</span> <span class="o">-</span> <span class="mf">1.61</span> <span class="o">*</span> <span class="n">sin90tts</span> <span class="o">+</span> <span class="mf">1.04</span> <span class="o">*</span> <span class="n">sin90tts</span> <span class="o">*</span> <span class="n">sin90tts</span>
+    <span class="n">PARdiro</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">skyl</span><span class="p">)</span> <span class="o">*</span> <span class="n">es</span>
+    <span class="n">PARdifo</span> <span class="o">=</span> <span class="n">skyl</span> <span class="o">*</span> <span class="n">ed</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">rdot</span> <span class="o">*</span> <span class="n">PARdifo</span> <span class="o">+</span> <span class="n">rsot</span> <span class="o">*</span> <span class="n">PARdiro</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">PARdiro</span> <span class="o">+</span> <span class="n">PARdifo</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="foursail_inform">
+<a class="viewcode-back" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_inform">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foursail_inform</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Understorey reflectance (dicotyledoneae defaults), BRF-blended.</span>
+
+<span class="sd">    Direct port of ``ToolsRTM::foursail.inform`` with ``typeLAI=&#39;understorey&#39;``</span>
+<span class="sd">    -- the only ``typeLAI`` value ``inform()`` itself ever calls it with (the</span>
+<span class="sd">    ``&#39;Inf-crownTree&#39;``/default branches are dead code from the caller&#39;s</span>
+<span class="sd">    perspective and are not ported).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span><span class="p">,</span> <span class="n">Cab</span><span class="p">,</span> <span class="n">Car</span><span class="p">,</span> <span class="n">Anth</span><span class="p">,</span> <span class="n">Cbrown</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+    <span class="n">EWT</span><span class="p">,</span> <span class="n">LMA</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span>
+    <span class="n">LIDFa_fixed</span> <span class="o">=</span> <span class="mf">45.0</span>
+    <span class="n">TypeLidf</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;TypeLidf&quot;</span><span class="p">]</span>
+    <span class="n">lai</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;LAIu&quot;</span><span class="p">]</span>
+    <span class="n">hotspot</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;hspot&quot;</span><span class="p">]</span>
+    <span class="n">tts</span><span class="p">,</span> <span class="n">tto</span><span class="p">,</span> <span class="n">psi</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tts&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tto&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;psi&quot;</span><span class="p">]</span>
+
+    <span class="n">leaf</span> <span class="o">=</span> <span class="n">prospect_d</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">Cab</span><span class="p">,</span> <span class="n">Car</span><span class="p">,</span> <span class="n">Anth</span><span class="p">,</span> <span class="n">Cbrown</span><span class="p">,</span> <span class="n">EWT</span><span class="p">,</span> <span class="n">LMA</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <span class="n">rho</span><span class="p">,</span> <span class="n">tau</span> <span class="o">=</span> <span class="n">leaf</span><span class="o">.</span><span class="n">refl</span><span class="p">,</span> <span class="n">leaf</span><span class="o">.</span><span class="n">tran</span>
+
+    <span class="n">lidf</span><span class="p">,</span> <span class="n">litab</span> <span class="o">=</span> <span class="n">_inform_lidf</span><span class="p">(</span><span class="n">LIDFa_fixed</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="p">)</span>
+    <span class="n">sail</span> <span class="o">=</span> <span class="n">_foursail_scattering_core</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">lidf</span><span class="p">,</span> <span class="n">litab</span><span class="p">,</span> <span class="n">lai</span><span class="p">,</span> <span class="n">hotspot</span><span class="p">,</span> <span class="n">tts</span><span class="p">,</span> <span class="n">tto</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">compute_brf</span><span class="p">(</span><span class="n">sail</span><span class="o">.</span><span class="n">rdot</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">,</span> <span class="n">tts</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="foursail_inf">
+<a class="viewcode-back" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_inf">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foursail_inf</span><span class="p">(</span>
+    <span class="n">inputLUT</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rleaf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tleaf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">short_waves</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Infinite (very dense, LAI=15) crown reflectance, BRF-blended.</span>
+
+<span class="sd">    Direct port of ``ToolsRTM::foursail.inf`` as called by ``inform()``.</span>
+<span class="sd">    ``short_waves`` defaults to ``False`` (the non-Fluspect leaf models&#39;</span>
+<span class="sd">    call site omits the argument, so R&#39;s ``missing()`` guard resolves it</span>
+<span class="sd">    to ``FALSE`` -- see :func:`compute_brf`); ``inform()`` passes</span>
+<span class="sd">    ``short_waves=True`` explicitly for the Fluspect-B/-B-Cx leaf models</span>
+<span class="sd">    (matching R&#39;s own ``foursail.inf(..., short.waves=T)`` call there).</span>
+<span class="sd">    Unlike :func:`foursail_inform`, TypeLidf==1 here uses a real</span>
+<span class="sd">    ``dladgen`` call in the R source (not the hardcoded quirky table), so</span>
+<span class="sd">    this reuses :func:`toolsrtm.canopy.foursail_core` directly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lai</span><span class="p">,</span> <span class="n">hotspot</span> <span class="o">=</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mf">0.04</span>
+    <span class="n">LIDFa</span><span class="p">,</span> <span class="n">LIDFb</span><span class="p">,</span> <span class="n">TypeLidf</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;LIDFa&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;LIDFb&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;TypeLidf&quot;</span><span class="p">]</span>
+    <span class="n">tts</span><span class="p">,</span> <span class="n">tto</span><span class="p">,</span> <span class="n">psi</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tts&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tto&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;psi&quot;</span><span class="p">]</span>
+
+    <span class="n">sail</span> <span class="o">=</span> <span class="n">foursail_core</span><span class="p">(</span><span class="n">rleaf</span><span class="p">,</span> <span class="n">tleaf</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">LIDFa</span><span class="p">,</span> <span class="n">LIDFb</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="p">,</span> <span class="n">lai</span><span class="p">,</span> <span class="n">hotspot</span><span class="p">,</span> <span class="n">tts</span><span class="p">,</span> <span class="n">tto</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">compute_brf</span><span class="p">(</span><span class="n">sail</span><span class="o">.</span><span class="n">rdot</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">,</span> <span class="n">tts</span><span class="p">,</span> <span class="n">short_waves</span><span class="o">=</span><span class="n">short_waves</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_crown_transmittance</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rleaf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tleaf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tts</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shared body of foursail_t_s/foursail_t_o (differ only in which angle</span>
+<span class="sd">    is passed as ``tts``, and in not calling Compute_BRF at all -- they</span>
+<span class="sd">    blend rdot/rsot directly with the LUT&#39;s ``skyl`` fraction).&quot;&quot;&quot;</span>
+    <span class="n">lai</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;LAI&quot;</span><span class="p">]</span>
+    <span class="n">hotspot</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">LIDFa</span><span class="p">,</span> <span class="n">TypeLidf</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;LIDFa&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;TypeLidf&quot;</span><span class="p">]</span>
+    <span class="n">tto</span><span class="p">,</span> <span class="n">psi</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tto&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;psi&quot;</span><span class="p">]</span>
+    <span class="n">skyl</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;skyl&quot;</span><span class="p">]</span>
+
+    <span class="n">lidf</span><span class="p">,</span> <span class="n">litab</span> <span class="o">=</span> <span class="n">_inform_lidf</span><span class="p">(</span><span class="n">LIDFa</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="p">)</span>
+    <span class="n">sail</span> <span class="o">=</span> <span class="n">_foursail_scattering_core</span><span class="p">(</span><span class="n">rleaf</span><span class="p">,</span> <span class="n">tleaf</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">lidf</span><span class="p">,</span> <span class="n">litab</span><span class="p">,</span> <span class="n">lai</span><span class="p">,</span> <span class="n">hotspot</span><span class="p">,</span> <span class="n">tts</span><span class="p">,</span> <span class="n">tto</span><span class="p">,</span> <span class="n">psi</span><span class="p">)</span>
+
+    <span class="n">PARdifo</span> <span class="o">=</span> <span class="n">skyl</span>
+    <span class="n">PARdiro</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">skyl</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">sail</span><span class="o">.</span><span class="n">rdot</span> <span class="o">*</span> <span class="n">PARdiro</span> <span class="o">+</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span> <span class="o">*</span> <span class="n">PARdifo</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">PARdiro</span> <span class="o">+</span> <span class="n">PARdifo</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="foursail_t_s">
+<a class="viewcode-back" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_t_s">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foursail_t_s</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rleaf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tleaf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Crown transmittance in the sun direction. Port of ``foursail_t_s.R``.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_crown_transmittance</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">rleaf</span><span class="p">,</span> <span class="n">tleaf</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tts&quot;</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="foursail_t_o">
+<a class="viewcode-back" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_t_o">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foursail_t_o</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rleaf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tleaf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Crown transmittance in the observation direction. Port of</span>
+<span class="sd">    ``foursail_t_o.R`` -- note the R source passes the *viewing* zenith</span>
+<span class="sd">    angle (``tto``) in as ``tts`` too, so illumination and viewing</span>
+<span class="sd">    geometry coincide; reproduced as-is.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_crown_transmittance</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">rleaf</span><span class="p">,</span> <span class="n">tleaf</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tto&quot;</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="inform">
+<a class="viewcode-back" href="../../toolsrtm/inform.html#toolsrtm.inform.inform">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">inform</span><span class="p">(</span>
+    <span class="n">inputLUT</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">rsoil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">leaf_model</span><span class="p">:</span> <span class="n">_LeafModel</span> <span class="o">=</span> <span class="s2">&quot;PROSPECT-PRO&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;INFORM forest-stand reflectance. Direct port of ``ToolsRTM::inform``,</span>
+<span class="sd">    dispatching to any of the 5 leaf models ToolsRTM itself supports (see</span>
+<span class="sd">    :func:`toolsrtm.canopy._leaf_optics`) -- same as :func:`toolsrtm.canopy.foursail`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inputLUT : dict</span>
+<span class="sd">        Must contain the fourSAIL keys (``LIDFa``, ``LIDFb``, ``TypeLidf``,</span>
+<span class="sd">        ``LAI``, ``hspot``, ``tts``, ``tto``, ``psi``) plus the leaf-model</span>
+<span class="sd">        parameters (see :func:`toolsrtm.canopy.foursail` for the full list</span>
+<span class="sd">        per leaf model), plus the INFORM-specific canopy keys ``LAIu``</span>
+<span class="sd">        (understorey LAI), ``sd`` (stem density, ha-1), ``cd`` (crown</span>
+<span class="sd">        diameter, m), ``h`` (tree height, m), and ``skyl`` (diffuse-light</span>
+<span class="sd">        fraction).</span>
+<span class="sd">    rsoil : array_like</span>
+<span class="sd">        Soil reflectance spectrum, 400-2500 nm (2101 values).</span>
+<span class="sd">    leaf_model : {&#39;PROSPECT-D&#39;, &#39;PROSPECT-PRO&#39;, &#39;Liberty&#39;, &#39;Fluspect-B&#39;, &#39;Fluspect-B-Cx&#39;}</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray</span>
+<span class="sd">        Forest reflectance spectrum -- 2101 values (400-2500 nm) for</span>
+<span class="sd">        PROSPECT-D/-PRO/Liberty, 2001 values (400-2400 nm) for the two</span>
+<span class="sd">        Fluspect leaf models (matching R&#39;s ``r_understorey[1:2001]``</span>
+<span class="sd">        truncation there and ``foursail.inf(..., short.waves=T)``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tts</span><span class="p">,</span> <span class="n">tto</span><span class="p">,</span> <span class="n">psi</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tts&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;tto&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;psi&quot;</span><span class="p">]</span>
+    <span class="n">sd</span><span class="p">,</span> <span class="n">cd</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;sd&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;cd&quot;</span><span class="p">],</span> <span class="n">inputLUT</span><span class="p">[</span><span class="s2">&quot;h&quot;</span><span class="p">]</span>
+
+    <span class="n">refl_soil</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rsoil</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">r_understorey</span> <span class="o">=</span> <span class="n">foursail_inform</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">refl_soil</span><span class="p">)</span>
+
+    <span class="n">r_leaf</span><span class="p">,</span> <span class="n">t_leaf</span><span class="p">,</span> <span class="n">force_2001</span> <span class="o">=</span> <span class="n">_leaf_optics</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">leaf_model</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">force_2001</span><span class="p">:</span>
+        <span class="n">r_understorey</span> <span class="o">=</span> <span class="n">r_understorey</span><span class="p">[:</span><span class="mi">2001</span><span class="p">]</span>
+
+    <span class="n">r_sail_inf</span> <span class="o">=</span> <span class="n">foursail_inf</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">r_understorey</span><span class="p">,</span> <span class="n">r_leaf</span><span class="p">,</span> <span class="n">t_leaf</span><span class="p">,</span> <span class="n">short_waves</span><span class="o">=</span><span class="n">force_2001</span><span class="p">)</span>
+
+    <span class="c1"># Ground coverage (FLIM model, Rosema et al. 1992)</span>
+    <span class="n">adapt</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">adapt</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">cd</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10000.0</span>
+    <span class="n">tto_</span> <span class="o">=</span> <span class="n">tto</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+    <span class="n">tts_</span> <span class="o">=</span> <span class="n">tts</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+    <span class="n">psi_</span> <span class="o">=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+
+    <span class="n">co</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="n">sd</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tto_</span><span class="p">))</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="n">sd</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tts_</span><span class="p">))</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tto_</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tts_</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tto_</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tts_</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">psi_</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">g</span> <span class="o">*</span> <span class="n">h</span> <span class="o">/</span> <span class="n">cd</span><span class="p">)</span>
+
+    <span class="n">Fcd</span> <span class="o">=</span> <span class="n">co</span> <span class="o">*</span> <span class="n">cs</span> <span class="o">+</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">co</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">co</span><span class="p">)</span> <span class="o">*</span> <span class="n">cs</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cs</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+    <span class="n">Fcs</span> <span class="o">=</span> <span class="n">co</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cs</span><span class="p">)</span> <span class="o">-</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">co</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">co</span><span class="p">)</span> <span class="o">*</span> <span class="n">cs</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cs</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+    <span class="n">Fod</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">co</span><span class="p">)</span> <span class="o">*</span> <span class="n">cs</span> <span class="o">-</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">co</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">co</span><span class="p">)</span> <span class="o">*</span> <span class="n">cs</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cs</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+    <span class="n">Fos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">co</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cs</span><span class="p">)</span> <span class="o">+</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">co</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">co</span><span class="p">)</span> <span class="o">*</span> <span class="n">cs</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">cs</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+    <span class="n">t_s</span> <span class="o">=</span> <span class="n">foursail_t_s</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">r_understorey</span><span class="p">,</span> <span class="n">r_leaf</span><span class="p">,</span> <span class="n">t_leaf</span><span class="p">)</span>
+    <span class="n">t_o</span> <span class="o">=</span> <span class="n">foursail_t_o</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">r_understorey</span><span class="p">,</span> <span class="n">r_leaf</span><span class="p">,</span> <span class="n">t_leaf</span><span class="p">)</span>
+
+    <span class="n">G</span> <span class="o">=</span> <span class="n">Fcd</span> <span class="o">*</span> <span class="n">t_s</span> <span class="o">*</span> <span class="n">t_o</span> <span class="o">+</span> <span class="n">Fcs</span> <span class="o">*</span> <span class="n">t_o</span> <span class="o">+</span> <span class="n">Fod</span> <span class="o">*</span> <span class="n">t_s</span> <span class="o">+</span> <span class="n">Fos</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">Fcd</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">t_s</span> <span class="o">*</span> <span class="n">t_o</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">r_sail_inf</span> <span class="o">*</span> <span class="n">C</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">r_understorey</span> <span class="o">*</span> <span class="n">G</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

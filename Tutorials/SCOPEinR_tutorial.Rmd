@@ -1,0 +1,627 @@
+---
+title: "SCOPEinR — Complete Reference Manual"
+subtitle: "Running the SCOPE 2.0 soil-canopy-energy-fluorescence model in R, verified by real execution"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    theme: cosmo
+    highlight: tango
+    number_sections: true
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                       fig.width = 7, fig.height = 4.5)
+
+# Real console-noise suppression: txtProgressBar()/progress::progress_bar
+# write bar characters directly, which don't come through as normal chunk
+# output in a way chunk options alone filter. This strips any line
+# containing a progress-bar pattern before it reaches the rendered document.
+strip_progress_bars <- function(x) {
+  x <- gsub("\\r", "\n", x)
+  lines <- strsplit(x, "\n")[[1]]
+  lines <- lines[!grepl("[|]=*[|]?\\s*[0-9]{1,3}%", lines)]
+  lines <- lines[!grepl("^\\s*[|]\\s*$", lines)]
+  paste(lines, collapse = "\n")
+}
+knitr::knit_hooks$set(output = function(x, options) strip_progress_bars(x))
+knitr::knit_hooks$set(message = function(x, options) strip_progress_bars(x))
+```
+
+# What this manual is
+
+Every function call below actually runs against the real, installed
+`SCOPEinR` and `ToolsRTM` packages — nothing here is illustrative
+pseudocode. Where the port has real rough edges (a soil energy-balance
+warning, a non-exported helper, a folder-path quirk), they are shown and
+explained as they actually occur, not hidden.
+
+```{r libraries}
+library(ToolsRTM)
+library(SCOPEinR)
+cat("ToolsRTM ", as.character(packageVersion("ToolsRTM")),
+    " | SCOPEinR ", as.character(packageVersion("SCOPEinR")), "\n", sep = "")
+```
+
+# SCOPE, and how SCOPEinR relates to ToolsRTM
+
+**SCOPE** (Soil Canopy Observation, Photochemistry and Energy fluxes) is a
+coupled radiative-transfer/energy-balance model of a vegetated surface
+(Van der Tol et al. 2009; Yang et al. 2020, SCOPE 2.0). Given leaf
+biochemistry, canopy structure, viewing/illumination geometry and
+meteorology, it simultaneously solves for:
+
+- **Radiative transfer**: canopy reflectance and top-of-canopy radiance,
+  in the same sense as PROSAIL/4SAIL.
+- **Energy balance**: how absorbed radiation partitions into sensible
+  heat, latent heat (transpiration/evaporation) and soil heat flux, for
+  both the canopy and the soil, at leaf/soil temperatures that are solved
+  for rather than prescribed.
+- **Photosynthesis / biochemistry**: leaf-level CO₂ assimilation (a
+  Farquhar–von Caemmerer–Berry / Collatz-type C3/C4 model) driven by the
+  absorbed light and the solved leaf temperature.
+- **Chlorophyll fluorescence**: sun-induced fluorescence (SIF) emission,
+  linked mechanistically to the photosynthesis/NPQ (non-photochemical
+  quenching) state of the leaf, and propagated through the canopy to a
+  top-of-canopy radiance.
+
+**SCOPEinR** is the R port of SCOPE 2.1 (originally MATLAB). It does not
+reimplement leaf and canopy optics from scratch: the radiative-transfer
+core (Fluspect leaf optics, 4SAIL canopy geometry) is the same family of
+models exposed directly in **ToolsRTM** (see the companion
+`ToolsRTM_PROSAIL_tutorial.Rmd`). SCOPEinR calls into that machinery and
+then adds everything PROSAIL/4SAIL alone does not do: the iterative
+leaf/soil energy balance (`get.ebal()`), the biochemical photosynthesis
+model (`get.biochemical()`), and the fluorescence radiative transfer
+(`get.RTMf()`). `ToolsRTM` is a hard dependency of `SCOPEinR` for exactly
+this reason — you always need both packages loaded to run SCOPE.
+
+# Installation and loading
+
+Both packages are distributed from public GitLab repositories and, in
+this environment, are already installed:
+
+```r
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+remotes::install_gitlab("caminoccg/toolsrtm", upgrade = "never")
+remotes::install_gitlab("caminoccg/scopeinr", upgrade = "never")
+```
+
+`library(SCOPEinR)` on its own is not enough — always load `ToolsRTM`
+first (or alongside it), since SCOPEinR's `get.SCOPE()` dispatches leaf
+and canopy optics straight into `ToolsRTM` functions.
+
+# Input structure
+
+SCOPE needs two kinds of input beyond the leaf/canopy traits ToolsRTM
+already required for PROSAIL: **simulation options** (which sub-models to
+switch on) and a **parameter table** with the added biochemical,
+meteorological and geometric fields the energy balance needs. Both ship
+inside the installed package under `inst/input/`, resolved here with
+`system.file()` so the paths work regardless of the current working
+directory:
+
+```{r input-paths}
+path_input <- system.file("input", package = "SCOPEinR")
+list.files(path_input)
+```
+
+## `setoptions.csv` — simulation options
+
+```{r setoptions}
+scope_options <- read.table(file.path(path_input, "setoptions.csv"),
+                             header = TRUE, sep = ",")
+scope_options[, c("Options", "Value")]
+```
+
+Each row switches a SCOPE sub-model or numerical behaviour on/off (`0`/`1`)
+or picks a variant (e.g. `Fluorescence_model`). The ones that matter most
+for what follows: `calc_fluorescence = 1` turns on the Fluspect/RTMf
+fluorescence chain (without it, `data.rad$reflapp` and the
+`fluorescence_*` outputs are not produced); `calc_spectrum_planck = 1`
+turns on the thermal-emission spectrum; `soil_heat_method = 2` picks how
+the soil heat flux `G` is estimated (`0.35 * Rn` when not running a time
+series); `LIDF = 0` means the leaf-inclination distribution is built from
+`LIDFa`/`LIDFb` in the LUT rather than from a measured-angles file.
+
+## Parameter tables: `LUT_input.csv` and `inputs_SCOPE.csv`
+
+`LUT_input.csv` is a ready-to-run, single-row example parameter set (one
+SCOPE simulation) with every column SCOPE expects — leaf biochemistry
+(`N`, `Cab`, `Car`, ...), photosynthetic capacity (`Vcmax25`,
+`BallBerrySlope`, ...), canopy structure (`LAI`, `hc`, `LIDFa`, `LIDFb`,
+...), soil/meteorology (`Ta`, `Rin`, `Rli`, `p`, `ea`, `RH`, `u`, ...) and
+viewing/illumination geometry (`tts`, `tto`, `psi`):
+
+```{r lut-input}
+LUT_default <- read.table(file.path(path_input, "LUT_input.csv"),
+                           header = TRUE, sep = ",")
+dim(LUT_default)
+LUT_default[1, c("N","Cab","Car","LAI","Vcmax25","tts","tto","Ta","Rin")]
+```
+
+`inputs_SCOPE.csv` is the companion *ranges* table used to generate new,
+randomized parameter sets (Section 6): one row per variable, with a
+`lower`/`upper` bound, a sampling `Distribution` (`Uniform`, `Gaussian` or
+`Fixed`), and a `default` value used when the variable is held fixed.
+
+```{r inputs-scope}
+inputLUT <- read.table(file.path(path_input, "inputs_SCOPE.csv"),
+                        header = TRUE, sep = ",")
+inputLUT[inputLUT$variable %in% c("Cab","LAI","Vcmax25","EWT","LIDFa","tts"),
+         c("variable","lower","upper","Distribution","default")]
+```
+
+# A single simulation with `get.SCOPE()`
+
+The default `LUT_input.csv` row plus the default options are enough to
+run one full simulation. `optipar` selects the wavelength-dependent leaf
+optical coefficients for the chosen `leaf.model` — `optipar2021.Pro.CX`
+pairs with `leaf.model = "fluspect-CX"` (PROSPECT-PRO pigment set, plus
+the `Cx` xanthophyll de-epoxidation state for PRI-type simulations).
+
+```{r single-sim}
+db.sim <- SCOPEinR::get.SCOPE(
+  LUT           = LUT_default[1, ],
+  options.SCOPE = scope_options,
+  optipar       = SCOPEinR::optipar2021.Pro.CX,
+  leaf.model    = "fluspect-CX",
+  canopy.model  = "fourSAIL",
+  get.outputs   = "ALL",
+  get.plots     = FALSE
+)
+```
+
+That printed a real WARNING from the soil energy-balance solver — this is
+expected and covered in full in Section 10; it does not stop the run.
+
+`get.SCOPE()` always returns a **list of simulations** (one element per
+LUT row); for a single row that is a list of length 1, and
+`db.sim[[1]]` is itself a list with 19 named elements:
+
+```{r single-sim-structure}
+length(db.sim)
+length(db.sim[[1]])
+names(db.sim[[1]])
+```
+
+The elements that matter for everyday use:
+
+| Element | Contents |
+|---|---|
+| `data.rad` | Reflectance/radiance/irradiance spectra (`rdd`, `rdo`, `rsd`, `rso`, `refl`, `reflapp`, `Lo_`, `Esun_`, `Esky_`, fluorescence spectra, absorbed-PAR terms, ...) — 87 fields |
+| `data.fluxes` | Scalar energy/carbon fluxes: `Rnctot`, `lEctot`, `Hctot`, `Actot`, `Tcave`, and the soil/total equivalents |
+| `data.thermal` | Solved sunlit/shaded canopy and soil temperatures (`Tcu`, `Tch`, `Tsu`, `Tsh`) |
+| `data.bcu` / `data.bch` | Biochemical model state for sunlit (`bcu`) / shaded (`bch`) leaves: `A` (assimilation), `Ja` (electron transport), `Kn` (NPQ), `eta` (fluorescence yield factor) |
+| `data.canopy`, `data.leafbio`, `data.soil`, `data.meteo`, `data.angles` | Echo back the resolved canopy/leaf/soil/meteo/geometry inputs actually used |
+| `iter.ebal` | Energy-balance solver diagnostics: iteration `counter`, `maxit`, and the residual `maxEBercu`/`maxEBerch`/`maxEBers` errors (canopy sunlit/shaded/soil) |
+| `data.opts`, `data.spectral`, `data.gap`, `data.profiles`, `data.directional`, `atmo`, `resist_out` | Options actually used, wavelength grid, gap probabilities, vertical profiles, directional (BRDF) output, atmosphere, aerodynamic/surface resistances |
+
+```{r single-sim-fluxes}
+db.sim[[1]]$data.fluxes
+```
+
+```{r single-sim-iter}
+db.sim[[1]]$iter.ebal
+```
+
+`iter.ebal$counter` reached `iter.ebal$maxit` — the solver used every
+iteration it was allowed and never converged to the target error; the
+residual soil imbalance (`maxEBers`, ~150 W m⁻²) is exactly the WARNING
+printed above. Canopy sunlit/shaded errors (`maxEBercu`, `maxEBerch`) are
+numerically zero, so this is a soil-specific issue (Section 10).
+
+# Reflectance components: `rdd`, `rdo`, `rsd`, `rso`, `refl`, `reflapp`
+
+SCOPE separates canopy reflectance into four bidirectional components
+before summing them, plus the sensor-observed "apparent" reflectance:
+
+- **`rdd`** — diffuse-in / diffuse-out reflectance. Sky light entering the
+  canopy and leaving it also as diffuse radiation; describes multiple
+  scattering inside the canopy.
+- **`rdo`** — diffuse-in / directional-out reflectance. Diffuse incoming
+  radiation (sky light) leaving the canopy in the sensor's specific
+  viewing direction; relevant to BRDF effects under overcast conditions.
+- **`rsd`** — direct-in (sun beam) / diffuse-out reflectance. Direct
+  sunlight entering the canopy and emerging as diffuse scattered light;
+  shows sun–canopy interactions and internal scattering.
+- **`rso`** — direct-in (sun beam) / directional-out reflectance. Direct
+  sun illumination leaving the canopy exactly toward the sensor; contains
+  hot-spot effects and strong geometry interactions.
+- **`refl`** — total canopy reflectance, `rdd + rdo + rsd + rso`; the
+  "true" physical reflectance of the canopy.
+- **`reflapp`** — apparent reflectance, derived from the outgoing
+  radiance at sensor level (accounts for the actual illumination
+  geometry and, when fluorescence is on, differs from `refl` in the
+  fluorescence emission band because it is radiance-derived). This is
+  what a real sensor (e.g. Sentinel-2, PRISMA) would observe.
+
+```{r reflectance-components, fig.height=4.5}
+bands <- SCOPEinR::define.bands()
+wlS <- bands$wlS[1:2001]   # 400-2500 nm, shortwave-only part of data.rad's 2162-length vectors
+
+rad <- db.sim[[1]]$data.rad
+refl_components <- data.frame(
+  Wavelength = rep(wlS, 6),
+  Value = c(rad$rdd[1:2001], rad$rdo[1:2001], rad$rsd[1:2001],
+            rad$rso[1:2001], rad$refl[1:2001], rad$reflapp[1:2001]),
+  Component = rep(c("rdd","rdo","rsd","rso","refl","reflapp"), each = 2001)
+)
+
+library(ggplot2)
+ggplot(refl_components, aes(x = Wavelength, y = Value, color = Component)) +
+  geom_line(linewidth = 0.5) +
+  theme_bw() + xlim(400, 2500) +
+  xlab("Wavelength (nm)") + ylab("Reflectance") +
+  ggtitle("Reflectance components for the default LUT_input.csv simulation")
+```
+
+# Building a randomized LUT with `getLUT.SCOPE()`
+
+`getLUT.SCOPE(inputLUT, nLUT, setseed)` samples `nLUT` parameter sets from
+the ranges table read above: `Uniform` rows are sampled with
+`stats::runif()`, `Fixed` rows are repeated at their `default`, and
+anything else (`Gaussian`) is sampled with `ToolsRTM::gauss_byMin_Max()`
+(truncated Gaussian within `[lower, upper]`, centered at `Mean_D` with
+spread `Std_D`).
+
+```{r getlut-scope}
+n_samples <- 10
+LUT <- getLUT.SCOPE(inputLUT = inputLUT, nLUT = n_samples, setseed = 42)
+dim(LUT)
+summary(LUT[, c("Cab","LAI","Vcmax25")])
+```
+
+Real traits co-vary. `ToolsRTM::getCor()` (covered in depth in the
+ToolsRTM manual) generates correlated pairs instead of independent
+draws — this is exactly the pattern used in Carlos's production scripts
+(`Scripts/1-getSCOPE-v3_withChunck.R`) to keep the leaf-inclination
+parameters `LIDFa`/`LIDFb` jointly plausible instead of independently
+uniform:
+
+```{r correlated-lidf}
+lidf_cor <- suppressMessages(ToolsRTM::getCor(
+  n_inputs = 2, setseed = 7, distribution = "Uniform",
+  nLUT = n_samples, rho = 0.20, Varnames = c("LIDFa", "LIDFb"),
+  MinRange = c(-0.5, -0.5), MaxRange = c(0.2, 0.2)
+))
+LUT$LIDFa <- lidf_cor$LUT$LIDFa
+LUT$LIDFb <- lidf_cor$LUT$LIDFb
+cat("Achieved correlation:", round(cor(LUT$LIDFa, LUT$LIDFb), 2), "\n")
+```
+
+```{r lidf-plot, fig.height=4}
+plot(LUT$LIDFa, LUT$LIDFb, xlab = "LIDFa", ylab = "LIDFb",
+     main = "Correlated leaf-angle-distribution parameters", pch = 19)
+```
+
+# Running many simulations: serial vs. parallel
+
+`get.SCOPE()` accepts a multi-row `LUT` directly and loops over it
+serially (`n.LUT` must match `nrow(LUT)`). `get.SCOPE.parallel()` splits
+the same LUT into `n.cores` chunks, runs them on a `parallel`/`doParallel`
+PSOCK cluster, and (optionally) writes CSV outputs itself. Timed
+back-to-back on the same 10-row LUT:
+
+```{r serial-vs-parallel}
+t0 <- Sys.time()
+sims_serial <- SCOPEinR::get.SCOPE(
+  LUT = LUT, n.LUT = n_samples, options.SCOPE = scope_options,
+  optipar = SCOPEinR::optipar2021.Pro.CX, leaf.model = "fluspect-CX",
+  canopy.model = "fourSAIL", get.outputs = "ALL", get.plots = FALSE
+)
+t_serial <- as.numeric(Sys.time() - t0, units = "secs")
+
+t0 <- Sys.time()
+sims_parallel <- SCOPEinR::get.SCOPE.parallel(
+  LUT = LUT, options.SCOPE = scope_options, optipar = SCOPEinR::optipar2021.Pro.CX,
+  leaf.model = "fluspect-CX", canopy.model = "fourSAIL",
+  parallel = TRUE, n.cores = 4, get.outputs = "ALL",
+  get.plots = FALSE, get.csv = FALSE
+)
+t_parallel <- as.numeric(Sys.time() - t0, units = "secs")
+
+cat("Serial (1 core):    ", round(t_serial, 1), "s for", length(sims_serial), "sims\n")
+cat("Parallel (4 cores):  ", round(t_parallel, 1), "s for", length(sims_parallel), "sims\n")
+```
+
+For a LUT this small the parallel path still pays a fixed cost — spinning
+up a PSOCK cluster and exporting `SCOPEinR`/`ToolsRTM` to every worker —
+so the speed-up is modest here; it becomes worthwhile once `nLUT` is in
+the hundreds/thousands, which is the realistic use case for `get.LUT()`
++ inversion training data.
+
+## The chunked production pattern
+
+For large LUTs, Carlos's real workflow (`Scripts/1-getSCOPE-v3_withChunck.R`)
+splits the LUT into chunks and calls `get.SCOPE.parallel()` once per
+chunk with `get.csv = TRUE`, so intermediate results are written to disk
+instead of being held in memory all at once:
+
+```{r chunked-parallel, results='hide'}
+# A dedicated, larger LUT for this section -- get.SCOPE.plots() (Section 8)
+# needs at least 10 simulations per chunk to have something to bin, and the
+# inversion demo below (Section 11) reuses this same data: get.inversion()
+# uses 10-fold x 10-repeat cross-validation internally, which needs enough
+# rows per fold to fit PLSR/RF reliably -- 20 total (14 in the 70% training
+# split) is too few and makes caret::train() fail.
+n_prod <- 60
+LUT_prod <- getLUT.SCOPE(inputLUT = inputLUT, nLUT = n_prod, setseed = 43)
+lidf_cor_prod <- suppressMessages(ToolsRTM::getCor(
+  n_inputs = 2, setseed = 8, distribution = "Uniform",
+  nLUT = n_prod, rho = 0.20, Varnames = c("LIDFa", "LIDFb"),
+  MinRange = c(-0.5, -0.5), MaxRange = c(0.2, 0.2)
+))
+LUT_prod$LIDFa <- lidf_cor_prod$LUT$LIDFa
+LUT_prod$LIDFb <- lidf_cor_prod$LUT$LIDFb
+
+out_root <- paste0(tempdir(), "/scope_outs/")   # trailing slash required, see Section 10 --
+                                                 # file.path() would silently strip it
+dir.create(out_root, showWarnings = FALSE, recursive = TRUE)
+
+n_chunks   <- 2
+n_rows     <- nrow(LUT_prod)
+chunk_size <- n_rows / n_chunks
+
+for (i in seq_len(n_chunks)) {
+  start_row <- ((i - 1) * chunk_size) + 1
+  end_row   <- min(i * chunk_size, n_rows)
+  LUT_chunk <- LUT_prod[start_row:end_row, ]
+
+  SCOPEinR::get.SCOPE.parallel(
+    LUT           = LUT_chunk,
+    options.SCOPE = scope_options,
+    optipar       = SCOPEinR::optipar2021.Pro.CX,
+    leaf.model    = "fluspect-CX",
+    canopy.model  = "fourSAIL",
+    parallel      = TRUE,
+    n.cores       = 4,
+    get.outputs   = "ALL",
+    get.plots     = FALSE,
+    get.csv       = TRUE,
+    path.out      = out_root
+  )
+}
+```
+
+```{r chunked-parallel-check}
+subdirs <- list.dirs(out_root, recursive = FALSE)
+basename(subdirs)
+```
+
+`get.SCOPE.parallel()`/`get.SCOPE.outputs()` build the timestamped output
+folder with `paste(path.out, current_time, sep = "")` — plain string
+concatenation, not `file.path()`. **`path.out` must end in `/`**, or the
+"subfolder" ends up as a sibling directory with the timestamp glued onto
+its name instead of nested inside it (an easy trap; `tempdir()` never
+ends in a slash on its own).
+
+# Exploring SCOPE outputs
+
+Each chunk folder holds one CSV per output variable, plus a
+`Parameters/` subfolder with the exact LUT used:
+
+```{r list-outputs}
+last_subdir <- subdirs[length(subdirs)]
+list.files(last_subdir)
+list.files(file.path(last_subdir, "Parameters"))
+```
+
+## Merging chunks: `getCSV()`
+
+`getCSV(path.out, n.folders, files.names)` reads the CSVs back from the
+last `n.folders` timestamped subfolders under `path.out` and row-binds
+each variable across chunks:
+
+```{r getcsv}
+df.scope <- getCSV(path.out = substr(out_root, 1, nchar(out_root) - 1),
+                    n.folders = n_chunks, files.names = "All")
+names(df.scope)
+df.scope$names
+fluxes_slot <- df.scope$data[[which(df.scope$names == "fluxes")]]
+dim(fluxes_slot)
+colnames(fluxes_slot)[1:8]
+```
+
+`df.scope$names` correctly lists `"fluxes"` among the merged variables,
+but the slot it points to does not hold flux data: `getCSV()` has an
+internal bug (`R/getCSV.R`, the `data.all[[j]] <- n.lut` line) that
+assigns the **input LUT** to every one of the 24 output slots instead of
+the CSV that was actually read for slot `j` — every element of
+`df.scope$data` is the same LUT table, whatever `files.names` says. The
+`colnames` above are LUT input names (`N`, `Cab`, `Car`, ...), not flux
+names (`Rnctot`, `Actot`, ...), which is the tell.
+
+Merging chunk outputs correctly today means reading each chunk's CSV
+directly and row-binding across chunk folders:
+
+```{r getcsv-workaround}
+fluxes_all <- do.call(rbind, lapply(subdirs, function(d) read.csv(file.path(d, "fluxes.csv"))))
+dim(fluxes_all)
+head(fluxes_all[, c("Rnctot","Actot","Tcave","Rnstot","Tsave")])
+```
+
+`get.merge.SCOPE()` is the other documented merging option — it merges a
+run's spectral output straight onto its input LUT into one wide table
+(inputs + vegetation/fluxes/fluorescence/aPAR + spectra) in a single
+call. It is described here rather than run live: in this installed
+version it raised an internal `data.table` error
+(`object '..inputs' not found`) on both runs tested while writing this
+manual — a real port issue, not demonstrated further.
+
+## Plotting: `get.SCOPE.plots()`
+
+`get.SCOPE.plots(path.files, plant.trait, get.plots)` groups a chunk's
+spectra by an input trait (into 8 bins) and saves averaged spectra plots
+to `path.files/Plots.checks/`. It needs at least 10 simulations per file
+to have something to bin, and — in this package version — is **not
+exported** in `NAMESPACE` despite existing in `R/get.SCOPE.plots.R` and
+being documented, so it must be called with `:::`:
+
+```{r scope-plots, results='hide'}
+SCOPEinR:::get.SCOPE.plots(path.files = last_subdir, plant.trait = c("Vcmax25", "Cab"),
+                            get.plots = "reflectance")
+SCOPEinR:::get.SCOPE.plots(path.files = last_subdir, plant.trait = c("Vcmax25", "Cab"),
+                            get.plots = "fluorescence")
+SCOPEinR:::get.SCOPE.plots(path.files = last_subdir, plant.trait = c("Vcmax25", "Cab"),
+                            get.plots = "radiance")
+png_files <- list.files(file.path(last_subdir, "Plots.checks"), full.names = TRUE)
+basename(png_files)
+```
+
+```{r show-plot, fig.cap="refl grouped by Vcmax25, produced by get.SCOPE.plots()"}
+refl_png <- png_files[grepl("^1-reflectance_refl_by_Vcmax25", basename(png_files))]
+knitr::include_graphics(refl_png)
+```
+
+# Inverting traits from simulated reflectance
+
+The apparent reflectance (`reflapp`) SCOPE produces is exactly the kind
+of "sensor-observed" spectrum inversion works from — same idea as the
+PROSAIL inversion in the ToolsRTM manual, just generated with a coupled
+energy-balance model instead of pure radiative transfer. This section
+runs the short version of that workflow; see
+`ToolsRTM_PROSAIL_tutorial.Rmd` for the full 12-algorithm reference and
+the deep-learning (CNN/Hidden-layers) path.
+
+A 10-row LUT is too small to train anything meaningful. Rather than running a
+second, separate batch of simulations, this section reuses the 20 already
+produced by the `chunked-parallel` run above (`out_root`, two 10-row chunks) —
+same effective LUT size, without simulating twice:
+
+```{r inversion-lut}
+inv_subdirs <- list.dirs(out_root, recursive = FALSE)
+# A chunk can come back with no reflapp.csv if every simulation in it hit an
+# unrecoverable error (e.g. a randomly-drawn LIDFa/LIDFb combination outside
+# the physically valid range for fourSAIL) -- drop incomplete chunks rather
+# than fail the whole comparison.
+inv_subdirs <- inv_subdirs[file.exists(file.path(inv_subdirs, "reflapp.csv"))]
+length(inv_subdirs)
+```
+
+```{r inversion-data}
+lut_used <- do.call(rbind, lapply(inv_subdirs, function(d) {
+  read.csv(file.path(d, "Parameters", "inputLUT.csv"))
+}))
+reflapp <- do.call(rbind, lapply(inv_subdirs, function(d) {
+  read.csv(file.path(d, "reflapp.csv"))
+}))
+
+wlS <- SCOPEinR::define.bands()$wlS[1:2001]
+colnames(reflapp) <- paste0("R.", wlS)
+
+df.indices <- ToolsRTM::getIndices(reflapp, pattern.rfl = "R.", spectral.domain = "VNIR")
+df.indices <- df.indices[, colSums(is.na(df.indices)) == 0]
+
+target_wavelengths <- paste0("R.", seq(400, 800, by = 5))
+dataset <- cbind(Cab = lut_used$Cab, reflapp[, target_wavelengths], df.indices)
+dataset <- dataset[, !duplicated(names(dataset))]
+dim(dataset)
+```
+
+Two `caret`-backed algorithms via `ToolsRTM::get.inversion()`, using the
+same interface the ToolsRTM manual documents in full for all 12 options:
+
+```{r inversion-models, results='hide'}
+inputs_inv <- colnames(dataset)[-1]
+
+inv_plsr <- get.inversion(data = dataset, depVar = "Cab", inputs = inputs_inv,
+                           algorithm = "PLSR", n.samples = nrow(dataset), seed = 123)
+inv_rf   <- get.inversion(data = dataset, depVar = "Cab", inputs = inputs_inv,
+                           algorithm = "RF", n.samples = nrow(dataset), seed = 123)
+```
+
+```{r inversion-results}
+cat("PLSR trained. Object class:", class(inv_plsr)[1], "\n")
+cat("RF trained. Object class:  ", class(inv_rf)[1], "\n")
+```
+
+# Known limitations of the current port
+
+The soil energy-balance non-convergence shown in Section 5 is real,
+reproducible, and documented in `SCOPEinR/README_errors.txt` as a known,
+open issue in this R port — not something introduced or fixed for this
+manual. What actually happens:
+
+`get.ebal()` iterates leaf and soil temperatures (and the fluxes they
+drive) until the energy-balance residual drops below 1 W m⁻², or until
+`k.maxit` iterations (100 by default) are used up. Across every
+simulation run while writing this manual, the **canopy** sunlit/shaded
+residuals (`maxEBercu`, `maxEBerch`) converged to numerical zero, but the
+**soil** residual (`maxEBers`) consistently failed to converge, exhausted
+all 100 iterations, and settled around 100–165 W m⁻² instead of the
+target ≤1 W m⁻² — printed as:
+
+```
+WARNING: maximum number of iterations exceeded
+Maximum energy balance error sunlit vegetation = 0.00 W m-2
+Maximum energy balance error shaded vegetation = 0.00 W m-2
+Energy balance error soil = 152.13 W m-2
+```
+
+`README_errors.txt` traces this to the soil branch of `get.ebal()` /
+`get.resistances()` — the soil aerodynamic/surface resistance coupling
+that feeds the soil temperature update — and flags it as unresolved. In
+practice this means: **soil-driven outputs from SCOPEinR** (`Tsave`,
+`Rnstot`, `Hstot`, `lEstot`, `Gtot`) carry a real, non-trivial residual
+energy imbalance under the option set exercised here, and should be
+treated with caution — canopy-level fluxes and reflectance/fluorescence
+are not affected by this residual (the canopy balance does converge).
+This is inherited behaviour of the current port; fixing it is out of
+scope for this manual.
+
+Four smaller, genuine rough edges also surfaced while writing this
+manual and are worth knowing before you hit them yourself:
+
+- **`path.out` needs a trailing slash — and R's own `file.path()` will
+  quietly take it away from you.** `get.SCOPE.outputs()`,
+  `get.SCOPE.parallel()`, `get.merge.SCOPE()` and `getCSV()`'s own
+  merge-writer all build their output path with plain string concatenation
+  (`paste(path.out, current_time, sep = "")`), not `file.path()`. Without
+  a trailing `/`, the "subfolder" is created as a sibling directory with
+  the timestamp glued onto the name you passed, not nested inside it —
+  and every downstream `list.dirs()`/`list.files()` call then silently
+  sees an empty folder instead of erroring loudly. This bit us while
+  writing this manual in the most deceptive way possible:
+  `file.path(tempdir(), "scope_outs/")` looks like it ends in `/`, but
+  `file.path()` strips a trailing separator from its last component
+  before joining, so the result does **not** end in `/` and the bug above
+  triggers anyway. `paste0(tempdir(), "/scope_outs/")` (used in Section 7
+  below) is not vulnerable to that normalization and does what you'd
+  expect.
+- **`get.SCOPE.plots()` is not exported.** It exists in
+  `R/get.SCOPE.plots.R`, is documented in `man/get.SCOPE.plots.Rd`, and
+  is used in Carlos's own example scripts — but has no `@export` tag, so
+  `NAMESPACE` never picked it up. Call it as `SCOPEinR:::get.SCOPE.plots()`.
+- **`getCSV()` returns the input LUT in every slot, not the requested
+  variable.** In `R/getCSV.R`, the line `data.all[[j]] <- n.lut` should
+  almost certainly read `data.all[[j]] <- n.sim` — as written, every
+  element of the returned `data` list is the same input-parameter table,
+  regardless of `files.names`. `getCSV()` still finds the right chunk
+  folders and doesn't error, so the bug is silent (Section 8 shows how to
+  spot it and works around it with a direct `read.csv()` + `rbind()`
+  instead).
+- **`get.merge.SCOPE()` errors internally** with
+  `object '..inputs' not found` (a `data.table` non-standard-evaluation
+  bug in how it subsets columns).
+
+# Summary
+
+| Want to... | Use |
+|---|---|
+| Run one simulation | `get.SCOPE(LUT[1, ], options.SCOPE, optipar, leaf.model, canopy.model, get.outputs, get.plots)` |
+| Sample a random parameter set | `getLUT.SCOPE(inputLUT, nLUT, setseed)` |
+| Correlate two traits (e.g. `LIDFa`/`LIDFb`) | `ToolsRTM::getCor(...)` |
+| Run many simulations in parallel | `get.SCOPE.parallel(LUT, ..., parallel = TRUE, n.cores = , get.csv = TRUE, path.out = "somewhere/")` |
+| Merge chunked CSV outputs | `getCSV(...)` finds the right folders but mislabels its output (Section 10) — `read.csv()` + `rbind()` per chunk is the reliable path |
+| Inspect reflectance/fluorescence/radiance by trait | `SCOPEinR:::get.SCOPE.plots(path.files, plant.trait, get.plots)` (needs `:::`) |
+| Invert a trait from simulated `reflapp` | `ToolsRTM::getIndices()` + `ToolsRTM::get.inversion()` — full detail in `ToolsRTM_PROSAIL_tutorial.Rmd` |
+
+Every code chunk above executed for real while writing this manual,
+including the soil energy-balance WARNING (expected, documented,
+inherited from the port) and the four smaller issues in Section 10
+(worked around, not fixed, so this manual reflects how the package
+actually behaves today).

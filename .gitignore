@@ -1,0 +1,33 @@
+.Rproj.user
+.Rhistory
+.RData
+.RDataTmp
+.Ruserdata
+.positai
+
+# Large source archives — kept locally for reference, not tracked in git
+# (avoids bloating the GitLab repo permanently; see Gitlab_repo_originals/ for the untouched originals)
+*.zip
+outs/
+
+# R build/check artifacts
+*.Rcheck/
+*.tar.gz
+.claude/
+
+AEO-To-Adapt/*
+# Belongs to a separate, independent project — never part of RTM-Suite
+AEO-Course/
+# Untouched reference copies of the original GitLab repos (302MB+38MB) —
+# kept locally to diff against, never meant to live in the suite repo history
+Gitlab_repo_originals/
+
+# Python build/test artifacts
+__pycache__/
+*.egg-info/
+.pytest_cache/
+*.pyc
+
+# Sphinx build cache (python/docs/) -- only the copied output in docs/python/
+# is committed, same pattern as the R pkgdown sites in docs/toolsrtm, docs/scopeinr
+python/docs/_build/

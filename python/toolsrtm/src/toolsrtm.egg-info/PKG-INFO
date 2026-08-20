@@ -1,0 +1,17 @@
+Metadata-Version: 2.4
+Name: toolsrtm
+Version: 0.1.0
+Summary: Python port of the core of the R ToolsRTM package: PROSPECT-D, PROSPECT-PRO leaf models and the fourSAIL canopy model.
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.22
+Requires-Dist: scipy>=1.8
+Provides-Extra: test
+Requires-Dist: pytest>=7.0; extra == "test"
+Requires-Dist: pandas>=1.4; extra == "test"
+
+# toolsrtm (Python)
+
+Python port of the core of the R `ToolsRTM` package. See `../README.md`
+(python/README.md, at the repo root of the `python/` folder) for the full
+scope, verification results, and usage examples.

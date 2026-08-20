@@ -1,0 +1,310 @@
+---
+title: "The SCOPEinR package"
+author: "C.Camino"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    navbar:
+      title: "SCOPEinR"
+vignette: >
+  %\VignetteIndexEntry{The SCOPEinR package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{=html}
+<style>
+body {
+text-align: justify}
+</style>
+```
+```{r, echo = FALSE, message = FALSE}
+# Install and load ggplot2 quietly
+if (!require(ggplot2)) install.packages("ggplot2")
+library(ggplot2)
+# Load necessary libraries
+library(knitr)
+library(kableExtra)
+library(ToolsRTM)
+library(SCOPEinR)
+library(tidyr)
+library(parallel)
+library(doParallel)
+library(dplyr)
+```
+
+## 1. Introduction
+
+This tutorial provides an introduction to the **SCOPEinR** package, developed using [R Markdown](http://rmarkdown.rstudio.com). The **SCOPEinR** package powers the online RT-Simulator, offering a user-friendly interface through a Shiny app that allows users to simulate canopy reflectance at the Top of Canopy (TOC) level. Additionally, it enables the simulation of reflectance and chlorophyll fluorescence emissions using the SCOPE model. For inter-comparison with other key radiative transfer (RT) models, it is recommended to install the **ToolsRTM** package alongside **SCOPEinR**.
+
+![](images/rtm_scope.png){width="456"}
+
+**Fig. 1** Simulations generated using the SCOPE model via the **SCOPEinR** package
+
+The **SCOPEin** R package is designed to execute the Soil Canopy Observation, Photochemistry, and Energy fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB by Van der Tol et al. (2009) and extended by Yang et al. (2020). The **SCOPEin**R package enables seamless integration of the SCOPE model within the R environment, offering users the flexibility to harness its capabilities for in-depth analysis.
+
+We have integrated **ToolsRTM** and **SCOPEinR** package into the online RT-platform, and the R packages are available under the GNU license. You can access the online RT simulator at <https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/>
+
+The repositories for accessing the R packages and platform are as follows:
+
+-   The **ToolsRTM** package: <https://gitlab.com/caminoccg/toolsrtm>
+
+-   The **SCOPEinR** packages: [https://gitlab.com/caminoccg/](https://gitlab.com/caminoccg/toolsrtm){.uri}[scopeinr](https://gitlab.com/caminoccg/scopeinr)
+
+-   The online **RT-platform**: [https://gitlab.com/caminoccg/](https://gitlab.com/caminoccg/toolsrtm){.uri}[toolsrtm-simulator](https://gitlab.com/caminoccg/toolsrtm-simulator)
+
+***Note***: These modules are currently being tested before public release. For access, please contact us at caminoccg\@gmail.com.
+
+**Citation**: Camino et al. (2024): **DOI:** [10.1109/IGARSS53475.2024.10642442](https://doi.org/10.1109/IGARSS53475.2024.10642442)
+
+## 2. SCOPEinR package
+
+### 2.1 Install using gitlab repository
+
+To install the **SCOPEinR** package, please follow these steps within your R session:
+
+1.  Download the **SCOPEinR** package as a `.tar.gz` file from the GitLab repository.
+
+2.  After downloading, execute the following code:
+
+```         
+install.packages('pathWithFile/scopeinr-main.tar.gz',repos = NULL,type = "source")
+```
+
+Additionally, we recommend installing the **ToolsRTM** package. This package provides inversion methods, LUT functions, and relevant radiative transfer models for comparison with the SCOPE model (installation is not mandatory).
+
+```         
+install.packages('pathWithFile/toolsrtm-main.tar.gz',repos = NULL,type = "source")
+```
+
+### 2.2 How to run SCOPE model in R
+
+Before running the SCOPE model in R, it's essential to prepare the options file. This file contains various settings that customize the model's behavior. To view the available options, you can use the following command:
+
+```{r, echo=T, results='asis'}
+table.with.opts<-SCOPEinR::data.opts
+knitr::kable(head(table.with.opts, 10))
+```
+
+This command retrieves the options table from the SCOPEinR package and displays the first ten entries in a user-friendly format. Each entry outlines an option, its corresponding value, and a brief description of its purpose within the model.
+
+Once you have reviewed the available options, you can proceed to create a Look-Up Table (LUT) for your SCOPE simulation. The LUT is a crucial component that allows the model to reference pre-calculated values for various parameters, streamlining the simulation process.
+
+To create the LUT, you can use the following commands:
+
+```{r, echo=T, results='asis'}
+n.samples =100 
+inputLUT=SCOPEinR::inputsSCOPE
+# create a LUT
+LUT <-SCOPEinR::getLUT.SCOPE(inputLUT=inputLUT,nLUT=n.samples)
+knitr::kable(head(LUT, 5))
+```
+
+In this example, n.samples is set to 10, indicating the number of samples you wish to generate. The **inputLUT** variable is assigned the default inputs for the SCOPE model, which are necessary for creating the LUT. The function **getLUT.SCOPE** then generates the LUT based on these inputs and the specified number of samples. The resulting LUT is displayed, showcasing the first five entries, which will be utilized in your SCOPE simulations.
+
+By preparing the options file and creating the LUT, you set the foundation for effective and efficient SCOPE model runs in R.The LUT contains the inputs and their variants generated using a uniform distribution. This ensures that the model explores a broad range of parameter values, enhancing the robustness of the simulations. By leveraging this comprehensive LUT, you can achieve more accurate and representative results from your SCOPE model analysis.
+
+### 2.3 Updating the LUT according to new ranges
+
+In this section, we will update the Look-Up Table (LUT) by generating values for the Vcmax25 parameter, which represents the velocity of carboxylation of the enzyme RUbisCO at 25 degrees, and creating a correlation between Cab (chlorophyll content) and Vcmax25. The following code performs these tasks:
+
+1.  Generate Vcmax25 Values: We create random values for the Vcmax25 parameter using the runif function from the stats package. This function generates values uniformly distributed between 5 and 90.
+
+2.  Set Seed for Randomness: A random seed is established using the runif function to ensure that the generated values can be reproduced in future runs. This is critical for maintaining consistency in simulations.
+
+3.  Generate a correlation dataset: The getCor function from the **ToolsRTM** package is called to create a correlation structure for the variables Cab and Vcmax25. This function takes several arguments:
+
+    -   `n:inputs`: Indicates the number of input variables.
+
+    -   `n.seed`: Uses the previously set random seed.
+
+    -   `distribution`: Specifies the type of distribution to be used; the options are 'Uniform' or 'Gauss'.
+
+    -   `nLUT`: The number of samples to generate.
+
+    -   `rho`rho = 0.99: Sets the correlation coefficient for the generated variables.
+
+    -   `Varnames`: A vector containing the names of the variables (Cab and Vcmax25).
+
+    -   `MinRange` and `MaxRange`: Specify the minimum and maximum ranges for each variable.
+
+```{r, echo=T, results='asis'}
+
+LUT$Vcmax25 = stats::runif(n.samples,min = 5 ,max=90 )
+n.seed <- round(runif(1,1,n.samples),0)
+
+pigments<-ToolsRTM::getCor(n_inputs = 2,setseed = n.seed,distribution = 'Uniform',nLUT = n.samples, rho = 0.99,
+               Varnames = c('Cab','Vcmax25'),MinRange = c(0.5,5), MaxRange = c(95,90))
+LUT$Cab <-pigments$LUT$Cab
+LUT$Vcmax25 <-pigments$LUT$Vcmax25
+# Create the ggplot
+ggplot(pigments$LUT, aes(x = Cab, y = Vcmax25)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Relationship Between Chlorophyll Content (Cab) and Vcmax25",
+       x = "Chlorophyll Content (Cab)",
+       y = "Vcmax25") +
+  theme_bw()
+```
+
+In this example a scatter plot is generated using the `ggplot2` package to visualize the relationship between `Cab` and `Vcmax25`. The `aes` function maps the `Cab` values to the x-axis and `Vcmax25` values to the y-axis. The `geom_point` function adds points to the plot, with `alpha` set to 0.6 for transparency. The plot is titled "Relationship Between Chlorophyll Content (Cab) and Vcmax25," with appropriately labeled axes. The `theme_bw()` function is applied to give the plot a clean, minimalistic appearance.
+
+This process allows for a detailed examination of how changes in chlorophyll content correlate with variations in Vcmax25, providing valuable insights for further analysis in your SCOPE model simulations.
+
+### 2.4 Run the SCOPE model in parallel
+
+To simulate canopy reflectance using the SCOPE model, you need to define a range of inputs that describe plant traits, canopy structure, and environmental conditions. In this example, we will focus on generating a Look-Up Table (LUT) for SCOPE and running the model in parallel. The LUT will contain a range of values for the key input parameters, which will be used to simulate various outputs such as apparent reflectance.
+
+In SCOPE, you can configure the leaf and canopy models and choose different radiative transfer models such as fluspect-CX (for leaf optical properties) and fourSAIL (for canopy structure). Below is an example of running SCOPE in parallel with the default settings and using the SCOPEinR package.
+
+```{r, echo=T, results='asis'}
+
+db.sims <-SCOPEinR::get.SCOPE.parallel(LUT=LUT,options.SCOPE=table.with.opts,optipar=SCOPEinR::optipar2017.ProspectD,
+                                       leaf.model='fluspect-CX',canopy.model='fourSAIL', parallel = T,
+                                       get.outputs='ALL', get.plots = F, get.csv =F, n.cores = 3)
+```
+
+```{r,message = FALSE}
+
+wave_<-db.sims[[1]]$data.spectral$wlS[1:2001]
+matrix.reflapp <- sapply(seq_along(db.sims), function(i) db.sims[[i]]$data.rad$reflapp[1:2001])
+# Assuming matrix.refl is your matrix
+ncols <- sample(ncol(matrix.reflapp), n.samples/10)
+
+matplot(wave_,matrix.reflapp[,ncols], type = "l", lty = 1, col = 1:ncol(matrix.reflapp), xlab = "", ylab = "Apparent reflectance", main = "SCOPE v 2.1 using SCOPEinR package")
+
+
+```
+
+### 2.5 Export the simulations and SCOPE outputs
+
+The `get.SCOPE.outputs` function is designed to export all the results from the SCOPE simulations to your disk. By specifying the output folder, the function will save both the primary simulation outputs and any additional parameters that you choose to extract. The following code demonstrates how to export the outputs to a specified directory:
+
+```{r, echo=F, eval=F}
+
+## get main outputs in a folder
+path.outs = 'outs/'
+## get all the main outs
+get.SCOPE.outputs(data.sim = db.sims, N.sims=n.samples,
+                  LUT=inputLUT,  ## main inputs
+                  path.out = path.outs, ## path for outputs
+                  get.more.inputs=c('refl','lidf','LIDFb','Ft_Fo','rdo'),
+                  get.plots=T)
+
+
+```
+
+the `get.SCOPE.outputs` function includes the **get.more.inputs** parameter, which allows you to specify additional inputs/outputs to be saved. In the example above (Fig. 2), we extract extra outputs such as:
+
+-   **Reflectance (refl)**
+
+-   **LIDF angles (lidf)**
+
+-   **LIDF-b parameter (LIDFb)**
+
+-   **Ft-Fo ratio (Ft_Fo)** (representing fluorescence efficiency)
+
+-   **TOC hemispherical-directional reflectance (rdo)**
+
+All simulation outputs, including these additional variables, will be saved in the specified folder on your disk for further analysis. By setting **get.plots = TRUE**, the function will also generate and save relevant plots alongside the data.
+
+## ![](images/outputs.png){width="601"}
+
+**Fig. 3** Directory containing all outputs generated by the **SCOPEinR** package.
+
+## 3. Inputs and ranges used in the SCOPE model
+
+Below are tables summarizing the key inputs and their respective ranges utilized in each RTMs.
+
+### 3.1 FLUSPECT model (Leaf radiative transfer model)
+
+```{r, echo = FALSE, message = FALSE}
+# Define slider inputs and their parameters
+slider_fp_data <- data.frame(
+  Name = c("Fluorescence Quantum Efficiency", 
+           "Chlorophyll Content", 
+           "Carotenoid Content", 
+           "Anthocyanin Content", 
+           "Leaf Senescence", 
+           "Violaxanthin - Zeaxanthin Transition Status", 
+           "Water Content", 
+           "Dry Matter Content", 
+           "Mesophyll Structure Parameter"),
+  Parameter = c("fqe", "Cab", "Car", "Anth", "Cs", "Cx", "EWT", "LMA", "N"),
+  Units = c("-", "μg cm²", "μg cm²", "μg cm²", "-", "-", "g cm²", "g cm²", "-"),
+  Min = c(0.01, 0.01, 0.01, 0.01, 0, 0, 0, 0, 1),
+  Max = c(0.05, 100, 40, 7, 1, 1, 0.05, 0.05, 4),
+  Value = c(0.02, 50, 20, 2, 0.01, 0.1, 0.01, 0.005, 2.5)
+)
+
+# Create and style the table
+slider_fp_data %>%
+  kable("html", col.names = c("Name", "Parameter", "Units", "Min", "Max", "Default Value"), 
+        caption = "") %>%
+  kable_styling(full_width = TRUE, bootstrap_options = c("striped", "hover", "condensed")) %>%
+  kable_styling(position = "center") 
+```
+
+### 3.2 FourSAIL model (Canopy radiative transfer model)
+
+```{r,echo=FALSE, message = FALSE}
+# Define slider inputs and their parameters
+slider_data <- data.frame(
+  Name = c("Leaf Area Index", "leaf inclination distribution function a", "Type of leaf inclination distribution function b",
+           "Hotspot", "Sun zeith angle", "Observer zeith angle", "Azimuth Sun / Observer", "soil factor"),
+  Parameter = c("LAI", "LIDFa", "LIDFb", "Hotspot", "tts", "tto","psi",'psoil'),
+  units =c('m²/m²','deg','deg','-','deg','deg','deg','-'),
+  Min = c(0, -1, -1, 0, 0, 0,0,0),
+  Max = c(8, 1, 1, 1, 90, 90,360,1),
+  Value = c(4, 0.5, 0.5, 0.5, 0, 30,15,0.5)
+)
+# Create and style the table
+slider_data %>%
+  kable("html", col.names = c("Name","Parameter", "Units","Min", "Max", "Default Value"), 
+        caption = "") %>%
+  kable_styling(full_width = TRUE, bootstrap_options = c("striped", "hover", "condensed")) %>%
+  kable_styling(position = "center") 
+
+```
+
+## 4. References
+
+If you use any of the RTM models integrate into **SCOPEinR package**, please cite the following references:
+
+The official SCOPE's github is available at <https://github.com/Christiaanvandertol/SCOPE>
+
+Peiqi Yang, Elizaveta Prikaziuk, Wout Verhoef, and Christiaan van der Tol. SCOPE 2.0: A model to simulate vegetated land surface fluxes and satellite signals. *Geosci. Model Dev.*, 14:4697–4712, 2021. <https://doi.org/10.5194/gmd-14-4697-2021>.
+
+Christiaan van der Tol, Wouter Verhoef, Joost Timmermans, Adriaan Verhoef, and Zoltan Su. An integrated model of soil-canopy spectral radiances, photosynthesis, fluorescence, temperature and energy balance. *Biogeosciences*, 6(12):3109–3129, 2009. <https://doi.org/10.5194/bg-6-3109-2009>.
+
+### Other Main References:
+
+G.James Collatz, J.Timothy Ball, Cyril Grivet, and Joseph A. Berry. Physiological and environmental regulation of stomatal conductance, photosynthesis, and transpiration: A model that includes a laminar boundary layer. *Agric. For. Meteorol.*, 54(2-4):107–136, April 1991.
+
+G.J. Collatz, M. Ribas-Carbo, and J.A. Berry. Coupled photosynthesis-stomatal conductance model for leaves of C4 plants. *Aust. J. Plant Physiol.*, 19(5):519, 1992.
+
+Albert Porcar-Castell. A high-resolution portrait of the annual dynamics of photochemical and non-photochemical quenching in needles of *Pinus sylvestris*. *Physiol. Plant.*, 143(2):139–153, October 2011.
+
+G. Schaepman-Strub, M.E. Schaepman, T.H. Painter, S. Dangel, and J.V. Martonchik. Reflectance quantities in optical remote sensing: Definitions and case studies. *Remote Sens. Environ.*, 103(1):27–42, 2006.
+
+Christiaan van der Tol, Micol Rossini, Sergio Cogliati, Wouter Verhoef, Roberto Colombo, Uwe Rascher, and Gina Mohammed. A model and measurement comparison of diurnal cycles of sun-induced chlorophyll fluorescence of crops. *Remote Sens. Environ.*, 186:663–677, December 2016.
+
+Wout Verhoef and Nationaal Lucht- en Ruimtevaartlaboratorium (Netherlands). Theory of radiative transfer models applied in optical remote sensing of vegetation canopies, 1998. ISBN 9054858044.
+
+Wouter Verhoef, Christiaan van der Tol, and Elizabeth M. Middleton. Hyperspectral radiative transfer modeling to explore the combined retrieval of biophysical parameters and canopy fluorescence from FLEX–Sentinel-3 tandem mission multi-sensor data. *Remote Sens. Environ.*, 204(August 2016):942–963, 2018.
+
+Nastassia Vilfan, Christiaan van der Tol, Onno Muller, Uwe Rascher, and Wouter Verhoef. Fluspect-B: A model for leaf fluorescence, reflectance, and transmittance spectra. *Remote Sens. Environ.*, 186:596–615, 2016.
+
+Peiqi Yang, Wout Verhoef, and Christiaan van der Tol. The mSCOPE model: A simple adaptation to the SCOPE model to describe reflectance, fluorescence, and photosynthesis of vertically heterogeneous canopies. *Remote Sens. Environ.*, 201:1–11, November 2017.
+
+Xinyou Yin, Jeremy Harbinson, and Paul C. Struik. Mathematical review of literature to assess alternative electron transports and interphotosystem excitation partitioning of steady-state C3 photosynthesis under limiting light. *Plant, Cell Environ.*, 29(9):1771–1782, September 2006.
+
+Xinyou Yin and Paul C. Struik. Crop systems biology as an avenue to bridge applied crop science and fundamental plant biology. In *Proc. - 2012 IEEE 4th Int. Symp. Plant Growth Model. Simulation, Vis. Appl. PMA 2012*, pages 15–17. IEEE, October 2012.
+
+C.V. van der Tol, J.A. Berry, P.K.E. Campbell, and U. Rascher. Models of fluorescence and photosynthesis for interpreting measurements of solar-induced chlorophyll fluorescence. *J. Geophys. Res. Biogeosciences*, 119(12):2312–2327, 2014.

@@ -1,0 +1,672 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>toolsrtm.smac &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="toolsrtm.srf" href="srf.html" />
+    <link rel="prev" title="toolsrtm.spart" href="spart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    
+    <a href="../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+    
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">toolsrtm</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="leaf.html#toolsrtm.leaf.calctav"><code class="docutils literal notranslate"><span class="pre">calctav()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="leaf.html#toolsrtm.leaf.LeafOptics"><code class="docutils literal notranslate"><span class="pre">LeafOptics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="leaf.html#toolsrtm.leaf.prospect_d"><code class="docutils literal notranslate"><span class="pre">prospect_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="leaf.html#toolsrtm.leaf.prospect_pro"><code class="docutils literal notranslate"><span class="pre">prospect_pro()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fluspect.html#toolsrtm.fluspect.FluspectBResult"><code class="docutils literal notranslate"><span class="pre">FluspectBResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fluspect.html#toolsrtm.fluspect.FluspectCxResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fluspect.html#toolsrtm.fluspect.fluspect_b"><code class="docutils literal notranslate"><span class="pre">fluspect_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fluspect.html#toolsrtm.fluspect.fluspect_cx"><code class="docutils literal notranslate"><span class="pre">fluspect_cx()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="liberty.html#toolsrtm.liberty.LibertyResult"><code class="docutils literal notranslate"><span class="pre">LibertyResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="liberty.html#toolsrtm.liberty.liberty"><code class="docutils literal notranslate"><span class="pre">liberty()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="canopy.html">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.volscatt"><code class="docutils literal notranslate"><span class="pre">volscatt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.campbell"><code class="docutils literal notranslate"><span class="pre">campbell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.dladgen"><code class="docutils literal notranslate"><span class="pre">dladgen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.dcum"><code class="docutils literal notranslate"><span class="pre">dcum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.jfunc1"><code class="docutils literal notranslate"><span class="pre">jfunc1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.jfunc2"><code class="docutils literal notranslate"><span class="pre">jfunc2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.jfunc4"><code class="docutils literal notranslate"><span class="pre">jfunc4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.non_conservative_scattering"><code class="docutils literal notranslate"><span class="pre">non_conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.conservative_scattering"><code class="docutils literal notranslate"><span class="pre">conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.scattering"><code class="docutils literal notranslate"><span class="pre">scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.LeafAngleDistribution"><code class="docutils literal notranslate"><span class="pre">LeafAngleDistribution</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.FourSAILResult"><code class="docutils literal notranslate"><span class="pre">FourSAILResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.foursail_core"><code class="docutils literal notranslate"><span class="pre">foursail_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.foursail"><code class="docutils literal notranslate"><span class="pre">foursail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.FourSAIL2Result"><code class="docutils literal notranslate"><span class="pre">FourSAIL2Result</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.foursail2_core"><code class="docutils literal notranslate"><span class="pre">foursail2_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="canopy.html#toolsrtm.canopy.foursail2"><code class="docutils literal notranslate"><span class="pre">foursail2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.compute_brf"><code class="docutils literal notranslate"><span class="pre">compute_brf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.foursail_inform"><code class="docutils literal notranslate"><span class="pre">foursail_inform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.foursail_inf"><code class="docutils literal notranslate"><span class="pre">foursail_inf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.foursail_t_s"><code class="docutils literal notranslate"><span class="pre">foursail_t_s()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.foursail_t_o"><code class="docutils literal notranslate"><span class="pre">foursail_t_o()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inform.html#toolsrtm.inform.inform"><code class="docutils literal notranslate"><span class="pre">inform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="spart.html#toolsrtm.spart.spart_toc"><code class="docutils literal notranslate"><span class="pre">spart_toc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="spart.html#toolsrtm.spart.SpartToaResult"><code class="docutils literal notranslate"><span class="pre">SpartToaResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="spart.html#toolsrtm.spart.spart_toa"><code class="docutils literal notranslate"><span class="pre">spart_toa()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.SmacSensor"><code class="docutils literal notranslate"><span class="pre">SmacSensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.SENSORS"><code class="docutils literal notranslate"><span class="pre">SENSORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.get_sensor"><code class="docutils literal notranslate"><span class="pre">get_sensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.sentinel2a_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2a_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.sentinel2b_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2b_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.sentinel3a_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3a_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.sentinel3b_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3b_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.landsat4_tm"><code class="docutils literal notranslate"><span class="pre">landsat4_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.landsat5_tm"><code class="docutils literal notranslate"><span class="pre">landsat5_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.landsat7_etm"><code class="docutils literal notranslate"><span class="pre">landsat7_etm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.landsat8_oli"><code class="docutils literal notranslate"><span class="pre">landsat8_oli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.terra_aqua_modis"><code class="docutils literal notranslate"><span class="pre">terra_aqua_modis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.SmacAtmosphere"><code class="docutils literal notranslate"><span class="pre">SmacAtmosphere</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.get_smac"><code class="docutils literal notranslate"><span class="pre">get_smac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toolsrtm.smac.spectral_convolution"><code class="docutils literal notranslate"><span class="pre">spectral_convolution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.SrfTable"><code class="docutils literal notranslate"><span class="pre">SrfTable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.SrfConvolutionResult"><code class="docutils literal notranslate"><span class="pre">SrfConvolutionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.srf_prisma"><code class="docutils literal notranslate"><span class="pre">srf_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.fwhm_prisma"><code class="docutils literal notranslate"><span class="pre">fwhm_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.srf_sentinel2a"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.srf_sentinel2b"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.spectral_convolution_srf"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_srf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.enmap_characteristics"><code class="docutils literal notranslate"><span class="pre">enmap_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.sensor_characteristics"><code class="docutils literal notranslate"><span class="pre">sensor_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="srf.html#toolsrtm.srf.spectral_convolution_gaussian"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_gaussian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="indices.html#toolsrtm.indices.get_indices"><code class="docutils literal notranslate"><span class="pre">get_indices()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.MarmitSoil"><code class="docutils literal notranslate"><span class="pre">MarmitSoil</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.marmit1"><code class="docutils literal notranslate"><span class="pre">marmit1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.marmit2"><code class="docutils literal notranslate"><span class="pre">marmit2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.sigmoid_soil"><code class="docutils literal notranslate"><span class="pre">sigmoid_soil()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="marmit.html#toolsrtm.marmit.get_marmit_rsoil"><code class="docutils literal notranslate"><span class="pre">get_marmit_rsoil()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="satellite.html#toolsrtm.satellite.COLLECTION_ASSETS"><code class="docutils literal notranslate"><span class="pre">COLLECTION_ASSETS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="satellite.html#toolsrtm.satellite.SatelliteCollection"><code class="docutils literal notranslate"><span class="pre">SatelliteCollection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="satellite.html#toolsrtm.satellite.get_satellite_collection"><code class="docutils literal notranslate"><span class="pre">get_satellite_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="satellite.html#toolsrtm.satellite.get_sentinel2_cube"><code class="docutils literal notranslate"><span class="pre">get_sentinel2_cube()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.CarsPlsResult"><code class="docutils literal notranslate"><span class="pre">CarsPlsResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.carspls"><code class="docutils literal notranslate"><span class="pre">carspls()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.get_vif"><code class="docutils literal notranslate"><span class="pre">get_vif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.InversionOptResult"><code class="docutils literal notranslate"><span class="pre">InversionOptResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.get_inversion_opt"><code class="docutils literal notranslate"><span class="pre">get_inversion_opt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.ALGORITHMS"><code class="docutils literal notranslate"><span class="pre">ALGORITHMS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.InversionResult"><code class="docutils literal notranslate"><span class="pre">InversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.get_inversion"><code class="docutils literal notranslate"><span class="pre">get_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.HybridInversionResult"><code class="docutils literal notranslate"><span class="pre">HybridInversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.hybrid_inversion"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="inversion.html#toolsrtm.inversion.hybrid_inversion_ensemble"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion_ensemble()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deep_learning.html#toolsrtm.deep_learning.MLModelResult"><code class="docutils literal notranslate"><span class="pre">MLModelResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="deep_learning.html#toolsrtm.deep_learning.get_ml_model"><code class="docutils literal notranslate"><span class="pre">get_ml_model()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/soil.html#scopeinpython.soil.SoilParams"><code class="docutils literal notranslate"><span class="pre">SoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/soil.html#scopeinpython.soil.WettingParams"><code class="docutils literal notranslate"><span class="pre">WettingParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/soil.html#scopeinpython.soil.get_bsm"><code class="docutils literal notranslate"><span class="pre">get_bsm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/soil.html#scopeinpython.soil.soilwat"><code class="docutils literal notranslate"><span class="pre">soilwat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/spectral.html#scopeinpython.spectral.SpectralConfig"><code class="docutils literal notranslate"><span class="pre">SpectralConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/spectral.html#scopeinpython.spectral.get_spectra_scope"><code class="docutils literal notranslate"><span class="pre">get_spectra_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.get_volscatt_scope"><code class="docutils literal notranslate"><span class="pre">get_volscatt_scope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.get_pso"><code class="docutils literal notranslate"><span class="pre">get_pso()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.get_reflectances"><code class="docutils literal notranslate"><span class="pre">get_reflectances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.get_fluxprofile"><code class="docutils literal notranslate"><span class="pre">get_fluxprofile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.CanopyStructure"><code class="docutils literal notranslate"><span class="pre">CanopyStructure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult"><code class="docutils literal notranslate"><span class="pre">RTMoResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.run_rtmo"><code class="docutils literal notranslate"><span class="pre">run_rtmo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.NetRadiationLite"><code class="docutils literal notranslate"><span class="pre">NetRadiationLite</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmo.html#scopeinpython.rtmo.net_radiation_lite"><code class="docutils literal notranslate"><span class="pre">net_radiation_lite()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.LeafBio"><code class="docutils literal notranslate"><span class="pre">LeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.MeteoLeaf"><code class="docutils literal notranslate"><span class="pre">MeteoLeaf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.BiochemResult"><code class="docutils literal notranslate"><span class="pre">BiochemResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.sel_root"><code class="docutils literal notranslate"><span class="pre">sel_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_gs_fun"><code class="docutils literal notranslate"><span class="pre">get_gs_fun()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ball_berry"><code class="docutils literal notranslate"><span class="pre">get_ball_berry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_temperature_function_c3"><code class="docutils literal notranslate"><span class="pre">get_temperature_function_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_high_temp_inhibtion_c3"><code class="docutils literal notranslate"><span class="pre">get_high_temp_inhibtion_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_fluorescence_model"><code class="docutils literal notranslate"><span class="pre">get_fluorescence_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ci_next"><code class="docutils literal notranslate"><span class="pre">get_ci_next()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_compute_a"><code class="docutils literal notranslate"><span class="pre">get_compute_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/biochemical.html#scopeinpython.biochemical.get_biochemical"><code class="docutils literal notranslate"><span class="pre">get_biochemical()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect.html#scopeinpython.fluspect.FluspectCxScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect.html#scopeinpython.fluspect.get_fluspect_cx_scope"><code class="docutils literal notranslate"><span class="pre">get_fluspect_cx_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.MultiLayerLeafBio"><code class="docutils literal notranslate"><span class="pre">MultiLayerLeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.FluspectMScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectMScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.fluspect_mscope"><code class="docutils literal notranslate"><span class="pre">fluspect_mscope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmf.html#scopeinpython.rtmf.RTMfResult"><code class="docutils literal notranslate"><span class="pre">RTMfResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmf.html#scopeinpython.rtmf.rtmf"><code class="docutils literal notranslate"><span class="pre">rtmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmz.html#scopeinpython.rtmz.RTMzResult"><code class="docutils literal notranslate"><span class="pre">RTMzResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmz.html#scopeinpython.rtmz.rtmz"><code class="docutils literal notranslate"><span class="pre">rtmz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.stefan_boltzmann"><code class="docutils literal notranslate"><span class="pre">stefan_boltzmann()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.monin_obukhov"><code class="docutils literal notranslate"><span class="pre">monin_obukhov()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.psim"><code class="docutils literal notranslate"><span class="pre">psim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.psih"><code class="docutils literal notranslate"><span class="pre">psih()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.phstar"><code class="docutils literal notranslate"><span class="pre">phstar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.ResistanceParams"><code class="docutils literal notranslate"><span class="pre">ResistanceParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.Resistances"><code class="docutils literal notranslate"><span class="pre">Resistances</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.get_resistances"><code class="docutils literal notranslate"><span class="pre">get_resistances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.HeatFluxes"><code class="docutils literal notranslate"><span class="pre">HeatFluxes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/thermal.html#scopeinpython.thermal.get_heatfluxes"><code class="docutils literal notranslate"><span class="pre">get_heatfluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.RTMtSbResult"><code class="docutils literal notranslate"><span class="pre">RTMtSbResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.rtmt_sb"><code class="docutils literal notranslate"><span class="pre">rtmt_sb()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.EbalMeteo"><code class="docutils literal notranslate"><span class="pre">EbalMeteo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.EbalCanopyParams"><code class="docutils literal notranslate"><span class="pre">EbalCanopyParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.EbalSoilParams"><code class="docutils literal notranslate"><span class="pre">EbalSoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.EbalResult"><code class="docutils literal notranslate"><span class="pre">EbalResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.aggregator_ebal"><code class="docutils literal notranslate"><span class="pre">aggregator_ebal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/ebal.html#scopeinpython.ebal.ebal"><code class="docutils literal notranslate"><span class="pre">ebal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.TDP_DEFAULT"><code class="docutils literal notranslate"><span class="pre">TDP_DEFAULT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.get_zo_and_d"><code class="docutils literal notranslate"><span class="pre">get_zo_and_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.ScopeOptions"><code class="docutils literal notranslate"><span class="pre">ScopeOptions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.ScopeResult"><code class="docutils literal notranslate"><span class="pre">ScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/scope.html#scopeinpython.scope.get_scope"><code class="docutils literal notranslate"><span class="pre">get_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.sint"><code class="docutils literal notranslate"><span class="pre">sint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.get_ephoton"><code class="docutils literal notranslate"><span class="pre">get_ephoton()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.get_e2phot"><code class="docutils literal notranslate"><span class="pre">get_e2phot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.get_planck"><code class="docutils literal notranslate"><span class="pre">get_planck()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../scopeinpython/utils.html#scopeinpython.utils.satvap"><code class="docutils literal notranslate"><span class="pre">satvap()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">toolsrtm</a></li>
+      <li class="breadcrumb-item active">toolsrtm.smac</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/toolsrtm/smac.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="toolsrtm-smac">
+<h1>toolsrtm.smac<a class="headerlink" href="#toolsrtm-smac" title="Link to this heading"></a></h1>
+<p>SMAC (Simplified Method for Atmospheric Correction, Rahman &amp; Dedieu 1994)
+atmospheric radiative transfer, and the per-sensor coefficient/spectral-
+response data it needs. Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.smac</span></code>/
+<code class="docutils literal notranslate"><span class="pre">get.coef.SMAC</span></code>/<code class="docutils literal notranslate"><span class="pre">get.spectral.convolution</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The atmospheric-correction physics (<code class="xref py py-func docutils literal notranslate"><span class="pre">get_smac()</span></code>,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">spectral_convolution()</span></code>) is fully general and sensor-agnostic
+given a <code class="xref py py-class docutils literal notranslate"><span class="pre">SmacSensor</span></code> – only <strong>Sentinel-2A (MSI)</strong>’s data is
+bundled as package data so far, out of the 9 sensors the R package
+ships. See the module docstring for the exact R-side export recipe to
+add another sensor (a data-export exercise, not a code change).</p>
+</div>
+<p id="module-toolsrtm.smac">SMAC (Simplified Method for Atmospheric Correction, Rahman &amp; Dedieu 1994)
+atmospheric radiative transfer, and the sensor coefficient/spectral-response
+data it needs – the piece that turns SPART’s top-of-canopy (TOC) BRDF into
+top-of-atmosphere (TOA) reflectance/radiance for a specific sensor.</p>
+<p>Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.smac</span></code>/<code class="docutils literal notranslate"><span class="pre">get.coef.SMAC</span></code>/<code class="docutils literal notranslate"><span class="pre">get.spectral.convolution</span></code>
+(<code class="docutils literal notranslate"><span class="pre">ToolsRTM/R/get.smac.R</span></code>, <code class="docutils literal notranslate"><span class="pre">get.coef.SMAC.R</span></code>, <code class="docutils literal notranslate"><span class="pre">Spectral.convolution.R</span></code>).</p>
+<p><strong>Scope</strong>: all 9 sensors the R package ships are bundled – Landsat 4/5/7/8,
+Sentinel-2A/B, Sentinel-3A/B, Terra/Aqua MODIS (see <code class="docutils literal notranslate"><span class="pre">ToolsRTM/data/*.rda</span></code>
+and <a class="reference internal" href="#toolsrtm.smac.SENSORS" title="toolsrtm.smac.SENSORS"><code class="xref py py-data docutils literal notranslate"><span class="pre">SENSORS</span></code></a>/<a class="reference internal" href="#toolsrtm.smac.get_sensor" title="toolsrtm.smac.get_sensor"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_sensor()</span></code></a>). The atmospheric-correction
+<em>physics</em> (<a class="reference internal" href="#toolsrtm.smac.get_smac" title="toolsrtm.smac.get_smac"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_smac()</span></code></a>, <a class="reference internal" href="#toolsrtm.smac.spectral_convolution" title="toolsrtm.smac.spectral_convolution"><code class="xref py py-func docutils literal notranslate"><span class="pre">spectral_convolution()</span></code></a>) is fully general
+and sensor-agnostic given a <a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmacSensor</span></code></a>; each sensor’s coefficient/SRF
+tables were exported via <code class="docutils literal notranslate"><span class="pre">python/scratch/scratch_export_smac_sensors.R</span></code>.
+Sentinel-2A verified against a real, unmodified <code class="docutils literal notranslate"><span class="pre">ToolsRTM::SPART()</span></code> call
+(see <a class="reference internal" href="spart.html#toolsrtm.spart.spart_toa" title="toolsrtm.spart.spart_toa"><code class="xref py py-func docutils literal notranslate"><span class="pre">toolsrtm.spart.spart_toa()</span></code></a>); the other 8 verified against a real
+<code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.smac()</span></code> call each (see <code class="docutils literal notranslate"><span class="pre">tests/test_smac.py</span></code>).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacSensor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">SmacSensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mission</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl_smac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl_srf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_srf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#SmacSensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.SmacSensor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>One sensor’s SMAC coefficients + spectral-response data (subset of
+R’s <code class="docutils literal notranslate"><span class="pre">sensor</span></code> list, e.g. <code class="docutils literal notranslate"><span class="pre">ToolsRTM::Sentinel2A.MSI</span></code>, actually used
+by <a class="reference internal" href="#toolsrtm.smac.get_smac" title="toolsrtm.smac.get_smac"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_smac()</span></code></a>/<a class="reference internal" href="#toolsrtm.smac.spectral_convolution" title="toolsrtm.smac.spectral_convolution"><code class="xref py py-func docutils literal notranslate"><span class="pre">spectral_convolution()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mission</strong> (<em>str</em>)</p></li>
+<li><p><strong>wl_smac</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>coef</strong> (<em>dict</em>)</p></li>
+<li><p><strong>wl_srf</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>p_srf</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacSensor.mission">
+<span class="sig-name descname"><span class="pre">mission</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#toolsrtm.smac.SmacSensor.mission" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacSensor.wl_smac">
+<span class="sig-name descname"><span class="pre">wl_smac</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacSensor.wl_smac" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacSensor.coef">
+<span class="sig-name descname"><span class="pre">coef</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#toolsrtm.smac.SmacSensor.coef" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacSensor.wl_srf">
+<span class="sig-name descname"><span class="pre">wl_srf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacSensor.wl_srf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacSensor.p_srf">
+<span class="sig-name descname"><span class="pre">p_srf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacSensor.p_srf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="toolsrtm.smac.SENSORS">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">SENSORS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'LANDSAT4.TM':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;,</span> <span class="pre">'LANDSAT5.TM':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;,</span> <span class="pre">'LANDSAT7.ETM':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;,</span> <span class="pre">'LANDSAT8.OLI':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;,</span> <span class="pre">'Sentinel2A.MSI':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;,</span> <span class="pre">'Sentinel2B.MSI':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;,</span> <span class="pre">'Sentinel3A.OLCI':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;,</span> <span class="pre">'Sentinel3B.OLCI':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;,</span> <span class="pre">'TerraAqua.MODIS':</span> <span class="pre">&lt;functools._lru_cache_wrapper</span> <span class="pre">object&gt;}</span></span><a class="headerlink" href="#toolsrtm.smac.SENSORS" title="Link to this definition"></a></dt>
+<dd><p>Every bundled sensor, by the same short name used in R’s <code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.smac(sensor=...)</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.get_sensor">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">get_sensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#get_sensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.get_sensor" title="Link to this definition"></a></dt>
+<dd><p>Look up a bundled sensor by name (see <a class="reference internal" href="#toolsrtm.smac.SENSORS" title="toolsrtm.smac.SENSORS"><code class="xref py py-data docutils literal notranslate"><span class="pre">SENSORS</span></code></a> for the exact
+keys, matching R’s own sensor object names).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.sentinel2a_msi">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">sentinel2a_msi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#sentinel2a_msi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.sentinel2a_msi" title="Link to this definition"></a></dt>
+<dd><p>Sentinel-2A MSI: 13 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::Sentinel2A.MSI</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.sentinel2b_msi">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">sentinel2b_msi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#sentinel2b_msi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.sentinel2b_msi" title="Link to this definition"></a></dt>
+<dd><p>Sentinel-2B MSI: 13 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::Sentinel2B.MSI</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.sentinel3a_olci">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">sentinel3a_olci</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#sentinel3a_olci"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.sentinel3a_olci" title="Link to this definition"></a></dt>
+<dd><p>Sentinel-3A OLCI: 21 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::Sentinel3A.OLCI</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.sentinel3b_olci">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">sentinel3b_olci</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#sentinel3b_olci"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.sentinel3b_olci" title="Link to this definition"></a></dt>
+<dd><p>Sentinel-3B OLCI: 21 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::Sentinel3B.OLCI</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.landsat4_tm">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">landsat4_tm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#landsat4_tm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.landsat4_tm" title="Link to this definition"></a></dt>
+<dd><p>Landsat 4 TM: 6 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::LANDSAT4.TM</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.landsat5_tm">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">landsat5_tm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#landsat5_tm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.landsat5_tm" title="Link to this definition"></a></dt>
+<dd><p>Landsat 5 TM: 6 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::LANDSAT5.TM</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.landsat7_etm">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">landsat7_etm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#landsat7_etm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.landsat7_etm" title="Link to this definition"></a></dt>
+<dd><p>Landsat 7 ETM+: 6 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::LANDSAT7.ETM</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.landsat8_oli">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">landsat8_oli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#landsat8_oli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.landsat8_oli" title="Link to this definition"></a></dt>
+<dd><p>Landsat 8 OLI: 9 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::LANDSAT8.OLI</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.terra_aqua_modis">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">terra_aqua_modis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#terra_aqua_modis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.terra_aqua_modis" title="Link to this definition"></a></dt>
+<dd><p>Terra/Aqua MODIS: 20 bands. Direct export of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::TerraAqua.MODIS</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">SmacAtmosphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ta_ss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ta_sd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ta_oo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ta_do</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ta_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ta_o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ra_dd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ra_so</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#SmacAtmosphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Per-band atmospheric optical quantities, on <code class="docutils literal notranslate"><span class="pre">sensor.wl_smac</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ta_ss</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>Ta_sd</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>Ta_oo</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>Ta_do</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>Ta_s</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>Ta_o</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>Tg</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>Ra_dd</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>Ra_so</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Ta_ss">
+<span class="sig-name descname"><span class="pre">Ta_ss</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Ta_ss" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Ta_sd">
+<span class="sig-name descname"><span class="pre">Ta_sd</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Ta_sd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Ta_oo">
+<span class="sig-name descname"><span class="pre">Ta_oo</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Ta_oo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Ta_do">
+<span class="sig-name descname"><span class="pre">Ta_do</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Ta_do" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Ta_s">
+<span class="sig-name descname"><span class="pre">Ta_s</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Ta_s" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Ta_o">
+<span class="sig-name descname"><span class="pre">Ta_o</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Ta_o" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Tg">
+<span class="sig-name descname"><span class="pre">Tg</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Tg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Ra_dd">
+<span class="sig-name descname"><span class="pre">Ra_dd</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Ra_dd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="toolsrtm.smac.SmacAtmosphere.Ra_so">
+<span class="sig-name descname"><span class="pre">Ra_so</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span><a class="headerlink" href="#toolsrtm.smac.SmacAtmosphere.Ra_so" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.get_smac">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">get_smac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Pa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">taup550</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uo3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uh2o</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#get_smac"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.get_smac" title="Link to this definition"></a></dt>
+<dd><p>Atmospheric transmittance/reflectance terms (SMAC, Rahman &amp; Dedieu
+1994), per sensor band. Direct port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.smac</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sensor</strong> (<a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a>)</p></li>
+<li><p><strong>tts</strong> (<em>float</em>) – Sun zenith, view zenith, relative azimuth (degrees).</p></li>
+<li><p><strong>tto</strong> (<em>float</em>) – Sun zenith, view zenith, relative azimuth (degrees).</p></li>
+<li><p><strong>psi</strong> (<em>float</em>) – Sun zenith, view zenith, relative azimuth (degrees).</p></li>
+<li><p><strong>Pa</strong> (<em>float</em>) – Surface air pressure (hPa). Use <code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.Altitude2Pa</span></code>’s
+formula yourself first if you only have altitude – not ported
+here since every call site in this port supplies <code class="docutils literal notranslate"><span class="pre">Pa</span></code> directly.</p></li>
+<li><p><strong>taup550</strong> (<em>float</em>) – Aerosol optical thickness at 550nm.</p></li>
+<li><p><strong>uo3</strong> (<em>float</em>) – Ozone content (atm-cm).</p></li>
+<li><p><strong>uh2o</strong> (<em>float</em>) – Water vapour content (g/cm2).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#toolsrtm.smac.SmacAtmosphere" title="toolsrtm.smac.SmacAtmosphere"><em>SmacAtmosphere</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="toolsrtm.smac.spectral_convolution">
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.smac.</span></span><span class="sig-name descname"><span class="pre">spectral_convolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/smac.html#spectral_convolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.smac.spectral_convolution" title="Link to this definition"></a></dt>
+<dd><p>Weighted-average a high-resolution spectrum onto a sensor’s bands
+using its spectral response function (SRF). Direct port of
+<code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.spectral.convolution</span></code> (the non-Sentinel-3/MODIS
+per-detector-averaging branch – Sentinel-2A has one SRF per band
+already, no <code class="docutils literal notranslate"><span class="pre">colMeans</span></code> step needed).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wave</strong> (<em>array_like</em><em>, </em><em>shape</em><em> (</em><em>nwl</em><em>,</em><em>)</em>) – Integer-nm wavelength grid <code class="docutils literal notranslate"><span class="pre">values</span></code> is defined on (must cover
+every SRF sample wavelength for a band to get a non-NaN result).</p></li>
+<li><p><strong>values</strong> (<em>array_like</em><em>, </em><em>shape</em><em> (</em><em>nwl</em><em>,</em><em>)</em>)</p></li>
+<li><p><strong>sensor</strong> (<a class="reference internal" href="#toolsrtm.smac.SmacSensor" title="toolsrtm.smac.SmacSensor"><em>SmacSensor</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><em>ndarray</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="spart.html" class="btn btn-neutral float-left" title="toolsrtm.spart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="srf.html" class="btn btn-neutral float-right" title="toolsrtm.srf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+Package: ToolsRTM
+Type: Package
+Title: A Package for Simulating RT Models
+Version: 0.62.5
+Authors@R: person(given = "Carlos",
+           family = "Camino",
+           role = c("aut", "cre"),
+           email = "carlos.caminogonzalez@wur.nl",
+           comment = c(ORCID = "0000-0001-5188-4406"))
+Maintainer: Carlos Camino <carlos.caminogonzalez@wur.nl>
+Description: A series of tools for simulating spectra with radiative transfer models and Sentinel-2 data.
+Depends: R (>= 4.3.0)
+Imports: caret, signal, tidyr, dplyr, expint, stats, fmsb, doParallel, foreach, sensitivity, wavelets, parallel, raster, terra, sf, e1071, nnet, pls, ggplot2, MASS, randomForest, corrplot, MLmetrics, caretEnsemble, plyr, progress, scales, stringr, reshape2
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+LazyDataCompression: xz
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+VignetteBuilder: knitr
+Suggests:
+    knitr,
+    rmarkdown,
+    SCOPEinR,
+    renv,
+    gdalcubes,
+    ncdf4,
+    rstac,
+    factoextra,
+    gbm

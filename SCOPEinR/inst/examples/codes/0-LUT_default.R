@@ -1,0 +1,87 @@
+
+LUT_default<-data.frame(N=15,Cab=60, Car=15,Anth=0,  ## PROSPECT
+                EWT=0.012,LMA=00.009,alpha=40,  Cbrown=0,
+                Prot=0,CBC=0,
+                rho_thermal=0.01,
+                tau_thermal=0.01,
+                # Leaf_Biochemical
+                Vcmax25=60, # maximum carboxylation capacity
+                BallBerrySlope=8,
+                BallBerry0=0.01,
+                Type='C3',
+                kV=0.64,
+                Rdparam=0.015,
+                Kn0=2.48,
+                Knalpha=2.83,
+                Knbeta=0.114,
+
+                #Leaf_Biochemical_magnani
+                Tyear=15,
+                beta=0.51,
+                kNPQs=0,
+                qLs=1,
+                stressfactor=1,
+
+                #Fluorescence
+                fqe=0.01,
+
+                #Soil
+                spectrum=1,
+                rss=500,
+                rs_thermal=0.06,
+                cs=1180,
+                rhos=1800,
+                lambdas=1.55,
+                SMC=25,
+                BSMBrightness=0.5,
+                BSMlat=25,
+                BSMlon=45,
+
+                #Canopy
+                LAI=3,
+                hc=2,
+                LIDFa=-0.35,
+                LIDFb=-0.15,
+                TypeLidf = 1,
+                leafwidth=0.1,
+                hspot=0,
+                Cv=1,
+                crowndiameter=1,
+                #Aerodynamic
+                zo=0.25,
+                d=1.34,
+                Cd=0.3,
+                rb=10,
+                CR=0.35,
+                CD1=20.6,
+                Psicor=0.2,
+                CSSOIL=0.01,
+                rbs=10,
+                rwc=0,
+
+                #Meteo
+                z=5,
+                Rin=600,
+                Ta=20,
+                Rli=300,
+                p=970,
+                ea=15,
+                u=2,
+                Ca=410,
+                Oa=209,
+
+
+
+                #timeseries
+                startDate='2020-06-18',
+                endDate='2021-06-18',
+                LAT=51.55,
+                LON=5.55,
+                timezn=1,
+
+                #Angles
+                tts=30,
+                tto=0,
+                psi=0)
+
+write.table(LUT_default,'input/LUT_input.csv',col.names = T,sep=',')

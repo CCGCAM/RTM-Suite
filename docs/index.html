@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RTM-Suite — Radiative transfer modelling, R + Python</title>
+<meta name="description" content="RTM-Suite: R and Python radiative transfer models (PROSPECT, fourSAIL, INFORM, SPART, MARMIT, SCOPE), sensor convolution, and trait inversion (ML/DL).">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand: #0b3d59;
+  --brand-light: #1587b5;
+  --accent: #2bb3a3;
+  --bg-light: #f5f8fa;
+  --text-main: #26313a;
+  --text-muted: #5c6b76;
+  --border-soft: #e1e7ea;
+  --card-shadow: 0 10px 25px rgba(11, 61, 89, 0.08);
+  --radius-lg: 18px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text-main); line-height: 1.6; background: #fff; }
+a { text-decoration: none; color: inherit; }
+code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 0.9em; background: rgba(11,61,89,0.06); padding: 0.1em 0.35em; border-radius: 5px; }
+
+.navbar { position: sticky; top: 0; z-index: 999; background: var(--brand); color: #fff; }
+.nav-container { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.nav-logo { font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+.nav-logo span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; }
+.nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
+.nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
+.nav-links a:hover { opacity: 1; }
+.nav-cta { border: 1px solid #fff; padding: 6px 16px; border-radius: 999px; font-weight: 600; }
+
+.hero { padding: 70px 24px 60px; background: radial-gradient(circle at top left, #e7f4f7 0, #ffffff 55%); }
+.hero-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
+.hero-kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--brand-light); font-weight: 600; margin-bottom: 10px; }
+.hero-title { font-size: 38px; line-height: 1.18; color: var(--brand); font-weight: 700; margin-bottom: 14px; }
+.hero-title .accent { color: var(--accent); }
+.hero-subtitle { font-size: 16px; color: var(--text-muted); max-width: 560px; margin-bottom: 20px; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+.hero-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding: 6px 12px; border-radius: 999px; border: 1px solid #d3e3ea; color: var(--brand); background: rgba(255,255,255,0.85); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+.btn-primary { background: var(--brand); color: #fff; padding: 11px 22px; border-radius: 999px; border: none; cursor: pointer; font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; box-shadow: 0 10px 22px rgba(11,61,89,0.25); transition: transform 0.2s, box-shadow 0.2s; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(11,61,89,0.32); }
+.btn-ghost { background: transparent; border-radius: 999px; border: 1px solid var(--border-soft); padding: 10px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); transition: all 0.2s; }
+.btn-ghost:hover { border-color: var(--brand-light); color: var(--brand); background: var(--bg-light); }
+.hero-figure { background: #fff; border-radius: var(--radius-lg); padding: 14px; border: 1px solid var(--border-soft); box-shadow: var(--card-shadow); }
+.hero-figure img { width: 100%; border-radius: 12px; display: block; }
+.hero-figure-caption { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 8px; }
+
+section { padding: 64px 24px; scroll-margin-top: 70px; }
+.section-inner { max-width: 1180px; margin: 0 auto; }
+.section-bg-light { background: var(--bg-light); }
+.section-kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--brand-light); font-weight: 600; margin-bottom: 8px; }
+.section-title { font-size: 26px; color: var(--brand); font-weight: 700; margin-bottom: 10px; }
+.section-subtitle { font-size: 15px; color: var(--text-muted); max-width: 760px; margin-bottom: 30px; }
+
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+.packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 900px) { .packages-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .packages-grid { grid-template-columns: 1fr; } }
+.card { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; }
+.card-title { font-size: 16px; font-weight: 600; color: var(--brand); margin-bottom: 8px; }
+.card-lang { display: flex; gap: 6px; margin-bottom: 10px; }
+.card-lang img { height: 20px; display: block; }
+.card p { font-size: 13.5px; color: var(--text-muted); margin-bottom: 14px; flex-grow: 1; }
+.card-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.badge-link img { display: block; height: 20px; }
+
+.doc-lang-group { margin-bottom: 28px; }
+.doc-lang-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.doc-lang-header img { height: 22px; display: block; }
+.doc-lang-header span { font-size: 14px; font-weight: 600; color: var(--brand); text-transform: uppercase; letter-spacing: 0.08em; }
+.doc-version-badge { margin-left: auto; }
+.doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+.doc-card { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--card-shadow); transition: transform 0.2s, box-shadow 0.2s; }
+.doc-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(11,61,89,0.14); }
+.doc-card h3 { color: var(--brand); font-size: 17px; margin-bottom: 8px; }
+.doc-card p { color: var(--text-muted); font-size: 13.5px; }
+
+.tut-list { display: flex; flex-direction: column; gap: 12px; }
+.tut-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 14px 20px; }
+.tut-row .tut-name { font-weight: 600; color: var(--brand); font-size: 14px; }
+.tut-row .tut-desc { color: var(--text-muted); font-size: 13px; }
+.tut-row .tut-links a { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-light); font-weight: 600; margin-left: 14px; }
+.tut-row .tut-links a:hover { text-decoration: underline; }
+
+footer { background: #08202e; color: #b9cbd6; padding: 34px 24px; font-size: 12.5px; }
+.footer-inner { max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.footer-links a { color: #cfe3ec; margin-right: 18px; }
+.footer-links a:hover { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+
+/* Code examples */
+.code-card { background: #fff; border-radius: 20px; border: 1px solid var(--border-soft); box-shadow: var(--card-shadow); margin-bottom: 20px; overflow: hidden; }
+.code-card-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px 10px; }
+.code-badge { display: flex; align-items: center; }
+.code-badge img { height: 20px; display: block; }
+.code-title { font-size: 15px; font-weight: 600; color: var(--brand); }
+.code-card-body { background: #0b1720; color: #e5e7eb; padding: 4px 20px 16px; font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 12.5px; overflow-x: auto; }
+.code-card-body pre { margin: 0; white-space: pre; }
+.code-collapse summary { list-style: none; cursor: pointer; color: var(--brand-light); font-size: 13px; font-weight: 600; padding: 8px 0; }
+.code-collapse summary::-webkit-details-marker { display: none; }
+.code-collapse summary::before { content: "▶ "; }
+.code-collapse[open] summary::before { content: "▼ "; }
+.copy-btn { background: var(--brand-light); color: #fff; border: none; padding: 5px 14px; font-size: 11px; border-radius: 6px; cursor: pointer; float: right; margin: 4px 0 8px; transition: background 0.2s; }
+.copy-btn:hover { background: var(--brand); }
+.code-figure { background: #fff; padding: 14px 20px 18px; border-top: 1px solid var(--border-soft); }
+.code-figure img { width: 100%; max-width: 480px; border-radius: 10px; display: block; margin: 0 auto; }
+.code-figure-caption { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
+    <nav class="nav-links">
+      <a href="#packages">Packages</a>
+      <a href="#install">Install</a>
+      <a href="#docs">Documentation</a>
+      <a href="#apps">Apps</a>
+      <a href="#tutorials">Tutorials</a>
+      <a href="#examples">Examples</a>
+      <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-kicker">Wageningen University · GRS · Virtual Biophysical Lab</div>
+      <h1 class="hero-title">Radiative transfer modelling<br>for <span class="accent">vegetation &amp; Earth observation</span></h1>
+      <p class="hero-subtitle">
+        RTM-Suite couples leaf, canopy, soil and atmosphere radiative transfer models
+        with trait inversion (classical ML and deep learning) — in R and Python,
+        kept numerically in sync and verified against each other.
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag">PROSPECT · Liberty · Fluspect</span>
+        <span class="hero-tag">fourSAIL · foursail2 · INFORM</span>
+        <span class="hero-tag">MARMIT · SPART · SCOPE</span>
+        <span class="hero-tag">Sensor convolution</span>
+        <span class="hero-tag">ML / deep-learning inversion</span>
+        <span class="hero-tag">R &amp; Python</span>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'});">Explore the packages</button>
+        <button class="btn-ghost" onclick="document.getElementById('docs').scrollIntoView({behavior:'smooth'});">Browse reference manuals</button>
+      </div>
+    </div>
+    <div class="hero-figure">
+      <img src="../assets/compare_grid_canopy_x_leaf.png" alt="fourSAIL, foursail2 and INFORM canopy models compared across 5 leaf models">
+      <div class="hero-figure-caption">fourSAIL, foursail2 and INFORM canopy models compared across 5 leaf models</div>
+    </div>
+  </div>
+</section>
+
+<section id="packages">
+  <div class="section-inner">
+    <div class="section-kicker">Packages</div>
+    <h2 class="section-title">Five packages, one framework</h2>
+    <p class="section-subtitle" style="max-width: none;">RTM-Suite simulates how vegetation, soil and atmosphere interact with radiation — leaf-to-canopy reflectance and fluorescence, sensor convolution, and trait retrieval by inverting real observations — in both R and Python. Two R packages (developed on GitLab) and their Python libraries (developed on GitHub), all built and verified together inside this monorepo.</p>
+    <div class="packages-grid">
+
+      <div class="card">
+        <span class="card-lang"><img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R"></span>
+        <div class="card-title">ToolsRTM</div>
+        <p>Leaf-level optics (PROSPECT-D/PRO, Liberty, Fluspect-B/-Cx) and canopy-level optics (fourSAIL, foursail2, INFORM). Real soil via MARMIT. Trait inversion via 12 <code>caret</code> algorithms plus TensorFlow/Keras deep learning. Sensor convolution.</p>
+        <div class="card-links">
+          <a class="badge-link" href="https://gitlab.com/caminoccg/toolsrtm" target="_blank"><img src="https://img.shields.io/badge/GitLab-ToolsRTM-FC6D26?logo=gitlab&logoColor=white" alt="ToolsRTM on GitLab"></a>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-lang"><img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R"></span>
+        <div class="card-title">SCOPEinR</div>
+        <p>R port of SCOPE 2.0 (Van der Tol &amp; Yang et al.) — the full Soil-Canopy-Observation, Photochemistry and Energy-balance model: leaf photosynthesis/biochemistry, canopy energy balance, and chlorophyll fluorescence.</p>
+        <div class="card-links">
+          <a class="badge-link" href="https://gitlab.com/caminoccg/scopeinr" target="_blank"><img src="https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&logoColor=white" alt="SCOPEinR on GitLab"></a>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-lang"><img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R"></span>
+        <div class="card-title">ToolsRTM.app</div>
+        <p><code>get.simulator()</code> and nine interactive Shiny apps (PROSAIL, PROSAIL-BRDF, MARMIT, SPART, SCOPE, LUTs, RTMs, Inversion, STAC) — every model above, point-and-click.</p>
+        <div class="card-links">
+          <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/ToolsRTM.app" target="_blank"><img src="https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white" alt="ToolsRTM.app in RTM-Suite"></a>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-lang"><img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python"></span>
+        <div class="card-title">toolsrtm</div>
+        <p>Python port of ToolsRTM's core: all 5 leaf models, fourSAIL/foursail2/INFORM, MARMIT, sensor convolution (all 9 SMAC sensors), spectral indices, trait inversion (<code>toolsrtm.inversion</code>/<code>deep_learning</code>), and STAC satellite retrieval (Sentinel-2/Landsat/MODIS).</p>
+        <div class="card-links">
+          <a class="badge-link" href="https://github.com/CCGCAM/ToolsRTMinPython" target="_blank"><img src="https://img.shields.io/badge/GitHub-toolsrtm-181717?logo=github&logoColor=white" alt="toolsrtm on GitHub"></a>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-lang"><img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python"></span>
+        <div class="card-title">scopeinpython</div>
+        <p>Python port of SCOPEinR's core: soil + optical top-of-canopy BRDF pipeline, energy balance, fluorescence and zeaxanthin RTM, end-to-end via <code>get_scope()</code>.</p>
+        <div class="card-links">
+          <a class="badge-link" href="https://github.com/CCGCAM/scopeinpython" target="_blank"><img src="https://img.shields.io/badge/GitHub-scopeinpython-181717?logo=github&logoColor=white" alt="scopeinpython on GitHub"></a>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-lang"><img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R"><img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python"></span>
+        <div class="card-title">RTM-Suite (this monorepo)</div>
+        <p>Where all five packages above are developed, cross-verified, and demonstrated together — Apps, Scripts, Tutorials, and this documentation site all live here.</p>
+        <div class="card-links">
+          <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite" target="_blank"><img src="https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white" alt="RTM-Suite on GitHub"></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="section-inner">
+    <div class="section-kicker">Install</div>
+    <h2 class="section-title">Get the packages</h2>
+    <p class="section-subtitle" style="max-width: none;">Each package can be installed on its own -- you don't need the whole monorepo just to use one library.</p>
+
+    <div class="doc-lang-group">
+      <div class="doc-lang-header">
+        <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
+        <span>R</span>
+        <img class="doc-version-badge" src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white" alt="R >= 4.3">
+      </div>
+      <div class="code-card">
+        <div class="code-card-header">
+          <span class="code-title">ToolsRTM + SCOPEinR, from GitLab</span>
+        </div>
+        <div class="code-card-body">
+          <button class="copy-btn" data-copy="install-r">Copy</button>
+          <pre id="install-r"><code>install.packages("remotes")
+remotes::install_gitlab("caminoccg/toolsrtm")
+remotes::install_gitlab("caminoccg/scopeinr")  # depends on ToolsRTM</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-lang-group">
+      <div class="doc-lang-header">
+        <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python">
+        <span>Python</span>
+        <img class="doc-version-badge" src="https://img.shields.io/badge/Python-%3E%3D%203.9-3776AB?logo=python&logoColor=white" alt="Python >= 3.9">
+      </div>
+      <div class="code-card">
+        <div class="code-card-header">
+          <span class="code-title">toolsrtm + scopeinpython, from GitHub</span>
+        </div>
+        <div class="code-card-body">
+          <button class="copy-btn" data-copy="install-py">Copy</button>
+          <pre id="install-py"><code>pip install git+https://github.com/CCGCAM/ToolsRTMinPython.git
+pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsrtm
+
+# optional extras: pip install "toolsrtm[ml,dl,stac]"
+#   ml   -- trait inversion (scikit-learn, xgboost)
+#   dl   -- deep-learning inversion (TensorFlow)
+#   stac -- satellite retrieval (pystac-client, odc-stac, ...)</code></pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="docs" class="section-bg-light">
+  <div class="section-inner">
+    <div class="section-kicker">Documentation</div>
+    <h2 class="section-title">Reference manuals</h2>
+    <p class="section-subtitle" style="max-width: none;">Every function, every argument, auto-generated straight from source so it never drifts out of date — roxygen docstrings for the R packages, rendered as <code>pkgdown</code> sites; Python docstrings for the two Python libraries, rendered as a Sphinx site. Each page also links back to this one.</p>
+    <div class="doc-lang-group">
+      <div class="doc-lang-header">
+        <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
+        <span>R packages</span>
+        <img class="doc-version-badge" src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white" alt="R >= 4.3">
+      </div>
+      <div class="doc-grid">
+        <a class="doc-card" href="toolsrtm/index.html">
+          <h3>ToolsRTM</h3>
+          <p>Leaf/canopy radiative transfer models, sensor convolution, and trait inversion — pkgdown reference site.</p>
+        </a>
+        <a class="doc-card" href="scopeinr/index.html">
+          <h3>SCOPEinR</h3>
+          <p>Full SCOPE 2.0 canopy energy-balance, fluorescence and radiance simulation — pkgdown reference site.</p>
+        </a>
+      </div>
+    </div>
+
+    <div class="doc-lang-group">
+      <div class="doc-lang-header">
+        <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python">
+        <span>Python libraries</span>
+        <img class="doc-version-badge" src="https://img.shields.io/badge/Python-%3E%3D%203.9-3776AB?logo=python&logoColor=white" alt="Python >= 3.9">
+      </div>
+      <div class="doc-grid">
+        <a class="doc-card" href="python/toolsrtm/index.html">
+          <h3>toolsrtm</h3>
+          <p>Python port of ToolsRTM: leaf/canopy models, sensor convolution, spectral indices, trait inversion (ML/DL), and STAC satellite retrieval — Sphinx site.</p>
+        </a>
+        <a class="doc-card" href="python/scopeinpython/index.html">
+          <h3>scopeinpython</h3>
+          <p>Python port of SCOPEinR: soil + optical BRDF pipeline, energy balance, fluorescence and zeaxanthin RTM, end-to-end via <code>get_scope()</code> — Sphinx site.</p>
+        </a>
+      </div>
+    </div>
+
+    <p class="section-subtitle" style="margin-top: 22px; margin-bottom: 0;">Both Python libraries also share a <a href="python/index.html">combined landing page</a>, with the numeric verification-against-R table and the "what's not ported" list.</p>
+  </div>
+</section>
+
+<section id="apps">
+  <div class="section-inner">
+    <div class="section-kicker">Interactive apps</div>
+    <h2 class="section-title">Point-and-click, no code required</h2>
+    <p class="section-subtitle" style="max-width: none;">Explore every model, sweep any trait, and pull a real Sentinel-2 time series — without writing R or Python. Two Shiny apps: run them locally with <code>shiny::runApp()</code> (they're interactive, so unlike the rest of this site they can't be hosted as static pages) — source and run instructions on GitHub.</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">RTMs</div>
+        <p>Model Explorer (3 canopy models × 5 leaf models, live SIF and sensitivity), PROSAIL-WithSatellite, How-in-R/Python tutorial tabs, Reference tab.</p>
+        <div class="card-links">
+          <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs" target="_blank"><img src="https://img.shields.io/badge/GitHub-Apps%2FRTMs-181717?logo=github&logoColor=white" alt="Apps/RTMs on GitHub"></a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">STAC</div>
+        <p>Real Sentinel-2 time series retrieval via STAC (SpatioTemporal Asset Catalog), with an interactive map to draw/pick the area of interest.</p>
+        <div class="card-links">
+          <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/STAC" target="_blank"><img src="https://img.shields.io/badge/GitHub-Apps%2FSTAC-181717?logo=github&logoColor=white" alt="Apps/STAC on GitHub"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tutorials" class="section-bg-light">
+  <div class="section-inner">
+    <div class="section-kicker">Tutorials</div>
+    <h2 class="section-title">Guided walkthroughs, R and Python side by side</h2>
+    <p class="section-subtitle" style="max-width: none;">From a first simulation to a full course manual: sensor convolution, sensitivity analysis, and trait inversion, in R and Python. Every tutorial below is verified by actually running it end-to-end — not just written. The four rendered R notebooks are viewable directly on this site; Python notebooks render on GitHub.</p>
+    <div class="tut-list">
+
+      <div class="tut-row">
+        <div><div class="tut-name">How in R / How in Python</div><div class="tut-desc">Shorter on-ramp: one simulation &rarr; sensitivity &rarr; sensor convolution &rarr; ML inversion.</div></div>
+        <div class="tut-links">
+          <a href="../Tutorials/How-in-R.html">R (rendered)</a>
+          <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python.ipynb" target="_blank">Python (notebook)</a>
+        </div>
+      </div>
+
+      <div class="tut-row">
+        <div><div class="tut-name">How in R / How in Python — SCOPEinR</div><div class="tut-desc">The SCOPE equivalent: energy balance, fluorescence, a small LUT.</div></div>
+        <div class="tut-links">
+          <a href="../Tutorials/How-in-R-SCOPEinR.html">R (rendered)</a>
+          <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python-SCOPEinR.ipynb" target="_blank">Python (notebook)</a>
+        </div>
+      </div>
+
+      <div class="tut-row">
+        <div><div class="tut-name">ToolsRTM / PROSAIL — complete reference manual</div><div class="tut-desc">Every leaf/canopy model, trait sampling, all 12 inversion algorithms, deep learning.</div></div>
+        <div class="tut-links">
+          <a href="../Tutorials/ToolsRTM_PROSAIL_tutorial.html">R (rendered)</a>
+        </div>
+      </div>
+
+      <div class="tut-row">
+        <div><div class="tut-name">SCOPEinR — complete reference manual</div><div class="tut-desc">Every input table, sensitivity to soil/photosynthesis settings, serial and parallel runs.</div></div>
+        <div class="tut-links">
+          <a href="../Tutorials/SCOPEinR_tutorial.html">R (rendered)</a>
+        </div>
+      </div>
+
+      <div class="tut-row">
+        <div><div class="tut-name">Runnable pipeline scripts</div><div class="tut-desc">Simulate &rarr; convolve to a sensor &rarr; compute indices &rarr; invert traits, as plain scripts, R and Python.</div></div>
+        <div class="tut-links">
+          <a href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R" target="_blank">R scripts</a>
+          <a href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/Python" target="_blank">Python scripts</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="examples" class="section-bg-light">
+  <div class="section-inner">
+    <div class="section-kicker">Code examples</div>
+    <h2 class="section-title">Copy, paste, adapt</h2>
+    <p class="section-subtitle" style="max-width: none;">Short, runnable snippets, verified end to end — grouped by language below. R and Python aren't always the same model on purpose — e.g. fourSAIL in R vs. INFORM in Python — to show the same trait inputs driving different canopy representations across the framework.</p>
+
+    <div class="doc-lang-group">
+      <div class="doc-lang-header">
+        <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
+        <span>R examples</span>
+        <img class="doc-version-badge" src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white" alt="R >= 4.3">
+      </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white" alt="R >= 4.3"></span>
+        <span class="code-title">Simulate a vegetation spectrum (PROSPECT-PRO + fourSAIL)</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-r-sim">Copy</button>
+          <pre id="code-r-sim"><code># Generate a small Look-Up Table (LUT) of vegetation traits
+LUT &lt;- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL,
+                            nLUT = 10, setseed = 123))
+
+# Simulate canopy reflectance using PROSPECT-PRO + fourSAIL
+sim &lt;- simulate_RTM(
+    inputLUT    = LUT[1, ],
+    rsoil       = rep(0.15, 2101),
+    leaf.model  = "PROSPECT-PRO",
+    canopy.model = "fourSAIL")
+
+plot(sim$rsot, type = "l", xlab = "Wavelength", ylab = "Reflectance")</code></pre>
+          <div class="code-figure">
+            <img src="../assets/examples/r_sim_foursail.png" alt="fourSAIL simulated canopy reflectance spectrum, PROSPECT-PRO leaf model">
+            <div class="code-figure-caption">Real output of the exact code above.</div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white" alt="R >= 4.3"></span>
+        <span class="code-title">Run 50 simulations from a random LUT</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-r-50sims">Copy</button>
+          <pre id="code-r-50sims"><code>LUT &lt;- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 50, setseed = 42))
+rsoil &lt;- rep(0.15, 2101)
+
+plot(NULL, xlim = c(400, 2500), ylim = c(0, 0.5),
+     xlab = "Wavelength (nm)", ylab = "Reflectance")
+for (i in seq_len(50)) {
+  sim &lt;- simulate_RTM(inputLUT = LUT[i, ], rsoil = rsoil,
+                       leaf.model = "PROSPECT-PRO", canopy.model = "fourSAIL")
+  lines(400:2500, sim$rsot)
+}</code></pre>
+          <div class="code-figure">
+            <img src="../assets/examples/r_50sims.png" alt="50 fourSAIL simulations from a random LUT, colored by LAI">
+            <div class="code-figure-caption">Real output: 50 simulations from a random LUT, colored by LAI (light = low, dark = high).</div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white" alt="R >= 4.3"></span>
+        <span class="code-title">Sensitivity to chlorophyll content (Cab), fourSAIL</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-r-cab">Copy</button>
+          <pre id="code-r-cab"><code>cab_values &lt;- c(10, 25, 40, 55, 70)
+rsoil &lt;- rep(0.15, 2101)
+
+plot(NULL, xlim = c(400, 2500), ylim = c(0, 0.5),
+     xlab = "Wavelength (nm)", ylab = "Reflectance")
+for (cab in cab_values) {
+  row &lt;- LUT[1, ]
+  row$Cab &lt;- cab
+  sim &lt;- simulate_RTM(inputLUT = row, rsoil = rsoil,
+                       leaf.model = "PROSPECT-PRO", canopy.model = "fourSAIL")
+  lines(400:2500, sim$rsot)
+}</code></pre>
+          <div class="code-figure">
+            <img src="../assets/examples/r_sensitivity_cab.png" alt="Sensitivity of fourSAIL reflectance to chlorophyll content (Cab)">
+            <div class="code-figure-caption">Real output: higher Cab lowers the visible-green reflectance; NIR/SWIR are unaffected, as expected.</div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white" alt="R >= 4.3"></span>
+        <span class="code-title">Run a complete SCOPE simulation</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-r-scope">Copy</button>
+          <pre id="code-r-scope"><code>opts &lt;- read.table(system.file("input", "setoptions.csv", package = "SCOPEinR"),
+                    header = TRUE, sep = ",")
+lut &lt;- read.table(system.file("input", "LUT_input.csv", package = "SCOPEinR"),
+                   header = TRUE, sep = ",")
+
+scope &lt;- get.SCOPE(
+  LUT = lut[1, ], options.SCOPE = opts, optipar = optipar2021.Pro.CX,
+  leaf.model = "fluspect-CX", canopy.model = "fourSAIL",
+  get.outputs = "ALL", get.plots = FALSE)
+
+res &lt;- scope[[1]]
+plot(res$data.spectral$wlS, res$data.rad$refl, type = "l",
+     xlab = "Wavelength (nm)", ylab = "Reflectance", xlim = c(400, 2400))</code></pre>
+          <div class="code-figure">
+            <img src="../assets/examples/r_scope_refl.png" alt="SCOPE top-of-canopy reflectance spectrum">
+            <div class="code-figure-caption">Real output of the exact code above.</div>
+          </div>
+        </details>
+      </div>
+    </div>
+    </div>
+
+    <div class="doc-lang-group">
+      <div class="doc-lang-header">
+        <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python">
+        <span>Python examples</span>
+        <img class="doc-version-badge" src="https://img.shields.io/badge/Python-%3E%3D%203.9-3776AB?logo=python&logoColor=white" alt="Python >= 3.9">
+      </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/Python-%3E%3D%203.9-3776AB?logo=python&logoColor=white" alt="Python >= 3.9"></span>
+        <span class="code-title">Simulate a forest stand spectrum (PROSPECT-PRO + INFORM)</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-py-sim">Copy</button>
+          <pre id="code-py-sim"><code>import numpy as np
+from toolsrtm import inform
+
+# Same leaf/canopy traits as the R example, plus INFORM's explicit
+# crown geometry (understorey LAI, stem density, crown diameter, tree height)
+row = dict(
+    N=1.5, Cab=40, Car=8, Anth=1, Cbrown=0.1, EWT=0.01, LMA=0.009, alpha=40,
+    Prot=0, CBC=0,
+    LAI=3, hspot=0.01, LIDFa=-0.35, LIDFb=-0.15, TypeLidf=1,
+    tts=30, tto=0, psi=0,
+    LAIu=2, sd=500, cd=6, h=12, skyl=0.1,
+)
+rsoil = np.full(2101, 0.15)
+
+reflectance = inform(row, rsoil, leaf_model="PROSPECT-PRO")</code></pre>
+          <div class="code-figure">
+            <img src="../assets/examples/py_sim_inform.png" alt="INFORM simulated forest-stand reflectance spectrum, PROSPECT-PRO leaf model">
+            <div class="code-figure-caption">Real output of the exact code above.</div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/Python-%3E%3D%203.9-3776AB?logo=python&logoColor=white" alt="Python >= 3.9"></span>
+        <span class="code-title">Run 50 simulations from a random LUT</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-py-50sims">Copy</button>
+          <pre id="code-py-50sims"><code>import numpy as np
+from toolsrtm import inform
+
+rng = np.random.default_rng(42)
+rsoil = np.full(2101, 0.15)
+
+for _ in range(50):
+    row_i = dict(row)
+    row_i.update(
+        N=rng.uniform(1.2, 2.5), Cab=rng.uniform(10, 70), LAI=rng.uniform(0.5, 7.0),
+        LIDFa=rng.uniform(-0.5, 0.5), sd=rng.uniform(200, 800), h=rng.uniform(8, 20),
+    )
+    refl = inform(row_i, rsoil, leaf_model="PROSPECT-PRO")</code></pre>
+          <div class="code-figure">
+            <img src="../assets/examples/py_50sims.png" alt="50 INFORM simulations from a random LUT, colored by LAI">
+            <div class="code-figure-caption">Real output: 50 simulations from a random LUT, colored by LAI (dark = low, light = high).</div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/Python-%3E%3D%203.9-3776AB?logo=python&logoColor=white" alt="Python >= 3.9"></span>
+        <span class="code-title">Sensitivity to chlorophyll content (Cab), INFORM</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-py-cab">Copy</button>
+          <pre id="code-py-cab"><code>cab_values = [10, 25, 40, 55, 70]
+
+for cab in cab_values:
+    row_i = dict(row)
+    row_i["Cab"] = cab
+    refl_i = inform(row_i, rsoil, leaf_model="PROSPECT-PRO")
+    plt.plot(wl, refl_i, label=f"Cab={cab}")
+
+plt.xlabel("Wavelength (nm)")
+plt.ylabel("Reflectance")
+plt.legend()
+plt.show()</code></pre>
+          <div class="code-figure">
+            <img src="../assets/examples/py_sensitivity_cab.png" alt="Sensitivity of INFORM reflectance to chlorophyll content (Cab)">
+            <div class="code-figure-caption">Real output: same pattern as the R version — visible-green sensitivity, NIR/SWIR unaffected.</div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/Python-%3E%3D%203.9-3776AB?logo=python&logoColor=white" alt="Python >= 3.9"></span>
+        <span class="code-title">Retrieve a trait with the 12-algorithm ML dispatcher</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-py-inv">Copy</button>
+          <pre id="code-py-inv"><code>from toolsrtm.inversion import get_inversion
+
+# dataset: a DataFrame with spectral_bands as columns and a "Cab" column
+fit = get_inversion(dataset, dep_var="Cab", inputs=spectral_bands, algorithm="RF")
+pred = fit.predictions["test"]</code></pre>
+        </details>
+      </div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-card-header">
+        <span class="code-badge"><img src="https://img.shields.io/badge/Python-%3E%3D%203.9-3776AB?logo=python&logoColor=white" alt="Python >= 3.9"></span>
+        <span class="code-title">20 SCOPE simulations: reflectance and SIF vs. chlorophyll</span>
+      </div>
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code</summary>
+          <button class="copy-btn" data-copy="code-py-scope">Copy</button>
+          <pre id="code-py-scope"><code>import csv
+import numpy as np
+from scopeinpython import ScopeOptions, get_scope
+from scopeinpython.spectral import get_spectra_scope
+
+with open("SCOPEinR/inst/input/LUT_input.csv", newline="") as f:
+    row = next(csv.DictReader(f))
+
+wl = get_spectra_scope().wlS
+options = ScopeOptions(calc_fluor=True, calc_xanthophyllabs=True)
+
+refl_curves, sif_values = [], []
+for cab in np.linspace(10, 80, 20):
+    row_i = dict(row)
+    row_i["Cab"] = cab
+    result = get_scope(row_i, options=options)
+    refl_curves.append(result.rtmo.refl)      # top-of-canopy reflectance
+    sif_values.append(result.rtmf.EoutF)      # sun-induced fluorescence (SIF)</code></pre>
+          <div class="code-figure">
+            <img src="../assets/examples/py_scope_cab_sif.png" alt="20 SCOPE simulations: reflectance spectra and sun-induced fluorescence vs. chlorophyll content">
+            <div class="code-figure-caption">Real output of the exact code above: reflectance for all 20 runs (left), SIF response to Cab (right).</div>
+          </div>
+        </details>
+      </div>
+    </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>Developed at the <a href="https://www.wur.nl/en/chair-groups/geo-information-science-and-remote-sensing" target="_blank">Laboratory of Geo-information Science and Remote Sensing</a>, Wageningen University, by <a href="https://www.wur.nl/en/persons/dr-cl-carlos-camino-gonzalez" target="_blank">Carlos Camino</a>, part of the <a href="https://virtual-biophysical-lab.wur.nl/" target="_blank">Virtual Biophysical Lab</a>.</div>
+    <div class="footer-links">
+      <a href="https://virtual-biophysical-lab.wur.nl/" target="_blank">Virtual Biophysical Lab</a>
+      <a href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
+      <a href="../README.md">Repo README</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".copy-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const targetId = btn.getAttribute("data-copy");
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      const text = el.textContent.replace(/^\n+|\s+$/g, "");
+      try {
+        await navigator.clipboard.writeText(text);
+        const old = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(() => (btn.textContent = old), 1200);
+      } catch (e) {
+        console.error("Clipboard error", e);
+        btn.textContent = "Error";
+        setTimeout(() => (btn.textContent = "Copy"), 1200);
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

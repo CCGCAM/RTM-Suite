@@ -1,0 +1,18 @@
+Order,Options,Value,Info
+1,lite,1,Value 1 indicates the SCOPE will use the lite SCOPEversion
+2,calc_fluorescence,1,Value 1 indicates that SCOPE will calculate thechlorophyll fluorescence in observation direction
+3,calc_spectrum_planck,1,Value 1 SCOPE will calculate the spectrum of thermal radiation
+4,calc_xanthophyllabs,1,Value 1 indicates the SCOPE includes simulation of reflectance dependence on de-epoxydation state
+5,soilspectrum,0,Value 0 use a soil reflectance file and  Value 1 SCOPE will calculate the soil spectrum using BSM model
+6,Fluorescence_model,0,Value 0 empirical with sustained NPQ from Flexas data and Value 1 empirical with sigmoid for Kn and Value 2 uses Magnani 2012 model
+7,applTcorr,1,Value 1 indicates that SCOPE will correct the Vcmax and rate constants for temperature in biochemical.m
+8,verify,1,Value 1 indicates that SCOPE will check with field data
+9,mSCOPE,0,Value 1 indicates that SCOPE wil use the mSCOPE considering vertical variations in the vegetation canopies
+10,simulation,0,Value 0 the SCOPE will execute by individual runs based on LUT table and Value 1 for time series (uses text files with meteo input as time series)
+11,calc_directional,0,Value 1 calculate full BRDF for many angles
+12,calc_vert_profiles,0,Value 1  indicates that SCOPE will estimate vertical profiles
+13,soil_heat_method,2,Value 0 will estimate the GAM parameters with Soil_Inertia0(lambdas) and Value 1 will estimate the GAM with Soil_Inertia1(SMC) and Value 2 will estimate  G by 0.35*Rn where always in no TS
+14,calc_rss_rbs,0,Value 0 is fixed and Value 1 is calculated
+15,MoninObukhov,1,Value 1 indicates that SCOPE wil use the MoninObukhov correction
+16,LIDF,0,Value 1 SCOPE wil estimate LIDF from angles file and Value 0 will use LIDFa and LIDFb from LUT table for estimating LIDF
+17,irradiance,0,Value 0 use a the irradiance file from SCOPE model Value 1 use irradiance measurements WithE and Value 2 use irradiance from MODTRAN atmospheric.file

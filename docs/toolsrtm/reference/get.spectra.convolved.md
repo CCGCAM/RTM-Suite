@@ -1,0 +1,66 @@
+# Get Convolved Spectra
+
+This function performs spectral convolution using specified sensor
+spectral response functions (SRFs). It can interpolate the input spectra
+to match the SRF resolution and plot the convolved and observed spectra.
+
+## Usage
+
+``` r
+get.spectra.convolved(rfl, sensor, plot.spectra = T)
+```
+
+## Arguments
+
+- rfl:
+
+  A matrix or data frame of reflectance spectra, with columns
+  representing wavelengths.
+
+- sensor:
+
+  A character string specifying the sensor to use for convolution.
+  Options are "sentinel2a", "sentinel2b", or "prisma". If NULL,
+  "sentinel2a" is used by default.
+
+- plot.spectra:
+
+  A logical value indicating whether to plot the convolved and observed
+  spectra. Default is TRUE.
+
+## Value
+
+A data frame of convolved spectra.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+#spectral response function downloaded from: https://oceancolor.gsfc.nasa.gov/resources/docs/rsr_tables/
+
+# 1. Generate a Lookup Table (LUT) for PROSAIL inputs
+
+inputs.prosail <- ToolsRTM::inputsPROSAIL
+# Create a LUT with 1 entry using the defined PROSAIL inputs
+df.LUT <- as.data.frame(ToolsRTM::getLUT(inputs = inputs.prosail, nLUT = 1, setseed = 1234))
+
+# 2. Simulate spectral reflectance using PROSAIL and apply BRDF effect
+
+# Simulate reflectance values using the PROSAIL model for the first LUT entry
+reflectance_values <- ToolsRTM::foursail(inputLUT = df.LUT[1,], rsoil = rsoil, LeafModel = 'PROSPECT-PRO')
+rdot <- reflectance_values[[1]]  # Direct reflectance
+rsot <- reflectance_values[[2]]  # Diffuse reflectance
+
+# Compute the Bidirectional Reflectance Factor (BRF) using BRDF effects
+reflectance_values <- ToolsRTM::Compute_BRF(rdot = rdot, rsot = rsot,
+                                            tts = df.LUT[1, 'tts'],
+                                            data.light = ToolsRTM::dataSpec_PDB)
+# Convert the reflectance values to a matrix for further processing
+sim.matrix <- as.matrix(t(reflectance_values))
+colnames(sim.matrix)=paste0("X",wavelength)
+# 3. Convolve the simulated reflectance with a sensor-specific SRF and plot the result
+
+# Here, we use the Sentinel-2A sensor for spectral resampling and plotting
+convolved_spectra <- get.spectra.convolved(rfl = sim.matrix, sensor = "Sentinel2a", plot.spectra = TRUE)
+} # }
+```

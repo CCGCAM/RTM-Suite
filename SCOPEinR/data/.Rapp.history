@@ -1,0 +1,7 @@
+load("/Volumes/LaCie/Drive/Workspace/SCOPEinR/data/input_border.rda")
+head(name_table)
+names(oad("/Volumes/LaCie/Drive/Workspace/SCOPEinR/data/input_border.rda"))
+names(load("/Volumes/LaCie/Drive/Workspace/SCOPEinR/data/input_border.rda"))
+head(load("/Volumes/LaCie/Drive/Workspace/SCOPEinR/data/input_border.rda"))
+load("/Volumes/LaCie/Drive/Workspace/SCOPEinR/data/leaf_spectrum.rda")
+leaf_spectrum
