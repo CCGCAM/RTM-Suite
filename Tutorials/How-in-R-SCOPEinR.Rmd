@@ -5,6 +5,8 @@ output:
     toc: true
     toc_float: true
     theme: flatly
+    includes:
+      before_body: _back_to_suite.html
 ---
 
 ```{r setup, include=FALSE}

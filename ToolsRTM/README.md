@@ -24,6 +24,12 @@ For more information, please visit: MARMIT [GitLab](https://pss-gitlab.math.univ
 
 **Fig. 1.** Simulations performed with ToolsRTM Package for several radiative transfer models .
 
+**ToolsRTM** is one library within [**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/), which links both the R packages (`ToolsRTM`, `SCOPEinR`) and their Python ports (`toolsrtm`, `scopeinpython`) behind one common site — with reference manuals, worked tutorials, and runnable example pipelines for both languages side by side.
+
+![RTM-Suite website](man/figures/Website_rtm-suite.png)
+
+**Fig. 2.** The [RTM-Suite website](https://ccgcam.github.io/RTM-Suite/) — see **Documentation** for R/Python reference manuals, **Tutorials** for step-by-step walkthroughs (R and Python side by side), and **Examples** for copy-paste runnable code with real generated figures.
+
 ### Installation
 
 ToolsRTM requires R 4.3 or newer. Install the development version directly from GitLab:
@@ -117,7 +123,7 @@ Use the [online RT-Simulator](https://carlos-camino.shinyapps.io/0-toolsrtm-simu
 
 ![](man/figures/shiny.png)
 
-**Fig. 2.** Interactive reflectance simulator using PROSAIL model based on shiny app.
+**Fig. 3.** Interactive reflectance simulator using PROSAIL model based on shiny app.
 
 ### Citation of the main radiative transfer models
 

@@ -1563,6 +1563,9 @@ border-radius: 0px;
 
 
 
+<div style="background:#2c3e50; padding:6px 16px; font-size:13px;">
+  <a href="../index.html" style="color:#fff; opacity:0.9; text-decoration:none;">← Back to RTM-Suite</a>
+</div>
 
 <div id="header">
 
@@ -2213,18 +2216,18 @@ same LUT into <code>n.cores</code> chunks, runs them on a
 <div id="total-simulations-10" class="section level2">
 <h2>Total simulations: 10</h2>
 </div>
-<div id="total-execution-time-9.563324" class="section level2">
-<h2>Total execution time: 9.563324</h2>
+<div id="total-execution-time-13.01378" class="section level2">
+<h2>Total execution time: 13.01378</h2>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>t_parallel <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">Sys.time</span>() <span class="sc">-</span> t0, <span class="at">units =</span> <span class="st">&quot;secs&quot;</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Serial (1 core):    &quot;</span>, <span class="fu">round</span>(t_serial, <span class="dv">1</span>), <span class="st">&quot;s for&quot;</span>, <span class="fu">length</span>(sims_serial), <span class="st">&quot;sims</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 </div>
-<div id="serial-1-core-7.9-s-for-10-sims" class="section level2">
-<h2>Serial (1 core): 7.9 s for 10 sims</h2>
+<div id="serial-1-core-16.5-s-for-10-sims" class="section level2">
+<h2>Serial (1 core): 16.5 s for 10 sims</h2>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Parallel (4 cores):  &quot;</span>, <span class="fu">round</span>(t_parallel, <span class="dv">1</span>), <span class="st">&quot;s for&quot;</span>, <span class="fu">length</span>(sims_parallel), <span class="st">&quot;sims</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 </div>
-<div id="parallel-4-cores-10.8-s-for-10-sims" class="section level2">
-<h2>Parallel (4 cores): 10.8 s for 10 sims</h2>
+<div id="parallel-4-cores-14.3-s-for-10-sims" class="section level2">
+<h2>Parallel (4 cores): 14.3 s for 10 sims</h2>
 <p>For a LUT this small the parallel path still pays a fixed cost —
 spinning up a PSOCK cluster and exporting
 <code>SCOPEinR</code>/<code>ToolsRTM</code> to every worker — so the
@@ -2286,7 +2289,7 @@ instead of being held in memory all at once:</p>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">basename</span>(subdirs)</span></code></pre></div>
 </div>
 <div id="section-39" class="section level2">
-<h2>[1] “2026-08-20_10-41-13” “2026-08-20_10-41-33”</h2>
+<h2>[1] “2026-08-20_11-01-32” “2026-08-20_11-01-47”</h2>
 <p><code>get.SCOPE.parallel()</code>/<code>get.SCOPE.outputs()</code>
 build the timestamped output folder with
 <code>paste(path.out, current_time, sep = &quot;&quot;)</code> — plain string
@@ -2363,11 +2366,11 @@ back from the last <code>n.folders</code> timestamped subfolders under
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>df.scope <span class="ot">&lt;-</span> <span class="fu">getCSV</span>(<span class="at">path.out =</span> <span class="fu">substr</span>(out_root, <span class="dv">1</span>, <span class="fu">nchar</span>(out_root) <span class="sc">-</span> <span class="dv">1</span>),</span>
 <span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>                    <span class="at">n.folders =</span> n_chunks, <span class="at">files.names =</span> <span class="st">&quot;All&quot;</span>)</span></code></pre></div>
 </div>
-<div id="getting-files-from-cscope_outs2026-08-20_10-41-13" class="section level2">
-<h2>Getting files from: C:/scope_outs/2026-08-20_10-41-13</h2>
+<div id="getting-files-from-cscope_outs2026-08-20_11-01-32" class="section level2">
+<h2>Getting files from: C:/scope_outs/2026-08-20_11-01-32</h2>
 </div>
-<div id="getting-files-from-cscope_outs2026-08-20_10-41-33" class="section level2">
-<h2>Getting files from: C:/scope_outs/2026-08-20_10-41-33</h2>
+<div id="getting-files-from-cscope_outs2026-08-20_11-01-47" class="section level2">
+<h2>Getting files from: C:/scope_outs/2026-08-20_11-01-47</h2>
 </div>
 <div id="section-40" class="section level2">
 <h2></h2>

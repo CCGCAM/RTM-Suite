@@ -8,6 +8,8 @@ output:
     toc_depth: 3
     theme: cosmo
     highlight: tango
+    includes:
+      before_body: _back_to_suite.html
 date: "`r Sys.Date()`"
 ---
 
@@ -301,8 +303,15 @@ if (dl_result$ok) {
   cat("Trained. Returned elements:", paste(names(dl_result$model), collapse = ", "), "\n")
   cat("Final training loss:", round(tail(dl_result$model$history$metrics$loss, 1), 3), "\n")
 } else {
+  # Only the first line of the underlying error is shown -- reticulate's full
+  # Python traceback is multi-line raw text that, printed as-is, can break
+  # the markdown/HTML this chunk's output gets embedded into (stray lines
+  # have been observed turning into spurious empty headings in the rendered
+  # HTML). The first line is enough to say *why* it's skipped; the full
+  # traceback isn't useful to a tutorial reader anyway.
+  first_line <- strsplit(dl_result$msg, "\n", fixed = TRUE)[[1]][1]
   cat("Skipped -- no working Python/TensorFlow/tf-keras stack reachable through",
-      "reticulate on this machine (", dl_result$msg, "). See the setup section",
+      "reticulate on this machine (", first_line, "). See the setup section",
       "above for how to configure one; the calling code itself (getMLmodel(...,",
       "model = \"Hidden-layers\")) is correct and unchanged.\n")
 }

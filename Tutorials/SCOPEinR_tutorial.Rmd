@@ -8,6 +8,8 @@ output:
     toc_depth: 3
     theme: cosmo
     highlight: tango
+    includes:
+      before_body: _back_to_suite.html
 date: "`r Sys.Date()`"
 ---
 

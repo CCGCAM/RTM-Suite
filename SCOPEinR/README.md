@@ -37,6 +37,12 @@ The complete documentation is maintained together in the [**RTM-Suite documentat
 
 Documentation is also available from inside the installed packages through their help pages, vignettes, and pkgdown articles.
 
+**SCOPEinR** is one library within [**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/), which links both the R packages (`ToolsRTM`, `SCOPEinR`) and their Python ports (`toolsrtm`, `scopeinpython`) behind one common site — with reference manuals, worked tutorials, and runnable example pipelines for both languages side by side.
+
+![RTM-Suite website](man/figures/Website_rtm-suite.png)
+
+**Fig.** The [RTM-Suite website](https://ccgcam.github.io/RTM-Suite/) — see **Documentation** for R/Python reference manuals, **Tutorials** for step-by-step walkthroughs (R and Python side by side), and **Examples** for copy-paste runnable code with real generated figures.
+
 ### Installation
 
 SCOPEinR requires R 4.3 or later and imports ToolsRTM. Install the current versions directly from their GitLab repositories:
