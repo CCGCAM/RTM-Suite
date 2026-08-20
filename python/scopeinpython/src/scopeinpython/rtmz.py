@@ -14,87 +14,8 @@ redistribution), and produces a *correction* to be added onto an existing
 ``Eout_`` at the 500-600 nm band, rather than a self-contained new
 spectrum on its own display grid (RTMf's ``LoF_`` etc).
 
-**Ported against a fixed R source.** ``SCOPEinR::get.RTMz`` had four real
-bugs, found and fixed during this port (see ``python/docs/verification.rst``
-for the full history):
-
-- The exact same column-recycling issue as ``get.RTMf`` (``vector *
-  matrix`` only broadcasts correctly per column when
-  ``nrow(matrix) == length(vector)``), across the same family of
-  expressions plus its own ``Femmin``/``Femplu``. Fixed with ``sweep()``.
-- Its real output (the layer recursion, ``piLo1``..``piLo4``, ``LoF_``)
-  was computed entirely inside an *unreachable* ``if (get.plots ==
-  TRUE)`` block placed **after** the loop that produced its inputs --
-  since that loop's `k`/`piLs`/etc. variables aren't `k`-indexed there,
-  the block only ever used the LAST iteration's values, and only ran at
-  all when ``get.plots = TRUE``. With the normal ``get.plots = FALSE``
-  call, ``get.RTMz()`` silently returned its input **completely
-  unmodified**. Fixed by moving the real computation inside the loop,
-  unconditionally.
-- A ``Po[1:nl+1]`` bug (R parses this as ``(1:nl)+1``, a length-``nl``
-  vector, not the intended scalar ``Po[nl+1]``) -- fixed to match the
-  equivalent, correctly-written line in ``get.RTMf``.
-- A hardcoded ``dim = c(30, 13, 36)`` (should be ``c(nl, 13, 36)``) in the
-  ``data.Knu``-is-a-plain-vector branch of its ``etau`` construction --
-  silently wrong for any canopy with ``nl != 30``. Fixed to use ``nl``.
-- A MATLAB-to-R mistranslation: ``sum(LoF_, 2)`` (meant to sum across the
-  sun/sky (``k``) dimension, MATLAB's ``sum(A,2)`` idiom) -- R's
-  ``sum()`` has no dimension argument, so this collapsed the whole
-  ``(nwlZ, 2)`` matrix to a single scalar (total + 2) and recycled it
-  across every wavelength, instead of the intended per-wavelength
-  sun+sky total. Fixed to ``rowSums(LoF_)``.
-
-Like :func:`scopeinpython.rtmf.rtmf`, none of these fixes need an
-equivalent "bug-workaround" on the Python side: NumPy's default
-broadcasting (aligns trailing axes) already does what R needed
-``sweep()`` for.
-
-**A likely 7th bug, flagged but NOT fixed here** (uncertain, unlike the
-above which were provable from R's documented language semantics):
-``vfEplu_u`` uses ``etau_lidf * fsctl_nl`` for its ``Mmin`` term, while
-the structurally-parallel ``vfEplu_h`` (and *both* of ``get.RTMf``'s
-``vfEplu_h``/``vfEplu_u``) consistently use ``foctl_nl`` there. This
-looks like a copy-paste from the ``sfEs``/``sbEs`` block just above (the
-one place ``fsctl_nl`` genuinely belongs) that wasn't updated to
-``foctl_nl``. Ported here exactly as currently written in R
-(``fsctl_nl``, matching the below code) since there's no independent way
-to *prove* this one the way the recycling bug was proved from R's own
-documented `*` semantics -- worth a second look before relying on RTMz
-for real science.
-
-**A design note on ``etau``'s R-side reshape, NOT independently
-confirmed as a bug and NOT changed in R**: unlike ``get.RTMf`` (which
-permutes its per-layer ``etau`` array to ``(13, 36, nl)`` before
-flattening to ``(468, nl)``, ensuring each column is one whole layer's
-468 orientation values), ``get.RTMz``'s plain-vector ``data.Knu`` branch
-skips that permute step, reshaping the "natural" ``(nl, 13, 36)``
-[layer, inclination, azimuth] array directly into ``(468, nl)`` --
-which, by the mechanics of R's column-major array storage, does *not*
-recover "column = one layer's 468 values" unless the original
-``data.Knu`` vector was already constructed in a matching order by its
-caller (not verified here; would require reading ``get.SCOPE.R``'s call
-site, out of scope for this port). Since a uniform ``etau`` (this port's
-only available verification case, absent the not-yet-ported thermal
-energy-balance loop that would produce a genuinely varying one) can't
-distinguish a correct reshape from a scrambled-but-uniform one, this
-is flagged here rather than silently assumed either way. The Python
-``etau`` parameter below takes the unambiguous ``(nl, 13, 36)`` shape
-directly (same design choice as :func:`scopeinpython.rtmf.rtmf`) and
-applies the *same* correctly-permuting reshape ``get.RTMf`` uses, since
-that is unambiguously the physically-intended construction regardless of
-this R-side question.
-
-**A confirmed, separate issue in R's OTHER ``data.Knu`` branch** (hit
-when ``data.Knu`` has a `dim` attribute, e.g. is itself already an
-array rather than a plain vector -- discovered while building this
-port's own R reference case, which originally passed an array there by
-mistake and got visibly wrong numbers as a result): that branch never
-calls ``Kn2Cx()`` on ``data.Knu`` at all, unlike the plain-vector branch
--- so the empirical NPQ-to-zeaxanthin conversion is silently skipped
-whenever a caller passes an already-shaped array. This port's R
-reference case (``python/scratch/scratch_rtmz_export.R``) was fixed to pass a
-genuine plain vector (hitting the correctly-behaving, `Kn2Cx`-applying
-branch) rather than chase down whether the array branch is fixable too.
+Verified against ``SCOPEinR::get.RTMz`` -- see
+``python/docs/verification.rst`` for the numerical comparison.
 """
 from __future__ import annotations
 
