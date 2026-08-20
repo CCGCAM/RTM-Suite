@@ -51,9 +51,9 @@ this demo).
   identical to `ForPROSAIL_fourSAIL/3_inversion_ml.py`/`4_inversion_dl.py`
   (same scikit-learn/TensorFlow/PyTorch models, same metrics), just applied
   to `get_scope()`'s outputs instead of `foursail`'s -- not duplicated here
-  to avoid repeating the same code twice; see the AEO-Course material for a
-  worked example that goes through SCOPE (see the repo's course-template
-  work).
+  to avoid repeating the same code twice; see `Scripts/R/ForSCOPE/` (R) or
+  the SCOPEinR reference manual's inversion section for a worked example
+  that goes through SCOPE.
 - **`get.SCOPE.parallel` / batch LUT runs at scale** — `get_scope` is the
   composable per-row building block (see `python/README.md`); parallelize
   calls to it yourself (`multiprocessing`, `joblib`, ...) for a large LUT.

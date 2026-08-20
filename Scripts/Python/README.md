@@ -147,7 +147,7 @@ function here.
 - **`Tutorials/How-in-R.Rmd` / `How-in-Python.ipynb`** — the shorter
   on-ramp: one simulation -> 500 simulations -> sensitivity -> sensor
   convolution (all 3 convolution functions) -> ML inversion, matching the
-  AEO-Course PROSAIL app's own tutorial tabs.
+  `Apps/RTMs` Shiny app's own tutorial tabs.
 - **`Tutorials/ToolsRTM_PROSAIL_tutorial.Rmd`** — the comprehensive R
   reference manual (every leaf/canopy model, trait sampling, all 12 `caret`
   algorithms, TensorFlow/Keras deep learning) -- no direct Python

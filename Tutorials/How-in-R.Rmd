@@ -10,10 +10,10 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 8, fig.height = 5)
+knitr::opts_chunk$set(echo = TRUE, fig.width = 8, fig.height = 5, message = FALSE)
 ```
 
-Reproducing the [`AEO-Course/Apps/RTMs`](https://github.com/CCGCAM/RTM-Suite/tree/main/AEO-Course/Apps/RTMs)
+Reproducing the [`Apps/RTMs`](https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs)
 Shiny app's own workflow, step by step, in plain R -- no app required.
 Six steps: load the package, run one simulation, run 500, look at
 sensitivity to one trait at a time, convolve onto a real sensor's bands,

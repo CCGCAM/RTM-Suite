@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 8, fig.height = 5)
+knitr::opts_chunk$set(echo = TRUE, fig.width = 8, fig.height = 5, message = FALSE)
 ```
 
 This is the SCOPEinR-specific companion to `How-in-R.Rmd` (which covers

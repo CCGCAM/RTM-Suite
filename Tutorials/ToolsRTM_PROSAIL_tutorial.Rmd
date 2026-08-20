@@ -28,8 +28,17 @@ strip_progress_bars <- function(x) {
   lines <- lines[!grepl("^\\s*[|]\\s*$", lines)]
   paste(lines, collapse = "\n")
 }
-knitr::knit_hooks$set(output = function(x, options) strip_progress_bars(x))
-knitr::knit_hooks$set(message = function(x, options) strip_progress_bars(x))
+# Capture knitr's DEFAULT output/message hooks first -- they're what wraps
+# chunk output in a fenced code block (```...```) so pandoc treats it as
+# literal text. Replacing the hook outright (instead of calling the default
+# after stripping) drops that fencing, so raw output text gets parsed as
+# markdown -- observed turning stray lines into spurious empty/garbled <h2>
+# headings throughout the rendered HTML (e.g. a data.frame's printed values,
+# or a Python traceback's own text). Wrap the default, don't replace it.
+default_output_hook <- knitr::knit_hooks$get("output")
+default_message_hook <- knitr::knit_hooks$get("message")
+knitr::knit_hooks$set(output = function(x, options) default_output_hook(strip_progress_bars(x), options))
+knitr::knit_hooks$set(message = function(x, options) default_message_hook(strip_progress_bars(x), options))
 ```
 
 # What this manual is

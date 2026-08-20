@@ -41,7 +41,6 @@ Also in this repo: a Python port of the core models ([`python/`](python/)), narr
 │                 see "Canonical repos" below)
 ├── Apps/         Standalone Shiny apps, run directly with shiny::runApp() — no course material needed
 │   ├── RTMs/         Model Explorer, PROSAIL-WithSatellite, How in R/Python tutorials, Reference
-│   │                 (same code as AEO-Course/Apps/RTMs)
 │   └── STAC/         real Sentinel-2 time series retrieval via STAC, interactive map
 ├── Tutorials/    Rmd/HTML/ipynb walkthroughs, verified block-by-block by execution
 ├── docs/         pkgdown reference manuals for both R packages + Sphinx docs for both Python packages (generated)
