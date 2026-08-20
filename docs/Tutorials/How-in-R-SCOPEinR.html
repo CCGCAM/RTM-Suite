@@ -1527,15 +1527,17 @@ the full leaf optics -&gt; soil -&gt; optical BRDF -&gt; energy balance
 Table.LUT &lt;- read.table(system.file(&quot;input&quot;, &quot;LUT_input.csv&quot;, package = &quot;SCOPEinR&quot;),
                          header = TRUE, sep = &quot;,&quot;)
 
-db.sim &lt;- SCOPEinR::get.SCOPE(
-  LUT           = Table.LUT[1, ],
-  options.SCOPE = table.with.opts,
-  optipar       = SCOPEinR::optipar2021.Pro.CX,
-  leaf.model    = &quot;fluspect-CX&quot;,
-  canopy.model  = &quot;fourSAIL&quot;,
-  get.outputs   = &quot;ALL&quot;,
-  get.plots     = FALSE
-)
+invisible(capture.output(
+  db.sim &lt;- SCOPEinR::get.SCOPE(
+    LUT           = Table.LUT[1, ],
+    options.SCOPE = table.with.opts,
+    optipar       = SCOPEinR::optipar2021.Pro.CX,
+    leaf.model    = &quot;fluspect-CX&quot;,
+    canopy.model  = &quot;fourSAIL&quot;,
+    get.outputs   = &quot;ALL&quot;,
+    get.plots     = FALSE
+  )
+))
 res &lt;- db.sim[[1]]  # get.SCOPE() always returns a list-of-results, even for one LUT row
 
 cat(&quot;Canopy layers:&quot;, res$data.canopy$nlayers, &quot;\n&quot;)</code></pre>
@@ -1685,7 +1687,7 @@ db.sim.many &lt;- get.SCOPE(
   canopy.model = &quot;fourSAIL&quot;, get.outputs = &quot;ALL&quot;, get.plots = FALSE
 )
 cat(&quot;Ran&quot;, N_SAMPLES, &quot;simulations in&quot;, round(as.numeric(Sys.time() - start_time), 1), &quot;s\n&quot;)</code></pre>
-<pre><code>## Ran 100 simulations in 1.5 s</code></pre>
+<pre><code>## Ran 100 simulations in 2.2 s</code></pre>
 <pre class="r"><code>Actot_vals &lt;- sapply(db.sim.many, function(r) r$data.fluxes$Actot)
 EoutF_vals &lt;- sapply(db.sim.many, function(r) r$data.rad$EoutF)
 
