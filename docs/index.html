@@ -158,7 +158,7 @@ footer { background: #08202e; color: #b9cbd6; padding: 34px 24px; font-size: 12.
       </div>
     </div>
     <div class="hero-figure">
-      <img src="../assets/compare_grid_canopy_x_leaf.png" alt="fourSAIL, foursail2 and INFORM canopy models compared across 5 leaf models">
+      <img src="assets/compare_grid_canopy_x_leaf.png" alt="fourSAIL, foursail2 and INFORM canopy models compared across 5 leaf models">
       <div class="hero-figure-caption">fourSAIL, foursail2 and INFORM canopy models compared across 5 leaf models</div>
     </div>
   </div>
@@ -433,7 +433,7 @@ sim &lt;- simulate_RTM(
 
 plot(sim$rsot, type = "l", xlab = "Wavelength", ylab = "Reflectance")</code></pre>
           <div class="code-figure">
-            <img src="../assets/examples/r_sim_foursail.png" alt="fourSAIL simulated canopy reflectance spectrum, PROSPECT-PRO leaf model">
+            <img src="assets/examples/r_sim_foursail.png" alt="fourSAIL simulated canopy reflectance spectrum, PROSPECT-PRO leaf model">
             <div class="code-figure-caption">Real output of the exact code above.</div>
           </div>
         </details>
@@ -460,7 +460,7 @@ for (i in seq_len(50)) {
   lines(400:2500, sim$rsot)
 }</code></pre>
           <div class="code-figure">
-            <img src="../assets/examples/r_50sims.png" alt="50 fourSAIL simulations from a random LUT, colored by LAI">
+            <img src="assets/examples/r_50sims.png" alt="50 fourSAIL simulations from a random LUT, colored by LAI">
             <div class="code-figure-caption">Real output: 50 simulations from a random LUT, colored by LAI (light = low, dark = high).</div>
           </div>
         </details>
@@ -489,7 +489,7 @@ for (cab in cab_values) {
   lines(400:2500, sim$rsot)
 }</code></pre>
           <div class="code-figure">
-            <img src="../assets/examples/r_sensitivity_cab.png" alt="Sensitivity of fourSAIL reflectance to chlorophyll content (Cab)">
+            <img src="assets/examples/r_sensitivity_cab.png" alt="Sensitivity of fourSAIL reflectance to chlorophyll content (Cab)">
             <div class="code-figure-caption">Real output: higher Cab lowers the visible-green reflectance; NIR/SWIR are unaffected, as expected.</div>
           </div>
         </details>
@@ -519,7 +519,7 @@ res &lt;- scope[[1]]
 plot(res$data.spectral$wlS, res$data.rad$refl, type = "l",
      xlab = "Wavelength (nm)", ylab = "Reflectance", xlim = c(400, 2400))</code></pre>
           <div class="code-figure">
-            <img src="../assets/examples/r_scope_refl.png" alt="SCOPE top-of-canopy reflectance spectrum">
+            <img src="assets/examples/r_scope_refl.png" alt="SCOPE top-of-canopy reflectance spectrum">
             <div class="code-figure-caption">Real output of the exact code above.</div>
           </div>
         </details>
@@ -559,7 +559,7 @@ rsoil = np.full(2101, 0.15)
 
 reflectance = inform(row, rsoil, leaf_model="PROSPECT-PRO")</code></pre>
           <div class="code-figure">
-            <img src="../assets/examples/py_sim_inform.png" alt="INFORM simulated forest-stand reflectance spectrum, PROSPECT-PRO leaf model">
+            <img src="assets/examples/py_sim_inform.png" alt="INFORM simulated forest-stand reflectance spectrum, PROSPECT-PRO leaf model">
             <div class="code-figure-caption">Real output of the exact code above.</div>
           </div>
         </details>
@@ -589,7 +589,7 @@ for _ in range(50):
     )
     refl = inform(row_i, rsoil, leaf_model="PROSPECT-PRO")</code></pre>
           <div class="code-figure">
-            <img src="../assets/examples/py_50sims.png" alt="50 INFORM simulations from a random LUT, colored by LAI">
+            <img src="assets/examples/py_50sims.png" alt="50 INFORM simulations from a random LUT, colored by LAI">
             <div class="code-figure-caption">Real output: 50 simulations from a random LUT, colored by LAI (dark = low, light = high).</div>
           </div>
         </details>
@@ -618,7 +618,7 @@ plt.ylabel("Reflectance")
 plt.legend()
 plt.show()</code></pre>
           <div class="code-figure">
-            <img src="../assets/examples/py_sensitivity_cab.png" alt="Sensitivity of INFORM reflectance to chlorophyll content (Cab)">
+            <img src="assets/examples/py_sensitivity_cab.png" alt="Sensitivity of INFORM reflectance to chlorophyll content (Cab)">
             <div class="code-figure-caption">Real output: same pattern as the R version — visible-green sensitivity, NIR/SWIR unaffected.</div>
           </div>
         </details>
@@ -671,7 +671,7 @@ for cab in np.linspace(10, 80, 20):
     refl_curves.append(result.rtmo.refl)      # top-of-canopy reflectance
     sif_values.append(result.rtmf.EoutF)      # sun-induced fluorescence (SIF)</code></pre>
           <div class="code-figure">
-            <img src="../assets/examples/py_scope_cab_sif.png" alt="20 SCOPE simulations: reflectance spectra and sun-induced fluorescence vs. chlorophyll content">
+            <img src="assets/examples/py_scope_cab_sif.png" alt="20 SCOPE simulations: reflectance spectra and sun-induced fluorescence vs. chlorophyll content">
             <div class="code-figure-caption">Real output of the exact code above: reflectance for all 20 runs (left), SIF response to Cab (right).</div>
           </div>
         </details>
