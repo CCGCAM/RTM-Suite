@@ -204,13 +204,13 @@ Van der Tol, C.V, Berry J. A., Campbell P.K.E., and Rascher U. Models of fluores
 
 ### License
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![RTM-Suite code: MIT](https://img.shields.io/badge/RTM--Suite%20code-MIT-yellow.svg){alt="RTM-Suite code: MIT"}](#0) [![Ported GPL models: GPL--3.0](https://img.shields.io/badge/Ported%20GPL%20models-GPL--3.0-blue.svg){alt="Ported GPL models: GPL--3.0"}](#0) [![Model licenses](https://img.shields.io/badge/Per--model%20licenses-THIRD__PARTY__LICENSES.md-informational.svg){alt="Model licenses"}](#0)
 
 **SCOPEinR** is a port of **SCOPE**, whose own reference implementation ([`Christiaanvandertol/SCOPE`](https://github.com/Christiaanvandertol/SCOPE)) is GPL-3.0-licensed. Since this package's entire purpose is porting SCOPE, `SCOPEinR` is distributed under **GPL-3.0** (`License: GPL-3` in `DESCRIPTION`), matching its Python port `scopeinpython`'s own license.
 
 Within that GPL-3.0 distribution, two kinds of code coexist:
 
 - **The core SCOPE physics port** (`RTMo`, `RTMf`, `RTMt.sb`, `RTMz`, `BSM`, `Biochemical_functions`, `ebal`, `fluspect_*_ForSCOPE`, ...) is a direct translation of SCOPE's own GPL-3.0 algorithm -- GPL-3.0, same as upstream.
-- **Original utilities Carlos Camino wrote on top of that port** -- LUT generation and batch/time-series execution (`getLUT.SCOPE`, `getLUT_time`, `getinputLUT`, `get.SCOPE.parallel`), output aggregation, CSV export and plotting (`get.SCOPE.outputs`, `get.SCOPE.ind`, `get.merge.SCOPE`, `get.outs.lut*`, `getCSV`), and the trait-inversion and LUT-matching workflows built around SCOPE's outputs -- are original, independent work and are **MIT** individually. Because GPL-3.0 requires the combined, distributed package to be GPL-3.0 as a whole, the package you install is still `License: GPL-3` end to end; the MIT notice above is about authorship/reuse of those specific original files on their own, not a separate installable subset.
+- **Original utilities developed in this package** -- LUT generation and batch/time-series execution (`getLUT.SCOPE`, `getLUT_time`, `getinputLUT`, `get.SCOPE.parallel`), output aggregation, CSV export and plotting (`get.SCOPE.outputs`, `get.SCOPE.ind`, `get.merge.SCOPE`, `get.outs.lut*`, `getCSV`), and the trait-inversion and LUT-matching workflows built around SCOPE's outputs -- are original, independent work and are **MIT** individually. Because GPL-3.0 requires the combined, distributed package to be GPL-3.0 as a whole, the package you install is still `License: GPL-3` end to end; the MIT notice above is about authorship/reuse of those specific original files on their own, not a separate installable subset.
 
 See [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) for the full source-code provenance and citation details. `SCOPEinR` depends on [`ToolsRTM`](https://gitlab.com/caminoccg/toolsrtm) for leaf-level optics -- see that package's own `THIRD_PARTY_LICENSES.md` for the licensing of those specific leaf models. Always cite the original SCOPE publication(s) when using this package in scientific work, in addition to citing RTM-Suite/SCOPEinR.

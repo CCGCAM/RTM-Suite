@@ -17,7 +17,7 @@ The suite builds on the **ToolsRTM** and **SCOPEinR** R packages and extends the
 ## Packages in this suite
 
 | Library | What it does | Depends on |
-|-----------------|---------------------------------------|-----------------|
+|----|----|----|
 | [**ToolsRTM**](ToolsRTM/) | Leaf-level optics (PROSPECT-D, PROSPECT-PRO, Liberty, Fluspect-B, Fluspect-B-Cx) and canopy-level optics (fourSAIL, foursail2, INFORM). Real soil via MARMIT. Trait inversion via 12 `caret` algorithms plus TensorFlow/Keras deep learning. Sensor convolution (Sentinel-2A/2B, PRISMA). | — |
 | [**SCOPEinR**](SCOPEinR/) | R port of **SCOPE 2.0** (Van der Tol & Yang et al.) — the full Soil-Canopy-Observation, Photochemistry and Energy-balance model: couples ToolsRTM's radiative transfer with leaf photosynthesis/biochemistry, canopy energy balance, and chlorophyll fluorescence. | ToolsRTM |
 | [**ToolsRTM.app**](ToolsRTM.app/) | `get.simulator()` and nine interactive Shiny apps (PROSAIL, PROSAIL-BRDF, MARMIT, SPART, SCOPE, LUTs, RTMs, Inversion, STAC) — every model above, point-and-click. Kept as a separate package so the core `ToolsRTM` install stays light for scripted/batch use. | ToolsRTM (+ SCOPEinR for the SCOPE/SPART apps) |

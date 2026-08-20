@@ -91,8 +91,13 @@ This repo is deliberately just the installable package -- everything else (manua
 
 ## License
 
-[](#0){style="background-color: rgb(40, 42, 54); font-family: \"Segoe UI\", sans-serif; font-size: 11pt;"}
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 `toolsrtm` is a Python port of several radiative transfer models bundled behind one common interface, and not all of them carry the same license. Three of the bundled models -- **Fluspect-B**, **fourSAIL2**, and **SPART** -- are ports of GPL-3.0-licensed original models, and GPL-3.0 requires any combined work incorporating GPL-3.0 code to be distributed as GPL-3.0 as a whole. `toolsrtm` is therefore distributed under **GPL-3.0-only** (see [`LICENSE`](LICENSE)), matching its R sibling package `ToolsRTM`'s own `License: GPL-3` field.
 
-See [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) for the license and source-code provenance of every individual model this package implements (some are independently MIT-licensable on their own, e.g. PROSPECT-D/-PRO; that does not change the combined package's GPL-3.0 status). Always cite the original publication(s) of each model you use, in addition to citing RTM-Suite/ToolsRTM.
+Within that GPL-3.0 distribution, two kinds of code coexist:
+
+- **The ported radiative transfer models themselves** (`leaf`, `liberty`, `fluspect`, `canopy`, `inform`, listed individually in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)) -- GPL-3.0 for the three GPL-derived ports above, and independently MIT-licensable for the rest (e.g. PROSPECT-D/-PRO in `leaf`).
+- **Original utilities Carlos Camino wrote on top of those models** -- sensor convolution (`srf`, `smac`), spectral indices (`indices`), satellite/STAC retrieval (`satellite`), and the trait-inversion tooling (`inversion`, `deep_learning`) -- are original, independent work and are **MIT** individually. Because GPL-3.0 requires the combined, distributed package to be GPL-3.0 as a whole, the package you `pip install` is still GPL-3.0-only end to end; the MIT notice above is about authorship/reuse of those specific original modules on their own, not a separate installable subset.
+
+See [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) for the license and source-code provenance of every individual model this package implements. Always cite the original publication(s) of each model you use, in addition to citing RTM-Suite/ToolsRTM.
