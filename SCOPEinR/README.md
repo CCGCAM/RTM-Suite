@@ -208,4 +208,9 @@ Van der Tol, C.V, Berry J. A., Campbell P.K.E., and Rascher U. Models of fluores
 
 **SCOPEinR** is a port of **SCOPE**, whose own reference implementation ([`Christiaanvandertol/SCOPE`](https://github.com/Christiaanvandertol/SCOPE)) is GPL-3.0-licensed. Since this package's entire purpose is porting SCOPE, `SCOPEinR` is distributed under **GPL-3.0** (`License: GPL-3` in `DESCRIPTION`), matching its Python port `scopeinpython`'s own license.
 
+Within that GPL-3.0 distribution, two kinds of code coexist:
+
+- **The core SCOPE physics port** (`RTMo`, `RTMf`, `RTMt.sb`, `RTMz`, `BSM`, `Biochemical_functions`, `ebal`, `fluspect_*_ForSCOPE`, ...) is a direct translation of SCOPE's own GPL-3.0 algorithm -- GPL-3.0, same as upstream.
+- **Original utilities Carlos Camino wrote on top of that port** -- LUT generation and batch/time-series execution (`getLUT.SCOPE`, `getLUT_time`, `getinputLUT`, `get.SCOPE.parallel`), output aggregation, CSV export and plotting (`get.SCOPE.outputs`, `get.SCOPE.ind`, `get.merge.SCOPE`, `get.outs.lut*`, `getCSV`), and the trait-inversion and LUT-matching workflows built around SCOPE's outputs -- are original, independent work and are **MIT** individually. Because GPL-3.0 requires the combined, distributed package to be GPL-3.0 as a whole, the package you install is still `License: GPL-3` end to end; the MIT notice above is about authorship/reuse of those specific original files on their own, not a separate installable subset.
+
 See [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) for the full source-code provenance and citation details. `SCOPEinR` depends on [`ToolsRTM`](https://gitlab.com/caminoccg/toolsrtm) for leaf-level optics -- see that package's own `THIRD_PARTY_LICENSES.md` for the licensing of those specific leaf models. Always cite the original SCOPE publication(s) when using this package in scientific work, in addition to citing RTM-Suite/SCOPEinR.
