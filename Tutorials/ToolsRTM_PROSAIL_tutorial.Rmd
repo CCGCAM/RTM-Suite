@@ -359,8 +359,4 @@ meaningfully beat PLSR/RF).
 
 Every code chunk above (except the deep-learning one, which needs an
 external Python/TensorFlow setup not available in this rendering
-environment) executed for real while writing this manual — including
-catching and fixing three real bugs in the package along the way
-(`get.spectra.convolved()` crashing when not plotting, `detectCores()`
-going negative on small machines, missing `randomForest`/`gbm`
-dependencies).
+environment) executed for real while writing this manual.
