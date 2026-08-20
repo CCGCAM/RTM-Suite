@@ -487,9 +487,15 @@ def run_rtmo(
     piLo_ = piLoc_ + piLos_
     Lo_ = piLo_ / np.pi
 
-    rso = piLou_ / Esun_
-    rdo = piLod_ / Esky_
-    refl = piLo_ / (Esky_ + Esun_)
+    # Esun_/Esky_ are genuinely near-zero at a handful of water-vapor/O2
+    # absorption wavelengths -- rso/rdo/refl are expected to come back
+    # NaN/Inf there (refl is masked back to a finite fallback via rso just
+    # below); suppress the resulting divide warning rather than let NumPy
+    # print it (with this file's own absolute path) on every call.
+    with np.errstate(divide="ignore", invalid="ignore"):
+        rso = piLou_ / Esun_
+        rdo = piLod_ / Esky_
+        refl = piLo_ / (Esky_ + Esun_)
     refl = np.where(Esky_ < 1e-4, rso, refl)
     idx = Esky_ < 2e-4 * np.max(Esky_)
     refl = np.where(idx, rso, refl)
