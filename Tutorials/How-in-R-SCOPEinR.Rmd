@@ -189,23 +189,25 @@ Sentinel-2A's bands, then train on 70% of the rows and evaluate on the
 library(randomForest)
 
 band_refl <- t(sapply(db.sim.many, function(r) {
-  df_i <- data.frame(wave = wl_optical, rfl = r$data.rad$reflapp[1:n])
+  rfl_i <- r$data.rad$reflapp[1:n]
+  # reflapp is a radiance ratio (Lo_/incident irradiance), and incident
+  # irradiance is genuinely near-zero at a handful of water-vapor/O2
+  # absorption wavelengths (~849-850, ~1355-1420, ~1800-1950nm) --
+  # numerically unstable there in EVERY simulation, including SCOPEinR's
+  # own canonical example row, not just unusual random draws. Real
+  # sensors avoid placing bands on these features for the same reason;
+  # linearly interpolate over just those narrow gaps before convolving
+  # rather than let a handful of bad wavelengths poison an otherwise
+  # good spectrum.
+  bad <- !is.finite(rfl_i)
+  if (any(bad)) rfl_i[bad] <- approx(wl_optical[!bad], rfl_i[!bad], xout = wl_optical[bad])$y
+  df_i <- data.frame(wave = wl_optical, rfl = rfl_i)
   get.spectral.convolution.srf(df_i, ToolsRTM::srf.sentinel2a)$RFL
 }))
 colnames(band_refl) <- paste0("B", seq_len(ncol(band_refl)))
+ml_data <- data.frame(band_refl, LAI = Table.LUT.many$LAI)
 
-# A handful of the 100 full-range LUT draws can land on trait/geometry
-# combinations SCOPE's optics can't resolve cleanly (e.g. LAI near its
-# floor of 0.1 combined with an extreme leaf-angle draw), coming back as
-# NaN reflectance -- drop those rows rather than let randomForest() choke
-# on them (same pattern as How-in-R.Rmd's step 3).
-ok <- apply(band_refl, 1, function(r) all(is.finite(r)))
-band_refl <- band_refl[ok, , drop = FALSE]
-ml_data <- data.frame(band_refl, LAI = Table.LUT.many$LAI[ok])
-n_ok <- nrow(ml_data)
-cat("Using", n_ok, "of", N_SAMPLES, "simulations (rest dropped: non-finite reflectance)\n")
-
-train_idx <- sample(seq_len(n_ok), size = round(0.7 * n_ok))
+train_idx <- sample(seq_len(N_SAMPLES), size = round(0.7 * N_SAMPLES))
 rf <- randomForest(LAI ~ ., data = ml_data[train_idx, ], ntree = 300)
 pred <- predict(rf, ml_data[-train_idx, ])
 obs  <- ml_data$LAI[-train_idx]
