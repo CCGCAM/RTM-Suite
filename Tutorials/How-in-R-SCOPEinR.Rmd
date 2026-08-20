@@ -129,21 +129,20 @@ components (Section 2's `refl` line among them), the fluorescence
 spectrum, the converged sunlit/shaded canopy and soil temperatures, and
 where the absorbed energy actually goes.
 
-## 4. Many simulations (a small LUT)
+## 4. Many simulations (100-row LUT)
 
 `getLUT.SCOPE()` builds a LUT the same way `ToolsRTM::getLUT()` does for
 PROSAIL -- sample every parameter's own default range from SCOPEinR's
 bundled `inputs_SCOPE.csv`. `get.SCOPE()` itself is much more expensive per
 call than `foursail()` (dominated by the energy-balance nonlinear solve,
-~0.1-0.3s per call vs ~2ms), so this tutorial uses a small sample (10, not
-SCOPE's own course-pipeline default of 100) -- see
-`Scripts/R/ForSCOPE/1-getSCOPE.R` for the full N=100 version with
-diagnostic plots and saved outputs.
+~0.1-0.3s per call vs ~2ms, so 100 rows takes on the order of a minute) --
+see `Scripts/R/ForSCOPE/1-getSCOPE.R` for the same idea at production scale
+with diagnostic plots and saved outputs.
 
 ```{r step4}
 inputLUT <- read.table(system.file("input", "inputs_SCOPE.csv", package = "SCOPEinR"),
                         header = TRUE, sep = ",")
-N_SAMPLES <- 10
+N_SAMPLES <- 100
 Table.LUT.many <- getLUT.SCOPE(inputLUT = inputLUT, nLUT = N_SAMPLES)
 
 start_time <- Sys.time()
@@ -168,24 +167,68 @@ par(op)
 ```
 
 `Vcmax25` (maximum carboxylation capacity) is the direct physiological
-driver of `Actot` in SCOPE's Farquhar-type photosynthesis model, so even
-across just 10 randomly-drawn LUT rows the relationship is visibly
-tighter than temperature-vs-pigment would be. The right panel shows the
-other half of what makes SCOPEinR more than plain PROSAIL: fluorescence
-(`EoutF`) is sensitive to leaf pigments, not just to LAI/structure --
-substitute `Table.LUT.many$Anth` or `Table.LUT.many$Car` for `Cab` above
-to see the same fluorescence output against anthocyanin or carotenoid
-content instead.
+driver of `Actot` in SCOPE's Farquhar-type photosynthesis model, so across
+100 randomly-drawn LUT rows the relationship comes through clearly. The
+right panel shows the other half of what makes SCOPEinR more than plain
+PROSAIL: fluorescence (`EoutF`) is sensitive to leaf pigments, not just to
+LAI/structure -- substitute `Table.LUT.many$Anth` or `Table.LUT.many$Car`
+for `Cab` above to see the same fluorescence output against anthocyanin
+or carotenoid content instead.
+
+## 5. Trait inversion with machine learning
+
+The reverse problem: given ONLY the sensor-band reflectance a satellite
+would actually measure, retrieve a trait (LAI here -- SCOPE's classic
+structural retrieval target) without knowing the ground truth. Convolve
+each of the 100 simulations' apparent reflectance (`reflapp` --
+SCOPE's radiance-derived, sensor-observed spectrum, Section 3) onto
+Sentinel-2A's bands, then train on 70% of the rows and evaluate on the
+30% the model never saw:
+
+```{r step5}
+library(randomForest)
+
+band_refl <- t(sapply(db.sim.many, function(r) {
+  df_i <- data.frame(wave = wl_optical, rfl = r$data.rad$reflapp[1:n])
+  get.spectral.convolution.srf(df_i, ToolsRTM::srf.sentinel2a)$RFL
+}))
+colnames(band_refl) <- paste0("B", seq_len(ncol(band_refl)))
+
+# A handful of the 100 full-range LUT draws can land on trait/geometry
+# combinations SCOPE's optics can't resolve cleanly (e.g. LAI near its
+# floor of 0.1 combined with an extreme leaf-angle draw), coming back as
+# NaN reflectance -- drop those rows rather than let randomForest() choke
+# on them (same pattern as How-in-R.Rmd's step 3).
+ok <- apply(band_refl, 1, function(r) all(is.finite(r)))
+band_refl <- band_refl[ok, , drop = FALSE]
+ml_data <- data.frame(band_refl, LAI = Table.LUT.many$LAI[ok])
+n_ok <- nrow(ml_data)
+cat("Using", n_ok, "of", N_SAMPLES, "simulations (rest dropped: non-finite reflectance)\n")
+
+train_idx <- sample(seq_len(n_ok), size = round(0.7 * n_ok))
+rf <- randomForest(LAI ~ ., data = ml_data[train_idx, ], ntree = 300)
+pred <- predict(rf, ml_data[-train_idx, ])
+obs  <- ml_data$LAI[-train_idx]
+cat("R2:", cor(pred, obs)^2, " RMSE:", sqrt(mean((pred - obs)^2)), "\n")
+
+plot(obs, pred, xlab = "Observed LAI", ylab = "Predicted LAI", pch = 19, col = "#2166AC",
+     main = "LAI retrieved from Sentinel-2A bands (SCOPE reflapp)")
+abline(0, 1, col = "grey40", lty = 2)
+```
+
+Same interface as `How-in-R.Rmd`'s own step 6 (RandomForest on convolved
+sensor bands) -- what changes here is the input spectrum: `reflapp` comes
+out of the full energy-balance/fluorescence-coupled SCOPE run instead of
+plain PROSAIL, so this trains on what a sensor would see over a canopy
+whose leaf/soil temperatures were actually solved for, not assumed.
 
 ## What's not covered here (and why)
 
-- **Trait inversion (ML/DL) from a simulated LUT** -- identical technique to
-  `How-in-R.Rmd`'s own step 6 (RandomForest on convolved sensor bands), just
-  applied to `get.SCOPE()`'s outputs instead of `foursail()`'s -- not
-  duplicated here to avoid repeating the same code twice.
-- **Batch LUT runs at course-pipeline scale (N=100+)** -- see
-  `Scripts/R/ForSCOPE/1-getSCOPE.R`/`2-Explore_outputsSCOPE.R` for the full
-  version with diagnostic figures and saved `.rds` outputs.
+- **Batch LUT runs at course-pipeline scale (N=1000+, chunked/parallel)** --
+  see `Scripts/R/ForSCOPE/1-getSCOPE.R`/`2-Explore_outputsSCOPE.R` for the
+  full version with diagnostic figures and saved `.rds` outputs, and
+  `SCOPEinR_tutorial.Rmd` (Section 7) for `get.SCOPE.parallel()` and
+  chunked production runs.
 - **Convergence diagnostics deep dive** -- `res$iter.ebal` already exposes
   `counter`/`maxEBercu`/`maxEBerch`/`maxEBers`; see
   `Scripts/R/ForSCOPE/6-validate_ebal_convergence.R` for a dedicated
