@@ -8,7 +8,6 @@ output:
     toc_depth: 3
     theme: cosmo
     highlight: tango
-    number_sections: true
 date: "`r Sys.Date()`"
 ---
 

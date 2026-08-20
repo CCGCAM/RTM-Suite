@@ -239,23 +239,25 @@ wave_ =c(wave.bands)
 
 jpeg(file.path(out_root, "Sensor/1-Check_RFL_Sensor.jpg"), units="in", width=5, height=5, res=300)
 
-plot_spectra(data.spectra, wave_, col='black',lwd=2,xlim=c(400,1000))
+matplot(wave_, t(data.spectra), type = "l", lty = 1, xlab = "wave (nm)", ylab = "Reflectance",
+        col='black', lwd=2, xlim=c(400,1000))
 rect(470, 0.6, 840, 0, col = "grey", density = 60)
 dev.off()
 
-#plot_spectra(data.spectra[, keep.data, drop = FALSE], wave_[keep.data], col='black',lwd=2,xlim=c(440,850))
-keep.data <- mask_wavelengths(wave_, c(300,470,841,2600))
+# keep only the 470-841nm VNIR range (excludes [300,470] and [841,2600])
+keep.data <- !(wave_ >= 300 & wave_ <= 470) & !(wave_ >= 841 & wave_ <= 2600)
 ## predefined filter functions
-## Savitzky-Golay
-data.spectra.sgolay <- sgolay_smooth(data.spectra, n = 25)
+## Savitzky-Golay (row-wise, via signal::sgolayfilt directly)
+data.spectra.sgolay <- t(apply(as.matrix(data.spectra), 1, signal::sgolayfilt, p = 3, n = 25))
 # same keep.data mask applies -- sgolay smoothing doesn't change the wavelength grid
 
 jpeg(file.path(out_root, "Sensor/1-Check_RFL_Sensor_withSgolay.jpg"), units="in", width=5, height=5, res=300)
-plot_spectra(data.spectra.sgolay[, keep.data, drop = FALSE], wave_[keep.data], col='black',lwd=2,xlim=c(440,850))
+matplot(wave_[keep.data], t(data.spectra.sgolay[, keep.data, drop = FALSE]), type = "l", lty = 1,
+        xlab = "wave (nm)", ylab = "Reflectance", col='black', lwd=2, xlim=c(440,850))
 dev.off()
 ##############################################################################################################################
 # 6.   Resample simulatons to specfic sensors  ----
-############################################################################################################################### resample_spectra() is defined near the top of this script
+############################################################################################################################### uses ToolsRTM::get.spectral.convolution.gaussian()'s bulk (matrix) mode
 
 ##### VNIR
 center <- wave_[keep.data] #wave.bands[5:190] ## 490-815 nm
@@ -263,8 +265,10 @@ fwhm   <- mean(diff(sort(unique(center))))  # approximate FWHM as mean band spac
 wl     <- seq(468,842,2)
 
 ## Resample both the simulated canopy spectra and the field sensor spectra onto the same wl grid, so they're directly comparable
-Spec.simula_resample.vnir <- resample_spectra(sim.canopy[, keep.simula, drop = FALSE], wave[keep.simula], wl, fwhm)
-Spec.sensor.vnir <- resample_spectra(data.spectra.sgolay[, keep.data, drop = FALSE], center, wl, fwhm)
+Spec.simula_resample.vnir <- get.spectral.convolution.gaussian(
+  centers = wl, fwhm = fwhm, rfl = sim.canopy[, keep.simula, drop = FALSE], wave = wave[keep.simula])
+Spec.sensor.vnir <- get.spectral.convolution.gaussian(
+  centers = wl, fwhm = fwhm, rfl = data.spectra.sgolay[, keep.data, drop = FALSE], wave = center)
 
 
 ##############################################################################################################################
@@ -284,9 +288,9 @@ plot(NA,NA, lwd=0,lty=2,type='l',col='forestgreen',ylim=c(0,0.6),xlim=c(450,850)
 rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = "gray")
 par(new=T)
 
-plot_spectra(Spec.simula_resample.vnir, wl, lwd=1,lty=2,col='black',ylim=c(0,0.6),xlim=c(450,850),xlab=axis_x,ylab=axis_y)
+matplot(wl, t(Spec.simula_resample.vnir), type="l", lwd=1,lty=2,col='black',ylim=c(0,0.6),xlim=c(450,850),xlab=axis_x,ylab=axis_y)
 par(new=T)
-plot_spectra(Spec.sensor.vnir, wl, lwd=1,lty=2,col='forestgreen',ylim=c(0,0.6),xlim=c(450,850),xlab=axis_x,ylab=axis_y)
+matplot(wl, t(Spec.sensor.vnir), type="l", lwd=1,lty=2,col='forestgreen',ylim=c(0,0.6),xlim=c(450,850),xlab=axis_x,ylab=axis_y)
 
 legend("topleft", legend = c(expression(bold('PROSAIL')),expression(bold('Obser.'))),
        fill=c('black','forestgreen'),cex=0.8)
