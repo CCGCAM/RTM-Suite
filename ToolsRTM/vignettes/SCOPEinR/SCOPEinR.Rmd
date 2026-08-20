@@ -46,7 +46,7 @@ This tutorial provides an introduction to the **SCOPEinR** package, developed us
 
 **Fig. 1** Simulations generated using the SCOPE model via the **SCOPEinR** package
 
-The **SCOPEin** R package is designed to execute the Soil Canopy Observation, Photochemistry, and Energy fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB by Van der Tol et al. (2009) and extended by Yang et al. (2020). The **SCOPEin**R package enables seamless integration of the SCOPE model within the R environment, offering users the flexibility to harness its capabilities for in-depth analysis.
+The **SCOPEinR** package is designed to execute the Soil Canopy Observation, Photochemistry, and Energy fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB by Van der Tol et al. (2009) and extended by Yang et al. (2020). **SCOPEinR** enables seamless integration of the SCOPE model within the R environment, offering users the flexibility to harness its capabilities for in-depth analysis.
 
 **ToolsRTM** and **SCOPEinR** are both part of [**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/), which also ships a point-and-click Shiny app (no code required) covering the same models -- see [`Apps/RTMs`](https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs), runnable locally via `shiny::runApp("Apps/RTMs")`. Both R packages are distributed under GPL-3.0 (see each package's own `LICENSE`/`THIRD_PARTY_LICENSES.md` for the per-model breakdown).
 
