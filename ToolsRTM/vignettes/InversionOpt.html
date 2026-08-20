@@ -12,7 +12,7 @@
 
 
 
-<title>Introduction to InversionOpt</title>
+<title>Trait inversion: merit-function matching, ML, and deep learning</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -48,6 +48,7 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -336,26 +337,254 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Introduction to InversionOpt</h1>
+<h1 class="title toc-ignore">Trait inversion: merit-function matching,
+ML, and deep learning</h1>
 
 
 
-<div id="working-with-inversionopt" class="section level2">
-<h2>Working with InversionOpt</h2>
-<p>** InversionOpt ** </br></p>
-<p>Is a LUT-based method for estimating the best parameters from PROSAIL
-model using three methods:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">##method is the method (opt =&#39;merit-RMSE&#39;,&#39;merit-DWT&#39;,merit-1stD&#39;)</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#inv.RMSE&lt;-InversionOpt_nOpt(rfl.sensor=rfl.sensor, #observado</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a> <span class="co">#                           rfl.prosail=rfl.prosail, #500</span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="co">#                          LUT=LUT,</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>   <span class="co">#                         wave=wave.vnir.swir, </span></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="co">#                        n=n_cases, #500</span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>     <span class="co">#                       method=&#39;merit-RMSE&#39;, </span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>        <span class="co">#                    nOpt=100)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
+<div id="the-problem-given-a-sensor-spectrum-retrieve-a-trait" class="section level2">
+<h2>The problem: given a sensor spectrum, retrieve a trait</h2>
+<p>Every method on this page solves the same task – given ONLY the
+sensor-band reflectance a satellite or field spectrometer would measure,
+retrieve a biophysical trait (chlorophyll content, <code>Cab</code>,
+here) without knowing the ground truth – but they get there in
+fundamentally different ways:</p>
+<ul>
+<li><strong><code>get.inversionOpt()</code></strong> (this page’s main
+subject): no model is fit at all. It ranks every spectrum in a reference
+LUT by how closely it matches each observed spectrum under a chosen
+merit function, then averages the trait values of the <code>nOpt</code>
+best matches. Pure library search.</li>
+<li><strong><code>get.inversion()</code></strong>: fits a statistical/ML
+model (Random Forest, PLSR, SVM, … 12 algorithms via <code>caret</code>)
+on a training LUT, then predicts on new spectra.</li>
+<li><strong><code>getMLmodel()</code></strong>: fits a deep-learning
+model (dense or 1D-CNN, via TensorFlow/Keras) on the same kind of
+data.</li>
+</ul>
+<p>To compare them fairly, all three are evaluated on the exact same
+held-out test spectra below.</p>
+</div>
+<div id="simulate-a-lut-and-convolve-to-sentinel-2a" class="section level2">
+<h2>1. Simulate a LUT and convolve to Sentinel-2A</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">150</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>inputs <span class="ot">&lt;-</span> ToolsRTM<span class="sc">::</span>inputsPROSAIL</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>LUT <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> inputs, <span class="at">nLUT =</span> n_samples, <span class="at">setseed =</span> <span class="dv">1</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>wl <span class="ot">&lt;-</span> <span class="dv">400</span><span class="sc">:</span><span class="dv">2500</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>rsoil <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.15</span>, <span class="fu">length</span>(wl))</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>refl <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(n_samples), <span class="cf">function</span>(i) {</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  sim <span class="ot">&lt;-</span> <span class="fu">simulate_RTM</span>(<span class="at">inputLUT =</span> LUT[i, ], <span class="at">rsoil =</span> rsoil,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>                       <span class="at">leaf.model =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>, <span class="at">canopy.model =</span> <span class="st">&quot;fourSAIL&quot;</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  sim<span class="sc">$</span>rsot</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>}))</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>refl_X <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(refl)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="fu">colnames</span>(refl_X) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, wl)</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>refl_X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">id =</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(refl_X)), refl_X)</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>se2a <span class="ot">&lt;-</span> <span class="fu">get.spectra.convolved</span>(<span class="at">rfl =</span> refl_X, <span class="at">sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>, <span class="at">plot.spectra =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Spectral resampling function to SENTINEL2A is being processed ...&quot;</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   8%  |                                                                              |===========                                                           |  15%  |                                                                              |================                                                      |  23%  |                                                                              |======================                                                |  31%  |                                                                              |===========================                                           |  38%  |                                                                              |================================                                      |  46%  |                                                                              |======================================                                |  54%  |                                                                              |===========================================                           |  62%  |                                                                              |================================================                      |  69%  |                                                                              |======================================================                |  77%  |                                                                              |===========================================================           |  85%  |                                                                              |=================================================================     |  92%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>wl_bands <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">names</span>(se2a)[<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>band_names <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;B&quot;</span>, <span class="fu">seq_along</span>(wl_bands))</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="fu">names</span>(se2a) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>, band_names)</span></code></pre></div>
+<p>150 simulated spectra, convolved down to Sentinel-2A’s 13 real bands
+– this is what all three inversion methods below actually see, not the
+native 1nm spectrum.</p>
+</div>
+<div id="a-traintest-split-shared-by-every-method" class="section level2">
+<h2>2. A train/test split, shared by every method</h2>
+<p>The same 70/30 split feeds <code>get.inversionOpt()</code> (as its
+reference LUT vs. its “observed” test spectra),
+<code>get.inversion()</code> (as training data vs. prediction targets),
+and <code>getMLmodel()</code> – so the comparison at the end is
+apples-to-apples.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n_samples), <span class="at">size =</span> <span class="fu">round</span>(<span class="fl">0.7</span> <span class="sc">*</span> n_samples))</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>test_idx  <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n_samples), train_idx)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>LUT_train <span class="ot">&lt;-</span> LUT[train_idx, ]</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>LUT_test  <span class="ot">&lt;-</span> LUT[test_idx, ]</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>se2a_mat  <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(se2a[, band_names])</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>se2a_train_mat <span class="ot">&lt;-</span> se2a_mat[train_idx, ]</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>se2a_test_mat  <span class="ot">&lt;-</span> se2a_mat[test_idx, ]</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>train_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(LUT_train, se2a[train_idx, band_names])</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>test_df  <span class="ot">&lt;-</span> <span class="fu">cbind</span>(LUT_test,  se2a[test_idx,  band_names])</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>r2_f   <span class="ot">&lt;-</span> <span class="cf">function</span>(obs, pred) <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((obs <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((obs <span class="sc">-</span> <span class="fu">mean</span>(obs))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>rmse_f <span class="ot">&lt;-</span> <span class="cf">function</span>(obs, pred) <span class="fu">sqrt</span>(<span class="fu">mean</span>((obs <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Train:&quot;</span>, <span class="fu">length</span>(train_idx), <span class="st">&quot;spectra. Test (held out):&quot;</span>, <span class="fu">length</span>(test_idx), <span class="st">&quot;spectra.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; Train: 105 spectra. Test (held out): 45 spectra.</span></span></code></pre></div>
+</div>
+<div id="get.inversionopt-lut-merit-function-matching" class="section level2">
+<h2>3. <code>get.inversionOpt()</code>: LUT merit-function matching</h2>
+<p><code>method</code> picks how “closeness” between two spectra is
+measured. <code>nOpt</code> controls how many of the closest training
+spectra get averaged together for the final trait estimate
+(<code>nOpt = 5</code> below – a compromise between a single nearest
+neighbour, which is noisy, and averaging too many, which smooths out
+real trait variation):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>opt_rmse <span class="ot">&lt;-</span> <span class="fu">get.inversionOpt</span>(<span class="at">rfl.sensor =</span> se2a_test_mat, <span class="at">rfl.rtm =</span> se2a_train_mat,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                              <span class="at">LUT =</span> LUT_train, <span class="at">wave =</span> wl_bands, <span class="at">method =</span> <span class="st">&quot;merit-RMSE&quot;</span>, <span class="at">nOpt =</span> <span class="dv">5</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>opt_fge  <span class="ot">&lt;-</span> <span class="fu">get.inversionOpt</span>(<span class="at">rfl.sensor =</span> se2a_test_mat, <span class="at">rfl.rtm =</span> se2a_train_mat,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                              <span class="at">LUT =</span> LUT_train, <span class="at">wave =</span> wl_bands, <span class="at">method =</span> <span class="st">&quot;merit-FGE&quot;</span>, <span class="at">nOpt =</span> <span class="dv">5</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>opt_dwt  <span class="ot">&lt;-</span> <span class="fu">get.inversionOpt</span>(<span class="at">rfl.sensor =</span> se2a_test_mat, <span class="at">rfl.rtm =</span> se2a_train_mat,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>                              <span class="at">LUT =</span> LUT_train, <span class="at">wave =</span> wl_bands, <span class="at">method =</span> <span class="st">&quot;merit-DWT&quot;</span>, <span class="at">nOpt =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p>Each call returns a 2-element list: <code>[[1]]</code>
+(<code>rfl.b</code>) is the matched reflectance itself,
+<code>[[2]]</code> (<code>LUT.best</code>) is the corresponding trait
+table – including the merit-function’s own error value
+(<code>merit-RMSE</code>, <code>merit-FGE</code>, …) and the
+<code>Cab</code> estimate we’re evaluating below:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>opt_metrics <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;merit-RMSE&quot;</span>, <span class="st">&quot;merit-FGE&quot;</span>, <span class="st">&quot;merit-DWT&quot;</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">R2   =</span> <span class="fu">c</span>(<span class="fu">r2_f</span>(LUT_test<span class="sc">$</span>Cab, opt_rmse[[<span class="dv">2</span>]]<span class="sc">$</span>Cab), <span class="fu">r2_f</span>(LUT_test<span class="sc">$</span>Cab, opt_fge[[<span class="dv">2</span>]]<span class="sc">$</span>Cab), <span class="fu">r2_f</span>(LUT_test<span class="sc">$</span>Cab, opt_dwt[[<span class="dv">2</span>]]<span class="sc">$</span>Cab)),</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">RMSE =</span> <span class="fu">c</span>(<span class="fu">rmse_f</span>(LUT_test<span class="sc">$</span>Cab, opt_rmse[[<span class="dv">2</span>]]<span class="sc">$</span>Cab), <span class="fu">rmse_f</span>(LUT_test<span class="sc">$</span>Cab, opt_fge[[<span class="dv">2</span>]]<span class="sc">$</span>Cab), <span class="fu">rmse_f</span>(LUT_test<span class="sc">$</span>Cab, opt_dwt[[<span class="dv">2</span>]]<span class="sc">$</span>Cab))</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(opt_metrics, <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">method</th>
+<th align="right">R2</th>
+<th align="right">RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">merit-RMSE</td>
+<td align="right">0.287</td>
+<td align="right">14.472</td>
+</tr>
+<tr class="even">
+<td align="left">merit-FGE</td>
+<td align="right">0.590</td>
+<td align="right">10.977</td>
+</tr>
+<tr class="odd">
+<td align="left">merit-DWT</td>
+<td align="right">0.251</td>
+<td align="right">14.832</td>
+</tr>
+</tbody>
+</table>
+<p><code>merit-RMSE</code>/<code>merit-FGE</code> compare raw band
+reflectance; <code>merit-DWT</code> compares each spectrum’s discrete
+wavelet transform coefficients instead (sensitive to the overall shape
+of the spectrum rather than each band’s exact value – can be more robust
+to band-to-band noise). <code>merit-NRMSE</code>,
+<code>merit-MAE</code>, <code>merit-NMB</code> and
+<code>merit-1stD</code> (first-derivative matching, more sensitive to
+absorption-feature position/shape than absolute reflectance) are the
+remaining built-in options; <code>custom_stat</code> accepts your own
+<code>function(sim, obs)</code> returning a single error value in place
+of any of them.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot</span>(LUT_test<span class="sc">$</span>Cab, opt_rmse[[<span class="dv">2</span>]]<span class="sc">$</span>Cab, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#2166AC&quot;</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Observed Cab&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Predicted Cab (merit-RMSE, nOpt=5)&quot;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;LUT merit-function matching&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;grey40&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="get.inversion-machine-learning-random-forest" class="section level2">
+<h2>4. <code>get.inversion()</code>: machine learning (Random
+Forest)</h2>
+<p>Same train/test split, but now a model is actually fit on
+<code>train_df</code> first, then applied to <code>test_df</code> – no
+per-observation LUT search at prediction time:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>ml_res <span class="ot">&lt;-</span> <span class="fu">get.inversion</span>(<span class="at">data =</span> train_df, <span class="at">depVar =</span> <span class="st">&quot;Cab&quot;</span>, <span class="at">inputs =</span> band_names,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                         <span class="at">algorithm =</span> <span class="st">&quot;RF&quot;</span>, <span class="at">n.samples =</span> <span class="fu">nrow</span>(train_df), <span class="at">seed =</span> <span class="dv">42</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>pred_ml_test <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(ml_res<span class="sc">$</span>model, <span class="at">newdata =</span> test_df[, <span class="fu">c</span>(<span class="st">&quot;Cab&quot;</span>, band_names)]))</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;ML (RF)  R2:&quot;</span>, <span class="fu">round</span>(<span class="fu">r2_f</span>(LUT_test<span class="sc">$</span>Cab, pred_ml_test), <span class="dv">3</span>),</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="st">&quot; RMSE:&quot;</span>, <span class="fu">round</span>(<span class="fu">rmse_f</span>(LUT_test<span class="sc">$</span>Cab, pred_ml_test), <span class="dv">3</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; ML (RF)  R2: 0.715  RMSE: 9.145</span></span></code></pre></div>
+<p><code>algorithm = &quot;RF&quot;</code> can be swapped for any of
+<code>get.inversion()</code>’s 12 supported values (<code>&quot;PLSR&quot;</code>,
+<code>&quot;SVM&quot;</code>, <code>&quot;GB&quot;</code>, <code>&quot;NN&quot;</code>,
+<code>&quot;Bayesian&quot;</code>, <code>&quot;AdaBag&quot;</code>, <code>&quot;BRNN&quot;</code>,
+<code>&quot;xGB&quot;</code>, <code>&quot;RVM&quot;</code>, <code>&quot;qLASSO&quot;</code>,
+<code>&quot;Ensemble&quot;</code>) – the rest of the call is identical.</p>
+</div>
+<div id="getmlmodel-deep-learning-tensorflowkeras" class="section level2">
+<h2>5. <code>getMLmodel()</code>: deep learning (TensorFlow/Keras)</h2>
+<p>Needs a working Python/TensorFlow/tf-keras stack reachable through
+<code>reticulate</code> – genuinely machine-specific setup (see
+<code>ToolsRTM_PROSAIL_tutorial.Rmd</code>’s “Deep learning” section for
+the full install sequence), so this is wrapped in
+<code>tryCatch()</code> to keep the rest of this vignette buildable on a
+machine without that stack configured, while still showing the real,
+correct calling code:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>dl_result <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>({</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">Sys.setenv</span>(<span class="at">TF_USE_LEGACY_KERAS =</span> <span class="st">&quot;1&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">library</span>(reticulate); <span class="fu">library</span>(keras)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  dl_model <span class="ot">&lt;-</span> <span class="fu">getMLmodel</span>(<span class="at">dataset =</span> train_df, <span class="at">depVar =</span> <span class="st">&quot;Cab&quot;</span>, <span class="at">model =</span> <span class="st">&quot;Hidden-layers&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>                          <span class="at">optimizer =</span> <span class="st">&quot;adam&quot;</span>, <span class="at">n.epochs =</span> <span class="dv">5</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">ok =</span> <span class="cn">TRUE</span>, <span class="at">model =</span> dl_model)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>}, <span class="at">error =</span> <span class="cf">function</span>(e) <span class="fu">list</span>(<span class="at">ok =</span> <span class="cn">FALSE</span>, <span class="at">msg =</span> <span class="fu">conditionMessage</span>(e)))</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Normalize&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="cf">if</span> (dl_result<span class="sc">$</span>ok) {</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;DL model trained. Final training loss:&quot;</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>      <span class="fu">round</span>(<span class="fu">tail</span>(dl_result<span class="sc">$</span>model<span class="sc">$</span>history<span class="sc">$</span>metrics<span class="sc">$</span>loss, <span class="dv">1</span>), <span class="dv">3</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  first_line <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(dl_result<span class="sc">$</span>msg, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="at">fixed =</span> <span class="cn">TRUE</span>)[[<span class="dv">1</span>]][<span class="dv">1</span>]</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Skipped -- no working Python/TensorFlow/tf-keras stack reachable through&quot;</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>      <span class="st">&quot;reticulate on this machine (&quot;</span>, first_line, <span class="st">&quot;). The calling code above is&quot;</span>,</span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>      <span class="st">&quot;correct and unchanged; see ToolsRTM_PROSAIL_tutorial.Rmd for setup.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>}</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; Skipped -- no working Python/TensorFlow/tf-keras stack reachable through reticulate on this machine ( infinite or missing values in &#39;x&#39; ). The calling code above is correct and unchanged; see ToolsRTM_PROSAIL_tutorial.Rmd for setup.</span></span></code></pre></div>
+</div>
+<div id="which-one-should-you-use" class="section level2">
+<h2>6. Which one should you use?</h2>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Needs training?</th>
+<th>Handles a small LUT well?</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>get.inversionOpt()</code> (merit-function)</td>
+<td>No – pure search</td>
+<td>Yes – works from a handful of reference spectra</td>
+<td>Quick, physically-grounded retrieval; no ML infrastructure
+needed</td>
+</tr>
+<tr class="even">
+<td><code>get.inversion()</code> (classic ML)</td>
+<td>Yes</td>
+<td>Needs enough rows to fit reliably (hundreds+)</td>
+<td>Production-scale retrieval, many predictors (e.g. full spectrum +
+indices)</td>
+</tr>
+<tr class="odd">
+<td><code>getMLmodel()</code> (deep learning)</td>
+<td>Yes, more data-hungry</td>
+<td>No – needs thousands of rows</td>
+<td>Large training sets, CNN over the full spectral shape</td>
+</tr>
+</tbody>
+</table>
+<p>All three were run on the exact same held-out Sentinel-2A test
+spectra above – see Sections 3-4 for their actual R²/RMSE on this LUT
+(deep learning’s result, when the optional TensorFlow stack is
+available, prints its own training loss above rather than a directly
+comparable R²/RMSE, since 5 epochs on 105 training rows is a smoke-test,
+not a tuned model).</p>
 </div>
 
 
