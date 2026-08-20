@@ -51,26 +51,25 @@ The repositories for accessing the R packages are as follows:
 
 ## 2. SCOPEinR package
 
-### 2.1 Install using gitlab repository
+### 2.1 Install from GitLab
 
-To install the **SCOPEinR** package, please follow these steps within
-your R session:
+``` r
 
-1.  Download the **SCOPEinR** package as a `.tar.gz` file from the
-    GitLab repository.
-
-2.  After downloading, execute the following code:
-
-&nbsp;
-
-    install.packages('pathWithFile/scopeinr-main.tar.gz',repos = NULL,type = "source")
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+if (!requireNamespace("SCOPEinR", quietly = TRUE)) remotes::install_gitlab("caminoccg/scopeinr")
+library(SCOPEinR)
+```
 
 Additionally, we recommend installing the **ToolsRTM** package. This
 package provides inversion methods, LUT functions, and relevant
 radiative transfer models for comparison with the SCOPE model
 (installation is not mandatory).
 
-    install.packages('pathWithFile/toolsrtm-main.tar.gz',repos = NULL,type = "source")
+``` r
+
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) remotes::install_gitlab("caminoccg/toolsrtm")
+library(ToolsRTM)
+```
 
 ### 2.2 How to run SCOPE model in R
 
@@ -242,7 +241,7 @@ db.sims <-SCOPEinR::get.SCOPE.parallel(LUT=LUT,options.SCOPE=table.with.opts,opt
 #> Executing SCOPE 2.1. version ...
 ```
 
-Total simulations: 100 Total execution time: 48.52433
+Total simulations: 100 Total execution time: 1.280381
 
 ``` r
 

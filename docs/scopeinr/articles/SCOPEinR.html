@@ -38,6 +38,7 @@
     <li><a class="dropdown-item" href="../articles/scope-pipeline.html">SCOPE course pipeline: energy balance, fluorescence, and trait inversion</a></li>
     <li><a class="dropdown-item" href="../articles/sensitivity-scope.html">Sensitivity analysis for SCOPE</a></li>
     <li><a class="dropdown-item" href="../articles/inversion-scope.html">Trait inversion from SCOPE reflectance</a></li>
+    <li><a class="dropdown-item" href="../articles/sif-photosynthesis-proxy.html">Does SIF add information about photosynthesis beyond greenness?</a></li>
   </ul>
 </li>
       </ul>
@@ -122,21 +123,19 @@ the Shiny apps together): <a href="https://github.com/CCGCAM/RTM-Suite" class="e
 <h2 id="scopeinr-package">2. SCOPEinR package<a class="anchor" aria-label="anchor" href="#scopeinr-package"></a>
 </h2>
 <div class="section level3">
-<h3 id="install-using-gitlab-repository">2.1 Install using gitlab repository<a class="anchor" aria-label="anchor" href="#install-using-gitlab-repository"></a>
+<h3 id="install-from-gitlab">2.1 Install from GitLab<a class="anchor" aria-label="anchor" href="#install-from-gitlab"></a>
 </h3>
-<p>To install the <strong>SCOPEinR</strong> package, please follow these
-steps within your R session:</p>
-<ol style="list-style-type: decimal">
-<li><p>Download the <strong>SCOPEinR</strong> package as a
-<code>.tar.gz</code> file from the GitLab repository.</p></li>
-<li><p>After downloading, execute the following code:</p></li>
-</ol>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'pathWithFile/scopeinr-main.tar.gz'</span>,repos <span class="op">=</span> <span class="cn">NULL</span>,type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span></code></pre>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"SCOPEinR"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"caminoccg/scopeinr"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SCOPEinR</span><span class="op">)</span></span></code></pre></div>
 <p>Additionally, we recommend installing the <strong>ToolsRTM</strong>
 package. This package provides inversion methods, LUT functions, and
 relevant radiative transfer models for comparison with the SCOPE model
 (installation is not mandatory).</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'pathWithFile/toolsrtm-main.tar.gz'</span>,repos <span class="op">=</span> <span class="cn">NULL</span>,type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ToolsRTM"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"caminoccg/toolsrtm"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ToolsRTM</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="how-to-run-scope-model-in-r">2.2 How to run SCOPE model in R<a class="anchor" aria-label="anchor" href="#how-to-run-scope-model-in-r"></a>
@@ -908,7 +907,7 @@ the SCOPEinR package.</p>
 <span>                                       leaf.model<span class="op">=</span><span class="st">'fluspect-CX'</span>,canopy.model<span class="op">=</span><span class="st">'fourSAIL'</span>, parallel <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>                                       get.outputs<span class="op">=</span><span class="st">'ALL'</span>, get.plots <span class="op">=</span> <span class="cn">F</span>, get.csv <span class="op">=</span><span class="cn">F</span>, n.cores <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Executing SCOPE 2.1. version ...</span></span></code></pre></div>
-<p>Total simulations: 100 Total execution time: 48.52433</p>
+<p>Total simulations: 100 Total execution time: 1.280381</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">wave_</span><span class="op">&lt;-</span><span class="va">db.sims</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">data.spectral</span><span class="op">$</span><span class="va">wlS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2001</span><span class="op">]</span></span>

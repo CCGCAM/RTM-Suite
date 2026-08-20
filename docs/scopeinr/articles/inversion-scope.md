@@ -23,7 +23,7 @@ path_input <- system.file("input", package = "SCOPEinR")
 scope_options <- read.table(file.path(path_input, "setoptions.csv"), header = TRUE, sep = ",")
 inputLUT <- read.table(file.path(path_input, "inputs_SCOPE.csv"), header = TRUE, sep = ",")
 
-n_samples <- 80
+n_samples <- 500
 set.seed(11)
 LUT <- getLUT.SCOPE(inputLUT = inputLUT, nLUT = n_samples)
 
@@ -90,9 +90,9 @@ knitr::kable(summary_df, digits = 3)
 
 | trait   | direct_RT_input        |     R2 |   RMSE |
 |:--------|:-----------------------|-------:|-------:|
-| Cab     | Yes (Fluspect)         |  0.229 | 15.343 |
-| LAI     | Yes (4SAIL)            |  0.786 |  0.914 |
-| Vcmax25 | No (biochemistry only) | -0.184 | 79.332 |
+| Cab     | Yes (Fluspect)         |  0.399 | 13.409 |
+| LAI     | Yes (4SAIL)            |  0.706 |  1.069 |
+| Vcmax25 | No (biochemistry only) | -0.073 | 68.891 |
 
 ``` r
 
@@ -116,30 +116,31 @@ par(op)
 ```
 
 `Vcmax25` comes back essentially unretrievable (R² below zero – worse
-than just predicting the mean every time): its only path into
-reflectance is the small, indirect leaf-temperature effect the
-`sensitivity-scope` article isolated, not a direct optical signature a
-13-band sensor can separate from everything else varying in this LUT at
-once. That’s the expected result, not a failure of the method – SCOPE’s
-own coupling of radiative transfer and biochemistry doesn’t imply every
-biochemical trait becomes remotely retrievable just because it can be
-simulated.
+than just predicting the mean every time) **even at 500 simulations**:
+its only path into reflectance is the small, indirect leaf-temperature
+effect the `sensitivity-scope` article isolated, not a direct optical
+signature a 13-band sensor can separate from everything else varying in
+this LUT at once. More training data doesn’t fix this, because the
+problem isn’t sample size – it’s that the signal genuinely isn’t there
+in reflectance to begin with. That’s the expected result, not a failure
+of the method: SCOPE’s own coupling of radiative transfer and
+biochemistry doesn’t imply every biochemical trait becomes remotely
+retrievable just because it can be simulated.
 
-`LAI` retrieves well (R² ~0.8) – its NIR-plateau signature is strong
+`LAI` retrieves well (R² ~0.7) – its NIR-plateau signature is strong
 enough to come through even with every other trait varying at once.
-`Cab` retrieves only moderately here (R² ~0.2), noticeably weaker than
-its strong, direct role in Fluspect would suggest on its own. That’s a
-LUT-design effect, not a property of `Cab` itself:
+`Cab` retrieves moderately (R² ~0.4) – weaker than its strong, direct
+role in Fluspect alone would suggest, because
 [`getLUT.SCOPE()`](../reference/getLUT.SCOPE.md) varies every free
 parameter simultaneously (leaf biochemistry, LAI, leaf-angle
-distribution, geometry – see `getting-luts-scope`), and with only 80
-samples (56 for training) Random Forest has limited room to disentangle
-`Cab`’s effect from all of that simultaneous nuisance variation. A
-larger LUT, or one that varies fewer traits at once (as
-`How-in-Python-SCOPEinR.ipynb`’s Section 4 does, perturbing only
-Cab/LAI/EWT/Vcmax25 around one fixed baseline), would be expected to
-retrieve `Cab` considerably better than this page’s deliberately
-information-poor 80-row, full-range setup does.
+distribution, geometry – see `getting-luts-scope`), adding real
+confounding noise a smaller, more targeted LUT wouldn’t have. Sample
+size does matter for `Cab` specifically: this page’s 500-row LUT
+retrieves it noticeably better than an earlier 80-row version of this
+same experiment did (R² 0.23 there vs. 0.40 here) – unlike `Vcmax25`,
+`Cab` has a real signal to find, just one more training data helps
+Random Forest separate from the LUT’s other simultaneous nuisance
+variation.
 
 See `How-in-R-SCOPEinR.Rmd` (Section 5) for the same LAI-retrieval
 pattern at N=100 walked through step by step, and the `ToolsRTM`

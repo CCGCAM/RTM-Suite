@@ -1,6 +1,6 @@
 # SCOPE course pipeline: energy balance, fluorescence, and trait inversion
 
-`Scripts/ForSCOPE/` is the SCOPEinR counterpart to ToolsRTM’s
+`Scripts/R/ForSCOPE/` is the SCOPEinR counterpart to ToolsRTM’s
 `ForPROSAIL` course pipeline (see that package’s `course-pipeline`
 article for the general pattern) – with one addition: SCOPE runs the
 full Soil-Canopy-Observation, Photochemistry and Energy-balance model,
@@ -10,18 +10,20 @@ traits.
 
 ``` r
 
-devtools::load_all("ToolsRTM/R"); devtools::load_all("SCOPEinR/R")
-source("Scripts/ForSCOPE/3-simulate_LUT.R")   # ~100 SCOPE runs, several minutes
-source("Scripts/ForSCOPE/4-inversion_ML.R")   # Cab/LAI/EWT/Vcmax25 x 11 algorithms + a SIF experiment
-source("Scripts/ForSCOPE/5-inversion_DL.R")
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) remotes::install_gitlab("caminoccg/toolsrtm")
+if (!requireNamespace("SCOPEinR", quietly = TRUE)) remotes::install_gitlab("caminoccg/scopeinr")
+library(ToolsRTM); library(SCOPEinR)
+source("Scripts/R/ForSCOPE/3-simulate_LUT.R")   # ~100 SCOPE runs, several minutes
+source("Scripts/R/ForSCOPE/4-inversion_ML.R")   # Cab/LAI/EWT/Vcmax25 x 11 algorithms + a SIF experiment
+source("Scripts/R/ForSCOPE/5-inversion_DL.R")
 ```
 
 Unlike the optical-only models,
 [`get.SCOPE()`](../reference/get.SCOPE.md)’s `leaf.model`/`canopy.model`
 arguments are **not functional** – SCOPE always runs its own integral
 multi-layer Fluspect-Cx + RTMo (verified directly in
-`Scripts/Comparison/compare_SCOPE_models.R`, not just documented). There
-is one leaf/canopy configuration, not a choice to expose here.
+`Scripts/R/Comparison/compare_SCOPE_models.R`, not just documented).
+There is one leaf/canopy configuration, not a choice to expose here.
 
 ## 1. Simulate
 
@@ -91,7 +93,7 @@ comparison.
 
 ## 4. Energy balance convergence
 
-`Scripts/ForSCOPE/6-validate_ebal_convergence.R` runs many randomized
+`Scripts/R/ForSCOPE/6-validate_ebal_convergence.R` runs many randomized
 SCOPE simulations and records how many iterations the energy-balance
 solver took to converge, and the residual error per component (sunlit
 vegetation, shaded vegetation, soil) – a numerical-stability check, not
@@ -108,7 +110,7 @@ well under 1 W/m² for every component.
 
 - **ToolsRTM**’s `course-pipeline` article for the optical-only models
   (fourSAIL, foursail2, INFORM, SPART, MARMIT) this pipeline mirrors.
-- `Scripts/ForSCOPE/1-getSCOPE.R`, `1-getSCOPE-v3_withChunck.R`,
+- `Scripts/R/ForSCOPE/1-getSCOPE.R`, `1-getSCOPE-v3_withChunck.R`,
   `2-Explore_outputsSCOPE.R` – lower-level teaching scripts covering
   [`get.SCOPE()`](../reference/get.SCOPE.md)/[`get.SCOPE.parallel()`](../reference/get.SCOPE.parallel.md)
   directly, and how to explore SCOPE’s own multi-part output structure

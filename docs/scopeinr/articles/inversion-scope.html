@@ -38,6 +38,7 @@
     <li><a class="dropdown-item" href="../articles/scope-pipeline.html">SCOPE course pipeline: energy balance, fluorescence, and trait inversion</a></li>
     <li><a class="dropdown-item" href="../articles/sensitivity-scope.html">Sensitivity analysis for SCOPE</a></li>
     <li><a class="dropdown-item" href="../articles/inversion-scope.html">Trait inversion from SCOPE reflectance</a></li>
+    <li><a class="dropdown-item" href="../articles/sif-photosynthesis-proxy.html">Does SIF add information about photosynthesis beyond greenness?</a></li>
   </ul>
 </li>
       </ul>
@@ -89,7 +90,7 @@ sensor-band reflectance, the way you can retrieve <code>Cab</code> or
 <span><span class="va">scope_options</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">path_input</span>, <span class="st">"setoptions.csv"</span><span class="op">)</span>, header <span class="op">=</span> <span class="cn">TRUE</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span>
 <span><span class="va">inputLUT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">path_input</span>, <span class="st">"inputs_SCOPE.csv"</span><span class="op">)</span>, header <span class="op">=</span> <span class="cn">TRUE</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">80</span></span>
+<span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">500</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
 <span><span class="va">LUT</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE</a></span><span class="op">(</span>inputLUT <span class="op">=</span> <span class="va">inputLUT</span>, nLUT <span class="op">=</span> <span class="va">n_samples</span><span class="op">)</span></span>
 <span></span>
@@ -159,20 +160,20 @@ sensor-band reflectance, the way you can retrieve <code>Cab</code> or
 <tr class="odd">
 <td align="left">Cab</td>
 <td align="left">Yes (Fluspect)</td>
-<td align="right">0.229</td>
-<td align="right">15.343</td>
+<td align="right">0.399</td>
+<td align="right">13.409</td>
 </tr>
 <tr class="even">
 <td align="left">LAI</td>
 <td align="left">Yes (4SAIL)</td>
-<td align="right">0.786</td>
-<td align="right">0.914</td>
+<td align="right">0.706</td>
+<td align="right">1.069</td>
 </tr>
 <tr class="odd">
 <td align="left">Vcmax25</td>
 <td align="left">No (biochemistry only)</td>
-<td align="right">-0.184</td>
-<td align="right">79.332</td>
+<td align="right">-0.073</td>
+<td align="right">68.891</td>
 </tr>
 </tbody>
 </table>
@@ -191,29 +192,30 @@ sensor-band reflectance, the way you can retrieve <code>Cab</code> or
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
 <p><code>Vcmax25</code> comes back essentially unretrievable (R² below
-zero – worse than just predicting the mean every time): its only path
-into reflectance is the small, indirect leaf-temperature effect the
-<code>sensitivity-scope</code> article isolated, not a direct optical
-signature a 13-band sensor can separate from everything else varying in
-this LUT at once. That’s the expected result, not a failure of the
-method – SCOPE’s own coupling of radiative transfer and biochemistry
-doesn’t imply every biochemical trait becomes remotely retrievable just
-because it can be simulated.</p>
-<p><code>LAI</code> retrieves well (R² ~0.8) – its NIR-plateau signature
+zero – worse than just predicting the mean every time) <strong>even at
+500 simulations</strong>: its only path into reflectance is the small,
+indirect leaf-temperature effect the <code>sensitivity-scope</code>
+article isolated, not a direct optical signature a 13-band sensor can
+separate from everything else varying in this LUT at once. More training
+data doesn’t fix this, because the problem isn’t sample size – it’s that
+the signal genuinely isn’t there in reflectance to begin with. That’s
+the expected result, not a failure of the method: SCOPE’s own coupling
+of radiative transfer and biochemistry doesn’t imply every biochemical
+trait becomes remotely retrievable just because it can be simulated.</p>
+<p><code>LAI</code> retrieves well (R² ~0.7) – its NIR-plateau signature
 is strong enough to come through even with every other trait varying at
-once. <code>Cab</code> retrieves only moderately here (R² ~0.2),
-noticeably weaker than its strong, direct role in Fluspect would suggest
-on its own. That’s a LUT-design effect, not a property of
-<code>Cab</code> itself: <code><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE()</a></code> varies every free
-parameter simultaneously (leaf biochemistry, LAI, leaf-angle
-distribution, geometry – see <code>getting-luts-scope</code>), and with
-only 80 samples (56 for training) Random Forest has limited room to
-disentangle <code>Cab</code>’s effect from all of that simultaneous
-nuisance variation. A larger LUT, or one that varies fewer traits at
-once (as <code>How-in-Python-SCOPEinR.ipynb</code>’s Section 4 does,
-perturbing only Cab/LAI/EWT/Vcmax25 around one fixed baseline), would be
-expected to retrieve <code>Cab</code> considerably better than this
-page’s deliberately information-poor 80-row, full-range setup does.</p>
+once. <code>Cab</code> retrieves moderately (R² ~0.4) – weaker than its
+strong, direct role in Fluspect alone would suggest, because
+<code><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE()</a></code> varies every free parameter simultaneously
+(leaf biochemistry, LAI, leaf-angle distribution, geometry – see
+<code>getting-luts-scope</code>), adding real confounding noise a
+smaller, more targeted LUT wouldn’t have. Sample size does matter for
+<code>Cab</code> specifically: this page’s 500-row LUT retrieves it
+noticeably better than an earlier 80-row version of this same experiment
+did (R² 0.23 there vs. 0.40 here) – unlike <code>Vcmax25</code>,
+<code>Cab</code> has a real signal to find, just one more training data
+helps Random Forest separate from the LUT’s other simultaneous nuisance
+variation.</p>
 <p>See <code>How-in-R-SCOPEinR.Rmd</code> (Section 5) for the same
 LAI-retrieval pattern at N=100 walked through step by step, and the
 <code>ToolsRTM</code> package’s <code>InversionOpt</code> article for

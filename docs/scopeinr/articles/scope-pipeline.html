@@ -38,6 +38,7 @@
     <li><a class="dropdown-item" href="../articles/scope-pipeline.html">SCOPE course pipeline: energy balance, fluorescence, and trait inversion</a></li>
     <li><a class="dropdown-item" href="../articles/sensitivity-scope.html">Sensitivity analysis for SCOPE</a></li>
     <li><a class="dropdown-item" href="../articles/inversion-scope.html">Trait inversion from SCOPE reflectance</a></li>
+    <li><a class="dropdown-item" href="../articles/sif-photosynthesis-proxy.html">Does SIF add information about photosynthesis beyond greenness?</a></li>
   </ul>
 </li>
       </ul>
@@ -69,7 +70,7 @@
 
     
     
-<p><code>Scripts/ForSCOPE/</code> is the SCOPEinR counterpart to
+<p><code>Scripts/R/ForSCOPE/</code> is the SCOPEinR counterpart to
 ToolsRTM’s <code>ForPROSAIL</code> course pipeline (see that package’s
 <code>course-pipeline</code> article for the general pattern) – with one
 addition: SCOPE runs the full Soil-Canopy-Observation, Photochemistry
@@ -77,15 +78,17 @@ and Energy-balance model, so it also produces chlorophyll fluorescence
 (SIF) and can target <code>Vcmax25</code> (maximum carboxylation rate),
 not just leaf/canopy optical traits.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">"ToolsRTM/R"</span><span class="op">)</span>; <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">"SCOPEinR/R"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/ForSCOPE/3-simulate_LUT.R"</span><span class="op">)</span>   <span class="co"># ~100 SCOPE runs, several minutes</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/ForSCOPE/4-inversion_ML.R"</span><span class="op">)</span>   <span class="co"># Cab/LAI/EWT/Vcmax25 x 11 algorithms + a SIF experiment</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/ForSCOPE/5-inversion_DL.R"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ToolsRTM"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"caminoccg/toolsrtm"</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"SCOPEinR"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html" class="external-link">install_gitlab</a></span><span class="op">(</span><span class="st">"caminoccg/scopeinr"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ToolsRTM</span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">SCOPEinR</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/R/ForSCOPE/3-simulate_LUT.R"</span><span class="op">)</span>   <span class="co"># ~100 SCOPE runs, several minutes</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/R/ForSCOPE/4-inversion_ML.R"</span><span class="op">)</span>   <span class="co"># Cab/LAI/EWT/Vcmax25 x 11 algorithms + a SIF experiment</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"Scripts/R/ForSCOPE/5-inversion_DL.R"</span><span class="op">)</span></span></code></pre></div>
 <p>Unlike the optical-only models, <code><a href="../reference/get.SCOPE.html">get.SCOPE()</a></code>’s
 <code>leaf.model</code>/<code>canopy.model</code> arguments are
 <strong>not functional</strong> – SCOPE always runs its own integral
 multi-layer Fluspect-Cx + RTMo (verified directly in
-<code>Scripts/Comparison/compare_SCOPE_models.R</code>, not just
+<code>Scripts/R/Comparison/compare_SCOPE_models.R</code>, not just
 documented). There is one leaf/canopy configuration, not a choice to
 expose here.</p>
 <div class="section level2">
@@ -151,8 +154,8 @@ comparison.</p>
 <div class="section level2">
 <h2 id="energy-balance-convergence">4. Energy balance convergence<a class="anchor" aria-label="anchor" href="#energy-balance-convergence"></a>
 </h2>
-<p><code>Scripts/ForSCOPE/6-validate_ebal_convergence.R</code> runs many
-randomized SCOPE simulations and records how many iterations the
+<p><code>Scripts/R/ForSCOPE/6-validate_ebal_convergence.R</code> runs
+many randomized SCOPE simulations and records how many iterations the
 energy-balance solver took to converge, and the residual error per
 component (sunlit vegetation, shaded vegetation, soil) – a
 numerical-stability check, not a trait-retrieval one.</p>
@@ -170,7 +173,7 @@ well under 1 W/m² for every component.</p>
 the optical-only models (fourSAIL, foursail2, INFORM, SPART, MARMIT)
 this pipeline mirrors.</li>
 <li>
-<code>Scripts/ForSCOPE/1-getSCOPE.R</code>,
+<code>Scripts/R/ForSCOPE/1-getSCOPE.R</code>,
 <code>1-getSCOPE-v3_withChunck.R</code>,
 <code>2-Explore_outputsSCOPE.R</code> – lower-level teaching scripts
 covering <code><a href="../reference/get.SCOPE.html">get.SCOPE()</a></code>/<code><a href="../reference/get.SCOPE.parallel.html">get.SCOPE.parallel()</a></code>

@@ -40,6 +40,7 @@
     <li><a class="dropdown-item" href="articles/scope-pipeline.html">SCOPE course pipeline: energy balance, fluorescence, and trait inversion</a></li>
     <li><a class="dropdown-item" href="articles/sensitivity-scope.html">Sensitivity analysis for SCOPE</a></li>
     <li><a class="dropdown-item" href="articles/inversion-scope.html">Trait inversion from SCOPE reflectance</a></li>
+    <li><a class="dropdown-item" href="articles/sif-photosynthesis-proxy.html">Does SIF add information about photosynthesis beyond greenness?</a></li>
   </ul>
 </li>
       </ul>
@@ -61,9 +62,7 @@
 </h3>
 <p><a href="https://www.r-project.org/" class="external-link"><img src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&amp;logoColor=white" alt="R &gt;= 4.3"></a> <a href="https://gitlab.com/caminoccg/scopeinr" class="external-link"><img src="https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&amp;logoColor=white" alt="SCOPEinR on GitLab"></a> <a href="https://github.com/CCGCAM/RTM-Suite" class="external-link"><img src="https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&amp;logoColor=white" alt="RTM–Suite on GitHub"></a> <a href="https://github.com/CCGCAM/scopeinpython" class="external-link"><img src="https://img.shields.io/badge/GitHub-scopeinpython%20(Python)-181717?logo=github&amp;logoColor=white" alt="scopeinpython (Python port) on GitHub"></a></p>
 <p><strong>SCOPEinR</strong> is an R package designed for implementing the Soil Canopy Observation, Photochemistry, and Energy Fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB, this model allows users to simulate interactions between soil, canopy, and atmospheric processes (Van der Tol et al., 2009; Yang et al., 2020).</p>
-<p>The <strong>SCOPEinR</strong> package powers the online <strong>RT-Simulator</strong>, providing a user-friendly interface through a Shiny app that allows users to simulate canopy reflectance at the Top of Canopy (TOC) level. In addition to reflectance, it also enables the simulation of chlorophyll fluorescence emissions using the SCOPE model. For comprehensive inter-comparison with other key radiative transfer (RT) models, it is recommended to install the <strong>ToolsRTM</strong> package alongside <strong>SCOPEinR</strong>.</p>
-<p>The <strong>SCOPEinR</strong> package executes the Soil Canopy Observation, Photochemistry, and Energy Fluxes (SCOPE) radiative transfer model, originally developed in MATLAB by Van der Tol et al. (2009) and further extended by Yang et al. (2020). This integration allows users to leverage the capabilities of the SCOPE model within the R environment for in-depth analyses.</p>
-<p>We have seamlessly integrated the <strong>ToolsRTM</strong> and <strong>SCOPEinR</strong> packages into the online RT-platform, both of which are available under the GNU license. You can access the online RT simulator at <a href="https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/" class="external-link">this link</a>.</p>
+<p><strong>SCOPEinR</strong> also powers <a href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs" class="external-link"><code>Apps/RTMs</code></a>, a point-and-click Shiny app (no code required) for simulating canopy reflectance and chlorophyll fluorescence at Top of Canopy (TOC) level – run it locally via <code>shiny::runApp("Apps/RTMs")</code>. For comprehensive inter-comparison with other key radiative transfer (RT) models, it is recommended to install the <strong>ToolsRTM</strong> package alongside <strong>SCOPEinR</strong>.</p>
 </div>
 <div class="section level3">
 <h3 id="rtm-suite-ecosystem">RTM-Suite ecosystem<a class="anchor" aria-label="anchor" href="#rtm-suite-ecosystem"></a>
@@ -111,15 +110,12 @@
 <td><a href="https://github.com/CCGCAM/RTM-Suite" class="external-link"><img src="https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&amp;logoColor=white" alt="GitHub"></a></td>
 </tr>
 <tr>
-<td><strong>RT-Simulator</strong></td>
-<td>Interactive access to the models without requiring local code</td>
-<td>
-<a href="https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/" class="external-link">Open platform</a> · <a href="https://gitlab.com/caminoccg/toolsrtm-simulator" class="external-link">Source repository</a>
-</td>
+<td><strong>Apps/RTMs</strong></td>
+<td>Interactive access to the models without writing code (Shiny, run locally)</td>
+<td><a href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs" class="external-link">Source</a></td>
 </tr>
 </tbody>
 </table>
-<p><em>Note: These modules are currently in the testing phase before public release. For access, please contact us at caminoccg@gmail.com.</em></p>
 </div>
 <div class="section level3">
 <h3 id="manuals-and-learning-resources">Manuals and learning resources<a class="anchor" aria-label="anchor" href="#manuals-and-learning-resources"></a>
@@ -132,8 +128,6 @@
 <a href="../docs/scopeinr/index.html"><strong>SCOPEinR reference manual</strong></a>: SCOPE inputs, outputs, energy balance, photosynthesis, and fluorescence.</li>
 <li>
 <a href="../docs/scopeinr/articles/scope-pipeline.html"><strong>SCOPE course pipeline</strong></a>: a reproducible workflow for energy balance, fluorescence, and trait inversion, including a real SIF-versus-Vcmax25 experiment.</li>
-<li>
-<a href="https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/" class="external-link"><strong>RT-Simulator online</strong></a>: interactive model exploration and access to package learning material.</li>
 <li>
 <a href="../Tutorials/"><strong>RTM-Suite tutorials</strong></a>: complete R workflows and corresponding Python learning resources.</li>
 </ul>
