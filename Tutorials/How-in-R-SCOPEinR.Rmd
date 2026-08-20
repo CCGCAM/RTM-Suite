@@ -154,17 +154,28 @@ db.sim.many <- get.SCOPE(
 )
 cat("Ran", N_SAMPLES, "simulations in", round(as.numeric(Sys.time() - start_time), 1), "s\n")
 
-Tcave_vals <- sapply(db.sim.many, function(r) r$data.fluxes$Tcave)
 Actot_vals <- sapply(db.sim.many, function(r) r$data.fluxes$Actot)
-plot(Table.LUT.many$Cab[seq_len(N_SAMPLES)], Tcave_vals, pch = 19, col = "#2166AC",
-     xlab = "Cab", ylab = "Canopy-average leaf temperature (degC)",
-     main = "Tcave vs Cab across the small LUT")
+EoutF_vals <- sapply(db.sim.many, function(r) r$data.rad$EoutF)
+
+op <- par(mfrow = c(1, 2))
+plot(Table.LUT.many$Vcmax25[seq_len(N_SAMPLES)], Actot_vals, pch = 19, col = "#2166AC",
+     xlab = "Vcmax25 (umol m-2 s-1)", ylab = "Canopy photosynthesis, Actot (umol m-2 s-1)",
+     main = "Actot vs Vcmax25")
+plot(Table.LUT.many$Cab[seq_len(N_SAMPLES)], EoutF_vals, pch = 19, col = "#B2182B",
+     xlab = "Cab", ylab = "Canopy fluorescence flux, EoutF (W/m2)",
+     main = "SIF vs Cab")
+par(op)
 ```
 
-Canopy-average leaf temperature responds to Cab through the energy
-balance (chlorophyll content changes absorbed PAR, which feeds into the
-leaf's own solved temperature), on top of whatever meteorological forcing
-is fixed in this LUT.
+`Vcmax25` (maximum carboxylation capacity) is the direct physiological
+driver of `Actot` in SCOPE's Farquhar-type photosynthesis model, so even
+across just 10 randomly-drawn LUT rows the relationship is visibly
+tighter than temperature-vs-pigment would be. The right panel shows the
+other half of what makes SCOPEinR more than plain PROSAIL: fluorescence
+(`EoutF`) is sensitive to leaf pigments, not just to LAI/structure --
+substitute `Table.LUT.many$Anth` or `Table.LUT.many$Car` for `Cab` above
+to see the same fluorescence output against anthocyanin or carotenoid
+content instead.
 
 ## What's not covered here (and why)
 
