@@ -409,7 +409,7 @@ server <- function(input, output,session) {
     
     additional_params_SCOPE <- c(Vcmax25 = Vcmax_scope, BallBerrySlope = BaLBerrySlope,
                                  BallBerry0 = BaLBerry0,
-                                 Rn = Rn_scope,
+                                 Rin = Rn_scope,
                                  Rli = Rli_scope,
                                  Ta =Ta_scope)
     
