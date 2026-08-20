@@ -20,7 +20,8 @@ get.marmit.rsoil(
   n_i = 1.53,
   k_i = 0.001,
   d_i = 5e-04,
-  wl.out = 400:2500
+  wl.out = 400:2500,
+  db_root = NULL
 )
 ```
 
@@ -68,6 +69,13 @@ get.marmit.rsoil(
   for Fluspect-leaf-model calls to
   [`foursail`](foursail.md)/[`foursail2`](foursail2.md).
 
+- db_root:
+
+  character or `NULL`. Directory containing database subfolders (e.g.
+  `"databases"` at the RTM-Suite repo root, which has all 8 MARMIT
+  databases – see Details). When `NULL` (default), only the bundled
+  `Bablet_2016` database is available.
+
 ## Value
 
 A list:
@@ -98,15 +106,21 @@ A list:
 ## Details
 
 Only the **Bablet 2016** soil database (Bablet et al., 2018) is bundled
-with the package, to keep install size small. Other MARMIT databases
-(Dupiau 2020, Humper 2015, Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq
-2012, Philpot 2014 – see
-<https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit>) can be
-used by dropping a folder in the same layout (an index CSV
-`<name>/<name>.csv` with columns `ID, Refl_file, SMCg, K, a, psi`, plus
-`<name>/spectra/<Refl_file>` tab-separated `Wvl,R` files) under
-`system.file("extdata", "marmit", "databases", package = "ToolsRTM")`
-and passing `database = "<name>"`.
+with the package, to keep install size small. The other 7 MARMIT
+databases (Dupiau 2020, Humper 2015, Lesaignoux 2008, Liu 2002, Lobell
+2002, Marcq 2012, Philpot 2014 – see
+<https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit>) ship in
+the RTM-Suite monorepo's own `databases/` folder (repo root, one
+subfolder per database, ~200MB total – too large to bundle in the
+package itself). Point at it directly with `db_root`, e.g.
+`get.marmit.rsoil(database = "Liu_2002", db_root = "databases")` run
+from the repo root – no copying required. Any other folder with the same
+layout (an index CSV `<name>/<name>.csv` with columns
+`ID, Refl_file, SMCg, K, a, psi` – extra columns are ignored – plus
+`<name>/spectra/<Refl_file>` tab-separated `Wvl,R` files) works the same
+way. Leaving `db_root = NULL` (the default) keeps the original behavior:
+only the bundled `Bablet_2016` database, looked up under
+`system.file("extdata", "marmit", "databases", package = "ToolsRTM")`.
 
 The dry-soil reference for a given `id` is the driest spectrum on file
 for that soil (the row with the smallest `SMCg`), matching how the
@@ -130,5 +144,9 @@ lines(soil$wavelength, soil$rsoil.dry, col = "grey50")
 # Feed straight into fourSAIL (PROSPECT-D domain, full 400-2500nm)
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 1, setseed = 1))
 sim <- foursail(inputLUT = LUT, rsoil = soil$rsoil.wet, LeafModel = "PROSPECT-D")
+
+# Any of the other 7 databases, from the RTM-Suite repo's own databases/ folder
+# (run from the repo root, or pass an absolute path):
+soil2 <- get.marmit.rsoil(database = "Liu_2002", id = 1, db_root = "databases")
 } # }
 ```

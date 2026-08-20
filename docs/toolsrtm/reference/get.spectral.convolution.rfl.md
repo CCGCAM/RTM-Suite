@@ -16,15 +16,20 @@ get.spectral.convolution.rfl(df, sensor.i, get.plots = T)
 - df:
 
   A data frame containing the high-resolution reflectance data to be
-  convoluted.
+  convoluted. Must have a `wave` column (wavelength, nm) and an `rfl`
+  column (reflectance) – e.g.
+  `data.frame(wave = dataSpec_PDB[, 1], rfl = my_reflectance)`.
 
 - sensor.i:
 
-  A character string with sensor information for which the calculations
-  are performed. Supported sensors should have predefined spectral
-  response functions. Options include: "LANDSAT4.TM", "LANDSAT5.TM",
-  "LANDSAT7.ETM", "LANDSAT8.OLI", "Sentinel2A.MSI", "Sentinel2B.MSI",
-  "Sentinel3A.OLCI", "Sentinel3B.OLCI", and "TerraAqua.MODIS".
+  The sensor to convolve onto – one of the package's bundled sensor
+  objects, e.g. `ToolsRTM::Sentinel2A.MSI`, `ToolsRTM::LANDSAT8.OLI`,
+  `ToolsRTM::TerraAqua.MODIS` (also accepts the bare sensor name as a
+  character string, e.g. `"LANDSAT8.OLI"`, which is resolved to the
+  matching bundled object automatically). Supported sensors:
+  "LANDSAT4.TM", "LANDSAT5.TM", "LANDSAT7.ETM", "LANDSAT8.OLI",
+  "Sentinel2A.MSI", "Sentinel2B.MSI", "Sentinel3A.OLCI",
+  "Sentinel3B.OLCI", and "TerraAqua.MODIS".
 
 - get.plots:
 
@@ -34,17 +39,13 @@ get.spectral.convolution.rfl(df, sensor.i, get.plots = T)
 ## Value
 
 A data frame containing the convoluted reflectance values for the
-specified sensor.
+specified sensor, with columns `wave` (band center wavelength, nm) and
+`RFL` (convolved reflectance).
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-# Example data frame with reflectance data
-df <- data.frame(Wavelength = seq(400, 2500, by = 10),
-                 Reflectance = runif(211)) # Simulated reflectance values
-
-# Perform spectral convolution for a specific sensor
-convoluted_results <- get.spectral.convolution.rfl(df, sensor.i = "LANDSAT8.OLI", get.plots = TRUE)
-} # }
+df <- data.frame(wave = ToolsRTM::dataSpec_PDB[, 1],
+                  rfl = 0.05 + 0.3 * ToolsRTM::dataSpec_PDB[, 1] / 2500) # toy reflectance
+convoluted_results <- get.spectral.convolution.rfl(df, sensor.i = "LANDSAT8.OLI", get.plots = FALSE)
 ```

@@ -1,4 +1,4 @@
-# LUT inversion using a RTM
+# LUT Inversion Using a Radiative Transfer Model (RTM)
 
 This function performs the inversion of a Radiative Transfer Model (RTM)
 based on observed sensor reflectance values. It compares simulated
@@ -8,16 +8,6 @@ best matches using different merit functions.
 ## Usage
 
 ``` r
-get.inversionOpt(
-  rfl.sensor = NULL,
-  rfl.rtm = NULL,
-  LUT = NULL,
-  wave = NULL,
-  method = "merit-RMSE",
-  nOpt = NULL,
-  custom_stat = NULL
-)
-
 get.inversionOpt(
   rfl.sensor = NULL,
   rfl.rtm = NULL,
@@ -70,6 +60,12 @@ get.inversionOpt(
 
   - `'merit-FGE'`: Fractional Gross Error.
 
+  - `'merit-DWT'`: RMSE computed on discrete wavelet transform (Haar)
+    coefficients instead of raw reflectance.
+
+  - `'merit-1stD'`: RMSE computed on the first derivative of the spectra
+    (finite differences along `wave`) instead of raw reflectance.
+
   - `'merit-custom.metric'`: A custom metric defined by users.
 
 - nOpt:
@@ -86,8 +82,6 @@ get.inversionOpt(
 
 ## Value
 
-A list with two elements: the LUT and the reflectance matrix (rfl).
-
 A list with two elements:
 
 - `rfl.b`: A matrix of the best-matching reflectance values selected
@@ -99,12 +93,12 @@ A list with two elements:
 ## Examples
 
 ``` r
-# Example usage:
-sensor_data <- matrix(runif(100), nrow=10, ncol=10) # Simulated sensor reflectance
-rtm_data <- matrix(runif(100), nrow=10, ncol=10)    # Simulated RTM reflectance
-lut_table <- data.frame(N=runif(10), Cab=runif(10), Cw=runif(10)) # Simulated LUT
+# Simulated example usage:
+sensor_data <- matrix(runif(100), nrow = 10, ncol = 10) # Simulated sensor reflectance
+rtm_data <- matrix(runif(100), nrow = 10, ncol = 10)    # Simulated RTM reflectance
+lut_table <- data.frame(N = runif(10), Cab = runif(10), Cw = runif(10)) # Simulated LUT
 wavelengths <- seq(400, 700, length.out = 10)  # Simulated wavelengths
-result <- get.inversionOpt(sensor_data, rtm_data, lut_table, wavelengths, method='merit-RMSE', nOpt=5)
+result <- get.inversionOpt(sensor_data, rtm_data, lut_table, wavelengths, method = 'merit-RMSE', nOpt = 5)
 #> Merit function using merit-RMSE is processing
 #>   |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
 print(result)
@@ -155,63 +149,5 @@ print(result)
 #> 8     5.6      0.295 0.653 0.516 0.630
 #> 9     3.8      0.387 0.619 0.669 0.455
 #> 10    7.2      0.342 0.703 0.381 0.506
-#> 
-
-# Simulated example usage:
-sensor_data <- matrix(runif(100), nrow = 10, ncol = 10) # Simulated sensor reflectance
-rtm_data <- matrix(runif(100), nrow = 10, ncol = 10)    # Simulated RTM reflectance
-lut_table <- data.frame(N = runif(10), Cab = runif(10), Cw = runif(10)) # Simulated LUT
-wavelengths <- seq(400, 700, length.out = 10)  # Simulated wavelengths
-result <- get.inversionOpt(sensor_data, rtm_data, lut_table, wavelengths, method = 'merit-RMSE', nOpt = 5)
-#> Merit function using merit-RMSE is processing
-#>   |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
-print(result)
-#> [[1]]
-#>           R.400 R.433.333333333333 R.466.666666666667     R.500
-#>  [1,] 0.5520337          0.5647055          0.7384030 0.6533848
-#>  [2,] 0.3912736          0.3488350          0.6133851 0.6211630
-#>  [3,] 0.5388350          0.3567664          0.6373415 0.5819488
-#>  [4,] 0.4197425          0.4160853          0.7610002 0.7210153
-#>  [5,] 0.5789553          0.3933747          0.5050971 0.4611309
-#>  [6,] 0.4197064          0.4233212          0.7756725 0.7776109
-#>  [7,] 0.5235286          0.5046913          0.6054602 0.6101281
-#>  [8,] 0.4197425          0.4160853          0.7610002 0.7210153
-#>  [9,] 0.4197425          0.4160853          0.7610002 0.7210153
-#> [10,] 0.3912375          0.3560710          0.6280574 0.6777586
-#>       R.533.333333333333 R.566.666666666667     R.600 R.633.333333333333
-#>  [1,]          0.2967967          0.6637971 0.3555322          0.5236494
-#>  [2,]          0.2391114          0.4589138 0.4621072          0.4648946
-#>  [3,]          0.2184565          0.5247333 0.5976546          0.5110995
-#>  [4,]          0.2470140          0.5889937 0.3735509          0.5510687
-#>  [5,]          0.3784341          0.6136448 0.6027345          0.4029282
-#>  [6,]          0.2768263          0.4909229 0.3667061          0.4130945
-#>  [7,]          0.3187063          0.4356465 0.4372436          0.2995010
-#>  [8,]          0.2470140          0.5889937 0.3735509          0.5510687
-#>  [9,]          0.2470140          0.5889937 0.3735509          0.5510687
-#> [10,]          0.2689237          0.3608431 0.4552624          0.3269204
-#>       R.666.666666666667     R.700
-#>  [1,]          0.6852965 0.4240884
-#>  [2,]          0.5351621 0.5243084
-#>  [3,]          0.6894712 0.4985063
-#>  [4,]          0.5249204 0.4243682
-#>  [5,]          0.6162050 0.5244586
-#>  [6,]          0.3409789 0.3586089
-#>  [7,]          0.5115968 0.4582692
-#>  [8,]          0.5249204 0.4243682
-#>  [9,]          0.5249204 0.4243682
-#> [10,]          0.3512206 0.4585490
-#> 
-#> [[2]]
-#>    ID_lut merit-RMSE     N   Cab    Cw
-#> 1     3.8      0.294 0.356 0.490 0.623
-#> 2     6.0      0.347 0.397 0.549 0.649
-#> 3     5.0      0.337 0.444 0.612 0.534
-#> 4     5.6      0.247 0.420 0.461 0.684
-#> 5     4.6      0.425 0.357 0.422 0.496
-#> 6     6.0      0.308 0.526 0.428 0.698
-#> 7     4.6      0.369 0.439 0.546 0.601
-#> 8     5.6      0.404 0.420 0.461 0.684
-#> 9     5.6      0.344 0.420 0.461 0.684
-#> 10    6.4      0.286 0.503 0.517 0.663
 #> 
 ```
