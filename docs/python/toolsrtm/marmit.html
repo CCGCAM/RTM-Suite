@@ -23,7 +23,15 @@
     <link rel="prev" title="toolsrtm.indices" href="indices.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -43,9 +51,7 @@
   </form>
 </div>
   <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-    
-    <a href="../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
   </div>
 
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -452,16 +458,26 @@ rule with exponent 1/2.27 instead of <a class="reference internal" href="#toolsr
 
 <dl class="py function">
 <dt class="sig sig-object py" id="toolsrtm.marmit.get_marmit_rsoil">
-<span class="sig-prename descclassname"><span class="pre">toolsrtm.marmit.</span></span><span class="sig-name descname"><span class="pre">get_marmit_rsoil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'marmit1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.53</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/marmit.html#get_marmit_rsoil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.marmit.get_marmit_rsoil" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">toolsrtm.marmit.</span></span><span class="sig-name descname"><span class="pre">get_marmit_rsoil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'marmit1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.53</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Bablet_2016'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/toolsrtm/marmit.html#get_marmit_rsoil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#toolsrtm.marmit.get_marmit_rsoil" title="Link to this definition"></a></dt>
 <dd><p>Build a canopy-model-ready soil reflectance spectrum from MARMIT-1
 or MARMIT-2.</p>
-<p>Python port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.marmit.rsoil()</span></code>, using the same bundled
-Bablet_2016 soil database (17 IDs). See that function’s docstring in R
-for the physical background.</p>
+<p>Python port of <code class="docutils literal notranslate"><span class="pre">ToolsRTM::get.marmit.rsoil()</span></code>. Only the Bablet_2016
+soil database (17 IDs) is bundled with the package, to keep install
+size small. The other 7 MARMIT databases (Dupiau 2020, Humper 2015,
+Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014 – see
+<a class="reference external" href="https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit">https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit</a>) ship in the
+RTM-Suite monorepo’s own <code class="docutils literal notranslate"><span class="pre">databases/</span></code> folder (repo root, ~200MB
+total, not bundled here either). Point at it directly with <code class="docutils literal notranslate"><span class="pre">db_root</span></code>,
+e.g. <code class="docutils literal notranslate"><span class="pre">get_marmit_rsoil(database=&quot;Liu_2002&quot;,</span> <span class="pre">db_root=&quot;databases&quot;)</span></code> run
+from the repo root – no copying required. Any other folder with the
+same layout (an index CSV <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;/&lt;name&gt;.csv</span></code> with columns <code class="docutils literal notranslate"><span class="pre">ID,</span>
+<span class="pre">Refl_file,</span> <span class="pre">SMCg,</span> <span class="pre">K,</span> <span class="pre">a,</span> <span class="pre">psi</span></code> – extra columns ignored – plus
+<code class="docutils literal notranslate"><span class="pre">&lt;name&gt;/spectra/&lt;Refl_file&gt;</span></code> tab-separated <code class="docutils literal notranslate"><span class="pre">Wvl,R</span></code> files) works the
+same way. See that R function’s docstring for the physical background.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>soil_id</strong> (<em>Bablet_2016 soil ID</em><em>, </em><em>1-17.</em>)</p></li>
+<li><p><strong>soil_id</strong> (soil ID within the database’s index (the <code class="docutils literal notranslate"><span class="pre">ID</span></code> column). For) – Bablet_2016, 1-17.</p></li>
 <li><p><strong>L</strong> (<em>thickness</em><em> of </em><em>the surface water layer</em><em>, </em><em>cm.</em>)</p></li>
 <li><p><strong>eps</strong> (<em>fraction</em><em> of </em><em>the soil surface that is wet</em><em> (</em><em>0-1</em><em>)</em><em>.</em>)</p></li>
 <li><p><strong>version</strong> (<em>{'marmit1'</em><em>, </em><em>'marmit2'}. MARMIT-2 additionally accounts for</em>) – soil particle size/refractive index (<code class="docutils literal notranslate"><span class="pre">n_i</span></code>/<code class="docutils literal notranslate"><span class="pre">k_i</span></code>/<code class="docutils literal notranslate"><span class="pre">d_i</span></code>) and
@@ -478,6 +494,11 @@ fraction). Ignored when <code class="docutils literal notranslate"><span class="
 MARMIT Shiny app’s defaults.</p></li>
 <li><p><strong>wl_out</strong> (<em>wavelength grid</em><em> (</em><em>nm</em><em>) </em><em>to resample/pad onto. Defaults to</em>) – <code class="docutils literal notranslate"><span class="pre">np.arange(400,</span> <span class="pre">2501)</span></code> (400-2500nm, 1nm step), matching
 <a class="reference internal" href="canopy.html#toolsrtm.canopy.foursail" title="toolsrtm.canopy.foursail"><code class="xref py py-func docutils literal notranslate"><span class="pre">toolsrtm.canopy.foursail()</span></code></a>’s default 2101-point grid.</p></li>
+<li><p><strong>database</strong> (soil database name. Default <code class="docutils literal notranslate"><span class="pre">&quot;Bablet_2016&quot;</span></code>, the only one) – bundled with the package (ignored – always Bablet_2016 – unless
+<code class="docutils literal notranslate"><span class="pre">db_root</span></code> is given).</p></li>
+<li><p><strong>db_root</strong> (directory containing database subfolders (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;databases&quot;</span></code>) – at the RTM-Suite repo root, which has all 8 MARMIT databases – see
+above). When <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), only the bundled Bablet_2016
+database is available and <code class="docutils literal notranslate"><span class="pre">database</span></code> is ignored.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

@@ -20,7 +20,15 @@
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -40,9 +48,7 @@
   </form>
 </div>
   <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-    
-    <a href="../../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
   </div>
 
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -831,9 +837,15 @@
     <span class="n">piLo_</span> <span class="o">=</span> <span class="n">piLoc_</span> <span class="o">+</span> <span class="n">piLos_</span>
     <span class="n">Lo_</span> <span class="o">=</span> <span class="n">piLo_</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 
-    <span class="n">rso</span> <span class="o">=</span> <span class="n">piLou_</span> <span class="o">/</span> <span class="n">Esun_</span>
-    <span class="n">rdo</span> <span class="o">=</span> <span class="n">piLod_</span> <span class="o">/</span> <span class="n">Esky_</span>
-    <span class="n">refl</span> <span class="o">=</span> <span class="n">piLo_</span> <span class="o">/</span> <span class="p">(</span><span class="n">Esky_</span> <span class="o">+</span> <span class="n">Esun_</span><span class="p">)</span>
+    <span class="c1"># Esun_/Esky_ are genuinely near-zero at a handful of water-vapor/O2</span>
+    <span class="c1"># absorption wavelengths -- rso/rdo/refl are expected to come back</span>
+    <span class="c1"># NaN/Inf there (refl is masked back to a finite fallback via rso just</span>
+    <span class="c1"># below); suppress the resulting divide warning rather than let NumPy</span>
+    <span class="c1"># print it (with this file&#39;s own absolute path) on every call.</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
+        <span class="n">rso</span> <span class="o">=</span> <span class="n">piLou_</span> <span class="o">/</span> <span class="n">Esun_</span>
+        <span class="n">rdo</span> <span class="o">=</span> <span class="n">piLod_</span> <span class="o">/</span> <span class="n">Esky_</span>
+        <span class="n">refl</span> <span class="o">=</span> <span class="n">piLo_</span> <span class="o">/</span> <span class="p">(</span><span class="n">Esky_</span> <span class="o">+</span> <span class="n">Esun_</span><span class="p">)</span>
     <span class="n">refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Esky_</span> <span class="o">&lt;</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">rso</span><span class="p">,</span> <span class="n">refl</span><span class="p">)</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">Esky_</span> <span class="o">&lt;</span> <span class="mf">2e-4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Esky_</span><span class="p">)</span>
     <span class="n">refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">rso</span><span class="p">,</span> <span class="n">refl</span><span class="p">)</span>
