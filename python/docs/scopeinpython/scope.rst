@@ -20,14 +20,6 @@ partial port of ``SCOPEinR::get.SCOPE``.
    over ~7-10 nonlinear iterations along a per-layer-loop biochemistry
    path -- not a functional bug).
 
-   Along the way, a second real R bug was found and fixed: ``get.zo_and_d``'s
-   degenerate-canopy branch (``LAI`` or ``hc`` near zero) assigned
-   ``zo_and_d$d <- d`` with no ``d`` ever defined on that branch -- errors,
-   or silently picks up a stale ``d`` left over from a previous call in the
-   same R session (the same stray-variable bug pattern as ``RTMo.R``'s
-   direct-beam term, see :func:`scopeinpython.rtmo.net_radiation_lite`).
-   Fixed in ``SCOPEinR/R/zo_and_d.R`` to the evidently-intended ``d <- 0``.
-
    See the module docstring below, and :doc:`../not_ported`, for the full
    list of ``options.SCOPE`` branches this wrapper does not expose at all
    (directional BRDF, ``RTMt_planck``, multi-layer mSCOPE, time-series

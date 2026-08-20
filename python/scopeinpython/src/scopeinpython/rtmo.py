@@ -15,22 +15,9 @@ quantities :mod:`scopeinpython.ebal` actually consumes; the "lite"
 (scalar-per-layer, not full ``(13,36,nl)`` per-leaf-angle) branch only,
 matching every reference case in this port.
 
-**A real bug found and fixed in R here**: the "lite" branch's direct-beam
-term (``Rndir``/``Pndir_Cab``/etc in ``RTMo.R``) used to compute
-``fs_ * Asun[j]`` where ``j`` was leftover from an unrelated, already-
-completed ``for`` loop above it (always equal to ``nl``, the *last*
-canopy layer) -- so the direct-beam contribution to sunlit-leaf net
-radiation came out **exactly constant across all canopy layers**
-(confirmed via direct repro: ``data.rad$Rnuc - data.rad$Rnhc`` had zero
-layer-to-layer variation), which is not physically sensible -- direct-
-beam absorption should decay with canopy depth, the same as the diffuse
-term a few lines below already correctly does. Fixed in
-``SCOPEinR/R/RTMo.R`` to use the full per-layer vectors (``Asun`` etc,
-not ``Asun[j]``) -- a scalar ``fs_`` broadcasts against them correctly
-without indexing. A second, downstream instance of the same class of
-mistake (``Rndir[1] + Rndif`` picking only the first layer, harmless
-before the fix since ``Rndir`` was a scalar, wrong after) was fixed in
-the same edit.
+The direct-beam term (``Rndir``/``Pndir_Cab``/etc) decays with canopy
+depth using the full per-layer vectors (``Asun`` etc.), the same as the
+diffuse term.
 
 NOT ported (out of scope for this port, see python/README.md):
   - Everything else in RTMo.R's section 4 (``Rnuc_Car``/``Pnuc_Car``/
@@ -546,8 +533,8 @@ def net_radiation_lite(
     kChlrel: np.ndarray,
 ) -> NetRadiationLite:
     """Direct, partial port of RTMo.R's section 4 ("lite" branch only,
-    against the fixed R source -- see module docstring). Computes just
-    the 6 quantities :mod:`scopeinpython.ebal` needs.
+    see module docstring). Computes just the 6 quantities
+    :mod:`scopeinpython.ebal` needs.
 
     Parameters
     ----------
