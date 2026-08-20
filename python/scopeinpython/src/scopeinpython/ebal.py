@@ -25,9 +25,6 @@ whole port:
   detail), so the full ``(13,36,nl)`` ``'angles'``/``'angles_and_layers'``
   modes never apply.
 
-See :mod:`scopeinpython.rtmo` (``net_radiation_lite``) and
-:mod:`scopeinpython.rtmt_sb` for two bugs found and fixed in R's own
-dependencies of this loop before this port was written.
 """
 from __future__ import annotations
 
