@@ -89,7 +89,12 @@ section { padding: 64px 24px; scroll-margin-top: 70px; }
 .tut-row .tut-links a { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-light); font-weight: 600; margin-left: 14px; }
 .tut-row .tut-links a:hover { text-decoration: underline; }
 .tut-shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 14px; }
-.tut-shots img { width: 100%; border-radius: 8px; border: 1px solid var(--border-soft); display: block; }
+.tut-shot summary { list-style: none; cursor: pointer; color: var(--brand-light); font-size: 12.5px; font-weight: 600; padding: 4px 0; }
+.tut-shot summary::-webkit-details-marker { display: none; }
+.tut-shot summary::before { content: "▶ Show image"; }
+.tut-shot[open] summary::before { content: "▼ Hide image"; }
+.tut-shot .tut-shot-frame { height: 160px; display: flex; align-items: center; justify-content: center; background: #f4f7f8; border-radius: 8px; border: 1px solid var(--border-soft); margin-top: 6px; overflow: hidden; }
+.tut-shot img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
 
 footer { background: #08202e; color: #b9cbd6; padding: 34px 24px; font-size: 12.5px; }
 .footer-inner { max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
@@ -389,9 +394,9 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
           </div>
         </div>
         <div class="tut-shots">
-          <img src="Tutorials/images/tutorial_sensor_convolution.png" alt="Native 1nm spectrum vs. Sentinel-2A band reflectance">
-          <img src="Tutorials/images/tutorial_sensitivity.png" alt="Canopy reflectance sensitivity to Cab and EWT">
-          <img src="Tutorials/images/tutorial_ml_inversion.png" alt="Cab retrieved from Sentinel-2A bands via Random Forest">
+          <details class="tut-shot"><summary></summary><div class="tut-shot-frame"><img src="Tutorials/images/tutorial_sensor_convolution.png" alt="Native 1nm spectrum vs. Sentinel-2A band reflectance"></div></details>
+          <details class="tut-shot"><summary></summary><div class="tut-shot-frame"><img src="Tutorials/images/tutorial_sensitivity.png" alt="Canopy reflectance sensitivity to Cab and EWT"></div></details>
+          <details class="tut-shot"><summary></summary><div class="tut-shot-frame"><img src="Tutorials/images/tutorial_ml_inversion.png" alt="Cab retrieved from Sentinel-2A bands via Random Forest"></div></details>
         </div>
       </div>
 
@@ -404,9 +409,9 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
           </div>
         </div>
         <div class="tut-shots">
-          <img src="Tutorials/images/scope_reflectance_fluorescence.png" alt="SCOPE TOC reflectance components and fluorescence spectrum">
-          <img src="Tutorials/images/scope_photosynthesis_sif.png" alt="SCOPE canopy photosynthesis vs Vcmax25 and SIF vs Cab">
-          <img src="Tutorials/images/scope_lai_inversion.png" alt="LAI retrieved from Sentinel-2A bands, SCOPE apparent reflectance">
+          <details class="tut-shot"><summary></summary><div class="tut-shot-frame"><img src="Tutorials/images/scope_reflectance_fluorescence.png" alt="SCOPE TOC reflectance components and fluorescence spectrum"></div></details>
+          <details class="tut-shot"><summary></summary><div class="tut-shot-frame"><img src="Tutorials/images/scope_photosynthesis_sif.png" alt="SCOPE canopy photosynthesis vs Vcmax25 and SIF vs Cab"></div></details>
+          <details class="tut-shot"><summary></summary><div class="tut-shot-frame"><img src="Tutorials/images/scope_lai_inversion.png" alt="LAI retrieved from Sentinel-2A bands, SCOPE apparent reflectance"></div></details>
         </div>
       </div>
 

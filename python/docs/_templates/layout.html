@@ -1,11 +1,16 @@
 {% extends "!layout.html" %}
+{% block extrabody %}
+  {{ super() }}
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+{% endblock %}
 {% block sidebartitle %}
   {{ super() }}
   <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-    {% if pagename == 'index' %}
-    <a href="../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    {% else %}
-    <a href="../{{ pathto('index') }}" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    {% endif %}
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
   </div>
 {% endblock %}
