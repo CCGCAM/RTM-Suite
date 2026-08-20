@@ -3,12 +3,11 @@ rm(list= ls())
 
 # 1. load the main libraries  -----
 
+if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) remotes::install_gitlab("caminoccg/toolsrtm")
+if (!requireNamespace("SCOPEinR", quietly = TRUE)) remotes::install_gitlab("caminoccg/scopeinr")
 library(ToolsRTM)
-if (!require(SCOPEinR)) {
-  stop("The 'SCOPEinR' package is required. Please install it and try again.\n",
-       "To install, run:\n", 
-       "  install.packages('SCOPEinR')") 
-}
+library(SCOPEinR)
 required_packages <- c("shiny", "shinythemes", "shinybusy", 'shinyWidgets',"ggplot2", "dplyr",
                        "doParallel",'foreach','parallel','DT')
 
