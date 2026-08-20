@@ -381,7 +381,7 @@ This suite repo is where the two R packages, both Python ports, their docs, and 
   - **Complete reference manuals** (comprehensive, the higher-level `simulate_RTM()`/`get.inversion()`/`get.SCOPE()` API):
     - `ToolsRTM_PROSAIL_tutorial.Rmd`/`.html` — leaf/canopy models, trait distributions and correlation, sensor convolution, all 12 inversion algorithms, real TensorFlow/Keras deep learning.
     - `SCOPEinR_tutorial.Rmd`/`.html` — the SCOPE simulation workflow, reflectance components (`rdd`/`rdo`/`rsd`/`rso`/`refl`/`reflapp`), serial and parallel runs, trait inversion from simulated reflectance.
-  - **How-in-R / How-in-Python** (a shorter, faster on-ramp, matching the AEO-Course PROSAIL app's own tutorial tabs, R and Python side by side, the lower-level `foursail()`/`compute_brf()` API):
+  - **How-in-R / How-in-Python** (a shorter, faster on-ramp, matching the `Apps/RTMs` Shiny app's own tutorial tabs, R and Python side by side, the lower-level `foursail()`/`compute_brf()` API):
     - `How-in-R.Rmd` / `How-in-Python.ipynb` — one simulation → 500 simulations → sensitivity → sensor convolution (all 3 convolution functions, incl. your own sensor/camera) → ML inversion → a Fluspect/SIF bonus.
     - `How-in-R-SCOPEinR.Rmd` / `How-in-Python-SCOPEinR.ipynb` — the SCOPE equivalent: one full simulation → explore reflectance/fluorescence/temperature/fluxes → a small LUT.
 - **Runnable pipeline** ([`Scripts/R/Pipeline/`](Scripts/R/Pipeline/README.md)) — the same workflow as the tutorials above, as plain `.R` scripts meant to be copied and adapted: simulate a LUT (any of the 3 canopy models, any of 3 sensors) → convolve → compute indices → invert (12 ML algorithms or deep learning), for both ToolsRTM and SCOPEinR/SCOPE.

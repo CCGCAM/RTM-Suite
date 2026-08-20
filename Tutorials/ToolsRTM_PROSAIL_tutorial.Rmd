@@ -189,9 +189,13 @@ cat("Sentinel-2A gives", ncol(s2a) - 1, "bands. PRISMA gives", ncol(prisma) - 1,
 
 # Vegetation indices
 
+`get.indices.v2()` computes the common vegetation indices directly from a
+simulated or convolved spectrum -- here's a handful of them for the single
+spectrum simulated above, rounded to 3 decimals for readability:
+
 ```{r indices}
 idx <- get.indices.v2(as.data.frame(sim.matrix), pattern.rfl = "X", spectral.domain = "VNIR")
-idx[, 1:6]
+knitr::kable(round(idx[, 1:6], 3))
 ```
 
 # Inversion: all 12 algorithms, and what each is actually for
