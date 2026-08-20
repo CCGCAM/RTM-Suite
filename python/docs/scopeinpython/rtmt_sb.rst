@@ -10,10 +10,7 @@ already-solved leaf/soil temperatures. Direct, **partial** port of
    Only the "SCOPE-lite" scalar-per-layer branch is ported (matches
    every reference case built during this port). The full per-leaf-angle
    ``(13, 36, nl)`` array branch and the ``obsdir`` (observation-direction
-   brightness temperature) branch are **not ported** -- the latter has an
-   unresolved, likely-buggy R indexing expression
-   (``data.rad$vb[1, nl]``, using the *layer count* as a *wavelength*
-   index) flagged in the module docstring but not independently confirmed.
+   brightness temperature) branch are **not ported**.
 
 .. automodule:: scopeinpython.rtmt_sb
    :members:

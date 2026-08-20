@@ -297,17 +297,8 @@ def fluspect_cx(
     still computed and returned normally either way (see :func:`fluspect_b`'s
     own docstring for why this isn't a ``None`` return, like it used to be).
 
-    **History**: R's ``ToolsRTM::getFluspect.Cx`` used to have a real
-    indexing bug here (``Iwlf <- intersect(wlp, wlf)`` returned the
-    *wavelength values* 640:850 used positionally against ``wlp``
-    (400:2400), reading Kubelka-Munk coefficients at 1039-1249 nm instead
-    of the intended 640-850 nm fluorescence emission range -- confirmed via
-    a standalone R repro). ``ToolsRTM::getFluspect.B`` (:func:`fluspect_b`)
-    never had this bug (uses ``which()``), nor does SCOPEinR's own
-    ``fluspect_Cx_forSCOPE.R`` (uses ``match()``). Fixed in the R source
-    (``Iwlf <- which(wlp >= min(wlf) & wlp <= max(wlf))``) and this port
-    updated to match; this function now computes the physically-intended
-    640-850 nm range (``_IWLF_CORRECT``), not the historical buggy one.
+    This function computes the physically-intended 640-850 nm
+    fluorescence emission range (``_IWLF_CORRECT``).
     """
     op = _fluspect_optipar()
     if LMA > 0 and (Prot > 0 or CBC > 0):

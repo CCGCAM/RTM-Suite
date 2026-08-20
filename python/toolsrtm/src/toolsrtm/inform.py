@@ -10,9 +10,9 @@ itself actually exercises. All 5 leaf models ToolsRTM itself supports
 :func:`toolsrtm.canopy._leaf_optics`, the same dispatcher :func:`toolsrtm.canopy.foursail`
 uses.
 
-Two real quirks of the R source are reproduced exactly here rather than
-"fixed", so results match R bit-for-bit -- see inline comments at
-``_INFORM_QUIRKY_LIDF`` and ``compute_brf``.
+Reproduces the R source's own behavior exactly, so results match R
+bit-for-bit -- see inline comments at ``_INFORM_QUIRKY_LIDF`` and
+``compute_brf``.
 """
 from __future__ import annotations
 
@@ -83,16 +83,9 @@ def compute_brf(rdot, rsot, tts: float, es=None, ed=None, short_waves: bool = Fa
     ``rdot``/``short_waves`` combinations (e.g. calling this directly on a
     Fluspect-based ``foursail()`` result without also setting
     ``short_waves=True``) would otherwise hit a hard NumPy broadcasting
-    error. This mirrors a real bug fixed in ``ToolsRTM::Compute_BRF`` itself
-    (see ``ToolsRTM/R/Compute_BRF.R``'s own comment): the R function used to
-    have a ``missing(short.waves)`` guard that silently forced
-    ``short.waves`` to ``FALSE`` whenever the argument was omitted --
-    contradicting its own declared default and, for Fluspect-based
-    ``rdot``/``rsot``, silently *recycling* mismatched-length Es/Ed instead
-    of erroring, corrupting the last ~100nm of the result. R now matches
-    Es/Ed to ``rdot``'s length the same way this port does; ``short_waves``
-    is kept only for backward API compatibility and no longer has any
-    effect.
+    error. ``ToolsRTM::Compute_BRF`` matches Es/Ed to ``rdot``'s length the
+    same way this port does; ``short_waves`` is kept only for backward API
+    compatibility and no longer has any effect.
     """
     rdot = np.asarray(rdot, dtype=float)
     rsot = np.asarray(rsot, dtype=float)
