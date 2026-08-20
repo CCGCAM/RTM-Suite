@@ -12,12 +12,10 @@
 
 rm(list = ls())
 
-use.dev.source <- TRUE
-if (use.dev.source) {
-  devtools::load_all("../../../ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 library(ggplot2)
 
 ## ----------------------------------------------------------------------------
@@ -32,7 +30,7 @@ sensors <- list(Sentinel2A = ToolsRTM::Sentinel2A.MSI, MODIS = ToolsRTM::TerraAq
 
 correlate.traits <- list(Car = list(with = "Cab", scale = 1/4, r = 0.8))
 
-out_dir <- "../../../outs/ForSPART"
+out_dir <- "outs/ForSPART"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 pdf(file.path(out_dir, "Rplots.pdf"))  # captures any stray plot() call, see ForPROSAIL/3-simulate_LUT.R for why
 

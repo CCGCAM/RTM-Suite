@@ -9,14 +9,12 @@
 
 rm(list = ls())
 
-use.dev.source <- TRUE
-if (use.dev.source) {
-  devtools::load_all("../../../ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 
-out_dir <- "../../../outs/ForINFORM"
+out_dir <- "outs/ForINFORM"
 sim <- readRDS(file.path(out_dir, "1-datasets.rds"))
 datasets <- sim$datasets
 

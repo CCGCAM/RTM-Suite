@@ -7,55 +7,25 @@ rm(list=ls())
 ##############################################################################################################################
 
 if (!require("RColorBrewer")) { install.packages("RColorBrewer"); require("RColorBrewer") }  ### colors
-if (!require("signal")) { install.packages("signal"); require("signal") }  ### Savitzky-Golay smoothing (replaces hsdar::noiseFiltering)
+if (!require("signal")) { install.packages("signal"); require("signal") }  ### Savitzky-Golay smoothing
 if (!require("parallel")) { install.packages("parallel"); require("parallel") }  ### Paralell
 if (!require("doParallel")) { install.packages("doParallel"); require("doParallel") }  ### Paralell foreach and caret
 # NOTE: rstanarm / ADGofTest / pspline were required here but never actually used
 # anywhere in this script -- dropped to cut install weight. hsdar (speclib/
 # spectralResampling/mask/noiseFiltering) was also dropped: it was archived
 # from CRAN on 2023-07-06 and can no longer be installed via install.packages()
-# on current R versions. Everything this script needed from it is reimplemented
-# below as plain-matrix helpers.
+# on current R versions. What this script needs from it is covered directly
+# by ToolsRTM's own functions below (get.spectral.convolution.gaussian() for
+# resampling) or by base R / signal:: calls inline -- no local reimplementation.
 
-# My packages in R
-if (!require("ToolsRTM")) { install.packages("ToolsRTM"); require("ToolsRTM") }
 library(tidyverse)
 library(ggplot2)
 
-use.dev.source <- TRUE  # TRUE = load ToolsRTM from local source (ToolsRTM/R); FALSE = use the installed package
-if (use.dev.source) devtools::load_all("../../../ToolsRTM/R")
-
-## --- Lightweight replacements for hsdar -------------------------------------
-## Gaussian-response spectral resampling from one wavelength grid to another
-## (replaces hsdar::speclib()+spectralResampling()).
-resample.fun<-function(center, wl, fwhm)
-{
-  a <- dnorm(wl, mean = center, sd = fwhm/2)
-  a <- (a-min(a))/(max(a) - min(a))
-  return(a)
+# ToolsRTM isn't on CRAN -- install from GitLab if missing.
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
-resample_spectra <- function(refl_matrix, from_wl, to_wl, fwhm) {
-  response <- t(sapply(to_wl, resample.fun, wl = from_wl, fwhm = fwhm))
-  response <- response / rowSums(response)
-  resampled <- as.matrix(refl_matrix) %*% t(response)
-  colnames(resampled) <- to_wl
-  resampled
-}
-## TRUE/FALSE keep-mask over `wl`, excluding paired [a,b] ranges (replaces hsdar::mask()<-).
-mask_wavelengths <- function(wl, ranges) {
-  keep <- rep(TRUE, length(wl))
-  for (k in seq(1, length(ranges), by = 2)) keep[wl >= ranges[k] & wl <= ranges[k + 1]] <- FALSE
-  keep
-}
-## Row-wise Savitzky-Golay smoothing (replaces hsdar::noiseFiltering(method="sgolay")).
-sgolay_smooth <- function(refl_matrix, n = 25) {
-  t(apply(as.matrix(refl_matrix), 1, signal::sgolayfilt, p = 3, n = n))
-}
-## Quick-look overlaid line plot of a reflectance matrix (replaces hsdar's plot.Speclib()).
-plot_spectra <- function(refl_matrix, wl, ...) {
-  # respects par(new=TRUE) the same way base plot()/matplot() always do -- no special handling needed
-  matplot(wl, t(refl_matrix), type = "l", lty = 1, xlab = "wave (nm)", ylab = "Reflectance", ...)
-}
+library(ToolsRTM)
 
 ##############################################################################################################################
 #	1. Generate LUTs with correlations  -----
@@ -193,7 +163,7 @@ keep.simula <- mask_wavelengths(wave, c(300,470,841,2600))
 # outs/ForPROSAIL/ always has real output from a run of this script.
 
 # Outputs always go under <repo root>/outs/, never inside Scripts/.
-out_root <- "../../../outs/ForPROSAIL"
+out_root <- "outs/ForPROSAIL"
 dir.create(file.path(out_root, "LUTs"),     showWarnings = FALSE, recursive = TRUE)
 dir.create(file.path(out_root, "Sensor"),   showWarnings = FALSE, recursive = TRUE)
 dir.create(file.path(out_root, "Sims"),     showWarnings = FALSE, recursive = TRUE)

@@ -35,7 +35,10 @@
 #'
 #' @param df A data frame with a `wave` column (wavelength, nm) and an
 #'   `rfl` column (reflectance) -- same convention as
-#'   `get.spectral.convolution.rfl()`/`get.spectral.convolution.srf()`.
+#'   `get.spectral.convolution.rfl()`/`get.spectral.convolution.srf()`. Used
+#'   for a SINGLE spectrum; for many spectra at once (e.g. an entire LUT),
+#'   use `rfl`/`wave` instead (see below) -- much faster, vectorized as one
+#'   matrix multiplication instead of one call per row.
 #' @param sensor.i Optional: a bundled sensor name (see above). If given,
 #'   `centers`/`fwhm` are looked up automatically and any values you also
 #'   pass for them are ignored.
@@ -44,10 +47,22 @@
 #' @param fwhm Optional: your own sensor's per-band FWHM, nm, same length
 #'   and order as `centers`. Derived from band spacing if omitted.
 #' @param get.plots logical, plot the convolved spectrum? Default `FALSE`.
+#'   Ignored when `rfl`/`wave` (bulk mode) is used instead of `df`.
+#' @param rfl Optional: a matrix or data.frame of MANY reflectance spectra
+#'   at once, one row per spectrum, columns matching `wave` (e.g. a LUT's
+#'   simulated reflectance matrix). When supplied (together with `wave`),
+#'   `df` is ignored and the whole matrix is convolved in one vectorized
+#'   pass -- this is the fast path for large tables.
+#' @param wave Required together with `rfl`: the wavelength grid (nm) `rfl`'s
+#'   columns are on.
 #'
-#' @return A data frame with one row per band: `band` (index), `wl` (center
-#'   wavelength, nm), `fwhm` (nm), `RFL` (convolved reflectance) -- sorted
-#'   by `wl`.
+#' @return Single-spectrum mode (`df`): a data frame with one row per band:
+#'   `band` (index), `wl` (center wavelength, nm), `fwhm` (nm), `RFL`
+#'   (convolved reflectance) -- sorted by `wl`. Bulk mode (`rfl`/`wave`): a
+#'   numeric matrix, one row per input spectrum (same row order as `rfl`),
+#'   one column per band (named by center wavelength, sorted by `wl`); the
+#'   per-band `wl`/`fwhm` vectors are attached as `attr(out, "wl")` /
+#'   `attr(out, "fwhm")`.
 #' @export
 #' @examples
 #' df <- data.frame(wave = ToolsRTM::dataSpec_PDB[, 1],
@@ -67,7 +82,14 @@
 #' # (e.g. a Headwall camera) -- only wavelength centers known, no FWHM:
 #' headwall_centers <- c(398.02, 400.25, 402.48, 404.71, 406.94)  # (truncated example)
 #' headwall_bands <- get.spectral.convolution.gaussian(df, centers = headwall_centers)
-get.spectral.convolution.gaussian <- function(df, sensor.i = NULL, centers = NULL, fwhm = NULL, get.plots = FALSE) {
+#'
+#' # Bulk mode: an entire LUT's reflectance matrix at once (fast, vectorized)
+#' wave <- 400:2500
+#' rfl_matrix <- matrix(0.05 + 0.3 * wave / 2500, nrow = 50, ncol = length(wave), byrow = TRUE)
+#' bulk_bands <- get.spectral.convolution.gaussian(centers = own_centers, fwhm = own_fwhm,
+#'                                                  rfl = rfl_matrix, wave = wave)
+get.spectral.convolution.gaussian <- function(df = NULL, sensor.i = NULL, centers = NULL, fwhm = NULL,
+                                               get.plots = FALSE, rfl = NULL, wave = NULL) {
   lb <- ub <- NULL
 
   if (!is.null(sensor.i)) {
@@ -92,6 +114,12 @@ get.spectral.convolution.gaussian <- function(df, sensor.i = NULL, centers = NUL
   if (is.null(centers)) {
     stop("Supply either `sensor.i` (a bundled sensor name) or your own `centers`.")
   }
+  # A single scalar fwhm (one uniform width for every band, e.g. a regular
+  # output grid) is recycled to match `centers` -- convenient for the common
+  # "resample onto a uniform-FWHM grid" case, e.g. `wl <- seq(468, 842, 2)`.
+  if (!is.null(fwhm) && length(fwhm) == 1 && length(centers) > 1) {
+    fwhm <- rep(fwhm, length(centers))
+  }
 
   ord <- order(centers)
   centers <- centers[ord]
@@ -104,9 +132,40 @@ get.spectral.convolution.gaussian <- function(df, sensor.i = NULL, centers = NUL
   }
   stopifnot(length(centers) == length(fwhm))
 
+  nbands <- length(centers)
+
+  ## ---- bulk mode: many spectra at once, one vectorized matrix multiply ----
+  if (!is.null(rfl)) {
+    if (is.null(wave)) {
+      stop("get.spectral.convolution.gaussian(): 'wave' is required together with 'rfl' (bulk mode).")
+    }
+    rfl <- as.matrix(rfl)
+    wl_native <- wave
+
+    W <- matrix(0, nrow = length(wl_native), ncol = nbands)
+    for (i in seq_len(nbands)) {
+      sigma <- fwhm[i] / (2 * sqrt(2 * log(2)))
+      w <- exp(-0.5 * ((wl_native - centers[i]) / sigma)^2)
+      if (!is.null(lb)) w[wl_native < lb[i] | wl_native > ub[i]] <- 0
+      W[, i] <- w
+    }
+    col_sums <- colSums(W)
+    col_sums[col_sums == 0] <- NA  # band has no overlap with wl_native -> output column is NA, not div-by-zero
+    W <- sweep(W, 2, col_sums, "/")
+
+    out <- rfl %*% W
+    colnames(out) <- paste0("wl_", round(centers, 1))
+    attr(out, "wl") <- centers
+    attr(out, "fwhm") <- fwhm
+    return(out)
+  }
+
+  ## ---- single-spectrum mode (unchanged behavior) ----
+  if (is.null(df)) {
+    stop("get.spectral.convolution.gaussian(): supply either 'df' (one spectrum) or 'rfl'+'wave' (many spectra at once).")
+  }
   wl_native <- df$wave
   refl_native <- df$rfl
-  nbands <- length(centers)
 
   out <- data.frame(band = seq_len(nbands), wl = centers, fwhm = fwhm, RFL = NA_real_)
   for (i in seq_len(nbands)) {

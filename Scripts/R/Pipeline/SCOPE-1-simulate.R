@@ -24,15 +24,14 @@
 
 rm(list = ls())  # avoid leftover objects from a previous run/session leaking in
 
-use.dev.source <- TRUE  # TRUE = load from local source; FALSE = use installed package
-
-if (use.dev.source) {
-  devtools::load_all("ToolsRTM/R")
-  devtools::load_all("SCOPEinR/R")
-} else {
-  library(ToolsRTM)
-  library(SCOPEinR)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+if (!requireNamespace("SCOPEinR", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/scopeinr")
+}
+library(ToolsRTM)
+library(SCOPEinR)
 library(ggplot2)  # needed for the diagnostic plot below
 
 ## ----------------------------------------------------------------------------

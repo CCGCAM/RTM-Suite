@@ -11,13 +11,10 @@
 
 rm(list = ls())
 
-use.dev.source <- TRUE  # TRUE = cargar desde el código fuente local (ToolsRTM/R); FALSE = usar el paquete instalado
-
-if (use.dev.source) {
-  devtools::load_all("ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 
 out_dir <- "outs/rtm_sims/pipeline"
 sim <- readRDS(file.path(out_dir, "1-datasets.rds"))

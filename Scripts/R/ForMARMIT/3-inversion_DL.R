@@ -21,15 +21,13 @@ library(reticulate)
 py_require(packages = c("tensorflow", "tf-keras"))
 library(keras)  # getMLmodel() calls callback_early_stopping() unnamespaced -- needs this attached, not just installed
 
-use.dev.source <- TRUE
-if (use.dev.source) {
-  devtools::load_all("../../../ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 library(ggplot2)
 
-out_dir <- "../../../outs/ForMARMIT"
+out_dir <- "outs/ForMARMIT"
 sim <- readRDS(file.path(out_dir, "1-datasets.rds"))
 datasets <- sim$datasets
 

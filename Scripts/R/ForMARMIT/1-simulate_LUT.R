@@ -14,12 +14,10 @@
 
 rm(list = ls())
 
-use.dev.source <- TRUE
-if (use.dev.source) {
-  devtools::load_all("../../../ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 library(ggplot2)
 
 ## ----------------------------------------------------------------------------
@@ -41,10 +39,10 @@ sensors   <- c("Sentinel2a", "Sentinel2b", "PRISMA")
 # below and change `database` above to use any of them -- no download/copy
 # needed, just point at the folder:
 #   database <- "Liu_2002"
-#   db.root  <- "../../../databases"
-db.root <- NULL          # NULL = only Bablet_2016 (bundled); or "../../../databases"
+#   db.root  <- "databases"
+db.root <- NULL          # NULL = only Bablet_2016 (bundled); or "databases"
 
-out_dir <- "../../../outs/ForMARMIT"
+out_dir <- "outs/ForMARMIT"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 pdf(file.path(out_dir, "Rplots.pdf"))  # captures any stray plot() call, see ForPROSAIL/3-simulate_LUT.R for why
 

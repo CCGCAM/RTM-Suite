@@ -16,12 +16,13 @@
 
 rm(list = ls())  # avoid leftover objects from a previous run/session leaking in
 
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
+}
 library(ToolsRTM)
 library(ggplot2)
 
-devtools::load_all("../../../ToolsRTM")
-
-out_dir <- "../../../outs/Comparison"
+out_dir <- "outs/Comparison"
 dir.create(out_dir, showWarnings = FALSE)
 
 set.seed(1)

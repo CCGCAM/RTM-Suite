@@ -7,13 +7,10 @@
 
 rm(list = ls())
 
-use.dev.source <- TRUE
-
-if (use.dev.source) {
-  devtools::load_all("ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 
 out_dir <- "outs/rtm_sims/pipeline_scope"
 sim <- readRDS(file.path(out_dir, "SCOPE-1-datasets.rds"))

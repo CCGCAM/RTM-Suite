@@ -13,15 +13,14 @@
 
 rm(list = ls())  # avoid leftover objects from a previous run/session leaking in
 
-use.dev.source <- TRUE  # TRUE = cargar desde el código fuente local (ToolsRTM/R, SCOPEinR/R); FALSE = usar el paquete instalado
-
-if (use.dev.source) {
-  devtools::load_all("ToolsRTM/R")
-  devtools::load_all("SCOPEinR/R")
-} else {
-  library(ToolsRTM)
-  library(SCOPEinR)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+if (!requireNamespace("SCOPEinR", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/scopeinr")
+}
+library(ToolsRTM)
+library(SCOPEinR)
 # ggplot2/dplyr aren't re-exported by ToolsRTM (it only `import()`s them for
 # its own internal use, per NAMESPACE) -- need them attached directly here.
 library(ggplot2)

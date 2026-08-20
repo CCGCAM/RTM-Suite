@@ -9,12 +9,10 @@
 
 rm(list = ls())
 
-use.dev.source <- TRUE  # TRUE = load ToolsRTM from local source (ToolsRTM/R); FALSE = use the installed package
-if (use.dev.source) {
-  devtools::load_all("../../../ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 library(ggplot2)
 
 ## ----------------------------------------------------------------------------
@@ -34,7 +32,7 @@ correlate.traits <- list(Car = list(with = "Cab", scale = 1/4, r = 0.8))
 
 # Everything lands directly under outs/ForPROSAIL/ -- no extra subfolder, so
 # it's obvious where to look.
-out_dir <- "../../../outs/ForFoursail2"
+out_dir <- "outs/ForFoursail2"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 # Any plot() / print(ggplot) call that doesn't have its own explicit device

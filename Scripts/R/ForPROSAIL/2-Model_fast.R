@@ -6,9 +6,6 @@ rm(list=ls())
 ##############################################################################################################################
 
 if (!require("RColorBrewer")) { install.packages("RColorBrewer"); require("RColorBrewer") }  ### colors
-
-# My packages in R
-if (!require("ToolsRTM")) { install.packages("ToolsRTM"); require("ToolsRTM") }
 if (!require("caret")) { install.packages("caret"); require("caret") }  ### findCorrelation()
 
 if (!require("dplyr")) { install.packages("dplyr"); require("dplyr") }  ###
@@ -21,10 +18,12 @@ if (!require("tensorflow")) { install.packages("tensorflow"); require("tensorflo
 # in particular was archived from CRAN on 2023-07-06 and can no longer be
 # installed via install.packages() on current R versions anyway.
 
-use.dev.source <- TRUE  # TRUE = load ToolsRTM from local source (ToolsRTM/R); FALSE = use the installed package
-if (use.dev.source) devtools::load_all("../../../ToolsRTM/R")
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
+}
+library(ToolsRTM)
 
-out_root <- "../../../outs/ForPROSAIL"  # outputs always go under <repo root>/outs/, never inside Scripts/
+out_root <- "outs/ForPROSAIL"  # outputs always go under <repo root>/outs/, never inside Scripts/
 
 ##############################################################################################################################
 #	1. Open  LUT with correlations  -----

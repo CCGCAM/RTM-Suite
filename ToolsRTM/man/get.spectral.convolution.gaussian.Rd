@@ -8,17 +8,22 @@ no real measured per-nm SRF curve available at all, approximated as a
 Gaussian response (optionally truncated to a published band edge range).}
 \usage{
 get.spectral.convolution.gaussian(
-  df,
+  df = NULL,
   sensor.i = NULL,
   centers = NULL,
   fwhm = NULL,
-  get.plots = FALSE
+  get.plots = FALSE,
+  rfl = NULL,
+  wave = NULL
 )
 }
 \arguments{
 \item{df}{A data frame with a \code{wave} column (wavelength, nm) and an
 \code{rfl} column (reflectance) -- same convention as
-\code{get.spectral.convolution.rfl()}/\code{get.spectral.convolution.srf()}.}
+\code{get.spectral.convolution.rfl()}/\code{get.spectral.convolution.srf()}. Used
+for a SINGLE spectrum; for many spectra at once (e.g. an entire LUT),
+use \code{rfl}/\code{wave} instead (see below) -- much faster, vectorized as one
+matrix multiplication instead of one call per row.}
 
 \item{sensor.i}{Optional: a bundled sensor name (see above). If given,
 \code{centers}/\code{fwhm} are looked up automatically and any values you also
@@ -30,12 +35,26 @@ sensor's band center wavelengths, nm.}
 \item{fwhm}{Optional: your own sensor's per-band FWHM, nm, same length
 and order as \code{centers}. Derived from band spacing if omitted.}
 
-\item{get.plots}{logical, plot the convolved spectrum? Default \code{FALSE}.}
+\item{get.plots}{logical, plot the convolved spectrum? Default \code{FALSE}.
+Ignored when \code{rfl}/\code{wave} (bulk mode) is used instead of \code{df}.}
+
+\item{rfl}{Optional: a matrix or data.frame of MANY reflectance spectra
+at once, one row per spectrum, columns matching \code{wave} (e.g. a LUT's
+simulated reflectance matrix). When supplied (together with \code{wave}),
+\code{df} is ignored and the whole matrix is convolved in one vectorized
+pass -- this is the fast path for large tables.}
+
+\item{wave}{Required together with \code{rfl}: the wavelength grid (nm) \code{rfl}'s
+columns are on.}
 }
 \value{
-A data frame with one row per band: \code{band} (index), \code{wl} (center
-wavelength, nm), \code{fwhm} (nm), \code{RFL} (convolved reflectance) -- sorted
-by \code{wl}.
+Single-spectrum mode (\code{df}): a data frame with one row per band:
+\code{band} (index), \code{wl} (center wavelength, nm), \code{fwhm} (nm), \code{RFL}
+(convolved reflectance) -- sorted by \code{wl}. Bulk mode (\code{rfl}/\code{wave}): a
+numeric matrix, one row per input spectrum (same row order as \code{rfl}),
+one column per band (named by center wavelength, sorted by \code{wl}); the
+per-band \code{wl}/\code{fwhm} vectors are attached as \code{attr(out, "wl")} /
+\code{attr(out, "fwhm")}.
 }
 \description{
 \code{get.spectral.convolution.rfl()} needs SMAC atmospheric-correction
@@ -89,4 +108,10 @@ own_bands <- get.spectral.convolution.gaussian(df, centers = own_centers, fwhm =
 # (e.g. a Headwall camera) -- only wavelength centers known, no FWHM:
 headwall_centers <- c(398.02, 400.25, 402.48, 404.71, 406.94)  # (truncated example)
 headwall_bands <- get.spectral.convolution.gaussian(df, centers = headwall_centers)
+
+# Bulk mode: an entire LUT's reflectance matrix at once (fast, vectorized)
+wave <- 400:2500
+rfl_matrix <- matrix(0.05 + 0.3 * wave / 2500, nrow = 50, ncol = length(wave), byrow = TRUE)
+bulk_bands <- get.spectral.convolution.gaussian(centers = own_centers, fwhm = own_fwhm,
+                                                 rfl = rfl_matrix, wave = wave)
 }

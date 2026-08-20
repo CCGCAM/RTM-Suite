@@ -16,14 +16,12 @@ if (!require("sensitivity")) { install.packages("sensitivity"); require("sensiti
 if (!require("ggplot2")) { install.packages("ggplot2"); require("ggplot2") }
 if (!require("dplyr")) { install.packages("dplyr"); require("dplyr") }
 
-use.dev.source <- TRUE
-if (use.dev.source) {
-  devtools::load_all("../../../ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 
-out_dir <- "../../../outs/Sensibility"
+out_dir <- "outs/Sensibility"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 pdf(file.path(out_dir, "Rplots.pdf"))  # catches any stray plot()/print() call, keeps it out of Scripts/
 

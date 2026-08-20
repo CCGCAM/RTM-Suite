@@ -32,15 +32,14 @@
 
 rm(list = ls())  # avoid leftover objects from a previous run/session leaking in
 
-use.dev.source <- TRUE  # TRUE = load from local source; FALSE = use installed package
-
-if (use.dev.source) {
-  devtools::load_all("../../../ToolsRTM/R")
-  devtools::load_all("../../../SCOPEinR/R")
-} else {
-  library(ToolsRTM)
-  library(SCOPEinR)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+if (!requireNamespace("SCOPEinR", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/scopeinr")
+}
+library(ToolsRTM)
+library(SCOPEinR)
 library(ggplot2)
 
 ## ----------------------------------------------------------------------------
@@ -52,7 +51,7 @@ use.parallel <- FALSE            # TRUE = get.SCOPE.parallel(parallel = TRUE); F
 seed         <- 1
 sensors      <- c("Sentinel2a", "Sentinel2b", "PRISMA")
 
-out_dir <- "../../../outs/ForSCOPE"
+out_dir <- "outs/ForSCOPE"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 pdf(file.path(out_dir, "Rplots.pdf"))  # captures any stray plot() call, see ForPROSAIL/3-simulate_LUT.R for why
 

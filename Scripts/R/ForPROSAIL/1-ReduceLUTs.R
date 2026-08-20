@@ -8,8 +8,6 @@ rm(list=ls())
 if (!require("RColorBrewer")) { install.packages("RColorBrewer"); require("RColorBrewer") }  ### colors
 if (!require("parallel")) { install.packages("parallel"); require("parallel") }  ### Paralell
 if (!require("doParallel")) { install.packages("doParallel"); require("doParallel") }  ### Paralell foreach and caret
-# My packages in R
-if (!require("ToolsRTM")) { install.packages("ToolsRTM"); require("ToolsRTM") }
 
 if (!require("dplyr")) { install.packages("dplyr"); require("dplyr") }  ###
 if (!require("data.table")) { install.packages("data.table"); require("data.table") }  ###
@@ -23,10 +21,12 @@ if (!require("zoo")) { install.packages("zoo"); require("zoo") }  ###
 # reimplemented below as plain-matrix helpers -- see 'resample_spectra()' and
 # 'mask_wavelengths()'.
 
-use.dev.source <- TRUE  # TRUE = load ToolsRTM from local source (ToolsRTM/R); FALSE = use the installed package
-if (use.dev.source) devtools::load_all("../../../ToolsRTM/R")
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
+}
+library(ToolsRTM)
 
-out_root <- "../../../outs/ForPROSAIL"  # outputs always go under <repo root>/outs/, never inside Scripts/
+out_root <- "outs/ForPROSAIL"  # outputs always go under <repo root>/outs/, never inside Scripts/
 dir.create(file.path(out_root, "LUTs"), showWarnings = FALSE, recursive = TRUE)
 dir.create(file.path(out_root, "Sims"), showWarnings = FALSE, recursive = TRUE)
 

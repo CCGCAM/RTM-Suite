@@ -13,14 +13,12 @@ rm(list = ls())
 if (!require("sensobol")) { install.packages("sensobol"); require("sensobol") }
 if (!require("ggplot2")) { install.packages("ggplot2"); require("ggplot2") }
 
-use.dev.source <- TRUE
-if (use.dev.source) {
-  devtools::load_all("../../../ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+library(ToolsRTM)
 
-out_dir <- "../../../outs/Sensibility"
+out_dir <- "outs/Sensibility"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 pdf(file.path(out_dir, "Rplots.pdf"))  # catches any stray plot()/print() call, keeps it out of Scripts/
 

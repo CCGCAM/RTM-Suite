@@ -19,16 +19,19 @@
 
 rm(list = ls())  # avoid leftover objects from a previous run/session leaking in
 
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
+}
+if (!requireNamespace("SCOPEinR", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/scopeinr")
+}
 library(ToolsRTM)
+library(SCOPEinR)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 
-
-devtools::load_all("../../../ToolsRTM")
-devtools::load_all("../../../SCOPEinR")
-
-out_dir <- "../../../outs/Comparison"  # project-level outputs folder, never inside Scripts/
+out_dir <- "outs/Comparison"  # project-level outputs folder, never inside Scripts/
 dir.create(out_dir, showWarnings = FALSE)
 pdf(file.path(out_dir, "Rplots.pdf"))  # catches any stray plot()/print() call, keeps it out of Scripts/
 

@@ -8,11 +8,14 @@
 
 rm(list = ls())  # avoid leftover objects from a previous run/session leaking in
 
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
+}
 library(ToolsRTM)
 library(ggplot2)
 library(dplyr)
 
-out_dir <- "../../../outs/Comparison"  # project-level outputs folder, never inside Scripts/
+out_dir <- "outs/Comparison"  # project-level outputs folder, never inside Scripts/
 dir.create(out_dir, showWarnings = FALSE)
 pdf(file.path(out_dir, "Rplots.pdf"))  # catches any stray plot()/print() call, keeps it out of Scripts/
 
@@ -87,7 +90,7 @@ p_toc <- ggplot(df_toc, aes(x = wavelength, y = reflectance, color = leaf_model)
        x = "Wavelength (nm)", y = "TOC BRDF reflectance", color = "Leaf model") +
   theme_bw(base_size = 12) + theme(legend.position = "top")
 
-out_dir <- "../../../outs/Comparison"  # project-level outputs folder, never inside Scripts/
+out_dir <- "outs/Comparison"  # project-level outputs folder, never inside Scripts/
 ggsave(file.path(out_dir, "compare_SPART_leafmodels.png"), p_toc, width = 8, height = 5, dpi = 150)
 cat("\nSaved to '", out_dir, "/compare_SPART_leafmodels.png'\n", sep = "")
 

@@ -20,13 +20,14 @@
 
 rm(list = ls())  # avoid leftover objects from a previous run/session leaking in
 
-use.dev.source <- TRUE  # TRUE = cargar desde el código fuente local (ToolsRTM/R, SCOPEinR/R); FALSE = usar el paquete instalado
-
-if (use.dev.source) {
-  devtools::load_all("ToolsRTM/R")
-} else {
-  library(ToolsRTM)
+if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/toolsrtm")
 }
+if (!requireNamespace("SCOPEinR", quietly = TRUE)) {
+  remotes::install_gitlab("caminoccg/scopeinr")
+}
+library(ToolsRTM)
+library(SCOPEinR)
 library(ggplot2)  # ToolsRTM doesn't re-export it; needed for the diagnostic plot below
 
 ## ----------------------------------------------------------------------------
