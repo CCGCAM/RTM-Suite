@@ -4,11 +4,7 @@
 
 **SCOPEinR** is an R package designed for implementing the Soil Canopy Observation, Photochemistry, and Energy Fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB, this model allows users to simulate interactions between soil, canopy, and atmospheric processes (Van der Tol et al., 2009; Yang et al., 2020).
 
-The **SCOPEinR** package powers the online **RT-Simulator**, providing a user-friendly interface through a Shiny app that allows users to simulate canopy reflectance at the Top of Canopy (TOC) level. In addition to reflectance, it also enables the simulation of chlorophyll fluorescence emissions using the SCOPE model. For comprehensive inter-comparison with other key radiative transfer (RT) models, it is recommended to install the **ToolsRTM** package alongside **SCOPEinR**.
-
-The **SCOPEinR** package executes the Soil Canopy Observation, Photochemistry, and Energy Fluxes (SCOPE) radiative transfer model, originally developed in MATLAB by Van der Tol et al. (2009) and further extended by Yang et al. (2020). This integration allows users to leverage the capabilities of the SCOPE model within the R environment for in-depth analyses.
-
-We have seamlessly integrated the **ToolsRTM** and **SCOPEinR** packages into the online RT-platform, both of which are available under the GNU license. You can access the online RT simulator at [this link](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/).
+**SCOPEinR** also powers [`Apps/RTMs`](https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs), a point-and-click Shiny app (no code required) for simulating canopy reflectance and chlorophyll fluorescence at Top of Canopy (TOC) level -- run it locally via `shiny::runApp("Apps/RTMs")`. For comprehensive inter-comparison with other key radiative transfer (RT) models, it is recommended to install the **ToolsRTM** package alongside **SCOPEinR**.
 
 ### RTM-Suite ecosystem
 
@@ -21,9 +17,7 @@ SCOPEinR is part of **RTM-Suite**, which brings together the R packages, interac
 | **toolsrtm** (Python) | Python port of ToolsRTM | [![GitHub](https://img.shields.io/badge/GitHub-toolsrtm-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/ToolsRTMinPython) |
 | **scopeinpython** (Python) | Python port of SCOPEinR | [![GitHub](https://img.shields.io/badge/GitHub-scopeinpython-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/scopeinpython) |
 | **RTM-Suite** | Monorepo: both R packages, both Python ports, apps, tutorials, docs | [![GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite) |
-| **RT-Simulator** | Interactive access to the models without requiring local code | [Open platform](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/) · [Source repository](https://gitlab.com/caminoccg/toolsrtm-simulator) |
-
-*Note: These modules are currently in the testing phase before public release. For access, please contact us at caminoccg\@gmail.com.*
+| **Apps/RTMs** | Interactive access to the models without writing code (Shiny, run locally) | [Source](https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs) |
 
 ### Manuals and learning resources
 
@@ -32,7 +26,6 @@ The complete documentation is maintained together in the [**RTM-Suite documentat
 - [**ToolsRTM reference manual**](../docs/toolsrtm/index.html): functions, model families, examples, and articles.
 - [**SCOPEinR reference manual**](../docs/scopeinr/index.html): SCOPE inputs, outputs, energy balance, photosynthesis, and fluorescence.
 - [**SCOPE course pipeline**](../docs/scopeinr/articles/scope-pipeline.html): a reproducible workflow for energy balance, fluorescence, and trait inversion, including a real SIF-versus-Vcmax25 experiment.
-- [**RT-Simulator online**](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/): interactive model exploration and access to package learning material.
 - [**RTM-Suite tutorials**](../Tutorials/): complete R workflows and corresponding Python learning resources.
 
 Documentation is also available from inside the installed packages through their help pages, vignettes, and pkgdown articles.

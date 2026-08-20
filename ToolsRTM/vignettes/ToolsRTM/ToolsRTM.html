@@ -625,33 +625,31 @@ SCOPEin R enables seamless integration of the SCOPE model within the R
 environment, offering users the flexibility to harness its capabilities
 for in-depth analysis.</p></li>
 </ol>
-<p>The online RT-platform and R packages are available under GNU
-license. The online RT-simulator is currently accessible at <a href="https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/" class="uri">https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/</a></p>
-<p>The repositories for accessing the packages and platform are as
-follows:</p>
+<p><strong>ToolsRTM</strong> and <strong>SCOPEinR</strong> are both part
+of <a href="https://ccgcam.github.io/RTM-Suite/"><strong>RTM-Suite</strong></a>,
+which also ships a point-and-click Shiny app (no code required) covering
+the same models – see <a href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs"><code>Apps/RTMs</code></a>,
+runnable locally via <code>shiny::runApp(&quot;Apps/RTMs&quot;)</code>. Both R
+packages are distributed under GPL-3.0 (see each package’s own
+<code>LICENSE</code>/<code>THIRD_PARTY_LICENSES.md</code> for the
+per-model breakdown).</p>
+<p>The repositories for accessing the R packages are as follows:</p>
 <ul>
 <li><p>The <strong>ToolsRTM</strong> package: <a href="https://gitlab.com/caminoccg/toolsrtm" class="uri">https://gitlab.com/caminoccg/toolsrtm</a></p></li>
-<li><p>The <strong>SCOPEinR</strong> packages: <a href="https://gitlab.com/caminoccg/toolsrtm" class="uri">https://gitlab.com/caminoccg/</a><a href="https://gitlab.com/caminoccg/scopeinr">scopeinr</a></p></li>
-<li><p>The online <strong>RT-platform</strong>: <a href="https://gitlab.com/caminoccg/toolsrtm" class="uri">https://gitlab.com/caminoccg/</a><a href="https://gitlab.com/caminoccg/toolsrtm-simulator">toolsrtm-simulator</a></p></li>
+<li><p>The <strong>SCOPEinR</strong> package: <a href="https://gitlab.com/caminoccg/scopeinr" class="uri">https://gitlab.com/caminoccg/scopeinr</a></p></li>
+<li><p>The monorepo (both packages, their Python ports, tutorials, and
+the Shiny apps together): <a href="https://github.com/CCGCAM/RTM-Suite" class="uri">https://github.com/CCGCAM/RTM-Suite</a></p></li>
 </ul>
-<p><strong><em>Note</em></strong>: These modules are currently being
-tested before public release. For access, please contact us at
-caminoccg@gmail.com.</p>
 <p><strong>Citation</strong>: Camino et al. (2024):
 <strong>DOI:</strong> <a href="https://doi.org/10.1109/IGARSS53475.2024.10642442">10.1109/IGARSS53475.2024.10642442</a></p>
 </div>
 <div id="toolsrtm-package" class="section level2">
 <h2>2. ToolsRTM package</h2>
-<div id="install-using-gitlab-repository" class="section level3">
-<h3>2.1 Install using gitlab repository</h3>
-<p>To install the ToolsRTM package, please follow these steps within
-your R session:</p>
-<ol style="list-style-type: decimal">
-<li><p>Download the ToolsRTM package as a <code>.tar.gz</code> file from
-the GitLab repository.</p></li>
-<li><p>After downloading, execute the following code:</p></li>
-</ol>
-<pre><code>install.packages(&#39;pathWithFile/toolsrtm-main.tar.gz&#39;,repos = NULL,type = &quot;source&quot;)</code></pre>
+<div id="install-from-gitlab" class="section level3">
+<h3>2.1 Install from GitLab</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;remotes&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) <span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;ToolsRTM&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) remotes<span class="sc">::</span><span class="fu">install_gitlab</span>(<span class="st">&quot;caminoccg/toolsrtm&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
 </div>
 <div id="understanding-the-spectral-profiles" class="section level3">
 <h3>2.2 Understanding the spectral profiles</h3>
