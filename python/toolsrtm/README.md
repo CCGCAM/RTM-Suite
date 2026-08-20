@@ -25,6 +25,12 @@ Together, the libraries provide an end-to-end workflow for vegetation radiative 
 | **Deep-learning inversion** (`toolsrtm.deep_learning`, optional) | Dense and 1D-CNN Keras architectures for trait inversion, matching R's `getMLmodel`. Not required for the rest of the package -- needs the optional `dl` extra: `pip install "toolsrtm[dl]"` (TensorFlow). scikit-learn's own estimators (above) cover most trait-inversion needs without this. |
 | **Satellite retrieval** (`toolsrtm.satellite`, optional) | Search and download real scenes via STAC (Microsoft Planetary Computer or AWS Earth Search) for a bounding box/date range, and build a cropped multi-band data cube -- Sentinel-2 L2A, Landsat C2 L2, and 6 MODIS products. Needs the optional `stac` extra: `pip install "toolsrtm[stac]"` and live network access. |
 
+`toolsrtm` is one library within [**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/), which links both the R packages (`ToolsRTM`, `SCOPEinR`) and their Python ports (`toolsrtm`, `scopeinpython`) behind one common site -- with reference manuals, worked tutorials, and runnable example pipelines for both languages side by side.
+
+![RTM-Suite website](docs/images/Website_rtm-suite.png)
+
+The [RTM-Suite website](https://ccgcam.github.io/RTM-Suite/) -- see **Documentation** for R/Python reference manuals, **Tutorials** for step-by-step walkthroughs (R and Python side by side), and **Examples** for copy-paste runnable code with real generated figures.
+
 ## Install
 
 ``` bash

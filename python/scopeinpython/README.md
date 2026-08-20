@@ -22,6 +22,12 @@ Every module is verified against a real, unmodified call to the original R packa
 
 Depends on [`toolsrtm`](https://github.com/CCGCAM/ToolsRTMinPython) for leaf optics (PROSPECT-D/PROSPECT-PRO), exactly as the R `SCOPEinR` package depends on `ToolsRTM`.
 
+`scopeinpython` is one library within [**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/), which links both the R packages (`ToolsRTM`, `SCOPEinR`) and their Python ports (`toolsrtm`, `scopeinpython`) behind one common site -- with reference manuals, worked tutorials, and runnable example pipelines for both languages side by side.
+
+![RTM-Suite website](docs/images/Website_rtm-suite.png)
+
+The [RTM-Suite website](https://ccgcam.github.io/RTM-Suite/) -- see **Documentation** for R/Python reference manuals, **Tutorials** for step-by-step walkthroughs (R and Python side by side), and **Examples** for copy-paste runnable code with real generated figures.
+
 ## Install
 
 ``` bash
