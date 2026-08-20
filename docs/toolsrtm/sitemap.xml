@@ -4,8 +4,8 @@
 <url><loc>/articles/Getting-LUTs.html</loc></url>
 <url><loc>/articles/index.html</loc></url>
 <url><loc>/articles/InversionOpt.html</loc></url>
+<url><loc>/articles/marmit-soil-in-canopy.html</loc></url>
 <url><loc>/articles/model-comparison-and-sensitivity.html</loc></url>
-<url><loc>/articles/SCOPEinR/SCOPEinR.html</loc></url>
 <url><loc>/articles/ToolsRTM/ToolsRTM.html</loc></url>
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
@@ -57,8 +57,10 @@
 <url><loc>/reference/get.sobol.indices.html</loc></url>
 <url><loc>/reference/get.spectra.convolved.html</loc></url>
 <url><loc>/reference/get.spectra.spart.html</loc></url>
+<url><loc>/reference/get.spectral.convolution.gaussian.html</loc></url>
 <url><loc>/reference/get.spectral.convolution.html</loc></url>
 <url><loc>/reference/get.spectral.convolution.rfl.html</loc></url>
+<url><loc>/reference/get.spectral.convolution.srf.html</loc></url>
 <url><loc>/reference/get.spectral.derivative.html</loc></url>
 <url><loc>/reference/get.spectral.html</loc></url>
 <url><loc>/reference/get.spectral.sensitivity.html</loc></url>
@@ -142,5 +144,6 @@
 <url><loc>/reference/SPART.simN.html</loc></url>
 <url><loc>/reference/ToolsRTM-package.html</loc></url>
 <url><loc>/reference/volscatt.html</loc></url>
+<url><loc>/THIRD_PARTY_LICENSES.html</loc></url>
 </urlset>
 
