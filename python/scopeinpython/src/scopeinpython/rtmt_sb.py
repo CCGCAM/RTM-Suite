@@ -17,19 +17,9 @@ reference case built during this whole port (``data.opts`` always sets
 (see below), so is intentionally left for later.
 
 **Not ported: the ``obsdir`` (observation-direction brightness
-temperature) branch.** R's ``vb <- (data.rad[['vb']])[1,nl]`` indexes
-``data.rad$vb`` (an ``(nl, nwl)`` matrix, layer x wavelength) using the
-*canopy layer count* ``nl`` as if it were a *wavelength* column index --
-selecting whatever wavelength happens to sit at position ``nl`` (e.g.
-~429 nm for a 30-layer canopy), nowhere near the thermal-IR region the
-surrounding code otherwise carefully extracts (``Xdd[, ncol(Xdd)]`` etc).
-This looks like a bug (a stray ``nl`` where the last/thermal-region
-column, or an entire row, was likely intended) but wasn't independently
-confirmed the way the recycling bugs were, and building a verification
-case for it isn't worth the time until it's actually needed -- flagged
-here rather than guessed at. The core (non-``obsdir``) net-radiation
-output below, which is what :mod:`scopeinpython.ebal`'s convergence loop
-actually needs, does not depend on this branch at all.
+temperature) branch.** Not needed for :mod:`scopeinpython.ebal`'s
+convergence loop, which only depends on the core net-radiation output
+below.
 
 **A structural note, not a bug**: in this formulation, the "direct thermal
 emission" term ``Es_`` is initialized to zero and never given a nonzero
