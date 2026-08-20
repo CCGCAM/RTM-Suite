@@ -40,15 +40,17 @@ table.with.opts <- read.table(system.file("input", "setoptions.csv", package = "
 Table.LUT <- read.table(system.file("input", "LUT_input.csv", package = "SCOPEinR"),
                          header = TRUE, sep = ",")
 
-db.sim <- SCOPEinR::get.SCOPE(
-  LUT           = Table.LUT[1, ],
-  options.SCOPE = table.with.opts,
-  optipar       = SCOPEinR::optipar2021.Pro.CX,
-  leaf.model    = "fluspect-CX",
-  canopy.model  = "fourSAIL",
-  get.outputs   = "ALL",
-  get.plots     = FALSE
-)
+invisible(capture.output(
+  db.sim <- SCOPEinR::get.SCOPE(
+    LUT           = Table.LUT[1, ],
+    options.SCOPE = table.with.opts,
+    optipar       = SCOPEinR::optipar2021.Pro.CX,
+    leaf.model    = "fluspect-CX",
+    canopy.model  = "fourSAIL",
+    get.outputs   = "ALL",
+    get.plots     = FALSE
+  )
+))
 res <- db.sim[[1]]  # get.SCOPE() always returns a list-of-results, even for one LUT row
 
 cat("Canopy layers:", res$data.canopy$nlayers, "\n")

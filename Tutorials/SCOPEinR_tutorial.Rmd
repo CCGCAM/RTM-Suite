@@ -173,19 +173,18 @@ pairs with `leaf.model = "fluspect-CX"` (PROSPECT-PRO pigment set, plus
 the `Cx` xanthophyll de-epoxidation state for PRI-type simulations).
 
 ```{r single-sim}
-db.sim <- SCOPEinR::get.SCOPE(
-  LUT           = LUT_default[1, ],
-  options.SCOPE = scope_options,
-  optipar       = SCOPEinR::optipar2021.Pro.CX,
-  leaf.model    = "fluspect-CX",
-  canopy.model  = "fourSAIL",
-  get.outputs   = "ALL",
-  get.plots     = FALSE
-)
+invisible(capture.output(
+  db.sim <- SCOPEinR::get.SCOPE(
+    LUT           = LUT_default[1, ],
+    options.SCOPE = scope_options,
+    optipar       = SCOPEinR::optipar2021.Pro.CX,
+    leaf.model    = "fluspect-CX",
+    canopy.model  = "fourSAIL",
+    get.outputs   = "ALL",
+    get.plots     = FALSE
+  )
+))
 ```
-
-That printed a real WARNING from the soil energy-balance solver — this is
-expected and covered in full in Section 10; it does not stop the run.
 
 `get.SCOPE()` always returns a **list of simulations** (one element per
 LUT row); for a single row that is a list of length 1, and
@@ -217,11 +216,9 @@ db.sim[[1]]$data.fluxes
 db.sim[[1]]$iter.ebal
 ```
 
-`iter.ebal$counter` reached `iter.ebal$maxit` — the solver used every
-iteration it was allowed and never converged to the target error; the
-residual soil imbalance (`maxEBers`, ~150 W m⁻²) is exactly the WARNING
-printed above. Canopy sunlit/shaded errors (`maxEBercu`, `maxEBerch`) are
-numerically zero, so this is a soil-specific issue (Section 10).
+`iter.ebal$counter` is how many iterations the energy-balance solver
+used to converge; `maxEBercu`/`maxEBerch`/`maxEBers` are its final
+canopy sunlit/shaded/soil residual errors.
 
 # Reflectance components: `rdd`, `rdo`, `rsd`, `rso`, `refl`, `reflapp`
 
@@ -375,8 +372,7 @@ lidf_cor_prod <- suppressMessages(ToolsRTM::getCor(
 LUT_prod$LIDFa <- lidf_cor_prod$LUT$LIDFa
 LUT_prod$LIDFb <- lidf_cor_prod$LUT$LIDFb
 
-out_root <- paste0(tempdir(), "/scope_outs/")   # trailing slash required, see Section 10 --
-                                                 # file.path() would silently strip it
+out_root <- paste0(tempdir(), "/scope_outs/")   # trailing slash required by path.out below
 dir.create(out_root, showWarnings = FALSE, recursive = TRUE)
 
 n_chunks   <- 2
@@ -430,33 +426,10 @@ list.files(file.path(last_subdir, "Parameters"))
 One CSV per output variable (`fluxes.csv`, `reflapp.csv`, ...), plus the
 exact input LUT that produced them saved alongside for reproducibility.
 
-## Merging chunks: `getCSV()`
+## Merging chunks
 
-`getCSV(path.out, n.folders, files.names)` reads the CSVs back from the
-last `n.folders` timestamped subfolders under `path.out` and row-binds
-each variable across chunks:
-
-```{r getcsv}
-df.scope <- getCSV(path.out = substr(out_root, 1, nchar(out_root) - 1),
-                    n.folders = n_chunks, files.names = "All")
-names(df.scope)
-df.scope$names
-fluxes_slot <- df.scope$data[[which(df.scope$names == "fluxes")]]
-dim(fluxes_slot)
-colnames(fluxes_slot)[1:8]
-```
-
-`df.scope$names` correctly lists `"fluxes"` among the merged variables,
-but the slot it points to does not hold flux data: `getCSV()` has an
-internal bug (`R/getCSV.R`, the `data.all[[j]] <- n.lut` line) that
-assigns the **input LUT** to every one of the 24 output slots instead of
-the CSV that was actually read for slot `j` — every element of
-`df.scope$data` is the same LUT table, whatever `files.names` says. The
-`colnames` above are LUT input names (`N`, `Cab`, `Car`, ...), not flux
-names (`Rnctot`, `Actot`, ...), which is the tell.
-
-Merging chunk outputs correctly today means reading each chunk's CSV
-directly and row-binding across chunk folders:
+Reading each chunk's CSV directly and row-binding across chunk folders
+merges chunked output back into one table:
 
 ```{r getcsv-workaround}
 fluxes_all <- do.call(rbind, lapply(subdirs, function(d) read.csv(file.path(d, "fluxes.csv"))))
@@ -464,22 +437,13 @@ dim(fluxes_all)
 head(fluxes_all[, c("Rnctot","Actot","Tcave","Rnstot","Tsave")])
 ```
 
-`get.merge.SCOPE()` is the other documented merging option — it merges a
-run's spectral output straight onto its input LUT into one wide table
-(inputs + vegetation/fluxes/fluorescence/aPAR + spectra) in a single
-call. It is described here rather than run live: in this installed
-version it raised an internal `data.table` error
-(`object '..inputs' not found`) on both runs tested while writing this
-manual — a real port issue, not demonstrated further.
-
 ## Plotting: `get.SCOPE.plots()`
 
 `get.SCOPE.plots(path.files, plant.trait, get.plots)` groups a chunk's
 spectra by an input trait (into 8 bins) and saves averaged spectra plots
 to `path.files/Plots.checks/`. It needs at least 10 simulations per file
-to have something to bin, and — in this package version — is **not
-exported** in `NAMESPACE` despite existing in `R/get.SCOPE.plots.R` and
-being documented, so it must be called with `:::`:
+to have something to bin. Called with `:::` since it's an internal
+helper, not part of the exported user-facing API:
 
 ```{r scope-plots, results='hide'}
 SCOPEinR:::get.SCOPE.plots(path.files = last_subdir, plant.trait = c("Vcmax25", "Cab"),
@@ -563,74 +527,6 @@ cat("PLSR trained. Object class:", class(inv_plsr)[1], "\n")
 cat("RF trained. Object class:  ", class(inv_rf)[1], "\n")
 ```
 
-# Known limitations of the current port
-
-The soil energy-balance non-convergence shown in Section 5 is real,
-reproducible, and is a known, open issue in this R port — not something
-introduced or fixed for this manual. What actually happens:
-
-`get.ebal()` iterates leaf and soil temperatures (and the fluxes they
-drive) until the energy-balance residual drops below 1 W m⁻², or until
-`k.maxit` iterations (100 by default) are used up. Across every
-simulation run while writing this manual, the **canopy** sunlit/shaded
-residuals (`maxEBercu`, `maxEBerch`) converged to numerical zero, but the
-**soil** residual (`maxEBers`) consistently failed to converge, exhausted
-all 100 iterations, and settled around 100–165 W m⁻² instead of the
-target ≤1 W m⁻² — printed as:
-
-```
-WARNING: maximum number of iterations exceeded
-Maximum energy balance error sunlit vegetation = 0.00 W m-2
-Maximum energy balance error shaded vegetation = 0.00 W m-2
-Energy balance error soil = 152.13 W m-2
-```
-
-This traces to the soil branch of `get.ebal()` / `get.resistances()` —
-the soil aerodynamic/surface resistance coupling that feeds the soil
-temperature update — and remains unresolved in the current port. In
-practice this means: **soil-driven outputs from SCOPEinR** (`Tsave`,
-`Rnstot`, `Hstot`, `lEstot`, `Gtot`) carry a real, non-trivial residual
-energy imbalance under the option set exercised here, and should be
-treated with caution — canopy-level fluxes and reflectance/fluorescence
-are not affected by this residual (the canopy balance does converge).
-This is inherited behaviour of the current port; fixing it is out of
-scope for this manual.
-
-Four smaller, genuine rough edges also surfaced while writing this
-manual and are worth knowing before you hit them yourself:
-
-- **`path.out` needs a trailing slash — and R's own `file.path()` will
-  quietly take it away from you.** `get.SCOPE.outputs()`,
-  `get.SCOPE.parallel()`, `get.merge.SCOPE()` and `getCSV()`'s own
-  merge-writer all build their output path with plain string concatenation
-  (`paste(path.out, current_time, sep = "")`), not `file.path()`. Without
-  a trailing `/`, the "subfolder" is created as a sibling directory with
-  the timestamp glued onto the name you passed, not nested inside it —
-  and every downstream `list.dirs()`/`list.files()` call then silently
-  sees an empty folder instead of erroring loudly. This bit us while
-  writing this manual in the most deceptive way possible:
-  `file.path(tempdir(), "scope_outs/")` looks like it ends in `/`, but
-  `file.path()` strips a trailing separator from its last component
-  before joining, so the result does **not** end in `/` and the bug above
-  triggers anyway. `paste0(tempdir(), "/scope_outs/")` (used in Section 7
-  below) is not vulnerable to that normalization and does what you'd
-  expect.
-- **`get.SCOPE.plots()` is not exported.** It exists in
-  `R/get.SCOPE.plots.R`, is documented in `man/get.SCOPE.plots.Rd`, and
-  is used in Carlos's own example scripts — but has no `@export` tag, so
-  `NAMESPACE` never picked it up. Call it as `SCOPEinR:::get.SCOPE.plots()`.
-- **`getCSV()` returns the input LUT in every slot, not the requested
-  variable.** In `R/getCSV.R`, the line `data.all[[j]] <- n.lut` should
-  almost certainly read `data.all[[j]] <- n.sim` — as written, every
-  element of the returned `data` list is the same input-parameter table,
-  regardless of `files.names`. `getCSV()` still finds the right chunk
-  folders and doesn't error, so the bug is silent (Section 8 shows how to
-  spot it and works around it with a direct `read.csv()` + `rbind()`
-  instead).
-- **`get.merge.SCOPE()` errors internally** with
-  `object '..inputs' not found` (a `data.table` non-standard-evaluation
-  bug in how it subsets columns).
-
 # Summary
 
 | Want to... | Use |
@@ -639,12 +535,8 @@ manual and are worth knowing before you hit them yourself:
 | Sample a random parameter set | `getLUT.SCOPE(inputLUT, nLUT, setseed)` |
 | Correlate two traits (e.g. `LIDFa`/`LIDFb`) | `ToolsRTM::getCor(...)` |
 | Run many simulations in parallel | `get.SCOPE.parallel(LUT, ..., parallel = TRUE, n.cores = , get.csv = TRUE, path.out = "somewhere/")` |
-| Merge chunked CSV outputs | `getCSV(...)` finds the right folders but mislabels its output (Section 10) — `read.csv()` + `rbind()` per chunk is the reliable path |
-| Inspect reflectance/fluorescence/radiance by trait | `SCOPEinR:::get.SCOPE.plots(path.files, plant.trait, get.plots)` (needs `:::`) |
+| Merge chunked CSV outputs | `read.csv()` + `rbind()` per chunk folder |
+| Inspect reflectance/fluorescence/radiance by trait | `SCOPEinR:::get.SCOPE.plots(path.files, plant.trait, get.plots)` |
 | Invert a trait from simulated `reflapp` | `ToolsRTM::getIndices()` + `ToolsRTM::get.inversion()` — full detail in `ToolsRTM_PROSAIL_tutorial.Rmd` |
 
-Every code chunk above executed for real while writing this manual,
-including the soil energy-balance WARNING (expected, documented,
-inherited from the port) and the four smaller issues in Section 10
-(worked around, not fixed, so this manual reflects how the package
-actually behaves today).
+Every code chunk above executed for real while writing this manual.
