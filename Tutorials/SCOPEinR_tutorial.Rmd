@@ -268,6 +268,11 @@ ggplot(refl_components, aes(x = Wavelength, y = Value, color = Component)) +
   ggtitle("Reflectance components for the default LUT_input.csv simulation")
 ```
 
+`reflapp` tracks `refl` closely outside the fluorescence band but departs
+from it around 640-850nm — the signature of SCOPE's fluorescence emission
+riding on top of the reflected signal, exactly what a real sensor would
+pick up in that region.
+
 # Building a randomized LUT with `getLUT.SCOPE()`
 
 `getLUT.SCOPE(inputLUT, nLUT, setseed)` samples `nLUT` parameter sets from
@@ -287,7 +292,7 @@ summary(LUT[, c("Cab","LAI","Vcmax25")])
 Real traits co-vary. `ToolsRTM::getCor()` (covered in depth in the
 ToolsRTM manual) generates correlated pairs instead of independent
 draws — this is exactly the pattern used in Carlos's production scripts
-(`Scripts/1-getSCOPE-v3_withChunck.R`) to keep the leaf-inclination
+(`Scripts/R/ForSCOPE/1-getSCOPE-v3_withChunck.R`) to keep the leaf-inclination
 parameters `LIDFa`/`LIDFb` jointly plausible instead of independently
 uniform:
 
@@ -306,6 +311,9 @@ cat("Achieved correlation:", round(cor(LUT$LIDFa, LUT$LIDFb), 2), "\n")
 plot(LUT$LIDFa, LUT$LIDFb, xlab = "LIDFa", ylab = "LIDFb",
      main = "Correlated leaf-angle-distribution parameters", pch = 19)
 ```
+
+The scatter leans along a diagonal instead of filling a square — `rho =
+0.20` is a modest but real correlation, not independent sampling.
 
 # Running many simulations: serial vs. parallel
 
@@ -345,7 +353,7 @@ the hundreds/thousands, which is the realistic use case for `get.LUT()`
 
 ## The chunked production pattern
 
-For large LUTs, Carlos's real workflow (`Scripts/1-getSCOPE-v3_withChunck.R`)
+For large LUTs, Carlos's real workflow (`Scripts/R/ForSCOPE/1-getSCOPE-v3_withChunck.R`)
 splits the LUT into chunks and calls `get.SCOPE.parallel()` once per
 chunk with `get.csv = TRUE`, so intermediate results are written to disk
 instead of being held in memory all at once:
@@ -419,6 +427,9 @@ list.files(last_subdir)
 list.files(file.path(last_subdir, "Parameters"))
 ```
 
+One CSV per output variable (`fluxes.csv`, `reflapp.csv`, ...), plus the
+exact input LUT that produced them saved alongside for reproducibility.
+
 ## Merging chunks: `getCSV()`
 
 `getCSV(path.out, n.folders, files.names)` reads the CSVs back from the
@@ -486,6 +497,10 @@ refl_png <- png_files[grepl("^1-reflectance_refl_by_Vcmax25", basename(png_files
 knitr::include_graphics(refl_png)
 ```
 
+Reflectance averaged within each of the 8 `Vcmax25` bins -- a quick way to
+see whether a trait leaves a visible signature on the spectrum before
+running a full inversion.
+
 # Inverting traits from simulated reflectance
 
 The apparent reflectance (`reflapp`) SCOPE produces is exactly the kind
@@ -551,9 +566,8 @@ cat("RF trained. Object class:  ", class(inv_rf)[1], "\n")
 # Known limitations of the current port
 
 The soil energy-balance non-convergence shown in Section 5 is real,
-reproducible, and documented in `SCOPEinR/README_errors.txt` as a known,
-open issue in this R port — not something introduced or fixed for this
-manual. What actually happens:
+reproducible, and is a known, open issue in this R port — not something
+introduced or fixed for this manual. What actually happens:
 
 `get.ebal()` iterates leaf and soil temperatures (and the fluxes they
 drive) until the energy-balance residual drops below 1 W m⁻², or until
@@ -571,9 +585,9 @@ Maximum energy balance error shaded vegetation = 0.00 W m-2
 Energy balance error soil = 152.13 W m-2
 ```
 
-`README_errors.txt` traces this to the soil branch of `get.ebal()` /
-`get.resistances()` — the soil aerodynamic/surface resistance coupling
-that feeds the soil temperature update — and flags it as unresolved. In
+This traces to the soil branch of `get.ebal()` / `get.resistances()` —
+the soil aerodynamic/surface resistance coupling that feeds the soil
+temperature update — and remains unresolved in the current port. In
 practice this means: **soil-driven outputs from SCOPEinR** (`Tsave`,
 `Rnstot`, `Hstot`, `lEstot`, `Gtot`) carry a real, non-trivial residual
 energy imbalance under the option set exercised here, and should be

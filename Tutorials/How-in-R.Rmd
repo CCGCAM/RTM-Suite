@@ -227,6 +227,11 @@ modis_bands <- get.spectral.convolution.gaussian(df, sensor.i = "MODIS")
 own_bands
 ```
 
+Same `get.spectral.convolution.gaussian()` call handles all three cases
+above -- a full center+FWHM calibration sheet, centers-only (FWHM
+estimated from spacing), or a bundled sensor name -- because none of them
+have a measured SRF to fall back on, unlike step 5's Sentinel-2A example.
+
 ## 6. Trait inversion with machine learning
 
 The reverse problem from every step above: given ONLY the sensor-band
@@ -255,6 +260,10 @@ abline(0, 1, col = "grey40", lty = 2)
 ```
 
 ![](images/tutorial_ml_inversion.png)
+
+Points scattered tightly around the 1:1 line mean the Random Forest
+recovered Cab well from just 13 Sentinel-2A bands on held-out data it
+never trained on -- the whole point of the LUT-then-invert workflow.
 
 ## Bonus: simulating fluorescence (SIF) with Fluspect
 

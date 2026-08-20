@@ -106,6 +106,11 @@ result <- tryCatch(
 cat("Attempted unsupported name ->", result, "\n")
 ```
 
+fourSAIL and foursail2 both ran for real, and the deliberately-wrong
+canopy name failed with a clear error instead of a silent wrong result —
+`simulate_RTM()` is meant to be the single entry point regardless of which
+leaf/canopy combination you pick.
+
 # Building a LUT: distribution and correlation options
 
 `getLUT()` (used above) samples parameters independently. Two functions
@@ -187,6 +192,10 @@ invisible(capture.output({
 cat("Sentinel-2A gives", ncol(s2a) - 1, "bands. PRISMA gives", ncol(prisma) - 1, "bands.\n")
 ```
 
+Same native 1nm spectrum, two different sensors: Sentinel-2A's 13
+multispectral bands vs. PRISMA's 230+ narrow hyperspectral bands — pick
+whichever matches the real sensor your own reflectance data comes from.
+
 # Vegetation indices
 
 `get.indices.v2()` computes the common vegetation indices directly from a
@@ -197,6 +206,10 @@ spectrum simulated above, rounded to 3 decimals for readability:
 idx <- get.indices.v2(as.data.frame(sim.matrix), pattern.rfl = "X", spectral.domain = "VNIR")
 knitr::kable(round(idx[, 1:6], 3))
 ```
+
+Each column is one index computed from the same simulated spectrum —
+`get.indices.v2()` returns dozens more than the 6 shown here; drop
+`[, 1:6]` to see the full set.
 
 # Inversion: all 12 algorithms, and what each is actually for
 
@@ -250,13 +263,6 @@ Swap `algorithm = "RF"` for any of the 12 values above — the rest of the
 call stays identical. What changes is the underlying `caret::train()`
 method and its accuracy/robustness/interpretability trade-offs, not the
 interface you use.
-
-# Deep learning (CNN / Hidden-layers via TensorFlow/Keras)
-
-`getMLmodel()` and `getMLmodel_withRetrain()` support real deep learning —
-`model = "CNN"` (1D convolutional network over the spectrum) or
-`model = "Hidden-layers"` (a standard dense/MLP network) — built on
-TensorFlow/Keras, not a "classic ML" method dressed up.
 
 # Deep learning (CNN / Hidden-layers via TensorFlow/Keras)
 

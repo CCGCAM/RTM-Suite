@@ -124,6 +124,11 @@ barplot(fluxes, col = c("darkorange", "steelblue", "firebrick", "grey60"),
 par(op)
 ```
 
+Four different views of the same one simulation: the reflectance
+components (Section 2's `refl` line among them), the fluorescence
+spectrum, the converged sunlit/shaded canopy and soil temperatures, and
+where the absorbed energy actually goes.
+
 ## 4. Many simulations (a small LUT)
 
 `getLUT.SCOPE()` builds a LUT the same way `ToolsRTM::getLUT()` does for
@@ -155,6 +160,11 @@ plot(Table.LUT.many$Cab[seq_len(N_SAMPLES)], Tcave_vals, pch = 19, col = "#2166A
      xlab = "Cab", ylab = "Canopy-average leaf temperature (degC)",
      main = "Tcave vs Cab across the small LUT")
 ```
+
+Canopy-average leaf temperature responds to Cab through the energy
+balance (chlorophyll content changes absorbed PAR, which feeds into the
+leaf's own solved temperature), on top of whatever meteorological forcing
+is fixed in this LUT.
 
 ## What's not covered here (and why)
 
