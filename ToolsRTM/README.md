@@ -1,6 +1,6 @@
 ### ToolsRTM package
 
-[![R >= 4.3](https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white)](https://www.r-project.org/) [![ToolsRTM on GitLab](https://img.shields.io/badge/GitLab-ToolsRTM-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/toolsrtm) [![RTM--Suite on GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite) [![toolsrtm (Python port) on GitHub](https://img.shields.io/badge/GitHub-toolsrtm%20(Python)-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/ToolsRTMinPython)
+[![R \>= 4.3](https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white)](https://www.r-project.org/) [![ToolsRTM on GitLab](https://img.shields.io/badge/GitLab-ToolsRTM-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/toolsrtm) [![RTM--Suite on GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite) [![toolsrtm (Python port) on GitHub](https://img.shields.io/badge/GitHub-toolsrtm%20(Python)-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/ToolsRTMinPython)
 
 The **ToolsRTM** package provides a comprehensive suite of tools for simulating canopy reflectance using various radiative transfer (RT) models at multiple satellite resolutions. Currently in the testing phase, this package is designed to facilitate detailed simulations, enabling versatile and accurate analyses of canopy reflectance characteristics.
 
@@ -22,7 +22,7 @@ For more information, please visit: MARMIT [GitLab](https://pss-gitlab.math.univ
 
 ToolsRTM requires R 4.3 or newer. Install the development version directly from GitLab:
 
-```r
+``` r
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
@@ -34,7 +34,7 @@ if (!requireNamespace("ToolsRTM", quietly = TRUE)) {
 
 Alternatively, install a downloaded source archive:
 
-```r
+``` r
 install.packages(
   "path/to/toolsrtm-main.tar.gz",
   repos = NULL,
@@ -44,7 +44,7 @@ install.packages(
 
 Check the installed version:
 
-```r
+``` r
 packageVersion("ToolsRTM")
 ```
 
@@ -54,7 +54,7 @@ The version described by this README is 0.62.5.
 
 The following example creates a small lookup table and runs PROSPECT-PRO coupled to fourSAIL. Both `getLUT()` and `simulate_RTM()` are exported by the current package.
 
-```r
+``` r
 inputs <- ToolsRTM::inputsPROSAIL
 lut <- as.data.frame(
   ToolsRTM::getLUT(inputs = inputs, nLUT = 30, setseed = 1234)
@@ -73,7 +73,7 @@ simulation <- ToolsRTM::simulate_RTM(
 
 Install [SCOPEinR](https://gitlab.com/caminoccg/scopeinr) when the workflow requires the SCOPE model. ToolsRTM is installed first because SCOPEinR imports it.
 
-```r
+``` r
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
@@ -85,7 +85,7 @@ packageVersion("SCOPEinR")
 
 For an offline installation, replace the second `install_gitlab()` call with:
 
-```r
+``` r
 install.packages(
   "path/to/scopeinr-main.tar.gz",
   repos = NULL,
@@ -96,7 +96,7 @@ install.packages(
 ### Manuals and RTM-Suite resources
 
 | Resource | Description |
-|---|---|
+|------------------------------------|------------------------------------|
 | [RTM-Suite documentation](../docs/index.html) | Entry point for the complete R suite |
 | [ToolsRTM reference](../docs/toolsrtm/index.html) | Function reference and package articles |
 | [Course pipeline](../docs/toolsrtm/articles/course-pipeline.html) | Simulation, spectral convolution and inversion |
@@ -125,7 +125,7 @@ Féret, J.B., Berger, K., de Boissieu, F., Malenovský, Z., 2021. PROSPECT-PRO f
 
 Jacquemoud S, Baret F, Hanocq J-F, 1992. Modeling spectral and bidirectional soil reflectance. Remote Sensing of Environment, 41, 123--132. [https://doi.org/10.1016/0034-4257(92)90072-R](https://doi.org/10.1016/0034-4257(92)90072-R){.uri}
 
-Jacquemoud, S., Baret, F., 1990. PROSPECT: a model of leaf optical properties spectra. Remote Sens. Environ. 34, 75--91. <https://doi.org/10.1016/0034-4257(90)90100-Z>.
+Jacquemoud, S., Baret, F., 1990. PROSPECT: a model of leaf optical properties spectra. Remote Sens. Environ. 34, 75--91. [https://doi.org/10.1016/0034-4257(90)90100-Z](https://doi.org/10.1016/0034-4257(90)90100-Z){.uri}.
 
 More info: <http://teledetection.ipgp.fr/prosail/>
 
@@ -185,6 +185,8 @@ Dupiau A., Jacquemoud S., Briottet X., Fabre S., Viallefont-Robinet F., Philpot 
 
 ### License
 
-![](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-The **ToolsRTM** package is licensed under the MIT License, allowing for free use, modification, and distribution. This package is available on GitLab, and we encourage contributions and collaborations from the community. For more details, please refer to the LICENSE file in the repository.
+**ToolsRTM** is a port of several radiative transfer models bundled behind one common R interface, and not all of them carry the same license. Three of the bundled models -- **Fluspect-B**, **fourSAIL2**, and **SPART** -- are ports of GPL-3.0-licensed original models, and GPL-3.0 requires any combined work incorporating GPL-3.0 code to be distributed as GPL-3.0 as a whole. `ToolsRTM` is therefore distributed under **GPL-3.0** (`License: GPL-3` in `DESCRIPTION`), matching its Python port `toolsrtm`'s own license.
+
+See [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) for the license and source-code provenance of every individual model this package implements (some are independently MIT-licensable on their own, e.g. PROSPECT-D/-PRO; that does not change the combined package's GPL-3.0 status). Always cite the original publication(s) of each model you use, in addition to citing RTM-Suite/ToolsRTM.

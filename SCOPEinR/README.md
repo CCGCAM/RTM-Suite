@@ -1,6 +1,6 @@
 ### SCOPEinR
 
-[![R >= 4.3](https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white)](https://www.r-project.org/) [![SCOPEinR on GitLab](https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/scopeinr) [![RTM--Suite on GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite) [![scopeinpython (Python port) on GitHub](https://img.shields.io/badge/GitHub-scopeinpython%20(Python)-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/scopeinpython)
+[![R \>= 4.3](https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white)](https://www.r-project.org/) [![SCOPEinR on GitLab](https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/scopeinr) [![RTM--Suite on GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite) [![scopeinpython (Python port) on GitHub](https://img.shields.io/badge/GitHub-scopeinpython%20(Python)-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/scopeinpython)
 
 **SCOPEinR** is an R package designed for implementing the Soil Canopy Observation, Photochemistry, and Energy Fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB, this model allows users to simulate interactions between soil, canopy, and atmospheric processes (Van der Tol et al., 2009; Yang et al., 2020).
 
@@ -12,12 +12,10 @@ We have seamlessly integrated the **ToolsRTM** and **SCOPEinR** packages into th
 
 ### RTM-Suite ecosystem
 
-SCOPEinR is part of **RTM-Suite**, which brings together the R packages,
-interactive applications, tutorials, reproducible pipelines, and generated
-documentation for radiative transfer modelling.
+SCOPEinR is part of **RTM-Suite**, which brings together the R packages, interactive applications, tutorials, reproducible pipelines, and generated documentation for radiative transfer modelling.
 
 | Resource | Purpose | Access |
-|---|---|---|
+|------------------------|------------------------|------------------------|
 | **ToolsRTM** (R) | Leaf, canopy, soil, atmosphere, sensor convolution, and trait inversion | [![GitLab](https://img.shields.io/badge/GitLab-ToolsRTM-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/toolsrtm) |
 | **SCOPEinR** (R) | Energy balance, photosynthesis, fluorescence, and SCOPE simulations in R | [![GitLab](https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/scopeinr) |
 | **toolsrtm** (Python) | Python port of ToolsRTM | [![GitHub](https://img.shields.io/badge/GitHub-toolsrtm-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/ToolsRTMinPython) |
@@ -29,10 +27,7 @@ documentation for radiative transfer modelling.
 
 ### Manuals and learning resources
 
-The complete documentation is maintained together in the
-[**RTM-Suite documentation hub**](../docs/index.html), so the R and Python
-implementations, tutorials, package references, and model-comparison material
-can be explored from one place.
+The complete documentation is maintained together in the [**RTM-Suite documentation hub**](../docs/index.html), so the R and Python implementations, tutorials, package references, and model-comparison material can be explored from one place.
 
 - [**ToolsRTM reference manual**](../docs/toolsrtm/index.html): functions, model families, examples, and articles.
 - [**SCOPEinR reference manual**](../docs/scopeinr/index.html): SCOPE inputs, outputs, energy balance, photosynthesis, and fluorescence.
@@ -40,15 +35,13 @@ can be explored from one place.
 - [**RT-Simulator online**](https://carlos-camino.shinyapps.io/0-toolsrtm-simulator/): interactive model exploration and access to package learning material.
 - [**RTM-Suite tutorials**](../Tutorials/): complete R workflows and corresponding Python learning resources.
 
-Documentation is also available from inside the installed packages through
-their help pages, vignettes, and pkgdown articles.
+Documentation is also available from inside the installed packages through their help pages, vignettes, and pkgdown articles.
 
 ### Installation
 
-SCOPEinR requires R 4.3 or later and imports ToolsRTM. Install the current
-versions directly from their GitLab repositories:
+SCOPEinR requires R 4.3 or later and imports ToolsRTM. Install the current versions directly from their GitLab repositories:
 
-```r
+``` r
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
@@ -63,17 +56,16 @@ packageVersion("SCOPEinR")
 
 For an offline installation, downloaded source archives can still be used:
 
-```r
+``` r
 install.packages("path/to/toolsrtm-main.tar.gz", repos = NULL, type = "source")
 install.packages("path/to/scopeinr-main.tar.gz", repos = NULL, type = "source")
 ```
 
 ### How to run SCOPE model in R
 
-The package installs its default options and example LUT. Locate them with
-`system.file()` so the example works from any working directory:
+The package installs its default options and example LUT. Locate them with `system.file()` so the example works from any working directory:
 
-```r
+``` r
 scope_options <- read.csv(
   system.file("input", "setoptions.csv", package = "SCOPEinR"),
   check.names = FALSE
@@ -93,11 +85,7 @@ scope_sim <- SCOPEinR::get.SCOPE(
 )
 ```
 
-`get.SCOPE()` returns one list element per LUT row. For the example above,
-inspect the first simulation with `names(scope_sim[[1]])`. SCOPE currently
-uses its native multi-layer RTMo canopy calculation and Fluspect-Cx leaf
-optics, so `canopy.model` and alternative `leaf.model` values are not presented
-as interchangeable engines in this quick-start example.
+`get.SCOPE()` returns one list element per LUT row. For the example above, inspect the first simulation with `names(scope_sim[[1]])`. SCOPE currently uses its native multi-layer RTMo canopy calculation and Fluspect-Cx leaf optics, so `canopy.model` and alternative `leaf.model` values are not presented as interchangeable engines in this quick-start example.
 
 ### Runnable pipeline scripts
 
@@ -114,7 +102,7 @@ The main elements in `scope_sim[[1]]` are:
 
 #### Get SCOPE's outputs
 
-```r
+``` r
 SCOPEinR::get.SCOPE.outputs(
   data.sim = scope_sim,
   N.sims = length(scope_sim),
@@ -143,10 +131,9 @@ The `get.plots` function allows for the plotting of key outputs from the SCOPE m
 
 ### Run the SCOPE model in parallel
 
-For multiple LUT rows, use `get.SCOPE.parallel()`. Start with a modest number
-of workers and leave one or more CPU cores free for the operating system:
+For multiple LUT rows, use `get.SCOPE.parallel()`. Start with a modest number of workers and leave one or more CPU cores free for the operating system:
 
-```r
+``` r
 parallel_lut <- scope_lut[rep(1, 20), , drop = FALSE]
 
 scope_sims_parallel <- SCOPEinR::get.SCOPE.parallel(
@@ -161,11 +148,7 @@ scope_sims_parallel <- SCOPEinR::get.SCOPE.parallel(
 )
 ```
 
-Set `get.csv = TRUE` to let the function write the simulation outputs to its
-output directory. For large production LUTs, process bounded chunks rather
-than keeping every full SCOPE result in memory at once. See the
-[SCOPE course pipeline](../docs/scopeinr/articles/scope-pipeline.html) for the
-complete simulation, sensor-convolution, and trait-inversion workflow.
+Set `get.csv = TRUE` to let the function write the simulation outputs to its output directory. For large production LUTs, process bounded chunks rather than keeping every full SCOPE result in memory at once. See the [SCOPE course pipeline](../docs/scopeinr/articles/scope-pipeline.html) for the complete simulation, sensor-convolution, and trait-inversion workflow.
 
 ### 1.6 Get some additional plots by main plant trait.
 
@@ -195,7 +178,7 @@ Van der Tol, C., W. Verhoef, J Timmermans, A Verhoef, and Z Su. 2009. "An Integr
 
 Other Main References:
 
-G.James Collatz, J.Timothy Ball, Cyril Grivet, and Joseph A Berry. Physiological and environmental regulation of stomatal conductance, photosynthesis and transpiration: a model that includes a laminar boundary layer. Agric. For. Meteorol., 54(2-4):107--136, apr 1991. URL: <https://doi.org/10.1016/0168-1923(91)90002-8>.
+G.James Collatz, J.Timothy Ball, Cyril Grivet, and Joseph A Berry. Physiological and environmental regulation of stomatal conductance, photosynthesis and transpiration: a model that includes a laminar boundary layer. Agric. For. Meteorol., 54(2-4):107--136, apr 1991. URL: [https://doi.org/10.1016/0168-1923(91)90002-8](https://doi.org/10.1016/0168-1923(91)90002-8){.uri}.
 
 GJ Collatz, M Ribas-Carbo, and JA Berry. Coupled Photosynthesis-Stomatal Conductance Model for Leaves of C \textless sub\textgreater 4\textless /sub\textgreater Plants. Aust. J. Plant Physiol., 19(5):519, 1992. URL: <https://doi.org/10.1071/PP9920519>.
 
@@ -221,6 +204,8 @@ Van der Tol, C.V, Berry J. A., Campbell P.K.E., and Rascher U. Models of fluores
 
 ### License
 
-![](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-The **SCOPEinR** package is licensed under the MIT License, allowing for free use, modification, and distribution. This package is available on GitLab, and we encourage contributions and collaborations from the community. For more details, please refer to the LICENSE file in the repository.
+**SCOPEinR** is a port of **SCOPE**, whose own reference implementation ([`Christiaanvandertol/SCOPE`](https://github.com/Christiaanvandertol/SCOPE)) is GPL-3.0-licensed. Since this package's entire purpose is porting SCOPE, `SCOPEinR` is distributed under **GPL-3.0** (`License: GPL-3` in `DESCRIPTION`), matching its Python port `scopeinpython`'s own license.
+
+See [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) for the full source-code provenance and citation details. `SCOPEinR` depends on [`ToolsRTM`](https://gitlab.com/caminoccg/toolsrtm) for leaf-level optics -- see that package's own `THIRD_PARTY_LICENSES.md` for the licensing of those specific leaf models. Always cite the original SCOPE publication(s) when using this package in scientific work, in addition to citing RTM-Suite/SCOPEinR.
