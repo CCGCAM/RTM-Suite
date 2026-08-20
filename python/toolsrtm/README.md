@@ -91,7 +91,7 @@ This repo is deliberately just the installable package -- everything else (manua
 
 ## License
 
-[![RTM-Suite code: MIT](https://img.shields.io/badge/RTM--Suite%20code-MIT-yellow.svg){alt="RTM-Suite code: MIT"}](#0) [![Ported GPL models: GPL--3.0](https://img.shields.io/badge/Ported%20GPL%20models-GPL--3.0-blue.svg){alt="Ported GPL models: GPL--3.0"}](#0) [![Model licenses](https://img.shields.io/badge/Per--model%20licenses-THIRD__PARTY__LICENSES.md-informational.svg){alt="Model licenses"}](#0)
+[![RTM-Suite code: MIT](https://img.shields.io/badge/RTM--Suite%20code-MIT-yellow.svg)](#0) [![Ported GPL models: GPL--3.0](https://img.shields.io/badge/Ported%20GPL%20models-GPL--3.0-blue.svg)](#0) [![Model licenses](https://img.shields.io/badge/Per--model%20licenses-THIRD__PARTY__LICENSES.md-informational.svg)](#0)
 
 `toolsrtm` is a Python port of several radiative transfer models bundled behind one common interface, and not all of them carry the same license. Three of the bundled models -- **Fluspect-B**, **fourSAIL2**, and **SPART** -- are ports of GPL-3.0-licensed original models, and GPL-3.0 requires any combined work incorporating GPL-3.0 code to be distributed as GPL-3.0 as a whole. `toolsrtm` is therefore distributed under **GPL-3.0-only** (see [`LICENSE`](LICENSE)), matching its R sibling package `ToolsRTM`'s own `License: GPL-3` field.
 

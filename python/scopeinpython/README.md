@@ -65,7 +65,7 @@ This repo is deliberately just the installable package -- everything else (manua
 
 ## License
 
-[![RTM-Suite code: MIT](https://img.shields.io/badge/RTM--Suite%20code-MIT-yellow.svg){alt="RTM-Suite code: MIT"}](#0) [![Ported GPL models: GPL--3.0](https://img.shields.io/badge/Ported%20GPL%20models-GPL--3.0-blue.svg){alt="Ported GPL models: GPL--3.0"}](#0) [![Model licenses](https://img.shields.io/badge/Per--model%20licenses-THIRD__PARTY__LICENSES.md-informational.svg){alt="Model licenses"}](#0)
+[![RTM-Suite code: MIT](https://img.shields.io/badge/RTM--Suite%20code-MIT-yellow.svg)](#0) [![Ported GPL models: GPL--3.0](https://img.shields.io/badge/Ported%20GPL%20models-GPL--3.0-blue.svg)](#0) [![Model licenses](https://img.shields.io/badge/Per--model%20licenses-THIRD__PARTY__LICENSES.md-informational.svg)](#0)
 
 `scopeinpython` is a Python port of **SCOPE**, whose own reference implementation ([`Christiaanvandertol/SCOPE`](https://github.com/Christiaanvandertol/SCOPE)) is GPL-3.0-licensed. Since this package's entire purpose is porting SCOPE, `scopeinpython` is distributed under **GPL-3.0-only** (see [`LICENSE`](LICENSE)), matching its R sibling package `SCOPEinR`'s own `License: GPL-3` field.
 
