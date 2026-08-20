@@ -13,3 +13,13 @@ navbar:
     toolsrtm:
       text: "ToolsRTM"
       href: ../toolsrtm/index.html
+
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - SCOPEinR
+  - getting-luts-scope
+  - scope-pipeline
+  - sensitivity-scope
+  - inversion-scope
