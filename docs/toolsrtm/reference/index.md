@@ -90,8 +90,8 @@
 - [`get.inversion()`](get.inversion.md) : get.inversion of the plant
   traits using different machine learning models
 
-- [`get.inversionOpt()`](get.inversionOpt.md) : LUT inversion using a
-  RTM
+- [`get.inversionOpt()`](get.inversionOpt.md) : LUT Inversion Using a
+  Radiative Transfer Model (RTM)
 
 - [`get.LUTfromRanges()`](get.LUTfromRanges.md) : Get a LUT based on a
   table with Min and Max ranges
@@ -140,11 +140,21 @@
 - [`get.spectra.spart()`](get.spectra.spart.md) : Get Spectral
   Characteristics for the SPART Model
 
+- [`get.spectral.convolution.gaussian()`](get.spectral.convolution.gaussian.md)
+  : Convolve reflectance onto a sensor using only NOMINAL band
+  characteristics (center wavelength + FWHM, or center + band edges) –
+  for sensors with no real measured per-nm SRF curve available at all,
+  approximated as a Gaussian response (optionally truncated to a
+  published band edge range).
+
 - [`get.spectral.convolution()`](get.spectral.convolution.md) :
   get.spectral.convolution
 
 - [`get.spectral.convolution.rfl()`](get.spectral.convolution.rfl.md) :
   Get Spectral Convolution for Reflectance
+
+- [`get.spectral.convolution.srf()`](get.spectral.convolution.srf.md) :
+  Convolve reflectance onto a sensor using a plain per-band SRF table
 
 - [`get.spectral.derivative()`](get.spectral.derivative.md) : Calculate
   spectral derivative

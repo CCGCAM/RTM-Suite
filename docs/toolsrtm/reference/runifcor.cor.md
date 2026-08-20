@@ -34,8 +34,8 @@ runif only works coming from uniform data
 
 ## References
 
-modified from Eric Neuwirth
-[http://r.789695.n4.nabble.com/Generating-uniformly-distributed-correlated-data-td3314905.html](http://r.789695.n4.nabble.com/Generating-uniformly-distributed-correlated-data-td3314905.md)
+modified from Eric Neuwirth, R-help mailing list post "Generating
+uniformly distributed correlated data" (2011)
 
 ## Author
 
@@ -47,9 +47,9 @@ Jared E. Knowles
 x <- runif(1000)
 y <- runifcor.cor(x, 0.2)
 cor(x,y) # very close to 0.2
-#> [1] 0.1468113
+#> [1] 0.157523
 mean(y) 
-#> [1] 0.4870911
+#> [1] 0.5060116
 sd(y)   
-#> [1] 0.2869681
+#> [1] 0.2840243
 ```

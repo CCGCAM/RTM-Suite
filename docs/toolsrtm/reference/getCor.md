@@ -72,5 +72,5 @@ out <- getCor(n_inputs = 2, nLUT = 200, distribution = "Uniform", rho = 0.7,
                Varnames = c("LAI", "Height"), MinRange = c(0.5, 2), MaxRange = c(7, 30))
 #> Generating a Uniform distribution for all correlated inputs ...
 cor(out$LUT$LAI, out$LUT$Height)  # close to 0.7
-#> [1] 0.6805108
+#> [1] 0.7273228
 ```
