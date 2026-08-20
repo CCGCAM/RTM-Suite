@@ -27,10 +27,22 @@ library(ggplot2)
 ## ----------------------------------------------------------------------------
 
 n.samples <- 100          # always 100 for this course pipeline
-soil.id   <- 1            # which Bablet_2016 reference soil (1-17)
+database  <- "Bablet_2016" # soil database -- see db.root below
+soil.id   <- 1            # which reference soil within `database` (Bablet_2016: 1-17)
 version   <- "marmit1"    # "marmit1" or "marmit2"
 seed      <- 1
 sensors   <- c("Sentinel2a", "Sentinel2b", "PRISMA")
+
+# Only Bablet_2016 ships with ToolsRTM itself (keeps the package install
+# small). The other 7 official MARMIT databases (Dupiau_2020, Humper_2015,
+# Lesaignoux_2008, Liu_2002, Lobell_2002, Marcq_2012, Philpot_2014 -- see
+# https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit) live in this
+# monorepo's own databases/ folder (repo root, ~200MB total). Set db.root
+# below and change `database` above to use any of them -- no download/copy
+# needed, just point at the folder:
+#   database <- "Liu_2002"
+#   db.root  <- "../../../databases"
+db.root <- NULL          # NULL = only Bablet_2016 (bundled); or "../../../databases"
 
 out_dir <- "../../../outs/ForMARMIT"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
@@ -66,8 +78,8 @@ ggsave(file.path(out_dir, "0-input_histograms.png"), plot = hist_plot, width = 1
 
 wl <- 400:2400
 marmit_runs <- lapply(seq_len(n.samples), function(i) {
-  get.marmit.rsoil(database = "Bablet_2016", id = soil.id, version = version,
-                    L = L[i], eps = eps[i], wl.out = wl)
+  get.marmit.rsoil(database = database, id = soil.id, version = version,
+                    L = L[i], eps = eps[i], wl.out = wl, db_root = db.root)
 })
 
 refl <- t(sapply(marmit_runs, function(r) r$rsoil.wet))

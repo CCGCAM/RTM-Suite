@@ -167,6 +167,41 @@ def _load_bablet_spectra() -> dict[int, tuple[np.ndarray, np.ndarray]]:
     return {sid: (np.array([p[0] for p in pts]), np.array([p[1] for p in pts])) for sid, pts in by_id.items()}
 
 
+def _load_external_index(db_root: str, database: str):
+    """Read ``<db_root>/<database>/<database>.csv`` -- any MARMIT database in
+    the full RTM-Suite layout (e.g. from the repo's own ``databases/``
+    folder, all 8 databases, ~200MB total, not bundled with the package).
+    Extra columns beyond ``ID, Refl_file, SMCg, K, a, psi`` are ignored,
+    matching ``ToolsRTM::get.marmit.rsoil()``'s R-side reader.
+    """
+    import csv
+    from pathlib import Path
+
+    root = Path(db_root)
+    db_dir = root / database
+    index_path = db_dir / f"{database}.csv"
+    if not index_path.is_file():
+        available = sorted(p.name for p in root.iterdir() if p.is_dir()) if root.is_dir() else []
+        raise ValueError(
+            f"get_marmit_rsoil(): soil database {database!r} not found under {db_root!r}. "
+            f"Available: {', '.join(available)}."
+        )
+    with open(index_path, "r", encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    by_id: dict[int, list[dict]] = {}
+    for r in rows:
+        by_id.setdefault(int(r["ID"]), []).append(r)
+    return by_id, db_dir
+
+
+def _load_external_spectrum(db_dir, refl_file: str) -> tuple[np.ndarray, np.ndarray]:
+    from pathlib import Path
+
+    path = Path(db_dir) / "spectra" / refl_file
+    data = np.loadtxt(path, delimiter="\t", skiprows=1)
+    return data[:, 0], data[:, 1]
+
+
 def get_marmit_rsoil(
     soil_id: int = 1,
     L: float = 0.05,
@@ -176,17 +211,30 @@ def get_marmit_rsoil(
     k_i: float = 0.001,
     d_i: float = 0.0005,
     wl_out: np.ndarray | None = None,
+    database: str = "Bablet_2016",
+    db_root: str | None = None,
 ) -> MarmitSoil:
     """Build a canopy-model-ready soil reflectance spectrum from MARMIT-1
     or MARMIT-2.
 
-    Python port of ``ToolsRTM::get.marmit.rsoil()``, using the same bundled
-    Bablet_2016 soil database (17 IDs). See that function's docstring in R
-    for the physical background.
+    Python port of ``ToolsRTM::get.marmit.rsoil()``. Only the Bablet_2016
+    soil database (17 IDs) is bundled with the package, to keep install
+    size small. The other 7 MARMIT databases (Dupiau 2020, Humper 2015,
+    Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014 -- see
+    https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit) ship in the
+    RTM-Suite monorepo's own ``databases/`` folder (repo root, ~200MB
+    total, not bundled here either). Point at it directly with ``db_root``,
+    e.g. ``get_marmit_rsoil(database="Liu_2002", db_root="databases")`` run
+    from the repo root -- no copying required. Any other folder with the
+    same layout (an index CSV ``<name>/<name>.csv`` with columns ``ID,
+    Refl_file, SMCg, K, a, psi`` -- extra columns ignored -- plus
+    ``<name>/spectra/<Refl_file>`` tab-separated ``Wvl,R`` files) works the
+    same way. See that R function's docstring for the physical background.
 
     Parameters
     ----------
-    soil_id : Bablet_2016 soil ID, 1-17.
+    soil_id : soil ID within the database's index (the ``ID`` column). For
+        Bablet_2016, 1-17.
     L : thickness of the surface water layer, cm.
     eps : fraction of the soil surface that is wet (0-1).
     version : {'marmit1', 'marmit2'}. MARMIT-2 additionally accounts for
@@ -200,17 +248,34 @@ def get_marmit_rsoil(
     wl_out : wavelength grid (nm) to resample/pad onto. Defaults to
         ``np.arange(400, 2501)`` (400-2500nm, 1nm step), matching
         :func:`toolsrtm.canopy.foursail`'s default 2101-point grid.
+    database : soil database name. Default ``"Bablet_2016"``, the only one
+        bundled with the package (ignored -- always Bablet_2016 -- unless
+        ``db_root`` is given).
+    db_root : directory containing database subfolders (e.g. ``"databases"``
+        at the RTM-Suite repo root, which has all 8 MARMIT databases -- see
+        above). When ``None`` (default), only the bundled Bablet_2016
+        database is available and ``database`` is ignored.
     """
     if version not in ("marmit1", "marmit2"):
         raise ValueError(f"version must be 'marmit1' or 'marmit2', got {version!r}")
 
-    index = _load_bablet_index()
-    if soil_id not in index:
-        raise ValueError(f"soil_id {soil_id} not in Bablet_2016 (available: {sorted(index)})")
-    meta = index[soil_id]
+    if db_root is None:
+        index = _load_bablet_index()
+        if soil_id not in index:
+            raise ValueError(f"soil_id {soil_id} not in Bablet_2016 (available: {sorted(index)})")
+        meta = index[soil_id]
 
-    spectra = _load_bablet_spectra()
-    wl_raw, rd_raw = spectra[soil_id]
+        spectra = _load_bablet_spectra()
+        wl_raw, rd_raw = spectra[soil_id]
+    else:
+        by_id, db_dir = _load_external_index(db_root, database)
+        if soil_id not in by_id:
+            raise ValueError(f"soil_id {soil_id} not in {database!r} (available: {sorted(by_id)})")
+        rows = by_id[soil_id]
+        dry_row = min(rows, key=lambda r: float(r["SMCg"]))
+        meta = {"K": float(dry_row["K"]), "a": float(dry_row["a"]), "psi": float(dry_row["psi"])}
+        wl_raw, rd_raw = _load_external_spectrum(db_dir, dry_row["Refl_file"])
+
     wl_native = np.arange(max(wl_raw.min(), 400), wl_raw.max() + 1)
     rd = np.interp(wl_native, wl_raw, rd_raw)
 

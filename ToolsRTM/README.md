@@ -8,9 +8,15 @@ For canopy-level simulations, the package features models such as **INFORM**, **
 
 Additionally, the **SPART** model (Soil-Plant-Atmosphere Radiative Transfer model) is tailored for satellite measurements in the solar spectrum. It integrates three computationally efficient RT models: the **BSM** model for soil, **PROSAIL** for vegetation canopies, and **SMAC** for the atmosphere. These components are interconnected using the four-stream theory and the adding method, allowing SPART to simulate directional top-of-atmosphere (TOA) spectral observations. This approach accounts for significant effects, such as sun-observer geometries and the non-Lambertian reflectance of the land surface.
 
-This package specifically simulates the **MARMIT** (Multilayer rAdiative tRansfer Model of soIl reflecTance), a radiative transfer model that predicts the spectral reflectance of bare soil across the solar domain, from 400 nm to 2500 nm with a 1 nm resolution, based on its surface water content. To run the MARMIT model, use the `get.marmit1` and `get.marmit2` functions.
+This package specifically simulates the **MARMIT** (Multilayer rAdiative tRansfer Model of soIl reflecTance), a radiative transfer model that predicts the spectral reflectance of bare soil across the solar domain, from 400 nm to 2500 nm with a 1 nm resolution, based on its surface water content. The high-level `get.marmit.rsoil()` wrapper (built on `get.marmit1`/`get.marmit2`) loads a soil's dry reference spectrum and runs MARMIT directly.
 
-The necessary datasets for running these models can be downloaded from the corresponding databases. Each of the eight database directories (Bablet-2016, Dupiau-2020, Humper-2015, Lesaignoux-2008, Liu-2002, Lobell-2002, Marcq-2012, and Philpot-2014) contains essential data for model validation and simulations.
+Only the **Bablet 2016** soil database ships with the package, to keep install size small. The other 7 MARMIT databases (Dupiau 2020, Humper 2015, Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014) live in this monorepo's own [`databases/`](../databases/) folder (repo root, ~200MB total). Point `get.marmit.rsoil()` at it directly with `db_root`, no copying required:
+
+``` r
+soil <- ToolsRTM::get.marmit.rsoil(database = "Liu_2002", id = 1, db_root = "databases")
+```
+
+(run from the repo root, or pass an absolute path to `databases/`).
 
 For more information, please visit: MARMIT [GitLab](https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit)
 

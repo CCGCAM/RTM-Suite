@@ -46,6 +46,9 @@ Also in this repo: a Python port of the core models ([`python/`](python/)), narr
 ├── Tutorials/    Rmd/HTML/ipynb walkthroughs, verified block-by-block by execution
 ├── docs/         pkgdown reference manuals for both R packages + Sphinx docs for both Python packages (generated)
 ├── assets/      Images used in this README
+├── databases/    All 8 official MARMIT soil databases (~200MB total) — only Bablet_2016 ships inside
+│                 ToolsRTM/toolsrtm (keeps install size small); point get.marmit.rsoil()/get_marmit_rsoil()'s
+│                 `db_root` at this folder to use any of the other 7 directly, no download needed
 ├── Scripts/      Working scripts — real-world usage examples and pipelines
 │   ├── R/            all R script folders (moved under here 2026-08-19, was directly under Scripts/)
 │   │   ├── Pipeline/     generic simulate → convolve → index → invert, for both ToolsRTM and SCOPEinR (see Scripts/R/Pipeline/README.md)
@@ -71,7 +74,7 @@ RTM-Suite provides a common framework for simulating how vegetation, soil and th
 
 At the **leaf level**, models such as PROSPECT-D, PROSPECT-PRO, LIBERTY and Fluspect describe how biochemical and structural properties control leaf reflectance, transmittance and fluorescence. At the **canopy level**, fourSAIL, foursail2 and INFORM propagate these signals through different representations of vegetation structure.
 
-The framework also extends beyond vegetation reflectance. **MARMIT** represents the effect of soil moisture on soil reflectance, **SPART** connects soil–vegetation simulations with atmospheric radiative transfer, and **SCOPE** couples radiative transfer with photosynthesis, chlorophyll fluorescence and the soil–canopy energy balance.
+The framework also extends beyond vegetation reflectance. **MARMIT** represents the effect of soil moisture on soil reflectance (with all 8 official MARMIT soil databases available from [`databases/`](databases/) — see the "Repo layout" table above), **SPART** connects soil–vegetation simulations with atmospheric radiative transfer, and **SCOPE** couples radiative transfer with photosynthesis, chlorophyll fluorescence and the soil–canopy energy balance.
 
 RTM-Suite can also run these models in reverse. Simulated Look-Up Tables (LUTs) can be combined with machine learning or deep learning to retrieve vegetation traits from hyperspectral or satellite observations. Simulated spectra can be convolved to real sensor configurations, including **Sentinel-2A/2B** and **PRISMA**, allowing the same workflow to be transferred from hyperspectral simulations to satellite observations.
 
@@ -325,7 +328,7 @@ These examples are intentionally minimal. Full workflows covering **LUT generati
 
 </p>
 
-***Figure 4.** MARMIT soil reflectance darkening as surface wetness increases, with estimated soil moisture content.*
+***Figure 4.** MARMIT soil reflectance darkening as surface wetness increases, with estimated soil moisture content.* Simulated from the bundled `Bablet_2016` database — all 8 official MARMIT databases are available directly from [`databases/`](databases/), see `?get.marmit.rsoil`/`get_marmit_rsoil`'s `db_root` argument.
 
 ## Interactive apps: `Apps/`
 

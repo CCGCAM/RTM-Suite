@@ -30,6 +30,10 @@ library(dplyr)
 out_dir <- "outs/rtm_sims"
 dir.create(out_dir, showWarnings = FALSE)
 
+# Only Bablet_2016 ships with ToolsRTM itself; the other 7 official MARMIT
+# databases live in this repo's own databases/ folder -- pass
+# db_root = "databases" and database = "Liu_2002" (etc.) to use them, see
+# ?get.marmit.rsoil.
 soil_marmit_2101 <- get.marmit.rsoil(database = "Bablet_2016", id = 1,
                                       L = 0.05, eps = 0.4, wl.out = 400:2500)
 soil_marmit_2001 <- get.marmit.rsoil(database = "Bablet_2016", id = 1,

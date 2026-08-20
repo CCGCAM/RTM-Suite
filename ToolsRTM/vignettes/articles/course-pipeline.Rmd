@@ -239,6 +239,14 @@ model, so there's no `Cab`/`LAI`/`EWT` to invert. Its two physical knobs are
 that's wet); the single target trait is `SMC` (gravimetric soil moisture %,
 MARMIT's own physical output via `sigmoid.soil()`).
 
+This pipeline runs on the bundled `Bablet_2016` soil database. All 8
+official MARMIT databases (Bablet 2016, Dupiau 2020, Humper 2015,
+Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014 -- see the
+[MARMIT GitLab](https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit))
+are available directly from this monorepo's own `databases/` folder (repo
+root) -- pass `db_root = "databases"` and `database = "<name>"` to
+`get.marmit.rsoil()` to use any of them, no download needed.
+
 ```{r fig-marmit-smc, eval = TRUE, echo = FALSE, out.width = "80%"}
 knitr::include_graphics("figures/course-pipeline/marmit_reflectance_bySMC.png")
 ```

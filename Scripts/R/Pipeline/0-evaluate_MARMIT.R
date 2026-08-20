@@ -31,6 +31,14 @@ dir.create(out_dir, showWarnings = FALSE)
 
 soil_database <- "Bablet_2016"
 soil_id <- 1
+# Only Bablet_2016 ships with ToolsRTM itself. The other 7 official MARMIT
+# databases (Dupiau_2020, Humper_2015, Lesaignoux_2008, Liu_2002,
+# Lobell_2002, Marcq_2012, Philpot_2014 -- see
+# https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit) live in this
+# monorepo's own databases/ folder (repo root, ~200MB total). Set
+# soil_db_root <- "databases" (run from the repo root) and soil_database to
+# one of the names above to use them -- no download/copy needed.
+soil_db_root <- NULL
 
 ## ----------------------------------------------------------------------------
 ## 1. Wetness sweep (eps), fixed L
@@ -42,7 +50,7 @@ eps_levels <- c(0, 0.2, 0.4, 0.6, 0.8, 1.0)
 L_fixed <- 0.05
 
 df_eps <- bind_rows(lapply(eps_levels, function(e) {
-  soil <- get.marmit.rsoil(database = soil_database, id = soil_id, version = "marmit1",
+  soil <- get.marmit.rsoil(database = soil_database, id = soil_id, db_root = soil_db_root, version = "marmit1",
                             L = L_fixed, eps = e)
   data.frame(wavelength = soil$wavelength, reflectance = soil$rsoil.wet,
              eps = e, SMC = round(soil$SMC, 1))
@@ -68,7 +76,7 @@ L_levels <- c(0.01, 0.05, 0.1, 0.2, 0.35, 0.5)
 eps_fixed <- 0.5
 
 df_L <- bind_rows(lapply(L_levels, function(l) {
-  soil <- get.marmit.rsoil(database = soil_database, id = soil_id, version = "marmit1",
+  soil <- get.marmit.rsoil(database = soil_database, id = soil_id, db_root = soil_db_root, version = "marmit1",
                             L = l, eps = eps_fixed)
   data.frame(wavelength = soil$wavelength, reflectance = soil$rsoil.wet,
              L = l, SMC = round(soil$SMC, 1))
@@ -90,9 +98,9 @@ print(p_L)
 
 cat("=== MARMIT-1 vs. MARMIT-2 ===\n")
 
-soil_m1 <- get.marmit.rsoil(database = soil_database, id = soil_id, version = "marmit1",
+soil_m1 <- get.marmit.rsoil(database = soil_database, id = soil_id, db_root = soil_db_root, version = "marmit1",
                              L = 0.05, eps = 0.4)
-soil_m2 <- get.marmit.rsoil(database = soil_database, id = soil_id, version = "marmit2",
+soil_m2 <- get.marmit.rsoil(database = soil_database, id = soil_id, db_root = soil_db_root, version = "marmit2",
                              L = 0.05, eps = 0.4, n_i = 1.53, k_i = 0.001, d_i = 0.0005)
 
 df_version <- bind_rows(

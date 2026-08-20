@@ -33,6 +33,8 @@ pending verification.
 | **MARMIT** / **MARMIT-2** | `get.marmit1`, `get.marmit2`, `get.marmit.rsoil` | Bablet, Dupiau, Jacquemoud, Briottet et al. | Bablet et al. (2018), Remote Sens. Environ. 217, 1-17; Dupiau et al. (2022), Remote Sens. Environ. 272, 112951 | [10.1016/j.rse.2018.07.031](https://doi.org/10.1016/j.rse.2018.07.031); [10.1016/j.rse.2022.112951](https://doi.org/10.1016/j.rse.2022.112951) | Original authors' own reference implementation (Python): [`marmit/marmit`](https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit), maintained by Alice Dupiau (dupiau@ipgp.fr), Stéphane Jacquemoud (jacquemoud@ipgp.fr) and Xavier Briottet (xavier.briottet@onera.fr) | Used with the original authors' permission (not a formal OSI license) |
 | **SPART** | `SPART`, `SPART.simN` | Yang, van der Tol, Yin, Verhoef | Yang et al. (2020), Remote Sens. Environ. 247, 111870 | [10.1016/j.rse.2020.111870](https://doi.org/10.1016/j.rse.2020.111870) | Original authors' own repository, `peiqiyang/SPART` (GitHub), is GPL-3.0-licensed | **GPL-3.0** |
 
+**MARMIT note:** only `Bablet_2016` ships with this package (keeps install size small). All 8 official MARMIT databases are available directly from the monorepo's own `databases/` folder (repo root, one level up from `ToolsRTM/`) -- pass `db_root` to `get.marmit.rsoil()`, see `?get.marmit.rsoil`.
+
 Full write-up of the package: [`README.md`](README.md). Root-repo license
 overview: [`../THIRD_PARTY_LICENSES.md`](https://github.com/CCGCAM/RTM-Suite/blob/main/THIRD_PARTY_LICENSES.md).
 

@@ -8,15 +8,22 @@
 #' \code{\link{inform}}, or into \code{\link{SPART}}'s \code{rsoil} override.
 #'
 #' Only the \strong{Bablet 2016} soil database (Bablet et al., 2018) is
-#' bundled with the package, to keep install size small. Other MARMIT
+#' bundled with the package, to keep install size small. The other 7 MARMIT
 #' databases (Dupiau 2020, Humper 2015, Lesaignoux 2008, Liu 2002, Lobell
 #' 2002, Marcq 2012, Philpot 2014 -- see
-#' \url{https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit}) can be
-#' used by dropping a folder in the same layout (an index CSV
-#' \code{<name>/<name>.csv} with columns \code{ID, Refl_file, SMCg, K, a, psi},
-#' plus \code{<name>/spectra/<Refl_file>} tab-separated \code{Wvl,R} files)
-#' under \code{system.file("extdata", "marmit", "databases", package =
-#' "ToolsRTM")} and passing \code{database = "<name>"}.
+#' \url{https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit}) ship in
+#' the RTM-Suite monorepo's own \code{databases/} folder (repo root, one
+#' subfolder per database, ~200MB total -- too large to bundle in the
+#' package itself). Point at it directly with \code{db_root}, e.g.
+#' \code{get.marmit.rsoil(database = "Liu_2002", db_root = "databases")} run
+#' from the repo root -- no copying required. Any other folder with the same
+#' layout (an index CSV \code{<name>/<name>.csv} with columns \code{ID,
+#' Refl_file, SMCg, K, a, psi} -- extra columns are ignored -- plus
+#' \code{<name>/spectra/<Refl_file>} tab-separated \code{Wvl,R} files) works
+#' the same way. Leaving \code{db_root = NULL} (the default) keeps the
+#' original behavior: only the bundled \code{Bablet_2016} database, looked
+#' up under \code{system.file("extdata", "marmit", "databases", package =
+#' "ToolsRTM")}.
 #'
 #' The dry-soil reference for a given \code{id} is the driest spectrum on
 #' file for that soil (the row with the smallest \code{SMCg}), matching how
@@ -48,6 +55,10 @@
 #'   \code{\link{foursail}}'s \code{spectrum.all = TRUE} / \code{\link{inform}}
 #'   grid); pass \code{400:2400} for Fluspect-leaf-model calls to
 #'   \code{\link{foursail}}/\code{\link{foursail2}}.
+#' @param db_root character or \code{NULL}. Directory containing database
+#'   subfolders (e.g. \code{"databases"} at the RTM-Suite repo root, which
+#'   has all 8 MARMIT databases -- see Details). When \code{NULL} (default),
+#'   only the bundled \code{Bablet_2016} database is available.
 #'
 #' @return A list:
 #'   \item{wavelength}{the \code{wl.out} grid.}
@@ -72,22 +83,31 @@
 #' # Feed straight into fourSAIL (PROSPECT-D domain, full 400-2500nm)
 #' LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 1, setseed = 1))
 #' sim <- foursail(inputLUT = LUT, rsoil = soil$rsoil.wet, LeafModel = "PROSPECT-D")
+#'
+#' # Any of the other 7 databases, from the RTM-Suite repo's own databases/ folder
+#' # (run from the repo root, or pass an absolute path):
+#' soil2 <- get.marmit.rsoil(database = "Liu_2002", id = 1, db_root = "databases")
 #' }
 get.marmit.rsoil <- function(database = "Bablet_2016", id = 1, version = "marmit1",
                               L = 0.05, eps = 0.3, n_i = 1.53, k_i = 0.001, d_i = 0.0005,
-                              wl.out = 400:2500) {
+                              wl.out = 400:2500, db_root = NULL) {
 
   if (!version %in% c("marmit1", "marmit2")) {
     stop("get.marmit.rsoil(): 'version' must be 'marmit1' or 'marmit2', got '", version, "'.")
   }
 
-  db_dir <- system.file("extdata", "marmit", "databases", database, package = "ToolsRTM")
-  if (db_dir == "" || !dir.exists(db_dir)) {
-    available <- list.dirs(system.file("extdata", "marmit", "databases", package = "ToolsRTM"),
-                            full.names = FALSE, recursive = FALSE)
-    stop("get.marmit.rsoil(): soil database '", database, "' not found under inst/extdata/marmit/databases. ",
+  all_dbs_dir <- if (is.null(db_root)) {
+    system.file("extdata", "marmit", "databases", package = "ToolsRTM")
+  } else {
+    db_root
+  }
+  db_dir <- file.path(all_dbs_dir, database)
+  if (all_dbs_dir == "" || !dir.exists(db_dir)) {
+    available <- if (all_dbs_dir == "") character(0) else list.dirs(all_dbs_dir, full.names = FALSE, recursive = FALSE)
+    stop("get.marmit.rsoil(): soil database '", database, "' not found under ",
+         if (is.null(db_root)) "inst/extdata/marmit/databases (only Bablet_2016 is bundled -- " else paste0(db_root, " -- "),
          "Available: ", paste(available, collapse = ", "), ". ",
-         "Other MARMIT databases can be added by copying the same folder layout in -- see ?get.marmit.rsoil.")
+         if (is.null(db_root)) "Pass db_root = \"databases\" (RTM-Suite repo root) to use the other 7 MARMIT databases -- see ?get.marmit.rsoil." else "Check the path and folder name.")
   }
 
   index_file <- file.path(db_dir, paste0(database, ".csv"))

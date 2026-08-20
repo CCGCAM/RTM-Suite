@@ -8,10 +8,12 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
 from toolsrtm import get_marmit_rsoil
 
 REFDATA = Path(__file__).parent / "refdata"
+DATABASES_ROOT = Path(__file__).resolve().parents[3] / "databases"
 
 
 def test_get_marmit_rsoil_matches_r():
@@ -47,3 +49,34 @@ def test_wet_never_brighter_than_dry():
 def test_marmit2_wet_never_brighter_than_dry():
     out = get_marmit_rsoil(soil_id=1, L=0.05, eps=0.5, version="marmit2")
     assert np.all(out.rsoil_wet <= out.rsoil_dry + 1e-9)
+
+
+@pytest.mark.skipif(not DATABASES_ROOT.is_dir(), reason="repo-root databases/ folder not present")
+@pytest.mark.parametrize("database", [
+    "Bablet_2016", "Dupiau_2020", "Humper_2015", "Lesaignoux_2008",
+    "Liu_2002", "Lobell_2002", "Marcq_2012", "Philpot_2014",
+])
+def test_db_root_loads_all_8_official_databases(database):
+    """All 8 databases in the repo's own databases/ folder load through the
+    same db_root mechanism, id=1 in each (real files, not synthetic)."""
+    out = get_marmit_rsoil(soil_id=1, L=0.05, eps=0.3, database=database, db_root=str(DATABASES_ROOT))
+    assert np.all(np.isfinite(out.rsoil_wet))
+    assert np.all(np.isfinite(out.rsoil_dry))
+    assert np.all(out.rsoil_wet <= out.rsoil_dry + 1e-9)
+    assert 0 <= out.smc <= 100
+
+
+@pytest.mark.skipif(not DATABASES_ROOT.is_dir(), reason="repo-root databases/ folder not present")
+def test_db_root_bablet_2016_matches_bundled_copy():
+    """The bundled Bablet_2016 (default, no db_root) and the full copy in
+    databases/ (via db_root) are the same database -- id=1 should agree."""
+    bundled = get_marmit_rsoil(soil_id=1, L=0.05, eps=0.3)
+    external = get_marmit_rsoil(soil_id=1, L=0.05, eps=0.3, database="Bablet_2016", db_root=str(DATABASES_ROOT))
+    np.testing.assert_allclose(bundled.smc, external.smc, rtol=1e-6)
+    np.testing.assert_allclose(bundled.rsoil_wet, external.rsoil_wet, rtol=1e-6)
+
+
+@pytest.mark.skipif(not DATABASES_ROOT.is_dir(), reason="repo-root databases/ folder not present")
+def test_db_root_unknown_database_raises_with_available_list():
+    with pytest.raises(ValueError, match="Bablet_2016"):
+        get_marmit_rsoil(database="Nonexistent", db_root=str(DATABASES_ROOT))

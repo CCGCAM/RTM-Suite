@@ -24,8 +24,20 @@ OUT_DIR = Path(__file__).resolve().parents[3] / "outs" / "Python" / "ForMARMIT"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 N_SAMPLES = 100
-SOIL_ID = 1
+DATABASE = "Bablet_2016"  # soil database -- see DB_ROOT below
+SOIL_ID = 1                # reference soil within DATABASE (Bablet_2016: 1-17)
 VERSION = "marmit1"
+
+# Only Bablet_2016 ships with toolsrtm itself (keeps the package install
+# small). The other 7 official MARMIT databases (Dupiau_2020, Humper_2015,
+# Lesaignoux_2008, Liu_2002, Lobell_2002, Marcq_2012, Philpot_2014 -- see
+# https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit) live in this
+# monorepo's own databases/ folder (repo root, ~200MB total). Set DB_ROOT
+# below and change DATABASE above to use any of them -- no download/copy
+# needed, just point at the folder:
+#   DATABASE = "Liu_2002"
+#   DB_ROOT = str(Path(__file__).resolve().parents[3] / "databases")
+DB_ROOT = None  # None = only Bablet_2016 (bundled); or the databases/ path above
 
 
 def main():
@@ -37,7 +49,8 @@ def main():
     reflectance = np.empty((N_SAMPLES, 2101))
     smc = np.empty(N_SAMPLES)
     for i in range(N_SAMPLES):
-        res = get_marmit_rsoil(soil_id=SOIL_ID, L=float(L[i]), eps=float(eps[i]), version=VERSION)
+        res = get_marmit_rsoil(soil_id=SOIL_ID, L=float(L[i]), eps=float(eps[i]), version=VERSION,
+                                database=DATABASE, db_root=DB_ROOT)
         if wavelengths is None:
             wavelengths = res.wavelength
         reflectance[i] = res.rsoil_wet

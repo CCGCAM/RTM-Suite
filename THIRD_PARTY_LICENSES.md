@@ -41,6 +41,8 @@ original authors before any commercial or redistribution use.
 | **SPART** | Soil-plant-atmosphere RT | R | Yang, van der Tol, Yin, Verhoef | Yang et al. (2020), Remote Sens. Environ. 247, 111870 | [10.1016/j.rse.2020.111870](https://doi.org/10.1016/j.rse.2020.111870) | Original authors' own repository, `peiqiyang/SPART` (GitHub), is GPL-3.0-licensed | **GPL-3.0** (port of the original GPL-3.0 model) |
 | **SCOPE** | RT, photosynthesis, SIF & energy balance | SCOPEinR / SCOPEinPython | Van der Tol, Verhoef, Yang, Prikaziuk et al. | Van der Tol et al. (2009), Biogeosciences 6(12), 3109-29; Yang et al. (2021), Geosci. Model Dev. 14, 4697-4712 (SCOPE 2.0, final published version) | [10.5194/bg-6-3109-2009](https://doi.org/10.5194/bg-6-3109-2009); [10.5194/gmd-14-4697-2021](https://doi.org/10.5194/gmd-14-4697-2021) | Original authors' own repository, `Christiaanvandertol/SCOPE` (GitHub), is GPL-3.0-licensed | **GPL-3.0** (port of the original GPL-3.0 model) |
 
+**MARMIT note:** only the `Bablet_2016` database ships inside `ToolsRTM`/`toolsrtm` (keeps install size small). All 8 official MARMIT databases (Bablet 2016, Dupiau 2020, Humper 2015, Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014) are available directly from this monorepo's own [`databases/`](databases/) folder (repo root, ~200MB) -- pass `db_root` to `get.marmit.rsoil()`/`get_marmit_rsoil()` to use any of them, no download needed.
+
 The scientific models listed above remain the work of their respective
 authors. Their inclusion in RTM-Suite does not imply authorship of the
 underlying models by the RTM-Suite developers, and RTM-Suite's own MIT

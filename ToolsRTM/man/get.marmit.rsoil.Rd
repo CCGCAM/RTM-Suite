@@ -13,7 +13,8 @@ get.marmit.rsoil(
   n_i = 1.53,
   k_i = 0.001,
   d_i = 5e-04,
-  wl.out = 400:2500
+  wl.out = 400:2500,
+  db_root = NULL
 )
 }
 \arguments{
@@ -46,6 +47,11 @@ resampled/padded onto. Default \code{400:2500} (matches
 \code{\link{foursail}}'s \code{spectrum.all = TRUE} / \code{\link{inform}}
 grid); pass \code{400:2400} for Fluspect-leaf-model calls to
 \code{\link{foursail}}/\code{\link{foursail2}}.}
+
+\item{db_root}{character or \code{NULL}. Directory containing database
+subfolders (e.g. \code{"databases"} at the RTM-Suite repo root, which
+has all 8 MARMIT databases -- see Details). When \code{NULL} (default),
+only the bundled \code{Bablet_2016} database is available.}
 }
 \value{
 A list:
@@ -69,15 +75,22 @@ result onto a fixed wavelength grid so it can be dropped straight into
 }
 \details{
 Only the \strong{Bablet 2016} soil database (Bablet et al., 2018) is
-bundled with the package, to keep install size small. Other MARMIT
+bundled with the package, to keep install size small. The other 7 MARMIT
 databases (Dupiau 2020, Humper 2015, Lesaignoux 2008, Liu 2002, Lobell
 2002, Marcq 2012, Philpot 2014 -- see
-\url{https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit}) can be
-used by dropping a folder in the same layout (an index CSV
-\code{<name>/<name>.csv} with columns \code{ID, Refl_file, SMCg, K, a, psi},
-plus \code{<name>/spectra/<Refl_file>} tab-separated \code{Wvl,R} files)
-under \code{system.file("extdata", "marmit", "databases", package =
-"ToolsRTM")} and passing \code{database = "<name>"}.
+\url{https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit}) ship in
+the RTM-Suite monorepo's own \code{databases/} folder (repo root, one
+subfolder per database, ~200MB total -- too large to bundle in the
+package itself). Point at it directly with \code{db_root}, e.g.
+\code{get.marmit.rsoil(database = "Liu_2002", db_root = "databases")} run
+from the repo root -- no copying required. Any other folder with the same
+layout (an index CSV \code{<name>/<name>.csv} with columns \code{ID,
+Refl_file, SMCg, K, a, psi} -- extra columns are ignored -- plus
+\code{<name>/spectra/<Refl_file>} tab-separated \code{Wvl,R} files) works
+the same way. Leaving \code{db_root = NULL} (the default) keeps the
+original behavior: only the bundled \code{Bablet_2016} database, looked
+up under \code{system.file("extdata", "marmit", "databases", package =
+"ToolsRTM")}.
 
 The dry-soil reference for a given \code{id} is the driest spectrum on
 file for that soil (the row with the smallest \code{SMCg}), matching how
@@ -95,6 +108,10 @@ lines(soil$wavelength, soil$rsoil.dry, col = "grey50")
 # Feed straight into fourSAIL (PROSPECT-D domain, full 400-2500nm)
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 1, setseed = 1))
 sim <- foursail(inputLUT = LUT, rsoil = soil$rsoil.wet, LeafModel = "PROSPECT-D")
+
+# Any of the other 7 databases, from the RTM-Suite repo's own databases/ folder
+# (run from the repo root, or pass an absolute path):
+soil2 <- get.marmit.rsoil(database = "Liu_2002", id = 1, db_root = "databases")
 }
 }
 \seealso{
