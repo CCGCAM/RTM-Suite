@@ -1685,7 +1685,7 @@ db.sim.many &lt;- get.SCOPE(
   canopy.model = &quot;fourSAIL&quot;, get.outputs = &quot;ALL&quot;, get.plots = FALSE
 )
 cat(&quot;Ran&quot;, N_SAMPLES, &quot;simulations in&quot;, round(as.numeric(Sys.time() - start_time), 1), &quot;s\n&quot;)</code></pre>
-<pre><code>## Ran 100 simulations in 1.9 s</code></pre>
+<pre><code>## Ran 100 simulations in 1.5 s</code></pre>
 <pre class="r"><code>Actot_vals &lt;- sapply(db.sim.many, function(r) r$data.fluxes$Actot)
 EoutF_vals &lt;- sapply(db.sim.many, function(r) r$data.rad$EoutF)
 
@@ -1755,6 +1755,18 @@ input spectrum: <code>reflapp</code> comes out of the full
 energy-balance/fluorescence-coupled SCOPE run instead of plain PROSAIL,
 so this trains on what a sensor would see over a canopy whose leaf/soil
 temperatures were actually solved for, not assumed.</p>
+<p><strong>If you compare this R² to the Python version of this
+section</strong>: R’s <code>getLUT.SCOPE()</code> (Section 4) randomizes
+essentially every free parameter at once – leaf biochemistry, LAI,
+leaf-angle distribution, and illumination/view geometry
+(<code>tts</code>/<code>tto</code>/<code>psi</code>) all vary
+simultaneously across the 100 rows. Python’s version of this tutorial
+perturbs only Cab/LAI/EWT/Vcmax25 around one fixed baseline, holding
+geometry and leaf-angle distribution constant. More
+simultaneously-varying nuisance parameters means more confounding for
+the model to see through, so R’s LAI retrieval is a genuinely harder
+task and a lower R² here is expected – not a bug, a real methodological
+difference between the two tutorials’ sampling designs.</p>
 </div>
 <div id="whats-not-covered-here-and-why" class="section level2">
 <h2>What’s not covered here (and why)</h2>

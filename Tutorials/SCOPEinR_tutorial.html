@@ -2018,13 +2018,13 @@ same LUT into <code>n.cores</code> chunks, runs them on a
 <span id="cb33-14"><a href="#cb33-14" tabindex="-1"></a>  <span class="at">get.plots =</span> <span class="cn">FALSE</span>, <span class="at">get.csv =</span> <span class="cn">FALSE</span></span>
 <span id="cb33-15"><a href="#cb33-15" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Total simulations: 10 
-## Total execution time: 13.5571</code></pre>
+## Total execution time: 7.045208</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a>t_parallel <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">Sys.time</span>() <span class="sc">-</span> t0, <span class="at">units =</span> <span class="st">&quot;secs&quot;</span>)</span>
 <span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a></span>
 <span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Serial (1 core):    &quot;</span>, <span class="fu">round</span>(t_serial, <span class="dv">1</span>), <span class="st">&quot;s for&quot;</span>, <span class="fu">length</span>(sims_serial), <span class="st">&quot;sims</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
-<pre><code>## Serial (1 core):     17.5 s for 10 sims</code></pre>
+<pre><code>## Serial (1 core):     6.9 s for 10 sims</code></pre>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Parallel (4 cores):  &quot;</span>, <span class="fu">round</span>(t_parallel, <span class="dv">1</span>), <span class="st">&quot;s for&quot;</span>, <span class="fu">length</span>(sims_parallel), <span class="st">&quot;sims</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
-<pre><code>## Parallel (4 cores):   15.8 s for 10 sims</code></pre>
+<pre><code>## Parallel (4 cores):   8.5 s for 10 sims</code></pre>
 <p>For a LUT this small the parallel path still pays a fixed cost —
 spinning up a PSOCK cluster and exporting
 <code>SCOPEinR</code>/<code>ToolsRTM</code> to every worker — so the
@@ -2083,7 +2083,7 @@ written to disk instead of being held in memory all at once:</p>
 <span id="cb39-43"><a href="#cb39-43" tabindex="-1"></a>}</span></code></pre></div>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(out_root, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="fu">basename</span>(subdirs)</span></code></pre></div>
-<pre><code>## [1] &quot;2026-08-20_12-23-00&quot; &quot;2026-08-20_12-23-19&quot;</code></pre>
+<pre><code>## [1] &quot;2026-08-20_14-21-01&quot; &quot;2026-08-20_14-21-20&quot;</code></pre>
 <p><code>get.SCOPE.parallel()</code>/<code>get.SCOPE.outputs()</code>
 build the timestamped output folder with
 <code>paste(path.out, current_time, sep = &quot;&quot;)</code> — plain string
@@ -2128,9 +2128,7 @@ back from the last <code>n.folders</code> timestamped subfolders under
 <code>path.out</code> and row-binds each variable across chunks:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>df.scope <span class="ot">&lt;-</span> <span class="fu">getCSV</span>(<span class="at">path.out =</span> <span class="fu">substr</span>(out_root, <span class="dv">1</span>, <span class="fu">nchar</span>(out_root) <span class="sc">-</span> <span class="dv">1</span>),</span>
 <span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>                    <span class="at">n.folders =</span> n_chunks, <span class="at">files.names =</span> <span class="st">&quot;All&quot;</span>)</span></code></pre></div>
-<pre><code>## Getting files from: C:\Users\camin001\AppData\Local\Temp\RtmpYVdlDQ/scope_outs/2026-08-20_12-23-00 
-## Getting files from: C:\Users\camin001\AppData\Local\Temp\RtmpYVdlDQ/scope_outs/2026-08-20_12-23-19 
-## 
+<pre><code>## 
 ## List of files:
 ## refl.csv, reflapp.csv, rdd.csv, rdo.csv, rsd.csv, rso.csv, Lo_spectrum_includingF.csv, Lo_spectrum.csv, fluorescence_All_Leaves.csv, fluorescence_scattered.csv, fluorescence_scattered.csv, fluorescence_shaded.csv, fluorescence_sunlit.csv, fluorescence_soil.csv, fluorescence_hemis.csv, fluorescence_ReabsCorr.csv, Esky.csv, Esun.csv, aPAR.csv, fluxes.csv, fluorescence_scalar.csv, radiation.csv, resistance.csv, vegatation.csv</code></pre>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">names</span>(df.scope)</span></code></pre></div>

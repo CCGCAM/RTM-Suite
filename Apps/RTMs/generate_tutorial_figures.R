@@ -8,8 +8,9 @@
 # model combinations the RTM tab supports, and to PROSAIL/PROSAIL-WithSatellite,
 # which are just this workflow with the model fixed to fourSAIL+PROSPECT-PRO).
 
-root <- "C:/Users/camin001/OneDrive - Wageningen University & Research/Workspace/0-RTM-Suite"
-setwd(file.path(root, "Apps/RTMs"))
+# Run with this file's own directory (Apps/RTMs/) as the working directory
+# -- e.g. open Apps/RTMs/app.R in RStudio first (sets it automatically), or
+# `Rscript generate_tutorial_figures.R` from inside Apps/RTMs/.
 suppressPackageStartupMessages({
   library(ToolsRTM); library(ggplot2); library(patchwork); library(randomForest)
 })

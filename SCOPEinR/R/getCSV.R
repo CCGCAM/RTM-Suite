@@ -63,7 +63,6 @@ getCSV <- function(path.out=NULL, n.folders=4, files.names='All') {
 
 
   for (folder in folder_list) {
-    cat("Getting files from:", folder, "\n")
 
     for (j in 1:length(names_pattern)){
       names_pattern.j <-names_pattern[j]
