@@ -20,7 +20,15 @@
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -40,9 +48,7 @@
   </form>
 </div>
   <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-    
-    <a href="../../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
   </div>
 
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -284,10 +290,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -336,34 +339,9 @@
 <span class="sd">iterative energy-balance dependency, so this is composable without the</span>
 <span class="sd">SCOPE thermal energy-balance loop, ``ebal.R``, being ported).</span>
 
-<span class="sd">**Ported against a fixed R source.** ``SCOPEinR::get.RTMf`` had two real</span>
-<span class="sd">bugs, found and fixed during this port (see ``python/docs/verification.rst``</span>
-<span class="sd">for the full history):</span>
-
-<span class="sd">- A column-recycling issue in ~18 expressions computing</span>
-<span class="sd">  ``wfEs``/``sfEs``/``sbEs``/``vfEplu_*``/``vbEmin_*``/``sigfEmin_*``/</span>
-<span class="sd">  ``sigbEmin_*``/``sigfEplu_*``/``sigbEplu_*``/``Femmin``/``Femplu``:</span>
-<span class="sd">  R&#39;s ``vector * matrix`` only broadcasts correctly per matrix-column</span>
-<span class="sd">  when ``nrow(matrix) == length(vector)``, which didn&#39;t hold here (the</span>
-<span class="sd">  matrices have ``nf`` (53) rows, the vectors have ``nl`` (canopy-layer</span>
-<span class="sd">  count) elements). Found in two passes -- the first covered the 16</span>
-<span class="sd">  expressions building ``wfEs`` through ``sigbEplu_u/h``; a second,</span>
-<span class="sd">  closer look (triggered by this Python port&#39;s own reference values</span>
-<span class="sd">  disagreeing with an R run at the time, which is how the *first* pass&#39;s</span>
-<span class="sd">  fix was confirmed complete but this remaining pair was found to still</span>
-<span class="sd">  need it) turned up two more instances two lines later, in</span>
-<span class="sd">  ``Femmin``/``Femplu`` themselves (``Qs * Fsmin`` etc). All fixed in R</span>
-<span class="sd">  with ``sweep()``. NumPy needs no equivalent fix anywhere:</span>
-<span class="sd">  ``matrix * vector_of_length_ncol`` already broadcasts correctly by</span>
-<span class="sd">  construction (NumPy aligns trailing axes; R recycles a flat vector), so</span>
-<span class="sd">  the natural direct translation below is correct without any</span>
-<span class="sd">  bug-workaround helper.</span>
-<span class="sd">- An ``absfs_nl &lt;- c(absfsfo)`` copy-paste mixup (should have been</span>
-<span class="sd">  ``c(absfs)``), fixed in R to ``absfs_nl &lt;- c(absfs)``.</span>
-
-<span class="sd">Both fixes are reflected directly in the derivation below (i.e. this</span>
-<span class="sd">module was written against the corrected R source, not translated from</span>
-<span class="sd">the buggy version and then patched).</span>
+<span class="sd">NumPy&#39;s ``matrix * vector_of_length_ncol`` broadcasting (NumPy aligns</span>
+<span class="sd">trailing axes) matches R&#39;s own ``sweep()``-based per-column scaling used</span>
+<span class="sd">throughout the derivation below.</span>
 
 <span class="sd">**A real, deliberate numerical approximation, not an exact match**: R&#39;s</span>
 <span class="sd">``signal::interp1(..., method=&#39;spline&#39;)`` calls ``stats::splinefun()``,</span>
@@ -458,8 +436,7 @@
     <span class="n">etau</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">etah</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RTMfResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Direct port of ``SCOPEinR::get.RTMf`` (against the fixed R source,</span>
-<span class="sd">    see module docstring).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Direct port of ``SCOPEinR::get.RTMf`` (see module docstring).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

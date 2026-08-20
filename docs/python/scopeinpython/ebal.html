@@ -293,10 +293,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -341,11 +338,8 @@ and heat-flux partitioning. Direct, <strong>“SCOPE-lite”-only</strong> port 
 chain built this session.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Depends on <a class="reference internal" href="rtmo.html#scopeinpython.rtmo.net_radiation_lite" title="scopeinpython.rtmo.net_radiation_lite"><code class="xref py py-func docutils literal notranslate"><span class="pre">scopeinpython.rtmo.net_radiation_lite()</span></code></a> (a <strong>real bug
-found and fixed in R</strong> here: the “lite” direct-beam term used a stray
-leftover loop variable, making direct-beam-absorbed net radiation come
-out constant across all canopy layers – see that function’s
-docstring) and <a class="reference internal" href="rtmt_sb.html#scopeinpython.rtmt_sb.rtmt_sb" title="scopeinpython.rtmt_sb.rtmt_sb"><code class="xref py py-func docutils literal notranslate"><span class="pre">scopeinpython.rtmt_sb.rtmt_sb()</span></code></a>.</p>
+<p>Depends on <a class="reference internal" href="rtmo.html#scopeinpython.rtmo.net_radiation_lite" title="scopeinpython.rtmo.net_radiation_lite"><code class="xref py py-func docutils literal notranslate"><span class="pre">scopeinpython.rtmo.net_radiation_lite()</span></code></a> and
+<a class="reference internal" href="rtmt_sb.html#scopeinpython.rtmt_sb.rtmt_sb" title="scopeinpython.rtmt_sb.rtmt_sb"><code class="xref py py-func docutils literal notranslate"><span class="pre">scopeinpython.rtmt_sb.rtmt_sb()</span></code></a>.</p>
 <p>Only the default (non-MD12) fluorescence-model branch, only the simple
 <code class="docutils literal notranslate"><span class="pre">G</span> <span class="pre">=</span> <span class="pre">0.35*Rn</span></code> ground-heat-flux method, and only <code class="docutils literal notranslate"><span class="pre">meanleaf.v2</span></code>’s
 <code class="docutils literal notranslate"><span class="pre">'layers'</span></code> aggregation mode are ported (matches every reference case
@@ -384,9 +378,6 @@ vectors throughout (one value per canopy layer, no per-leaf-angle-class
 detail), so the full <code class="docutils literal notranslate"><span class="pre">(13,36,nl)</span></code> <code class="docutils literal notranslate"><span class="pre">'angles'</span></code>/<code class="docutils literal notranslate"><span class="pre">'angles_and_layers'</span></code>
 modes never apply.</p></li>
 </ul>
-<p>See <a class="reference internal" href="rtmo.html#module-scopeinpython.rtmo" title="scopeinpython.rtmo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scopeinpython.rtmo</span></code></a> (<code class="docutils literal notranslate"><span class="pre">net_radiation_lite</span></code>) and
-<a class="reference internal" href="rtmt_sb.html#module-scopeinpython.rtmt_sb" title="scopeinpython.rtmt_sb"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scopeinpython.rtmt_sb</span></code></a> for two bugs found and fixed in R’s own
-dependencies of this loop before this port was written.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="scopeinpython.ebal.EbalMeteo">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scopeinpython.ebal.</span></span><span class="sig-name descname"><span class="pre">EbalMeteo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ea</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ca</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'float'</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scopeinpython/ebal.html#EbalMeteo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scopeinpython.ebal.EbalMeteo" title="Link to this definition"></a></dt>

@@ -290,10 +290,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -345,22 +342,9 @@
 <span class="sd">(scalar-per-layer, not full ``(13,36,nl)`` per-leaf-angle) branch only,</span>
 <span class="sd">matching every reference case in this port.</span>
 
-<span class="sd">**A real bug found and fixed in R here**: the &quot;lite&quot; branch&#39;s direct-beam</span>
-<span class="sd">term (``Rndir``/``Pndir_Cab``/etc in ``RTMo.R``) used to compute</span>
-<span class="sd">``fs_ * Asun[j]`` where ``j`` was leftover from an unrelated, already-</span>
-<span class="sd">completed ``for`` loop above it (always equal to ``nl``, the *last*</span>
-<span class="sd">canopy layer) -- so the direct-beam contribution to sunlit-leaf net</span>
-<span class="sd">radiation came out **exactly constant across all canopy layers**</span>
-<span class="sd">(confirmed via direct repro: ``data.rad$Rnuc - data.rad$Rnhc`` had zero</span>
-<span class="sd">layer-to-layer variation), which is not physically sensible -- direct-</span>
-<span class="sd">beam absorption should decay with canopy depth, the same as the diffuse</span>
-<span class="sd">term a few lines below already correctly does. Fixed in</span>
-<span class="sd">``SCOPEinR/R/RTMo.R`` to use the full per-layer vectors (``Asun`` etc,</span>
-<span class="sd">not ``Asun[j]``) -- a scalar ``fs_`` broadcasts against them correctly</span>
-<span class="sd">without indexing. A second, downstream instance of the same class of</span>
-<span class="sd">mistake (``Rndir[1] + Rndif`` picking only the first layer, harmless</span>
-<span class="sd">before the fix since ``Rndir`` was a scalar, wrong after) was fixed in</span>
-<span class="sd">the same edit.</span>
+<span class="sd">The direct-beam term (``Rndir``/``Pndir_Cab``/etc) decays with canopy</span>
+<span class="sd">depth using the full per-layer vectors (``Asun`` etc.), the same as the</span>
+<span class="sd">diffuse term.</span>
 
 <span class="sd">NOT ported (out of scope for this port, see python/README.md):</span>
 <span class="sd">  - Everything else in RTMo.R&#39;s section 4 (``Rnuc_Car``/``Pnuc_Car``/</span>
@@ -902,8 +886,8 @@
     <span class="n">kChlrel</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NetRadiationLite</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Direct, partial port of RTMo.R&#39;s section 4 (&quot;lite&quot; branch only,</span>
-<span class="sd">    against the fixed R source -- see module docstring). Computes just</span>
-<span class="sd">    the 6 quantities :mod:`scopeinpython.ebal` needs.</span>
+<span class="sd">    see module docstring). Computes just the 6 quantities</span>
+<span class="sd">    :mod:`scopeinpython.ebal` needs.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

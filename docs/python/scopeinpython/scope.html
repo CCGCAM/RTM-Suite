@@ -293,10 +293,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -351,13 +348,6 @@ match at the same ~1-2% tolerance established for <a class="reference internal" 
 itself, for the same reason (small floating-point divergence compounding
 over ~7-10 nonlinear iterations along a per-layer-loop biochemistry
 path – not a functional bug).</p>
-<p>Along the way, a second real R bug was found and fixed: <code class="docutils literal notranslate"><span class="pre">get.zo_and_d</span></code>’s
-degenerate-canopy branch (<code class="docutils literal notranslate"><span class="pre">LAI</span></code> or <code class="docutils literal notranslate"><span class="pre">hc</span></code> near zero) assigned
-<code class="docutils literal notranslate"><span class="pre">zo_and_d$d</span> <span class="pre">&lt;-</span> <span class="pre">d</span></code> with no <code class="docutils literal notranslate"><span class="pre">d</span></code> ever defined on that branch – errors,
-or silently picks up a stale <code class="docutils literal notranslate"><span class="pre">d</span></code> left over from a previous call in the
-same R session (the same stray-variable bug pattern as <code class="docutils literal notranslate"><span class="pre">RTMo.R</span></code>’s
-direct-beam term, see <a class="reference internal" href="rtmo.html#scopeinpython.rtmo.net_radiation_lite" title="scopeinpython.rtmo.net_radiation_lite"><code class="xref py py-func docutils literal notranslate"><span class="pre">scopeinpython.rtmo.net_radiation_lite()</span></code></a>).
-Fixed in <code class="docutils literal notranslate"><span class="pre">SCOPEinR/R/zo_and_d.R</span></code> to the evidently-intended <code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">&lt;-</span> <span class="pre">0</span></code>.</p>
 <p>See the module docstring below, and <a class="reference internal" href="../not_ported.html"><span class="doc">Known limitations</span></a>, for the full
 list of <code class="docutils literal notranslate"><span class="pre">options.SCOPE</span></code> branches this wrapper does not expose at all
 (directional BRDF, <code class="docutils literal notranslate"><span class="pre">RTMt_planck</span></code>, multi-layer mSCOPE, time-series

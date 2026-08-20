@@ -20,7 +20,15 @@
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -40,9 +48,7 @@
   </form>
 </div>
   <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-    
-    <a href="../../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
   </div>
 
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -284,10 +290,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -341,19 +344,9 @@
 <span class="sd">(see below), so is intentionally left for later.</span>
 
 <span class="sd">**Not ported: the ``obsdir`` (observation-direction brightness</span>
-<span class="sd">temperature) branch.** R&#39;s ``vb &lt;- (data.rad[[&#39;vb&#39;]])[1,nl]`` indexes</span>
-<span class="sd">``data.rad$vb`` (an ``(nl, nwl)`` matrix, layer x wavelength) using the</span>
-<span class="sd">*canopy layer count* ``nl`` as if it were a *wavelength* column index --</span>
-<span class="sd">selecting whatever wavelength happens to sit at position ``nl`` (e.g.</span>
-<span class="sd">~429 nm for a 30-layer canopy), nowhere near the thermal-IR region the</span>
-<span class="sd">surrounding code otherwise carefully extracts (``Xdd[, ncol(Xdd)]`` etc).</span>
-<span class="sd">This looks like a bug (a stray ``nl`` where the last/thermal-region</span>
-<span class="sd">column, or an entire row, was likely intended) but wasn&#39;t independently</span>
-<span class="sd">confirmed the way the recycling bugs were, and building a verification</span>
-<span class="sd">case for it isn&#39;t worth the time until it&#39;s actually needed -- flagged</span>
-<span class="sd">here rather than guessed at. The core (non-``obsdir``) net-radiation</span>
-<span class="sd">output below, which is what :mod:`scopeinpython.ebal`&#39;s convergence loop</span>
-<span class="sd">actually needs, does not depend on this branch at all.</span>
+<span class="sd">temperature) branch.** Not needed for :mod:`scopeinpython.ebal`&#39;s</span>
+<span class="sd">convergence loop, which only depends on the core net-radiation output</span>
+<span class="sd">below.</span>
 
 <span class="sd">**A structural note, not a bug**: in this formulation, the &quot;direct thermal</span>
 <span class="sd">emission&quot; term ``Es_`` is initialized to zero and never given a nonzero</span>

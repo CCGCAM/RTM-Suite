@@ -20,7 +20,15 @@
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -40,9 +48,7 @@
   </form>
 </div>
   <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-    
-    <a href="../../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
   </div>
 
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -284,10 +290,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -338,87 +341,8 @@
 <span class="sd">``Eout_`` at the 500-600 nm band, rather than a self-contained new</span>
 <span class="sd">spectrum on its own display grid (RTMf&#39;s ``LoF_`` etc).</span>
 
-<span class="sd">**Ported against a fixed R source.** ``SCOPEinR::get.RTMz`` had four real</span>
-<span class="sd">bugs, found and fixed during this port (see ``python/docs/verification.rst``</span>
-<span class="sd">for the full history):</span>
-
-<span class="sd">- The exact same column-recycling issue as ``get.RTMf`` (``vector *</span>
-<span class="sd">  matrix`` only broadcasts correctly per column when</span>
-<span class="sd">  ``nrow(matrix) == length(vector)``), across the same family of</span>
-<span class="sd">  expressions plus its own ``Femmin``/``Femplu``. Fixed with ``sweep()``.</span>
-<span class="sd">- Its real output (the layer recursion, ``piLo1``..``piLo4``, ``LoF_``)</span>
-<span class="sd">  was computed entirely inside an *unreachable* ``if (get.plots ==</span>
-<span class="sd">  TRUE)`` block placed **after** the loop that produced its inputs --</span>
-<span class="sd">  since that loop&#39;s `k`/`piLs`/etc. variables aren&#39;t `k`-indexed there,</span>
-<span class="sd">  the block only ever used the LAST iteration&#39;s values, and only ran at</span>
-<span class="sd">  all when ``get.plots = TRUE``. With the normal ``get.plots = FALSE``</span>
-<span class="sd">  call, ``get.RTMz()`` silently returned its input **completely</span>
-<span class="sd">  unmodified**. Fixed by moving the real computation inside the loop,</span>
-<span class="sd">  unconditionally.</span>
-<span class="sd">- A ``Po[1:nl+1]`` bug (R parses this as ``(1:nl)+1``, a length-``nl``</span>
-<span class="sd">  vector, not the intended scalar ``Po[nl+1]``) -- fixed to match the</span>
-<span class="sd">  equivalent, correctly-written line in ``get.RTMf``.</span>
-<span class="sd">- A hardcoded ``dim = c(30, 13, 36)`` (should be ``c(nl, 13, 36)``) in the</span>
-<span class="sd">  ``data.Knu``-is-a-plain-vector branch of its ``etau`` construction --</span>
-<span class="sd">  silently wrong for any canopy with ``nl != 30``. Fixed to use ``nl``.</span>
-<span class="sd">- A MATLAB-to-R mistranslation: ``sum(LoF_, 2)`` (meant to sum across the</span>
-<span class="sd">  sun/sky (``k``) dimension, MATLAB&#39;s ``sum(A,2)`` idiom) -- R&#39;s</span>
-<span class="sd">  ``sum()`` has no dimension argument, so this collapsed the whole</span>
-<span class="sd">  ``(nwlZ, 2)`` matrix to a single scalar (total + 2) and recycled it</span>
-<span class="sd">  across every wavelength, instead of the intended per-wavelength</span>
-<span class="sd">  sun+sky total. Fixed to ``rowSums(LoF_)``.</span>
-
-<span class="sd">Like :func:`scopeinpython.rtmf.rtmf`, none of these fixes need an</span>
-<span class="sd">equivalent &quot;bug-workaround&quot; on the Python side: NumPy&#39;s default</span>
-<span class="sd">broadcasting (aligns trailing axes) already does what R needed</span>
-<span class="sd">``sweep()`` for.</span>
-
-<span class="sd">**A likely 7th bug, flagged but NOT fixed here** (uncertain, unlike the</span>
-<span class="sd">above which were provable from R&#39;s documented language semantics):</span>
-<span class="sd">``vfEplu_u`` uses ``etau_lidf * fsctl_nl`` for its ``Mmin`` term, while</span>
-<span class="sd">the structurally-parallel ``vfEplu_h`` (and *both* of ``get.RTMf``&#39;s</span>
-<span class="sd">``vfEplu_h``/``vfEplu_u``) consistently use ``foctl_nl`` there. This</span>
-<span class="sd">looks like a copy-paste from the ``sfEs``/``sbEs`` block just above (the</span>
-<span class="sd">one place ``fsctl_nl`` genuinely belongs) that wasn&#39;t updated to</span>
-<span class="sd">``foctl_nl``. Ported here exactly as currently written in R</span>
-<span class="sd">(``fsctl_nl``, matching the below code) since there&#39;s no independent way</span>
-<span class="sd">to *prove* this one the way the recycling bug was proved from R&#39;s own</span>
-<span class="sd">documented `*` semantics -- worth a second look before relying on RTMz</span>
-<span class="sd">for real science.</span>
-
-<span class="sd">**A design note on ``etau``&#39;s R-side reshape, NOT independently</span>
-<span class="sd">confirmed as a bug and NOT changed in R**: unlike ``get.RTMf`` (which</span>
-<span class="sd">permutes its per-layer ``etau`` array to ``(13, 36, nl)`` before</span>
-<span class="sd">flattening to ``(468, nl)``, ensuring each column is one whole layer&#39;s</span>
-<span class="sd">468 orientation values), ``get.RTMz``&#39;s plain-vector ``data.Knu`` branch</span>
-<span class="sd">skips that permute step, reshaping the &quot;natural&quot; ``(nl, 13, 36)``</span>
-<span class="sd">[layer, inclination, azimuth] array directly into ``(468, nl)`` --</span>
-<span class="sd">which, by the mechanics of R&#39;s column-major array storage, does *not*</span>
-<span class="sd">recover &quot;column = one layer&#39;s 468 values&quot; unless the original</span>
-<span class="sd">``data.Knu`` vector was already constructed in a matching order by its</span>
-<span class="sd">caller (not verified here; would require reading ``get.SCOPE.R``&#39;s call</span>
-<span class="sd">site, out of scope for this port). Since a uniform ``etau`` (this port&#39;s</span>
-<span class="sd">only available verification case, absent the not-yet-ported thermal</span>
-<span class="sd">energy-balance loop that would produce a genuinely varying one) can&#39;t</span>
-<span class="sd">distinguish a correct reshape from a scrambled-but-uniform one, this</span>
-<span class="sd">is flagged here rather than silently assumed either way. The Python</span>
-<span class="sd">``etau`` parameter below takes the unambiguous ``(nl, 13, 36)`` shape</span>
-<span class="sd">directly (same design choice as :func:`scopeinpython.rtmf.rtmf`) and</span>
-<span class="sd">applies the *same* correctly-permuting reshape ``get.RTMf`` uses, since</span>
-<span class="sd">that is unambiguously the physically-intended construction regardless of</span>
-<span class="sd">this R-side question.</span>
-
-<span class="sd">**A confirmed, separate issue in R&#39;s OTHER ``data.Knu`` branch** (hit</span>
-<span class="sd">when ``data.Knu`` has a `dim` attribute, e.g. is itself already an</span>
-<span class="sd">array rather than a plain vector -- discovered while building this</span>
-<span class="sd">port&#39;s own R reference case, which originally passed an array there by</span>
-<span class="sd">mistake and got visibly wrong numbers as a result): that branch never</span>
-<span class="sd">calls ``Kn2Cx()`` on ``data.Knu`` at all, unlike the plain-vector branch</span>
-<span class="sd">-- so the empirical NPQ-to-zeaxanthin conversion is silently skipped</span>
-<span class="sd">whenever a caller passes an already-shaped array. This port&#39;s R</span>
-<span class="sd">reference case (``python/scratch/scratch_rtmz_export.R``) was fixed to pass a</span>
-<span class="sd">genuine plain vector (hitting the correctly-behaving, `Kn2Cx`-applying</span>
-<span class="sd">branch) rather than chase down whether the array branch is fixable too.</span>
+<span class="sd">Verified against ``SCOPEinR::get.RTMz`` -- see</span>
+<span class="sd">``python/docs/verification.rst`` for the numerical comparison.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -476,8 +400,7 @@
     <span class="n">Knu</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">Knh</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RTMzResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Direct port of ``SCOPEinR::get.RTMz`` (against the fixed R source,</span>
-<span class="sd">    see module docstring).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Direct port of ``SCOPEinR::get.RTMz`` (see module docstring).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

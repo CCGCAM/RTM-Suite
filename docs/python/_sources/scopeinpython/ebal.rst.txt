@@ -9,11 +9,8 @@ and heat-flux partitioning. Direct, **"SCOPE-lite"-only** port of
 chain built this session.
 
 .. note::
-   Depends on :func:`scopeinpython.rtmo.net_radiation_lite` (a **real bug
-   found and fixed in R** here: the "lite" direct-beam term used a stray
-   leftover loop variable, making direct-beam-absorbed net radiation come
-   out constant across all canopy layers -- see that function's
-   docstring) and :func:`scopeinpython.rtmt_sb.rtmt_sb`.
+   Depends on :func:`scopeinpython.rtmo.net_radiation_lite` and
+   :func:`scopeinpython.rtmt_sb.rtmt_sb`.
 
    Only the default (non-MD12) fluorescence-model branch, only the simple
    ``G = 0.35*Rn`` ground-heat-flux method, and only ``meanleaf.v2``'s

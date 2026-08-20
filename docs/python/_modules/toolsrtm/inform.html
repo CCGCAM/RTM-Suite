@@ -20,7 +20,15 @@
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -40,9 +48,7 @@
   </form>
 </div>
   <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-    
-    <a href="../../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
   </div>
 
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -284,10 +290,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -334,9 +337,9 @@
 <span class="sd">:func:`toolsrtm.canopy._leaf_optics`, the same dispatcher :func:`toolsrtm.canopy.foursail`</span>
 <span class="sd">uses.</span>
 
-<span class="sd">Two real quirks of the R source are reproduced exactly here rather than</span>
-<span class="sd">&quot;fixed&quot;, so results match R bit-for-bit -- see inline comments at</span>
-<span class="sd">``_INFORM_QUIRKY_LIDF`` and ``compute_brf``.</span>
+<span class="sd">Reproduces the R source&#39;s own behavior exactly, so results match R</span>
+<span class="sd">bit-for-bit -- see inline comments at ``_INFORM_QUIRKY_LIDF`` and</span>
+<span class="sd">``compute_brf``.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -409,16 +412,9 @@
 <span class="sd">    ``rdot``/``short_waves`` combinations (e.g. calling this directly on a</span>
 <span class="sd">    Fluspect-based ``foursail()`` result without also setting</span>
 <span class="sd">    ``short_waves=True``) would otherwise hit a hard NumPy broadcasting</span>
-<span class="sd">    error. This mirrors a real bug fixed in ``ToolsRTM::Compute_BRF`` itself</span>
-<span class="sd">    (see ``ToolsRTM/R/Compute_BRF.R``&#39;s own comment): the R function used to</span>
-<span class="sd">    have a ``missing(short.waves)`` guard that silently forced</span>
-<span class="sd">    ``short.waves`` to ``FALSE`` whenever the argument was omitted --</span>
-<span class="sd">    contradicting its own declared default and, for Fluspect-based</span>
-<span class="sd">    ``rdot``/``rsot``, silently *recycling* mismatched-length Es/Ed instead</span>
-<span class="sd">    of erroring, corrupting the last ~100nm of the result. R now matches</span>
-<span class="sd">    Es/Ed to ``rdot``&#39;s length the same way this port does; ``short_waves``</span>
-<span class="sd">    is kept only for backward API compatibility and no longer has any</span>
-<span class="sd">    effect.</span>
+<span class="sd">    error. ``ToolsRTM::Compute_BRF`` matches Es/Ed to ``rdot``&#39;s length the</span>
+<span class="sd">    same way this port does; ``short_waves`` is kept only for backward API</span>
+<span class="sd">    compatibility and no longer has any effect.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rdot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rdot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">rsot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rsot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>

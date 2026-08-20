@@ -20,7 +20,15 @@
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
@@ -40,9 +48,7 @@
   </form>
 </div>
   <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
-    
-    <a href="../../../index.html" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
-    
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
   </div>
 
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -284,10 +290,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -632,17 +635,8 @@
 <span class="sd">    still computed and returned normally either way (see :func:`fluspect_b`&#39;s</span>
 <span class="sd">    own docstring for why this isn&#39;t a ``None`` return, like it used to be).</span>
 
-<span class="sd">    **History**: R&#39;s ``ToolsRTM::getFluspect.Cx`` used to have a real</span>
-<span class="sd">    indexing bug here (``Iwlf &lt;- intersect(wlp, wlf)`` returned the</span>
-<span class="sd">    *wavelength values* 640:850 used positionally against ``wlp``</span>
-<span class="sd">    (400:2400), reading Kubelka-Munk coefficients at 1039-1249 nm instead</span>
-<span class="sd">    of the intended 640-850 nm fluorescence emission range -- confirmed via</span>
-<span class="sd">    a standalone R repro). ``ToolsRTM::getFluspect.B`` (:func:`fluspect_b`)</span>
-<span class="sd">    never had this bug (uses ``which()``), nor does SCOPEinR&#39;s own</span>
-<span class="sd">    ``fluspect_Cx_forSCOPE.R`` (uses ``match()``). Fixed in the R source</span>
-<span class="sd">    (``Iwlf &lt;- which(wlp &gt;= min(wlf) &amp; wlp &lt;= max(wlf))``) and this port</span>
-<span class="sd">    updated to match; this function now computes the physically-intended</span>
-<span class="sd">    640-850 nm range (``_IWLF_CORRECT``), not the historical buggy one.</span>
+<span class="sd">    This function computes the physically-intended 640-850 nm</span>
+<span class="sd">    fluorescence emission range (``_IWLF_CORRECT``).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">op</span> <span class="o">=</span> <span class="n">_fluspect_optipar</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">LMA</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">Prot</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">CBC</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>

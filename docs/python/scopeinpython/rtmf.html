@@ -293,10 +293,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -342,20 +339,7 @@ fluorescence quantum efficiencies (from
 <a class="reference internal" href="biochemical.html#scopeinpython.biochemical.get_biochemical" title="scopeinpython.biochemical.get_biochemical"><code class="xref py py-func docutils literal notranslate"><span class="pre">scopeinpython.biochemical.get_biochemical()</span></code></a>) as composable inputs.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Ported against a <strong>fixed</strong> R source. Three real bugs were found and
-fixed in <code class="docutils literal notranslate"><span class="pre">SCOPEinR::get.RTMf</span></code> during this port:</p>
-<ul class="simple">
-<li><p>A column-recycling issue across 18 expressions (<code class="docutils literal notranslate"><span class="pre">wfEs</span></code> through
-<code class="docutils literal notranslate"><span class="pre">sigbEplu_u/h</span></code>, plus <code class="docutils literal notranslate"><span class="pre">Femmin</span></code>/<code class="docutils literal notranslate"><span class="pre">Femplu</span></code> themselves) — R’s
-<code class="docutils literal notranslate"><span class="pre">vector</span> <span class="pre">*</span> <span class="pre">matrix</span></code> only broadcasts correctly per column when
-<code class="docutils literal notranslate"><span class="pre">nrow(matrix)</span> <span class="pre">==</span> <span class="pre">length(vector)</span></code>, which never held here.</p></li>
-<li><p>An <code class="docutils literal notranslate"><span class="pre">absfs_nl</span> <span class="pre">&lt;-</span> <span class="pre">c(absfsfo)</span></code> copy-paste mixup.</p></li>
-</ul>
-<p>See <a class="reference internal" href="../verification.html"><span class="doc">Numerical verification against R</span></a> for the full history (including how the
-<code class="docutils literal notranslate"><span class="pre">Femmin</span></code>/<code class="docutils literal notranslate"><span class="pre">Femplu</span></code> instance of the recycling bug was only found
-because this Python port’s own reference values initially disagreed
-with the first-pass-fixed R by a small amount).</p>
-<p>Also: the final upsampling from the native 53-point fluorescence
+<p>The final upsampling from the native 53-point fluorescence
 wavelength grid to the 211-point display grid (<code class="docutils literal notranslate"><span class="pre">spectral.wlF</span></code>) uses
 <code class="docutils literal notranslate"><span class="pre">scipy</span></code>’s <code class="docutils literal notranslate"><span class="pre">not-a-knot</span></code> cubic spline, a close but not bit-identical
 approximation of R’s <code class="docutils literal notranslate"><span class="pre">fmm</span></code>-method spline
@@ -376,34 +360,9 @@ called once per leaf micro-environment; NOT computed here, matching how
 the R function itself takes them as plain arguments rather than an
 iterative energy-balance dependency, so this is composable without the
 SCOPE thermal energy-balance loop, <code class="docutils literal notranslate"><span class="pre">ebal.R</span></code>, being ported).</p>
-<p><strong>Ported against a fixed R source.</strong> <code class="docutils literal notranslate"><span class="pre">SCOPEinR::get.RTMf</span></code> had two real
-bugs, found and fixed during this port (see <code class="docutils literal notranslate"><span class="pre">python/docs/verification.rst</span></code>
-for the full history):</p>
-<ul class="simple">
-<li><p>A column-recycling issue in ~18 expressions computing
-<code class="docutils literal notranslate"><span class="pre">wfEs</span></code>/<code class="docutils literal notranslate"><span class="pre">sfEs</span></code>/<code class="docutils literal notranslate"><span class="pre">sbEs</span></code>/<code class="docutils literal notranslate"><span class="pre">vfEplu_*</span></code>/<code class="docutils literal notranslate"><span class="pre">vbEmin_*</span></code>/<code class="docutils literal notranslate"><span class="pre">sigfEmin_*</span></code>/
-<code class="docutils literal notranslate"><span class="pre">sigbEmin_*</span></code>/<code class="docutils literal notranslate"><span class="pre">sigfEplu_*</span></code>/<code class="docutils literal notranslate"><span class="pre">sigbEplu_*</span></code>/<code class="docutils literal notranslate"><span class="pre">Femmin</span></code>/<code class="docutils literal notranslate"><span class="pre">Femplu</span></code>:
-R’s <code class="docutils literal notranslate"><span class="pre">vector</span> <span class="pre">*</span> <span class="pre">matrix</span></code> only broadcasts correctly per matrix-column
-when <code class="docutils literal notranslate"><span class="pre">nrow(matrix)</span> <span class="pre">==</span> <span class="pre">length(vector)</span></code>, which didn’t hold here (the
-matrices have <code class="docutils literal notranslate"><span class="pre">nf</span></code> (53) rows, the vectors have <code class="docutils literal notranslate"><span class="pre">nl</span></code> (canopy-layer
-count) elements). Found in two passes – the first covered the 16
-expressions building <code class="docutils literal notranslate"><span class="pre">wfEs</span></code> through <code class="docutils literal notranslate"><span class="pre">sigbEplu_u/h</span></code>; a second,
-closer look (triggered by this Python port’s own reference values
-disagreeing with an R run at the time, which is how the <em>first</em> pass’s
-fix was confirmed complete but this remaining pair was found to still
-need it) turned up two more instances two lines later, in
-<code class="docutils literal notranslate"><span class="pre">Femmin</span></code>/<code class="docutils literal notranslate"><span class="pre">Femplu</span></code> themselves (<code class="docutils literal notranslate"><span class="pre">Qs</span> <span class="pre">*</span> <span class="pre">Fsmin</span></code> etc). All fixed in R
-with <code class="docutils literal notranslate"><span class="pre">sweep()</span></code>. NumPy needs no equivalent fix anywhere:
-<code class="docutils literal notranslate"><span class="pre">matrix</span> <span class="pre">*</span> <span class="pre">vector_of_length_ncol</span></code> already broadcasts correctly by
-construction (NumPy aligns trailing axes; R recycles a flat vector), so
-the natural direct translation below is correct without any
-bug-workaround helper.</p></li>
-<li><p>An <code class="docutils literal notranslate"><span class="pre">absfs_nl</span> <span class="pre">&lt;-</span> <span class="pre">c(absfsfo)</span></code> copy-paste mixup (should have been
-<code class="docutils literal notranslate"><span class="pre">c(absfs)</span></code>), fixed in R to <code class="docutils literal notranslate"><span class="pre">absfs_nl</span> <span class="pre">&lt;-</span> <span class="pre">c(absfs)</span></code>.</p></li>
-</ul>
-<p>Both fixes are reflected directly in the derivation below (i.e. this
-module was written against the corrected R source, not translated from
-the buggy version and then patched).</p>
+<p>NumPy’s <code class="docutils literal notranslate"><span class="pre">matrix</span> <span class="pre">*</span> <span class="pre">vector_of_length_ncol</span></code> broadcasting (NumPy aligns
+trailing axes) matches R’s own <code class="docutils literal notranslate"><span class="pre">sweep()</span></code>-based per-column scaling used
+throughout the derivation below.</p>
 <p><strong>A real, deliberate numerical approximation, not an exact match</strong>: R’s
 <code class="docutils literal notranslate"><span class="pre">signal::interp1(...,</span> <span class="pre">method='spline')</span></code> calls <code class="docutils literal notranslate"><span class="pre">stats::splinefun()</span></code>,
 whose default method (<code class="docutils literal notranslate"><span class="pre">&quot;fmm&quot;</span></code>, Forsythe-Malcolm-Moler) estimates
@@ -531,8 +490,7 @@ two points specifically (see <code class="xref py py-func docutils literal notra
 <dl class="py function">
 <dt class="sig sig-object py" id="scopeinpython.rtmf.rtmf">
 <span class="sig-prename descclassname"><span class="pre">scopeinpython.rtmf.</span></span><span class="sig-name descname"><span class="pre">rtmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectral</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtmo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canopy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsoil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">etau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">etah</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scopeinpython/rtmf.html#rtmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scopeinpython.rtmf.rtmf" title="Link to this definition"></a></dt>
-<dd><p>Direct port of <code class="docutils literal notranslate"><span class="pre">SCOPEinR::get.RTMf</span></code> (against the fixed R source,
-see module docstring).</p>
+<dd><p>Direct port of <code class="docutils literal notranslate"><span class="pre">SCOPEinR::get.RTMf</span></code> (see module docstring).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

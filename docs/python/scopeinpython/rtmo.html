@@ -293,10 +293,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -353,22 +350,9 @@ section 4 (PAR / net-radiation absorption breakdown) – specifically just
 quantities <a class="reference internal" href="ebal.html#module-scopeinpython.ebal" title="scopeinpython.ebal"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scopeinpython.ebal</span></code></a> actually consumes; the “lite”
 (scalar-per-layer, not full <code class="docutils literal notranslate"><span class="pre">(13,36,nl)</span></code> per-leaf-angle) branch only,
 matching every reference case in this port.</p>
-<p><strong>A real bug found and fixed in R here</strong>: the “lite” branch’s direct-beam
-term (<code class="docutils literal notranslate"><span class="pre">Rndir</span></code>/<code class="docutils literal notranslate"><span class="pre">Pndir_Cab</span></code>/etc in <code class="docutils literal notranslate"><span class="pre">RTMo.R</span></code>) used to compute
-<code class="docutils literal notranslate"><span class="pre">fs_</span> <span class="pre">*</span> <span class="pre">Asun[j]</span></code> where <code class="docutils literal notranslate"><span class="pre">j</span></code> was leftover from an unrelated, already-
-completed <code class="docutils literal notranslate"><span class="pre">for</span></code> loop above it (always equal to <code class="docutils literal notranslate"><span class="pre">nl</span></code>, the <em>last</em>
-canopy layer) – so the direct-beam contribution to sunlit-leaf net
-radiation came out <strong>exactly constant across all canopy layers</strong>
-(confirmed via direct repro: <code class="docutils literal notranslate"><span class="pre">data.rad$Rnuc</span> <span class="pre">-</span> <span class="pre">data.rad$Rnhc</span></code> had zero
-layer-to-layer variation), which is not physically sensible – direct-
-beam absorption should decay with canopy depth, the same as the diffuse
-term a few lines below already correctly does. Fixed in
-<code class="docutils literal notranslate"><span class="pre">SCOPEinR/R/RTMo.R</span></code> to use the full per-layer vectors (<code class="docutils literal notranslate"><span class="pre">Asun</span></code> etc,
-not <code class="docutils literal notranslate"><span class="pre">Asun[j]</span></code>) – a scalar <code class="docutils literal notranslate"><span class="pre">fs_</span></code> broadcasts against them correctly
-without indexing. A second, downstream instance of the same class of
-mistake (<code class="docutils literal notranslate"><span class="pre">Rndir[1]</span> <span class="pre">+</span> <span class="pre">Rndif</span></code> picking only the first layer, harmless
-before the fix since <code class="docutils literal notranslate"><span class="pre">Rndir</span></code> was a scalar, wrong after) was fixed in
-the same edit.</p>
+<p>The direct-beam term (<code class="docutils literal notranslate"><span class="pre">Rndir</span></code>/<code class="docutils literal notranslate"><span class="pre">Pndir_Cab</span></code>/etc) decays with canopy
+depth using the full per-layer vectors (<code class="docutils literal notranslate"><span class="pre">Asun</span></code> etc.), the same as the
+diffuse term.</p>
 <dl class="simple">
 <dt>NOT ported (out of scope for this port, see python/README.md):</dt><dd><ul class="simple">
 <li><p>Everything else in RTMo.R’s section 4 (<code class="docutils literal notranslate"><span class="pre">Rnuc_Car</span></code>/<code class="docutils literal notranslate"><span class="pre">Pnuc_Car</span></code>/
@@ -841,8 +825,8 @@ file branch is not ported.</p></li>
 <dt class="sig sig-object py" id="scopeinpython.rtmo.net_radiation_lite">
 <span class="sig-prename descclassname"><span class="pre">scopeinpython.rtmo.</span></span><span class="sig-name descname"><span class="pre">net_radiation_lite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectral</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtmo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canopy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lazitab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_refl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_tran</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_thermal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_thermal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsoil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kChlrel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scopeinpython/rtmo.html#net_radiation_lite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scopeinpython.rtmo.net_radiation_lite" title="Link to this definition"></a></dt>
 <dd><p>Direct, partial port of RTMo.R’s section 4 (“lite” branch only,
-against the fixed R source – see module docstring). Computes just
-the 6 quantities <a class="reference internal" href="ebal.html#module-scopeinpython.ebal" title="scopeinpython.ebal"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scopeinpython.ebal</span></code></a> needs.</p>
+see module docstring). Computes just the 6 quantities
+<a class="reference internal" href="ebal.html#module-scopeinpython.ebal" title="scopeinpython.ebal"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scopeinpython.ebal</span></code></a> needs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

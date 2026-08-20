@@ -293,10 +293,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -337,17 +334,6 @@
 plus chlorophyll-fluorescence excitation-emission matrices. Direct port
 of <code class="docutils literal notranslate"><span class="pre">ToolsRTM/R/fluspect_B.R</span></code> (<code class="docutils literal notranslate"><span class="pre">getFluspect.B</span></code>) and <code class="docutils literal notranslate"><span class="pre">fluspect_Cx.R</span></code>
 (<code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code>).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A real indexing bug was found in <strong>``ToolsRTM::getFluspect.Cx``</strong>
-during this port: its fluorescence-matrix code used
-<code class="docutils literal notranslate"><span class="pre">intersect(wlp,</span> <span class="pre">wlf)</span></code> where it should use <code class="docutils literal notranslate"><span class="pre">which()</span></code>/<code class="docutils literal notranslate"><span class="pre">match()</span></code>,
-silently reading Kubelka-Munk coefficients at the wrong wavelengths
-(1039-1249 nm instead of 640-850 nm) when building <code class="docutils literal notranslate"><span class="pre">Mb</span></code>/<code class="docutils literal notranslate"><span class="pre">Mf</span></code>.
-<strong>Since fixed in the R source</strong>; <code class="docutils literal notranslate"><span class="pre">fluspect_cx</span></code> here matches the fixed
-behavior. See the function’s docstring and <a class="reference internal" href="../verification.html"><span class="doc">Numerical verification against R</span></a> for
-the full history. <code class="docutils literal notranslate"><span class="pre">fluspect_b</span></code> never had this bug.</p>
-</div>
 <p id="module-toolsrtm.fluspect">FLUSPECT-B / FLUSPECT-B-Cx leaf model: PROSPECT reflectance/transmittance
 plus chlorophyll-fluorescence excitation-emission matrices, via Verhoef’s
 doubling method applied to the leaf mesophyll layer alone (leaf-air
@@ -546,17 +532,8 @@ no auto-detection like <a class="reference internal" href="#toolsrtm.fluspect.fl
 <code class="docutils literal notranslate"><span class="pre">Mf</span></code> come back all-zero (no fluorescence) – <code class="docutils literal notranslate"><span class="pre">refl</span></code>/<code class="docutils literal notranslate"><span class="pre">tran</span></code> are
 still computed and returned normally either way (see <a class="reference internal" href="#toolsrtm.fluspect.fluspect_b" title="toolsrtm.fluspect.fluspect_b"><code class="xref py py-func docutils literal notranslate"><span class="pre">fluspect_b()</span></code></a>’s
 own docstring for why this isn’t a <code class="docutils literal notranslate"><span class="pre">None</span></code> return, like it used to be).</p>
-<p><strong>History</strong>: R’s <code class="docutils literal notranslate"><span class="pre">ToolsRTM::getFluspect.Cx</span></code> used to have a real
-indexing bug here (<code class="docutils literal notranslate"><span class="pre">Iwlf</span> <span class="pre">&lt;-</span> <span class="pre">intersect(wlp,</span> <span class="pre">wlf)</span></code> returned the
-<em>wavelength values</em> 640:850 used positionally against <code class="docutils literal notranslate"><span class="pre">wlp</span></code>
-(400:2400), reading Kubelka-Munk coefficients at 1039-1249 nm instead
-of the intended 640-850 nm fluorescence emission range – confirmed via
-a standalone R repro). <code class="docutils literal notranslate"><span class="pre">ToolsRTM::getFluspect.B</span></code> (<a class="reference internal" href="#toolsrtm.fluspect.fluspect_b" title="toolsrtm.fluspect.fluspect_b"><code class="xref py py-func docutils literal notranslate"><span class="pre">fluspect_b()</span></code></a>)
-never had this bug (uses <code class="docutils literal notranslate"><span class="pre">which()</span></code>), nor does SCOPEinR’s own
-<code class="docutils literal notranslate"><span class="pre">fluspect_Cx_forSCOPE.R</span></code> (uses <code class="docutils literal notranslate"><span class="pre">match()</span></code>). Fixed in the R source
-(<code class="docutils literal notranslate"><span class="pre">Iwlf</span> <span class="pre">&lt;-</span> <span class="pre">which(wlp</span> <span class="pre">&gt;=</span> <span class="pre">min(wlf)</span> <span class="pre">&amp;</span> <span class="pre">wlp</span> <span class="pre">&lt;=</span> <span class="pre">max(wlf))</span></code>) and this port
-updated to match; this function now computes the physically-intended
-640-850 nm range (<code class="docutils literal notranslate"><span class="pre">_IWLF_CORRECT</span></code>), not the historical buggy one.</p>
+<p>This function computes the physically-intended 640-850 nm
+fluorescence emission range (<code class="docutils literal notranslate"><span class="pre">_IWLF_CORRECT</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

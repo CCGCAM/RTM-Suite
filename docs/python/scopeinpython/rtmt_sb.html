@@ -293,10 +293,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../verification.html#a-genuine-bug-in-r-found-while-porting-getfluspect-cx-since-fixed">A genuine bug in R, found while porting <code class="docutils literal notranslate"><span class="pre">getFluspect.Cx</span></code> — since fixed</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
@@ -342,10 +339,7 @@ already-solved leaf/soil temperatures. Direct, <strong>partial</strong> port of
 <p>Only the “SCOPE-lite” scalar-per-layer branch is ported (matches
 every reference case built during this port). The full per-leaf-angle
 <code class="docutils literal notranslate"><span class="pre">(13,</span> <span class="pre">36,</span> <span class="pre">nl)</span></code> array branch and the <code class="docutils literal notranslate"><span class="pre">obsdir</span></code> (observation-direction
-brightness temperature) branch are <strong>not ported</strong> – the latter has an
-unresolved, likely-buggy R indexing expression
-(<code class="docutils literal notranslate"><span class="pre">data.rad$vb[1,</span> <span class="pre">nl]</span></code>, using the <em>layer count</em> as a <em>wavelength</em>
-index) flagged in the module docstring but not independently confirmed.</p>
+brightness temperature) branch are <strong>not ported</strong>.</p>
 </div>
 <p id="module-scopeinpython.rtmt_sb">RTMt (Stefan-Boltzmann variant): total thermal-infrared outgoing
 radiation and net radiation per leaf/soil component, given already-solved
@@ -363,19 +357,9 @@ reference case built during this whole port (<code class="docutils literal notra
 <code class="docutils literal notranslate"><span class="pre">lite</span> <span class="pre">=</span> <span class="pre">1</span></code>) and the full-array branch has its own unresolved question
 (see below), so is intentionally left for later.</p>
 <p><strong>Not ported: the ``obsdir`` (observation-direction brightness
-temperature) branch.</strong> R’s <code class="docutils literal notranslate"><span class="pre">vb</span> <span class="pre">&lt;-</span> <span class="pre">(data.rad[['vb']])[1,nl]</span></code> indexes
-<code class="docutils literal notranslate"><span class="pre">data.rad$vb</span></code> (an <code class="docutils literal notranslate"><span class="pre">(nl,</span> <span class="pre">nwl)</span></code> matrix, layer x wavelength) using the
-<em>canopy layer count</em> <code class="docutils literal notranslate"><span class="pre">nl</span></code> as if it were a <em>wavelength</em> column index –
-selecting whatever wavelength happens to sit at position <code class="docutils literal notranslate"><span class="pre">nl</span></code> (e.g.
-~429 nm for a 30-layer canopy), nowhere near the thermal-IR region the
-surrounding code otherwise carefully extracts (<code class="docutils literal notranslate"><span class="pre">Xdd[,</span> <span class="pre">ncol(Xdd)]</span></code> etc).
-This looks like a bug (a stray <code class="docutils literal notranslate"><span class="pre">nl</span></code> where the last/thermal-region
-column, or an entire row, was likely intended) but wasn’t independently
-confirmed the way the recycling bugs were, and building a verification
-case for it isn’t worth the time until it’s actually needed – flagged
-here rather than guessed at. The core (non-<code class="docutils literal notranslate"><span class="pre">obsdir</span></code>) net-radiation
-output below, which is what <a class="reference internal" href="ebal.html#module-scopeinpython.ebal" title="scopeinpython.ebal"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scopeinpython.ebal</span></code></a>’s convergence loop
-actually needs, does not depend on this branch at all.</p>
+temperature) branch.</strong> Not needed for <a class="reference internal" href="ebal.html#module-scopeinpython.ebal" title="scopeinpython.ebal"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scopeinpython.ebal</span></code></a>’s
+convergence loop, which only depends on the core net-radiation output
+below.</p>
 <p><strong>A structural note, not a bug</strong>: in this formulation, the “direct thermal
 emission” term <code class="docutils literal notranslate"><span class="pre">Es_</span></code> is initialized to zero and never given a nonzero
 seed anywhere in the recursion (unlike the analogous <code class="docutils literal notranslate"><span class="pre">Es_</span></code>/<code class="docutils literal notranslate"><span class="pre">Esun_</span></code>
