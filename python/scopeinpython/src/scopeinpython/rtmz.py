@@ -68,8 +68,7 @@ def rtmz(
     Knu: np.ndarray,
     Knh: np.ndarray,
 ) -> RTMzResult:
-    """Direct port of ``SCOPEinR::get.RTMz`` (against the fixed R source,
-    see module docstring).
+    """Direct port of ``SCOPEinR::get.RTMz`` (see module docstring).
 
     Parameters
     ----------

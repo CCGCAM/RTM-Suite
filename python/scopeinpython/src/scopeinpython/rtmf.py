@@ -12,34 +12,9 @@ the R function itself takes them as plain arguments rather than an
 iterative energy-balance dependency, so this is composable without the
 SCOPE thermal energy-balance loop, ``ebal.R``, being ported).
 
-**Ported against a fixed R source.** ``SCOPEinR::get.RTMf`` had two real
-bugs, found and fixed during this port (see ``python/docs/verification.rst``
-for the full history):
-
-- A column-recycling issue in ~18 expressions computing
-  ``wfEs``/``sfEs``/``sbEs``/``vfEplu_*``/``vbEmin_*``/``sigfEmin_*``/
-  ``sigbEmin_*``/``sigfEplu_*``/``sigbEplu_*``/``Femmin``/``Femplu``:
-  R's ``vector * matrix`` only broadcasts correctly per matrix-column
-  when ``nrow(matrix) == length(vector)``, which didn't hold here (the
-  matrices have ``nf`` (53) rows, the vectors have ``nl`` (canopy-layer
-  count) elements). Found in two passes -- the first covered the 16
-  expressions building ``wfEs`` through ``sigbEplu_u/h``; a second,
-  closer look (triggered by this Python port's own reference values
-  disagreeing with an R run at the time, which is how the *first* pass's
-  fix was confirmed complete but this remaining pair was found to still
-  need it) turned up two more instances two lines later, in
-  ``Femmin``/``Femplu`` themselves (``Qs * Fsmin`` etc). All fixed in R
-  with ``sweep()``. NumPy needs no equivalent fix anywhere:
-  ``matrix * vector_of_length_ncol`` already broadcasts correctly by
-  construction (NumPy aligns trailing axes; R recycles a flat vector), so
-  the natural direct translation below is correct without any
-  bug-workaround helper.
-- An ``absfs_nl <- c(absfsfo)`` copy-paste mixup (should have been
-  ``c(absfs)``), fixed in R to ``absfs_nl <- c(absfs)``.
-
-Both fixes are reflected directly in the derivation below (i.e. this
-module was written against the corrected R source, not translated from
-the buggy version and then patched).
+NumPy's ``matrix * vector_of_length_ncol`` broadcasting (NumPy aligns
+trailing axes) matches R's own ``sweep()``-based per-column scaling used
+throughout the derivation below.
 
 **A real, deliberate numerical approximation, not an exact match**: R's
 ``signal::interp1(..., method='spline')`` calls ``stats::splinefun()``,
@@ -129,8 +104,7 @@ def rtmf(
     etau: np.ndarray,
     etah: np.ndarray,
 ) -> RTMfResult:
-    """Direct port of ``SCOPEinR::get.RTMf`` (against the fixed R source,
-    see module docstring).
+    """Direct port of ``SCOPEinR::get.RTMf`` (see module docstring).
 
     Parameters
     ----------
