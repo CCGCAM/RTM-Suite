@@ -29,7 +29,7 @@ SCOPEinR is part of **RTM-Suite**, which brings together the R packages, interac
 
 ### Documentation and learning resources
 
-The complete documentation is maintained together in the [**RTM-Suite documentation hub**](../docs/index.html), so the R and Python implementations, tutorials, package references, and model-comparison material can be explored from one place.
+The complete documentation is maintained together in the [**RTM-Suite documentation hub**](https://ccgcam.github.io/RTM-Suite/), so the R and Python implementations, tutorials, package references, and model-comparison material can be explored from one place. The [SCOPEinR reference](https://ccgcam.github.io/RTM-Suite/scopeinr/index.html) and [SCOPEinR tutorials 01-11](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/index.html) are the direct entry points.
 
 **SCOPEinR** is part of [**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/), a unified documentation hub for the R packages (`ToolsRTM`, `SCOPEinR`) and their Python counterparts (`toolsrtm`, `scopeinpython`). It brings together reference manuals, tutorials, examples, and reproducible workflows for radiative transfer modelling.
 
@@ -154,7 +154,7 @@ scope_sims_parallel <- SCOPEinR::get.SCOPE.parallel(
 )
 ```
 
-Set `get.csv = TRUE` to let the function write the simulation outputs to its output directory. For large production LUTs, process bounded chunks rather than keeping every full SCOPE result in memory at once. See the [SCOPE course pipeline](../docs/scopeinr/articles/scope-pipeline.html) for the complete simulation, sensor-convolution, and trait-inversion workflow.
+Set `get.csv = TRUE` to let the function write the simulation outputs to its output directory. For large production LUTs, process bounded chunks rather than keeping every full SCOPE result in memory at once. See [Tutorial 10 — End-to-End Pipeline](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/10-end-to-end-pipeline.html) for the complete simulation, sensor-convolution, and trait-inversion workflow.
 
 ### 1.6 Get some additional plots by main plant trait.
 

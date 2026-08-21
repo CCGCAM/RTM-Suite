@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>18. Data-Driven Spatial Index Mapping with getSpatial_index()</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">18. Data-Driven Spatial Index Mapping with
+getSpatial_index()</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
+<p>Tutorial 09 introduced <code>getSpatial_index()</code> as the spatial
+(raster-in, raster-out) counterpart to the tabular index functions – one
+real GeoTIFF in, one index map out. This closing tutorial uses it for
+real, but doesn’t guess which index to map: it simulates a LUT, inverts
+<code>Cab</code> from it (Tutorial 12’s own rigor), finds which spectral
+index actually correlates best with the <em>retrieved</em> trait, and
+only then maps that winning index – and <code>Cab</code> itself –
+spatially, over a real Sentinel-2 image.</p>
+<pre class="text"><code>Simulated LUT (500 rows)
+      |
+      v
+Hybrid-invert Cab (RF, Tutorial 12)
+      |
+      v
+Rank every spectral index by correlation with Cab
+      |
+      v
+Winning index (data-driven, not assumed)
+      |                                    Real Sentinel-2 image (STAC,
+      |                                    NL-Loo/Loobos forest, NL)
+      |                                          |
+      v                                          v
+      +------------------ getSpatial_index() ----+
+                            |
+                            v
+              Winning index map + Cab trait map</code></pre>
+<div id="simulate-a-500-row-lut-and-invert-cab" class="section level2">
+<h2>1. Simulate a 500-row LUT and invert Cab</h2>
+<p>Same rigor as Tutorial 12 – 500 simulations, Sentinel-2A convolution,
+Random Forest, held-out test set:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>LUT <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> ToolsRTM<span class="sc">::</span>inputsPROSAIL, <span class="at">nLUT =</span> n_samples, <span class="at">setseed =</span> <span class="dv">1</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>wl <span class="ot">&lt;-</span> <span class="dv">400</span><span class="sc">:</span><span class="dv">2500</span>; rsoil <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.15</span>, <span class="fu">length</span>(wl))</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>refl <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(n_samples), <span class="cf">function</span>(i) {</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="fu">foursail</span>(<span class="at">inputLUT =</span> LUT[i, ], <span class="at">rsoil =</span> rsoil, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>)<span class="sc">$</span>rsot</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>}))</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>refl_X <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(refl); <span class="fu">colnames</span>(refl_X) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, wl); refl_X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">id =</span> <span class="fu">seq_len</span>(n_samples), refl_X)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>se2a_full <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">get.spectra.convolved</span>(<span class="at">rfl =</span> refl_X, <span class="at">sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>, <span class="at">plot.spectra =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="fu">names</span>(se2a_full) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;B1&quot;</span>,<span class="st">&quot;B2&quot;</span>,<span class="st">&quot;B3&quot;</span>,<span class="st">&quot;B4&quot;</span>,<span class="st">&quot;B5&quot;</span>,<span class="st">&quot;B6&quot;</span>,<span class="st">&quot;B7&quot;</span>,<span class="st">&quot;B8&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B9&quot;</span>,<span class="st">&quot;B10&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;B2&quot;</span>,<span class="st">&quot;B3&quot;</span>,<span class="st">&quot;B4&quot;</span>,<span class="st">&quot;B5&quot;</span>,<span class="st">&quot;B6&quot;</span>,<span class="st">&quot;B7&quot;</span>,<span class="st">&quot;B8&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>real_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;B02&quot;</span>,<span class="st">&quot;B03&quot;</span>,<span class="st">&quot;B04&quot;</span>,<span class="st">&quot;B05&quot;</span>,<span class="st">&quot;B06&quot;</span>,<span class="st">&quot;B07&quot;</span>,<span class="st">&quot;B08&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>se2a <span class="ot">&lt;-</span> se2a_full[, keep]; <span class="fu">names</span>(se2a) <span class="ot">&lt;-</span> real_names</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n_samples), <span class="at">size =</span> <span class="fu">round</span>(<span class="fl">0.7</span> <span class="sc">*</span> n_samples))</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>train_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(LUT[train_idx, ], se2a[train_idx, ])</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>fit_cab <span class="ot">&lt;-</span> <span class="fu">get.inversion</span>(<span class="at">data =</span> train_df, <span class="at">depVar =</span> <span class="st">&quot;Cab&quot;</span>, <span class="at">inputs =</span> real_names,</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>                          <span class="at">algorithm =</span> <span class="st">&quot;RF&quot;</span>, <span class="at">n.samples =</span> <span class="fu">nrow</span>(train_df), <span class="at">seed =</span> <span class="dv">42</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="which-index-correlates-best-with-cab-computed-not-assumed" class="section level2">
+<h2>2. Which index correlates best with Cab? Computed, not assumed</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>se2a_indexed <span class="ot">&lt;-</span> se2a</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">names</span>(se2a_indexed) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;B2&quot;</span>,<span class="st">&quot;B3&quot;</span>,<span class="st">&quot;B4&quot;</span>,<span class="st">&quot;B5&quot;</span>,<span class="st">&quot;B6&quot;</span>,<span class="st">&quot;B7&quot;</span>,<span class="st">&quot;B8&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)  <span class="co"># getIndicesSE2&#39;s own naming</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>indices_full <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">getIndicesSE2</span>(<span class="at">df =</span> se2a_indexed, <span class="at">sensor =</span> <span class="st">&quot;Sentinel-2a&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                                                <span class="at">df.data =</span> <span class="cn">NULL</span>, <span class="at">fast.process =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |                                                                      |   1%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |===                                                                   |   5%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |=======                                                               |  11%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |==========                                                            |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |===========                                                           |  15%  |                                                                              |===========                                                           |  16%  |                                                                              |============                                                          |  16%  |                                                                              |============                                                          |  17%  |                                                                              |============                                                          |  18%  |                                                                              |=============                                                         |  18%  |                                                                              |=============                                                         |  19%  |                                                                              |==============                                                        |  19%  |                                                                              |==============                                                        |  20%  |                                                                              |==============                                                        |  21%  |                                                                              |===============                                                       |  21%  |                                                                              |===============                                                       |  22%  |                                                                              |================                                                      |  22%  |                                                                              |================                                                      |  23%  |                                                                              |=================                                                     |  24%  |                                                                              |=================                                                     |  25%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  26%  |                                                                              |===================                                                   |  27%  |                                                                              |===================                                                   |  28%  |                                                                              |====================                                                  |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  29%  |                                                                              |=====================                                                 |  30%  |                                                                              |=====================                                                 |  31%  |                                                                              |======================                                                |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  34%  |                                                                              |========================                                              |  35%  |                                                                              |=========================                                             |  35%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  36%  |                                                                              |==========================                                            |  37%  |                                                                              |==========================                                            |  38%  |                                                                              |===========================                                           |  38%  |                                                                              |===========================                                           |  39%  |                                                                              |============================                                          |  39%  |                                                                              |============================                                          |  40%  |                                                                              |============================                                          |  41%  |                                                                              |=============================                                         |  41%  |                                                                              |=============================                                         |  42%  |                                                                              |==============================                                        |  42%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |===============================                                       |  45%  |                                                                              |================================                                      |  45%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |=================================                                     |  48%  |                                                                              |==================================                                    |  48%  |                                                                              |==================================                                    |  49%  |                                                                              |===================================                                   |  49%  |                                                                              |===================================                                   |  50%  |                                                                              |===================================                                   |  51%  |                                                                              |====================================                                  |  51%  |                                                                              |====================================                                  |  52%  |                                                                              |=====================================                                 |  52%  |                                                                              |=====================================                                 |  53%  |                                                                              |=====================================                                 |  54%  |                                                                              |======================================                                |  54%  |                                                                              |======================================                                |  55%  |                                                                              |=======================================                               |  55%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |========================================                              |  58%  |                                                                              |=========================================                             |  58%  |                                                                              |=========================================                             |  59%  |                                                                              |==========================================                            |  59%  |                                                                              |==========================================                            |  60%  |                                                                              |==========================================                            |  61%  |                                                                              |===========================================                           |  61%  |                                                                              |===========================================                           |  62%  |                                                                              |============================================                          |  62%  |                                                                              |============================================                          |  63%  |                                                                              |============================================                          |  64%  |                                                                              |=============================================                         |  64%  |                                                                              |=============================================                         |  65%  |                                                                              |==============================================                        |  65%  |                                                                              |==============================================                        |  66%  |                                                                              |===============================================                       |  67%  |                                                                              |===============================================                       |  68%  |                                                                              |================================================                      |  68%  |                                                                              |================================================                      |  69%  |                                                                              |=================================================                     |  69%  |                                                                              |=================================================                     |  70%  |                                                                              |=================================================                     |  71%  |                                                                              |==================================================                    |  71%  |                                                                              |==================================================                    |  72%  |                                                                              |===================================================                   |  72%  |                                                                              |===================================================                   |  73%  |                                                                              |===================================================                   |  74%  |                                                                              |====================================================                  |  74%  |                                                                              |====================================================                  |  75%  |                                                                              |=====================================================                 |  75%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  77%  |                                                                              |======================================================                |  78%  |                                                                              |=======================================================               |  78%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  79%  |                                                                              |========================================================              |  80%  |                                                                              |========================================================              |  81%  |                                                                              |=========================================================             |  81%  |                                                                              |=========================================================             |  82%  |                                                                              |==========================================================            |  82%  |                                                                              |==========================================================            |  83%  |                                                                              |==========================================================            |  84%  |                                                                              |===========================================================           |  84%  |                                                                              |===========================================================           |  85%  |                                                                              |============================================================          |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  87%  |                                                                              |=============================================================         |  88%  |                                                                              |==============================================================        |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |===============================================================       |  91%  |                                                                              |================================================================      |  91%  |                                                                              |================================================================      |  92%  |                                                                              |=================================================================     |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |==================================================================    |  94%  |                                                                              |==================================================================    |  95%  |                                                                              |===================================================================   |  95%  |                                                                              |===================================================================   |  96%  |                                                                              |====================================================================  |  97%  |                                                                              |====================================================================  |  98%  |                                                                              |===================================================================== |  98%  |                                                                              |===================================================================== |  99%  |                                                                              |======================================================================|  99%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co"># getSpatial_index() only implements a subset of index names -- only rank</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co"># among indices that can actually be mapped spatially in Section 4 below,</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co"># not the full 70-index tabular set Tutorial 09 covers.</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>spatial_index_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ARI&quot;</span>,<span class="st">&quot;ARV2&quot;</span>,<span class="st">&quot;ARVI&quot;</span>,<span class="st">&quot;AVI&quot;</span>,<span class="st">&quot;BAI&quot;</span>,<span class="st">&quot;BAIS2&quot;</span>,<span class="st">&quot;CIg&quot;</span>,<span class="st">&quot;CIgreen&quot;</span>,<span class="st">&quot;CIre&quot;</span>,<span class="st">&quot;CR_SWIR&quot;</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>                          <span class="st">&quot;EVI&quot;</span>,<span class="st">&quot;GM1&quot;</span>,<span class="st">&quot;GM2&quot;</span>,<span class="st">&quot;GNDVI&quot;</span>,<span class="st">&quot;Greeness&quot;</span>,<span class="st">&quot;IRECI&quot;</span>,<span class="st">&quot;MCARI&quot;</span>,<span class="st">&quot;MCARI1&quot;</span>,<span class="st">&quot;MCARI2&quot;</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>                          <span class="st">&quot;MNDVI&quot;</span>,<span class="st">&quot;MSAVI&quot;</span>,<span class="st">&quot;MSR&quot;</span>,<span class="st">&quot;MTVI1&quot;</span>,<span class="st">&quot;MTVI2&quot;</span>,<span class="st">&quot;NBR&quot;</span>,<span class="st">&quot;NDRE&quot;</span>,<span class="st">&quot;NDVI&quot;</span>,<span class="st">&quot;NDWI&quot;</span>,<span class="st">&quot;NDWI2&quot;</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>                          <span class="st">&quot;OSAVI&quot;</span>,<span class="st">&quot;PSSRa&quot;</span>,<span class="st">&quot;PVI&quot;</span>,<span class="st">&quot;RDVI&quot;</span>,<span class="st">&quot;REIP1&quot;</span>,<span class="st">&quot;REIP2&quot;</span>,<span class="st">&quot;RVI&quot;</span>,<span class="st">&quot;RedEg1&quot;</span>,<span class="st">&quot;RedEg2&quot;</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>                          <span class="st">&quot;Redness&quot;</span>,<span class="st">&quot;S2REP&quot;</span>,<span class="st">&quot;SIPI&quot;</span>,<span class="st">&quot;SR&quot;</span>,<span class="st">&quot;TCARI&quot;</span>,<span class="st">&quot;TCARI_OSAVI&quot;</span>,<span class="st">&quot;TVI&quot;</span>,<span class="st">&quot;WDRVI&quot;</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>candidate_names <span class="ot">&lt;-</span> <span class="fu">intersect</span>(<span class="fu">names</span>(indices_full), spatial_index_names)</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>cor_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  <span class="at">index =</span> candidate_names,</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>  <span class="at">abs_cor_with_Cab =</span> <span class="fu">sapply</span>(candidate_names, <span class="cf">function</span>(nm) <span class="fu">abs</span>(<span class="fu">cor</span>(indices_full[[nm]], LUT<span class="sc">$</span>Cab[<span class="fu">seq_len</span>(n_samples)], <span class="at">use =</span> <span class="st">&quot;complete.obs&quot;</span>)))</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>)</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>cor_table <span class="ot">&lt;-</span> cor_table[<span class="fu">order</span>(<span class="sc">-</span>cor_table<span class="sc">$</span>abs_cor_with_Cab), ]</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(cor_table, <span class="dv">10</span>), <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">index</th>
+<th align="right">abs_cor_with_Cab</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">REIP1</td>
+<td align="right">0.823</td>
+</tr>
+<tr class="even">
+<td align="left">REIP2</td>
+<td align="right">0.823</td>
+</tr>
+<tr class="odd">
+<td align="left">NDRE</td>
+<td align="right">0.809</td>
+</tr>
+<tr class="even">
+<td align="left">GM2</td>
+<td align="right">0.792</td>
+</tr>
+<tr class="odd">
+<td align="left">CIre</td>
+<td align="right">0.773</td>
+</tr>
+<tr class="even">
+<td align="left">TCARI_OSAVI</td>
+<td align="right">0.681</td>
+</tr>
+<tr class="odd">
+<td align="left">TCARI</td>
+<td align="right">0.656</td>
+</tr>
+<tr class="even">
+<td align="left">MCARI</td>
+<td align="right">0.611</td>
+</tr>
+<tr class="odd">
+<td align="left">GNDVI</td>
+<td align="right">0.606</td>
+</tr>
+<tr class="even">
+<td align="left">CIg</td>
+<td align="right">0.578</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>winning_index <span class="ot">&lt;-</span> cor_table<span class="sc">$</span>index[<span class="dv">1</span>]</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Winning index (highest |correlation| with Cab, among those getSpatial_index() supports):&quot;</span>, winning_index, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; Winning index (highest |correlation| with Cab, among those getSpatial_index() supports): REIP1</span></span></code></pre></div>
+</div>
+<div id="retrieve-a-real-sentinel-2-image-nl-loo-loobos-netherlands" class="section level2">
+<h2>3. Retrieve a real Sentinel-2 image: NL-Loo (Loobos),
+Netherlands</h2>
+<p>A real ICOS class-1 flux-tower forest site – Scots pine (<em>Pinus
+sylvestris</em>), Speuld/Kootwijk area, Gelderland, one of the
+longest-running eddy-covariance records in Europe (published station
+coordinates: 52.1666°N, 5.7436°E). Same STAC retrieval code already
+verified in Tutorials 15/17, a different real site:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(sf); <span class="fu">library</span>(terra)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>pt <span class="ot">&lt;-</span> <span class="fu">st_point</span>(<span class="fu">c</span>(<span class="fl">5.7436</span>, <span class="fl">52.1666</span>)) <span class="sc">|&gt;</span> <span class="fu">st_sfc</span>(<span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>scenario <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">1</span>), <span class="at">geometry =</span> <span class="fu">st_sfc</span>(pt[[<span class="dv">1</span>]], <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">get_bounding_box</span>(scenario, <span class="dv">500</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>shape <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">1</span>), <span class="at">geometry =</span> <span class="fu">st_sfc</span>(<span class="fu">st_polygon</span>(<span class="fu">list</span>(<span class="fu">rbind</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">c</span>(bbox[<span class="st">&quot;xmin&quot;</span>], bbox[<span class="st">&quot;ymin&quot;</span>]), <span class="fu">c</span>(bbox[<span class="st">&quot;xmin&quot;</span>], bbox[<span class="st">&quot;ymax&quot;</span>]),</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="fu">c</span>(bbox[<span class="st">&quot;xmax&quot;</span>], bbox[<span class="st">&quot;ymax&quot;</span>]), <span class="fu">c</span>(bbox[<span class="st">&quot;xmax&quot;</span>], bbox[<span class="st">&quot;ymin&quot;</span>]),</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="fu">c</span>(bbox[<span class="st">&quot;xmin&quot;</span>], bbox[<span class="st">&quot;ymin&quot;</span>])))), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">get.satellite_collection</span>(<span class="at">scenario =</span> scenario, <span class="at">collection =</span> <span class="st">&quot;sentinel-2-l2a&quot;</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>                                <span class="at">cloud_server =</span> <span class="st">&quot;microsoft&quot;</span>, <span class="at">n.limit =</span> <span class="dv">20</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>                                <span class="at">date_range =</span> <span class="fu">c</span>(<span class="st">&quot;2024-07-01&quot;</span>, <span class="st">&quot;2024-07-31&quot;</span>),</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>                                <span class="at">cloud_threshold =</span> <span class="dv">40</span>, <span class="at">buffer_size =</span> <span class="dv">500</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>cube <span class="ot">&lt;-</span> <span class="fu">get.sentinel2_cube</span>(sc[[<span class="dv">1</span>]], <span class="at">shape =</span> shape, <span class="at">date_range =</span> <span class="fu">c</span>(<span class="st">&quot;2024-07-01&quot;</span>, <span class="st">&quot;2024-07-31&quot;</span>),</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>                            <span class="at">aggregation_method =</span> <span class="st">&quot;mean&quot;</span>, <span class="at">get.dataset =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Real cube retrieved:&quot;</span>, <span class="fu">paste</span>(<span class="fu">dim</span>(cube), <span class="at">collapse =</span> <span class="st">&quot; x &quot;</span>), <span class="st">&quot;(rows x cols x bands), bands:&quot;</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="fu">names</span>(cube), <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+</div>
+<div id="getspatial_index-needs-a-file-on-disk-and-all-12-nominal-bands" class="section level2">
+<h2>4. <code>getSpatial_index()</code> needs a file on disk, and all 12
+nominal bands</h2>
+<p><code>getSpatial_index()</code> reads a GeoTIFF path (not an
+in-memory object) and assumes the full nominal 12-band SMAC order
+(<code>B01</code>…<code>B12</code>). <code>get.sentinel2_cube()</code>
+deliberately excludes the two 60m-only bands (<code>B01</code>,
+<code>B09</code>) that don’t carry vegetation signal at this resolution
+(same convention as Tutorials 15/17) – filled here with their nearest
+real spectral neighbor as a placeholder so the function can run on
+genuinely real reflectance rather than needing bands this pipeline never
+collects. Neither <code>B01</code> nor <code>B09</code> enters the
+winning index formula for any of Section 2’s top candidates, so this
+placeholder doesn’t affect the result below:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>refl <span class="ot">&lt;-</span> cube[[real_names]] <span class="sc">/</span> <span class="dv">10000</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>full12 <span class="ot">&lt;-</span> <span class="fu">c</span>(refl[[<span class="st">&quot;B02&quot;</span>]], refl[[<span class="st">&quot;B02&quot;</span>]], refl[[<span class="st">&quot;B03&quot;</span>]], refl[[<span class="st">&quot;B04&quot;</span>]], refl[[<span class="st">&quot;B05&quot;</span>]], refl[[<span class="st">&quot;B06&quot;</span>]],</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>            refl[[<span class="st">&quot;B07&quot;</span>]], refl[[<span class="st">&quot;B08&quot;</span>]], refl[[<span class="st">&quot;B8A&quot;</span>]], refl[[<span class="st">&quot;B8A&quot;</span>]], refl[[<span class="st">&quot;B11&quot;</span>]], refl[[<span class="st">&quot;B12&quot;</span>]])</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">names</span>(full12) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;B01&quot;</span>,<span class="st">&quot;B02&quot;</span>,<span class="st">&quot;B03&quot;</span>,<span class="st">&quot;B04&quot;</span>,<span class="st">&quot;B05&quot;</span>,<span class="st">&quot;B06&quot;</span>,<span class="st">&quot;B07&quot;</span>,<span class="st">&quot;B08&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B09&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>tmp_tif <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.tif&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">writeRaster</span>(full12, tmp_tif, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="the-winning-index-mapped-over-a-real-image" class="section level2">
+<h2>5. The winning index, mapped over a real image</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>idx_map <span class="ot">&lt;-</span> <span class="fu">getSpatial_index</span>(<span class="at">rasterFiles =</span> tmp_tif, <span class="at">Sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                             <span class="at">SpectraltoCompute =</span> winning_index, <span class="at">factorR =</span> <span class="dv">1</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">plot</span>(idx_map[[<span class="dv">1</span>]], <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;Loobos forest, &quot;</span>, winning_index, <span class="st">&quot; (data-driven, highest |cor| with Cab)&quot;</span>))</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">cat</span>(winning_index, <span class="st">&quot;range over the scene:&quot;</span>, <span class="fu">paste</span>(<span class="fu">round</span>(<span class="fu">range</span>(terra<span class="sc">::</span><span class="fu">values</span>(idx_map[[<span class="dv">1</span>]]), <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">3</span>), <span class="at">collapse =</span> <span class="st">&quot; to &quot;</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; REIP1 range over the scene: -303.997 to 140.442</span></span></code></pre></div>
+</div>
+<div id="cab-itself-mapped-the-same-per-pixel-pattern-as-tutorials-1517" class="section level2">
+<h2>6. Cab itself, mapped – the same per-pixel pattern as Tutorials
+15/17</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>pix_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(refl, <span class="at">xy =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>ok_rows <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">complete.cases</span>(pix_df[, real_names])</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>Cab_pixels <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_real_</span>, <span class="fu">nrow</span>(pix_df))</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>Cab_pixels[ok_rows] <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_cab<span class="sc">$</span>model, pix_df[ok_rows, real_names]))</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>cab_map <span class="ot">&lt;-</span> refl[[<span class="st">&quot;B04&quot;</span>]]</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">values</span>(cab_map) <span class="ot">&lt;-</span> Cab_pixels</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">names</span>(cab_map) <span class="ot">&lt;-</span> <span class="st">&quot;Cab_pred&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="fu">plot</span>(idx_map[[<span class="dv">1</span>]], <span class="at">main =</span> winning_index)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="fu">plot</span>(cab_map, <span class="at">main =</span> <span class="st">&quot;Retrieved Cab&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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e46uALRQhT0bvmIYtFmFPVfqiqHQCApAQ0UrAA0VrQA0VLQC0FDRCkBDRSsADRWtJQI6d7wqh7hYrRnGIGC1cljKr6i26/+jNKVG5of8f8lN5dtrN7XMCnsO09IAvXvsuNJ75h5jDcb5tXfuf/Dh3a/eSUuEpsSKenkVnabmH3tw73u389MbaSrfXrupZVbYc6iWBOj9D/72OEkUZkQ+zh3nkUr/f6Dtnb2jNGVWyE9vpKl8e92mlllhz+FaEqCV7eb5S8Tvu906T/z7x2/9l2P2JyltX9g7SlNz9vciP72RpvLtdZtaZoU9h2spgNpzk916lcJ7a2rN3x6/tfbOqFbobmqwKcdsKt9eJqBhz0W0FEDnSJY+rp93KnMr3bpYPWnHR/rx72rqQe/pjTSVby/zT3zYcxEt3YtPHeTUR7YnKXWlzayjdp/nsp54z+mNNJVvL9VJCnsO1bhhplvV89QJi4wegOiKZRxvLixyfGXCIktT2HOYIlAfKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaIVgIaKVgAaKloBaKhoBaChohWAhopWABoqWgFoqGgFoKGiFYCGilYAGipaAWioaAWgoaL1/wCtNwrwmhepmQAAAABJRU5ErkJggg==" /><!-- --></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">par</span>(op)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Correlation between the mapped&quot;</span>, winning_index, <span class="st">&quot;and mapped Cab, pixel-by-pixel:&quot;</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.numeric</span>(terra<span class="sc">::</span><span class="fu">values</span>(idx_map[[<span class="dv">1</span>]])), Cab_pixels, <span class="at">use =</span> <span class="st">&quot;complete.obs&quot;</span>), <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; Correlation between the mapped REIP1 and mapped Cab, pixel-by-pixel: 0.21</span></span></code></pre></div>
+<p>Two independent pixel-by-pixel outputs over the same real scene – one
+a plain spectral index, the other a full hybrid-inversion trait
+retrieval – their spatial agreement (or disagreement) is itself
+informative, not assumed: a strong correlation here means the simple
+index is largely capturing the same signal the more expensive ML model
+is; a weak one means the ML model is picking up something the index
+alone misses.</p>
+</div>
+<div id="series-complete" class="section level2">
+<h2>Series complete</h2>
+<pre class="text"><code>01 Getting Started -&gt; ... -&gt; 17 Forest Time Series -&gt; 18 Spatial Index Mapping (this page)</code></pre>
+<p>Two real forest sites now mapped across this series – Speulderbos
+(Tutorials 15, 17) and Loobos (this page) – both real ICOS/flux-tower
+locations in the Netherlands, both retrieved live via STAC, both fed
+through this package’s own hybrid-inversion machinery end to end.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
