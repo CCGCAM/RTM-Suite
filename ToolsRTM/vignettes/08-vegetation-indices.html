@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>08. Vegetation Indices and Spectral Features</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">08. Vegetation Indices and Spectral
+Features</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
+<p><code>ToolsRTM</code> ships <strong>five</strong> functions with
+“indices” in the name. They are not interchangeable, and the package’s
+own naming doesn’t make the distinction obvious – this page exists to
+clear that up before using any of them.</p>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Input shape</th>
+<th>Spectral basis</th>
+<th>Index set</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>getIndices()</code></td>
+<td>Tabular: many rows, <code>R.&lt;wavelength&gt;</code> columns
+(native 1nm)</td>
+<td>Native spectrum, domain-limited
+(<code>&quot;VNIR&quot;</code>/<code>&quot;SWIR&quot;</code>/<code>&quot;VNIR-SWIR&quot;</code>)</td>
+<td>~75 indices, full domain-appropriate set</td>
+<td>LUTs at native resolution (Tutorials 05-06)</td>
+</tr>
+<tr class="even">
+<td><code>getIndicesSE2()</code></td>
+<td>Tabular: many rows, <code>B1</code>-<code>B12</code> columns
+(Sentinel-2 bands)</td>
+<td>Sentinel-2A/2B band centers</td>
+<td><strong>70</strong> named indices – the full literature set (NDVI,
+RDVI, MCARI, REIP, SIPI, …)</td>
+<td>Exploratory analysis: which <em>specific</em>, citable index
+correlates with a trait</td>
+</tr>
+<tr class="odd">
+<td><code>getIndicesSE2.ML()</code></td>
+<td>Same as <code>getIndicesSE2()</code></td>
+<td>Same</td>
+<td><strong>31</strong> indices – a curated subset of the 70,
+decorrelated/simplified for regression, plus two ML-oriented additions
+(<code>kNDVI</code>, <code>NDVIv</code>) not in the full set</td>
+<td>Feature engineering for <code>get.inversion()</code>/ML models
+(Tutorials 10-12)</td>
+</tr>
+<tr class="even">
+<td><code>getSpectraIndices()</code></td>
+<td><strong>Spatial</strong>: a folder of GeoTIFF images (not a
+data.frame of spectra)</td>
+<td>Sentinel-2A only (currently)</td>
+<td>Any one index, or <code>&#39;All&#39;</code>, computed per pixel across
+every image in the folder</td>
+<td>Batch/time-series index maps from real imagery</td>
+</tr>
+<tr class="odd">
+<td><code>getSpatial_index()</code></td>
+<td><strong>Spatial</strong>: one GeoTIFF image at a time</td>
+<td>Sentinel-2A only (currently)</td>
+<td>Any one index, or <code>&#39;All&#39;</code>, computed per pixel</td>
+<td>A single-scene version of the above, used internally by
+<code>getSpatialTrait()</code>’s trait-mapping workflow</td>
+</tr>
+</tbody>
+</table>
+<p>Verified directly (same 20-row LUT, convolved to Sentinel-2A,
+Tutorial 05-07’s own pipeline): <code>getIndicesSE2()</code> returned 66
+non-constant columns and <code>getIndicesSE2.ML()</code> returned 30 on
+that particular sample – close to their full 70/31-index design sets,
+with a couple dropped as constant or non-finite for this specific draw
+(both functions drop those automatically, same defensive pattern used
+throughout this package).</p>
+<div id="getindices-native-resolution-tabular" class="section level2">
+<h2>1. <code>getIndices()</code>: native-resolution, tabular</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>LUT <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> ToolsRTM<span class="sc">::</span>inputsPROSAIL, <span class="at">nLUT =</span> <span class="dv">20</span>, <span class="at">setseed =</span> <span class="dv">1</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>rsoil <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.15</span>, <span class="dv">2101</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>refl <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(<span class="dv">20</span>), <span class="cf">function</span>(i) {</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">foursail</span>(<span class="at">inputLUT =</span> LUT[i, ], <span class="at">rsoil =</span> rsoil, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-D&quot;</span>)<span class="sc">$</span>rsot</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>}))</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">colnames</span>(refl) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;R.&quot;</span>, <span class="dv">400</span><span class="sc">:</span><span class="dv">2500</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>idx_native <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">getIndices</span>(<span class="fu">as.data.frame</span>(refl), <span class="at">pattern.rfl =</span> <span class="st">&quot;R.&quot;</span>, <span class="at">spectral.domain =</span> <span class="st">&quot;VNIR&quot;</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Estimating indices using VNIR domain...&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Columns after adding indices:&quot;</span>, <span class="fu">ncol</span>(idx_native), <span class="st">&quot;(&quot;</span>, <span class="fu">ncol</span>(refl), <span class="st">&quot;reflectance +&quot;</span>, <span class="fu">ncol</span>(idx_native) <span class="sc">-</span> <span class="fu">ncol</span>(refl), <span class="st">&quot;indices)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; Columns after adding indices: 2176 ( 2101 reflectance + 75 indices)</span></span></code></pre></div>
+</div>
+<div id="getindicesse2-vs.-getindicesse2.ml-sensor-band-full-vs.-curated" class="section level2">
+<h2>2. <code>getIndicesSE2()</code> vs. <code>getIndicesSE2.ML()</code>:
+sensor-band, full vs. curated</h2>
+<p>Both take Sentinel-2 band-named columns
+(<code>B1</code>…<code>B12</code>), not the native spectrum – convolve
+first (Tutorial 07):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>refl_X <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(refl); <span class="fu">colnames</span>(refl_X) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">400</span><span class="sc">:</span><span class="dv">2500</span>); refl_X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, refl_X)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>se2a <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">get.spectra.convolved</span>(<span class="at">rfl =</span> refl_X, <span class="at">sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>, <span class="at">plot.spectra =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Spectral resampling function to SENTINEL2A is being processed ...&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   8%  |                                                                              |===========                                                           |  15%  |                                                                              |================                                                      |  23%  |                                                                              |======================                                                |  31%  |                                                                              |===========================                                           |  38%  |                                                                              |================================                                      |  46%  |                                                                              |======================================                                |  54%  |                                                                              |===========================================                           |  62%  |                                                                              |================================================                      |  69%  |                                                                              |======================================================                |  77%  |                                                                              |===========================================================           |  85%  |                                                                              |=================================================================     |  92%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">names</span>(se2a) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;B1&quot;</span>,<span class="st">&quot;B2&quot;</span>,<span class="st">&quot;B3&quot;</span>,<span class="st">&quot;B4&quot;</span>,<span class="st">&quot;B5&quot;</span>,<span class="st">&quot;B6&quot;</span>,<span class="st">&quot;B7&quot;</span>,<span class="st">&quot;B8&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B9&quot;</span>,<span class="st">&quot;B10&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>idx_full <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">getIndicesSE2</span>(<span class="at">df =</span> se2a[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">sensor =</span> <span class="st">&quot;Sentinel-2a&quot;</span>, <span class="at">df.data =</span> <span class="cn">NULL</span>, <span class="at">fast.process =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  11%  |                                                                              |===========                                                           |  16%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  26%  |                                                                              |======================                                                |  32%  |                                                                              |==========================                                            |  37%  |                                                                              |=============================                                         |  42%  |                                                                              |=================================                                     |  47%  |                                                                              |=====================================                                 |  53%  |                                                                              |=========================================                             |  58%  |                                                                              |============================================                          |  63%  |                                                                              |================================================                      |  68%  |                                                                              |====================================================                  |  74%  |                                                                              |=======================================================               |  79%  |                                                                              |===========================================================           |  84%  |                                                                              |===============================================================       |  89%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;getIndicesSE2() (full set):&quot;</span>, <span class="fu">ncol</span>(idx_full), <span class="st">&quot;indices</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; getIndicesSE2() (full set): 66 indices</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>idx_ml <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">getIndicesSE2.ML</span>(<span class="at">df =</span> se2a[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">sensor =</span> <span class="st">&quot;Sentinel-2a&quot;</span>, <span class="at">df.data =</span> <span class="cn">NULL</span>, <span class="at">fast.process =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  11%  |                                                                              |===========                                                           |  16%  |                                                                              |===============                                                       |  21%  |                                                                              |==================                                                    |  26%  |                                                                              |======================                                                |  32%  |                                                                              |==========================                                            |  37%  |                                                                              |=============================                                         |  42%  |                                                                              |=================================                                     |  47%  |                                                                              |=====================================                                 |  53%  |                                                                              |=========================================                             |  58%  |                                                                              |============================================                          |  63%  |                                                                              |================================================                      |  68%  |                                                                              |====================================================                  |  74%  |                                                                              |=======================================================               |  79%  |                                                                              |===========================================================           |  84%  |                                                                              |===============================================================       |  89%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;getIndicesSE2.ML() (curated):&quot;</span>, <span class="fu">ncol</span>(idx_ml), <span class="st">&quot;indices</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; getIndicesSE2.ML() (curated): 30 indices</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;In the ML set but NOT the full set:&quot;</span>, <span class="fu">setdiff</span>(<span class="fu">names</span>(idx_ml), <span class="fu">names</span>(idx_full)), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; In the ML set but NOT the full set: CR.Brown NDVIv kNDVI</span></span></code></pre></div>
+<p><code>kNDVI</code> (kernel NDVI) and <code>NDVIv</code> are the two
+ML-oriented additions – <code>kNDVI</code> in particular is documented
+in the remote-sensing literature as behaving better as a regression
+predictor than plain NDVI (less saturation at high biomass), which is
+exactly the kind of index worth having in a curated ML feature set even
+though it isn’t one of the “classic” 70.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot</span>(LUT<span class="sc">$</span>Cab, idx_full<span class="sc">$</span>NDVI, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#0072B2&quot;</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Cab&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;NDVI&quot;</span>, <span class="at">main =</span> <span class="st">&quot;One of the 70: NDVI vs. Cab&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGwCAMAAAB2PiqAAAAAz1BMVEUAAAAAADoAAGYAOjoAOmYAOpAAZmYAZpAAZrYAcrI6AAA6ADo6AGY6OgA6Ojo6OmY6ZmY6ZpA6ZrY6kLY6kNtmAABmADpmOgBmOjpmZgBmZmZmkJBmkLZmkNtmtttmtv+QOgCQOjqQZgCQZjqQkDqQkGaQkLaQttuQtv+Q27aQ29uQ2/+2ZgC2Zjq2ZpC2kGa225C227a229u22/+2/7a2///bkDrbkGbbtmbbtpDb27bb2//b/9vb////tmb/trb/25D/27b//7b//9v///8x9WjZAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAQQUlEQVR4nO2df2PjNh2H3e4OkozbuKNl/Bhr2YADmsHgdtltUNNr/P5fE5ZkO3YSp7Y/ViNbz/PH1kvsr534ifSVbElJBiCQnPsEYNogEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEggEEhMVaDth8+SJPn87X2vnb5dJcmb4u9/vM+yTXJx17JtmhSYLbbf5v//cv9Y6yS5yf/3eJ0sTCi39et3+ea3ZdyHVfLyv7fJy86nuf3wynyudweHunzfNcTzMlGBHr8oLu+LPt+rleLK/vnxi8vuAuVCGBZ7m+QCGTMaAuXb39h/uMOYP7Y9BKo+19X+oRBoTIorauj+42744q7ICYHKPZwcF2+zH1x5UyMXyLy0J5AJmb9kzys/z8v3PQSqfa7msRBoXPKrdfFVflF+XNnfan6B/55XMi+sDLa6eVO7Yj/+Jkk+MfXPuqyRij8v35/e0dVA9+ayLrLdfysb1jZGJZC9xD99YZVbu+Pk+y9quxQapFaPH14VFV7zc714mxePt+6H8aMpjz6/c3v+K/8Yr/ertvMzSYGaOcZ99es3L+aXs1m1baqS6phADnNdD3bMSg/yd67sP5xMDYHydxoCFYVP6iqhjVFlt4szxwXa7I5c/1zu39s/vvlPVYuaU1gnRzYPgkkK5C6Zxf6ozQ/3XZF45C+8M16VSUSl2NXRKix52bZjVhQgWfmi3aUp0OVv89eaArk/8tfcxo1dXCFmfTQ73WcfmslO7XO5rX9+Xxx8bU/0w2EednYmKVDtMlsn7A/dXe6itKguZ1ltFKIdCnSzu6LNHbN6RXSVHclD8he+y986EKgoMm6KHWvObaqzyN968e8Tn6vgp3++qleJAaZCMxGoqGkW5q1dwZ/trl5tO0s9iT66Y7YrEE4I9D6/sn87JlBqrru77DWB8kg37p8uXf7ky/2Uqy7Q9pukbP0Vx34y6X9+JilQowprCtTovqltatOPUwLt75hVKctJgfL3fnZMIFOHfe/aYjWBTB1WRPvoGuwXfz3+udzGyYu//HTtBNr9DMJikgIdJtH1guRmb9POJdBeK70ypp5EH7y/KcqIUqAyEc7rsN+5DKeeNuVb/ak8iY9/frXXDVFLol+X+djjNSXQ+BTN+O2HVS05tl9180ecPZkDte+4e6WqdPY2WBfpcl0g0wIv672i0VQXyL66c2b7dbNUazTj0zKzu6o6vcmBRqLW4bbnganTvso+XtfTjmOtMPfnqR1rGcnGvOU6EvdaYS4RP+hILE9xUfy1U6bofDTV46/uTT328r5Zxe06Eu2ZF0Lmu13SChuR3a0M07VW96DoztkV9bt+oLpAadmR2L7jrlKr3co4FMjst38rozzuTba3izmuK0S+rWyrv199rjc1mxb0A43P1vQvJ599Zb/5ugfZx29WzS5b2xP9h912bn/TAf3u5I7p7n6CuQvrbqYeCuQaXI2bqZbcvyor2gm0qymru6aN94ubqbaFb1phL97aupGeaJgpCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSCAQSfQR6vDYjNdMgx7fBmegt0MbNK7k/EQFESl+BCnU2fea2hBnTV6CHlRUopRIDCyUQSPQTqJyjwqXTAH2b8blDF3d5Qwx/wEE/EEiMLFACM8GPQOWkWa29QBRoM8GPQA+fmnkFzYRZba14BJoJXgTa3trceW1mDW2Z7BGBZoIXgWp9QG0diQg0E7yWQAtXj6nhIGD85EAbM6epSYQer5tVWP/kHcLGUyvMPMpxcejP0HAwFsvlctyAngR67nDQjeVybIMQKCaWy9EN8i0QSXRITFCgZwoHnUAg0CAHmiWjN42e8VCeb6a2PtCKQDvGLxaeEU8dieWDZK1PlCFQhYfE5BnxeSvD0PZMNAJVINABtdFg3Ex9EgQ6gBKoF1P2x1sOVBRB5EBdmLA/vlphxcK0+wuoDw0HwUI/EEgg0KQIr7JDoCmhpdte7EOgiWCuvtbg99PYQ6BpsKwhRRj3tBBoIiwDEegwAAJNAt2fUQQ6EgGBwuPIZS6vvphDj+HPXgwECo6jF3qM/GWMCgyBguLYJW2pakLoAUKgwGgvaxovh+COgxwoKI6XNQev+um/GQatsJBor6wO/GluFY5QCHRO2hrWBxXYYZUWjkEI1A0vl6yTCcertGAMQqBO9L9knbbvutETRdI5QaAu9L9mY17jwwwIgeYukNeLHJI/CNSJsASiFTZ+ON8MqsECusz+QKBuDMiho/CHsfG+iMQfxsZ7IRZ7MkameiGa+itjbLwP4smgM0ogHyCQtKEh7rHxCCRtaIl7bHxE/tAP5IV4/EEg0PDckciKhXPHj0CsWBgNPpvxrFjYgamnSz47Elmx8Gkm32DzWgKxYuFTTL/LyFNHIisWlpzWA4FaYMXCgif8QCDvx502TwoydX8QyC9PlzAT98e7QJEn0dOvop6CEsgvc/cHgXwzc38QCDQYldHO3AuPUWBURiuzT19GgWei25h/A2oUGJXRBgJ1ghKoDQTqBKMyWsGfLjAqox386QD9QCCBQCCBQCCBQCCBQCCBQCCBQCARl0D07IxOVALRtzw+MQnE3S0PIBBIIBBIxCQQOZAHohKIVtj4xCUQjE7EAlEcjUG8ApEQjUK0AtEkGwcEAgkEAglP48LMWIw07KHN+DMK/gSyI8JqQwyHh/ME/oyBN4FqU/2q4SBgvAn0sLICTXdoM3SCEggkPAlkRqUusjKdFsNBwPhqxucOXdy1D41HoLkQbT8QjAMCgYQngdZ5CmTnSWxbcQ6BZoKn+YHyttfaZNEk0XPH3wxlqVmxh2b83PE3R6LrQqQjceZQAoGE5xyoNt2mixLdgnNzh1YYSNAPBBIIBBK+BYp8wbn5QwkEEj0FKicQP7mU06jHhbChBAKJ3iVQW7u8ySwWnIMODKjCFk9vPIsF56ALvaswU7bYmxQnmMVyT9CJITmQKYbaHlUtNpjBgnPQiYFJdHqyEUYJFA/DW2FtZYthFgvOQReGl0Cta8kZZrHgHHTASw405nEhbLy0wsY8LoSNn36gEY8LYeOpJ3q840LYcC8MJPoL5BpYJ9tgYx4Xwqa3QGvXxbMR22E9BWI2sVDpK1BatsCKCaS8H9fCfIbB0lOg7W3VBltLrbFeAjGjarj0boXt7nI93xOJCBQuw5vxp+6FjXhcAwKFyyQEIgcKl2kIRCssWCYiEIQKw3pAglsZIIFAIEEVBhKDS6C1djMMgWbCQIHykkh7MAiBZsIwgVKt/upzXAibQQJtnnwciLHxsTBAoFyOp9IfxsZHw6AnEp9KfxiZGg+9BeqS/jA2Ph76CrTpMqqHEige/HQkMjY+GjzdymBsfCxwLwwkEAgkPAnEWhmx4EcgViyMBi8CsV5YPHgRiBUL44ESCCQ850CsWDh3aIWBBP1AIIFAIOFbIFYsnDmUQCCBQCCBQCDhSSBGZcSCp45ERmXEgr9bGQ5uZcwcfzdTHdxMnTmUQCDhKwdiVEYkMCoDJOgHAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAglPAwvNYJ6UsfER4E8gO6SwNkZ1eDgIGG8CFeowMnXmeBPoYWUFYmz8zKEEAglPAplhzYuMxVbmj69mfO7QxV373AoINBfoBwIJBAIJTzlQ67QuQ8JBwHgS6JertuRnQDgIGG/N+I1thY0SDgLG772wdocQaCZ4FCizDtETPW/8CnQYhRULZ8YzCzQoHAQM/UAggUAg4VsgViycOZRAIIFAIIFAIOFJIFYsjAU/ArFiYTR4EYj1wuLBU080KxbGAiUQSPjKgVixMBI8tcJYsTAW6AcCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCcbGgwRj40EilJGpy+WyxwEgGAIZG79cYtA0CaMEWi4xaKKEMTYegSZLGGPjEWiyBNIPhD9TJRCBaIVNFU+tMFYsjAVPArFiYSx4EogVC2PBm0CsWBgHHgXKWLEwAvwKdBiFFQtnxjMLtAsHM8GHQKMzysHHCBJKjAmeCAKFFGOCJzLwaG0rFvZjVt/5rD4MJdA0Y0zwRBAopBgTPBEECinGBE9k5FEZ/ZjVdz6rD3O2URn9mNV3PqsPc7Znovsxq+98Vh/mbKMyIDbOWgLB9Bl5VAbExsijMiA2eP4CJBAIJBAIJBAIJBAIJBAIJBAIJBAIJBAIJM4l0MMv7N3YNEku7oZFsM8mXYlBNuWuQoycte2aF2K4Lv6FFuRhVQwaHh4jLQb13HQOciaBHq/t7fw0P8V02Gfd3ub72ZH6QhAzNsDuKsTIzHdtBFJiPHxa7CcESfOTeLzWvhBLryDnEagYG+1u769PTtfQxsPK3NjNDRCC2JGS29uFdCK2+MivnRSjfDxGCOJ21b4Qh/lZdQ5yFoHS5Mp+Y5UEwyNd3KlBjEBajM3Lr3OBpBib4koJQapCTP1CHswcPp2DnCsHcgLZz6w8nLa+fK8G2eTltBQj39nkQFKM9WcuoROCpJffX6sx3Ln0ujRnFcjVsUJ1bZ5L0oKk9jtXYpjC3gikxHBzv62lD7NJbM2zUL/VYhKfrkEmLVBa5tBKkO3ty3slhnk4UxXIkX8nikAXd3KMLGt+n6ELJBa27rlIuR40edTwGHZXuQpzoVY3QhCXr2gxDK5LYhpVmJi7ul4gORM33/nwGJuy50RvEeQXTQjiLrYWI6vm8JlGEi01OMsHtIUg7ltK9ZbvWmzGj3EibsyM/GHcqQTejM/K34vQ5fVQTRgrBKkuvNj3tlY7Eu2VWmsnshnlw5Q7ht2RWNWum8Gd7kXVYfYeHiRbu257KUZW5g1KjDFOJC3v7SgnUtVaHYNwMxUkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEAgkEKgbdlLhxjp7xTQWsYNAnXBzWa3rsw0gkAWBulBNmlMrgxDIgkBdKBep/p+Z+qSYieVh9ftVwuLDCNQBM/dphZkLyk4NvLL/id0gBOpAMW+g+/vXd676cu4ocyLOAgTqQF0gQ2rqsGJeQ2Fes1mAQB1oVGGbJLn8zpRAdiLcaoGBWEGgLpRJdFrM5uuqMEqgDIG6UWvGuyn2kyoHanQuRggCdcJ2JNolyoxLj9f5P20rLE1i7wxCoG7YJQV3k/muzTJTph8odn8QCDQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCQQCCT+D6e2XpxqhN5IAAAAAElFTkSuQmCC" /><!-- --></p>
+</div>
+<div id="spatial-indices-getspectraindices-and-getspatial_index" class="section level2">
+<h2>3. Spatial indices: <code>getSpectraIndices()</code> and
+<code>getSpatial_index()</code></h2>
+<p>Both work on real GeoTIFF imagery, not simulated spectra – not
+runnable here without real Sentinel-2 scenes on disk, but their
+signatures show the distinction clearly:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># getSpectraIndices(): a whole FOLDER of images (e.g. a time series),</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co"># looped per file, with a progress bar and optional export -- Sentinel-2A</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co"># only for now.</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">getSpectraIndices</span>(<span class="at">rasterFiles =</span> <span class="st">&quot;path/to/tif_folder/&quot;</span>, <span class="at">Sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>                   <span class="at">SpectraltoCompute =</span> <span class="st">&quot;NDVI&quot;</span>, <span class="at">factorR =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10000</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                   <span class="at">path.export =</span> <span class="st">&quot;path/to/output/&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># getSpatial_index(): ONE image in, one (or &#39;All&#39;) index map(s) out -- no</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co"># folder loop, no progress bar; the building block getSpatialTrait() itself</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># calls internally when producing a spatial trait map.</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">getSpatial_index</span>(<span class="at">rasterFiles =</span> <span class="st">&quot;path/to/one_scene.tif&quot;</span>, <span class="at">Sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>                  <span class="at">SpectraltoCompute =</span> <span class="st">&quot;NDVI&quot;</span>, <span class="at">factorR =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10000</span>)</span></code></pre></div>
+<p>Tutorial 14 uses this spatial path for real, on an actual Sentinel-2
+image retrieved via STAC, to produce a genuine 2D index/trait map.</p>
+</div>
+<div id="which-one-should-you-use" class="section level2">
+<h2>Which one should you use?</h2>
+<pre class="text"><code>What are you computing indices from?
+          |
+          +-- A LUT / many simulated spectra at native (1nm) resolution
+          |      |
+          |      v
+          |   getIndices()
+          |
+          +-- Sentinel-2 band-level reflectance (simulated or real)
+          |      |
+          |      +-- Exploring which named index matters
+          |      |      -&gt; getIndicesSE2()  (full 70-index set)
+          |      |
+          |      +-- Feeding indices into an ML/inversion model
+          |             -&gt; getIndicesSE2.ML()  (31-index curated set)
+          |
+          +-- Real GeoTIFF imagery (a spatial map, not a spectrum table)
+                 |
+                 +-- One scene -&gt; getSpatial_index()
+                 +-- Many scenes / a time series -&gt; getSpectraIndices()</code></pre>
+</div>
+<div id="whats-next" class="section level2">
+<h2>What’s next</h2>
+<ul>
+<li><strong>Tutorial 09</strong> – formal sensitivity analysis: which
+traits actually drive which indices and bands, and by how much.</li>
+<li><strong>Tutorial 11</strong> – using
+<code>getIndicesSE2.ML()</code>’s curated set as ML predictor features
+alongside raw bands.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

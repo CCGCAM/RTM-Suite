@@ -470,6 +470,14 @@ get.inversion <- function(data, depVar, inputs, algorithm='PLSR',method.resampli
 
     ### Ensemble mddels
 
+    # NB (fix): every other algorithm branch in this function defines its own
+    # fmla.n right before using it -- this branch used fmla.n (below, in the
+    # caretList() call) without ever defining it, which only happened to work
+    # if a PREVIOUS algorithm branch had already run earlier in the same R
+    # session and left fmla.n behind; calling get.inversion(algorithm =
+    # "Ensemble") on its own errored with "object 'fmla.n' not found".
+    fmla.n <- as.formula(paste(depVar," ~ ", paste(inputs, collapse= "+")))
+
     models.ensemble=list(gbm=caretEnsemble::caretModelSpec(method="gbm",  #metric='MAE',
                                             preProc = c("center", "scale",'BoxCox', 'YeoJohnson'),
                                             tuneGrid=tune.grid.gbm),
@@ -497,10 +505,19 @@ get.inversion <- function(data, depVar, inputs, algorithm='PLSR',method.resampli
                                        tuneList = models.ensemble,
                                        methodList=algorithmList)
     # Combine Predictions from multiple models
+    # NB (fix): index = createFolds(df.train[,], 5) passed the WHOLE training
+    # data.frame as createFolds()'s `y` -- createFolds() then computes fold
+    # sizes from `length(y)`, which for a data.frame returns the number of
+    # COLUMNS, not rows, producing fold index sets sized/aligned to the wrong
+    # dimension entirely. Downstream this made caretEnsemble::caretStack()
+    # fail with "pred_rows == pred_rows[1L] are not all TRUE" (the ensemble
+    # members' predictions no longer lined up row-for-row). Stratify on the
+    # actual response column instead, matching this same function's other
+    # (unused, also-buggy) attempt at this on the commented-out line above.
     stackControl <- caret::trainControl(method=method.resampling,
                                  number=3,
                                  repeats=3,
-                                 index = caret::createFolds(df.train[,], 5),
+                                 index = caret::createFolds(df.train[[depVar]], 5),
                                  savePredictions = "all",
                                  search = "random")
 

@@ -1,0 +1,140 @@
+---
+title: "07. From RTM Spectra to Satellite Observations: Sensor Convolution"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{07. From RTM Spectra to Satellite Observations: Sensor Convolution}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 4.5
+)
+```
+
+```{r setup}
+library(ToolsRTM)
+```
+
+Every simulation so far stayed at native 1nm resolution (2101 or 2001
+points, Tutorial 02). A real sensor never measures that -- it integrates
+incoming light over each band's spectral response function (SRF), giving
+far fewer, wider bands. This page converts a native simulation into what
+a real sensor would actually report.
+
+```{r baseline}
+row <- data.frame(
+  LAI = 3, hspot = 0.01, LIDFa = -0.35, LIDFb = -0.15, TypeLidf = 1,
+  tts = 30, tto = 0, psi = 0,
+  N = 1.5, Cab = 40, Car = 8, Anth = 2, Cbrown = 0, EWT = 0.009, LMA = 0.009, alpha = 40
+)
+rsoil <- 0.5 * dataSpec_PDB[, 11] + 0.5 * dataSpec_PDB[, 12]
+sail <- foursail(inputLUT = row, rsoil = rsoil, LeafModel = "PROSPECT-D")
+reflectance <- Compute_BRF(rdot = sail$rdot, rsot = sail$rsot, tts = row$tts, data.light = dataSpec_PDB)
+```
+
+## Three convolution functions, one for each kind of sensor data
+
+| Function | What it needs | Sensors covered |
+|---|---|---|
+| `get.spectral.convolution.srf()` | A real, MEASURED per-nm SRF, no atmospheric-correction coefficients | PRISMA, Sentinel-2A, Sentinel-2B (`srf.prisma`/`srf.sentinel2a`/`srf.sentinel2b`) |
+| `get.spectral.convolution.rfl()` | A measured SRF bundled together WITH SMAC atmospheric-correction coefficients | Landsat 4/5/7/8, Sentinel-3A/B OLCI, Terra/Aqua MODIS |
+| `get.spectral.convolution.gaussian()` | No measured SRF at all -- only nominal band characteristics (center + FWHM, or center + edges), approximated as Gaussian | EnMAP, ALI, Hyperion, MODIS (19-band nominal), Quickbird, RapidEye, WorldView-2/3/4, and any sensor/camera you supply `centers`/`fwhm` for yourself |
+
+Only sensors actually bundled/supported are listed above -- see
+`unique(ToolsRTM::sensor.characteristics$Sensor)` for the full nominal-
+characteristics list behind the Gaussian path.
+
+## 1. Measured SRF: Sentinel-2A
+
+```{r srf}
+band_values <- get.spectral.convolution.srf(
+  df  = data.frame(wave = dataSpec_PDB[, 1], rfl = reflectance),
+  srf = ToolsRTM::srf.sentinel2a)
+print(band_values)
+
+plot(dataSpec_PDB[, 1], reflectance, type = "l", col = "grey60",
+     xlab = "Wavelength (nm)", ylab = "Reflectance", main = "Native 1nm vs Sentinel-2A bands")
+points(band_values$wl, band_values$RFL, col = "#B2182B", pch = 19, cex = 1.3)
+lines(band_values$wl, band_values$RFL, col = "#B2182B", lwd = 1.5)
+```
+
+## 2. SMAC-bundled SRF: MODIS
+
+```{r rfl-modis}
+modis_bands <- get.spectral.convolution.rfl(
+  df = data.frame(wave = dataSpec_PDB[, 1], rfl = reflectance),
+  sensor.i = ToolsRTM::TerraAqua.MODIS)
+cat("MODIS bands:", nrow(modis_bands), "\n")
+```
+
+**A real, documented gotcha with this path**: for MODIS/Landsat/Sentinel-3
+OLCI specifically, the bundled SRF tables are column-ordered by natural
+band number rather than by true center wavelength -- confirmed once,
+fixed at the package source (see `NEWS`/package changelog for the R
+bug-fix history); using `get.spectral.convolution.rfl()`'s own band-order
+output (as above) rather than re-deriving indices by hand avoids re-
+hitting it.
+
+## 3. No measured SRF: Gaussian approximation
+
+```{r gaussian}
+enmap_bands <- get.spectral.convolution.gaussian(
+  df = data.frame(wave = dataSpec_PDB[, 1], rfl = reflectance), sensor.i = "EnMAP")
+cat("EnMAP bands:", nrow(enmap_bands), "\n")
+```
+
+### Worked example: your own sensor or camera
+
+```{r own-sensor}
+own_centers <- c(444, 475, 502, 531, 550, 560, 570, 650, 668, 678, 705, 717, 740, 754, 842)
+own_fwhm    <- c(28,  32,  18,  14,  12,  27,  14,  16,  14,  14,  10,  12,  18,  10,  57)
+
+df <- data.frame(wave = dataSpec_PDB[, 1], rfl = reflectance)
+own_bands <- get.spectral.convolution.gaussian(df, centers = own_centers, fwhm = own_fwhm)
+
+# Centers-only (e.g. copied from an ENVI header's "wavelength = {...}" block,
+# no separate "fwhm = {...}" block) -- FWHM estimated from band spacing instead:
+headwall_centers <- c(398.0166, 400.247, 402.4774, 404.7078, 406.9382)  # (full header has 272)
+headwall_bands <- get.spectral.convolution.gaussian(df, centers = headwall_centers)
+
+own_bands
+```
+
+Same function handles all three cases (a full center+FWHM calibration
+sheet, centers-only, or a bundled sensor name) because none of them have a
+measured SRF to fall back on, unlike Sections 1-2 above.
+
+## Which one should you use?
+
+```text
+Do you have a measured SRF?
+          |
+          +-- Yes, plain per-band SRF (no SMAC coeffs)
+          |      |
+          |      v
+          |   get.spectral.convolution.srf()
+          |   (PRISMA, Sentinel-2A/2B)
+          |
+          +-- Yes, bundled with SMAC atmospheric coefficients
+          |      |
+          |      v
+          |   get.spectral.convolution.rfl()
+          |   (Landsat 4/5/7/8, Sentinel-3A/B OLCI, MODIS)
+          |
+          +-- No measured SRF -- only nominal center/FWHM,
+                 or your own camera
+                 |
+                 v
+               get.spectral.convolution.gaussian()
+```
+
+## What's next
+
+- **Tutorial 08** -- computing vegetation indices from convolved
+  sensor-band reflectance (and clarifying which index function to use,
+  tabular vs. spatial, full set vs. ML-curated).
+- **Tutorial 11** -- training an inversion model on convolved,
+  sensor-realistic reflectance instead of the native spectrum.

@@ -20,16 +20,26 @@
 #' 
 getKmeans <- function(stack,k=12,iter.max=100,nstart=10,geo=T,geo.weight=1){
   
-  if("RasterStack" %in% class(stack)){
+  # NB (raster->terra migration): "RasterStack" is a raster-package S4 class
+  # that no longer applies to a terra SpatRaster -- accept a SpatRaster
+  # directly instead (inherits("SpatRaster")), keeping the folder-of-tifs
+  # path unchanged.
+  if(inherits(stack, "SpatRaster")){
     stk=stack
   }else{
     stl=list.files(stack,full.names = TRUE,include.dirs = FALSE,pattern = "tif")
-    stk=raster::stack(stl)
+    stk=terra::rast(stl)
   }
-  
-  
-  oDF=raster::as.data.frame(stk)
-  oo=raster::xyFromCell(stk,1:(stk@ncols * stk@nrows))
+
+
+  # NB: terra::as.data.frame() defaults to na.rm = TRUE (drops NA cells),
+  # unlike raster::as.data.frame() which kept every cell by default -- the
+  # xyFromCell() call right below assumes oDF has exactly ncell(stk) rows,
+  # one per cell index 1:ncell in order, so na.rm must stay FALSE here to
+  # preserve that row<->cell alignment (same reasoning applies below wherever
+  # oDF/oDFk/of are indexed positionally against cell numbers).
+  oDF=terra::as.data.frame(stk, na.rm = FALSE)
+  oo=terra::xyFromCell(stk,1:(terra::ncol(stk) * terra::nrow(stk)))
   if(geo == T){
     oDF$x=oo[,1]
     oDF$y=oo[,2]
@@ -55,8 +65,12 @@ getKmeans <- function(stack,k=12,iter.max=100,nstart=10,geo=T,geo.weight=1){
   
   of=plyr::join(oDFk,oDFi,by="idx",type="left")
   
-  classify.m <- matrix(of$cluster, nrow=stk@nrows,ncol=stk@ncols, byrow=TRUE)
-  raster.classify <- raster::raster(classify.m,crs=stk@crs, xmn=stk@extent@xmin, ymn=stk@extent@ymin, xmx=stk@extent@xmax, ymx=stk@extent@ymax)
+  # NB (raster->terra migration): a terra SpatRaster has no @ncols/@nrows/
+  # @crs/@extent S4 slots (those were raster-package Raster* class slots) --
+  # use the equivalent accessor functions instead.
+  classify.m <- matrix(of$cluster, nrow=terra::nrow(stk),ncol=terra::ncol(stk), byrow=TRUE)
+  raster.classify <- terra::rast(classify.m, crs=terra::crs(stk),
+                                 extent=terra::ext(terra::xmin(stk), terra::xmax(stk), terra::ymin(stk), terra::ymax(stk)))
   return(raster.classify)
 }
 

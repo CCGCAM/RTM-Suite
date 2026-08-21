@@ -47,19 +47,28 @@ getStacks<-function(rasterFiles=NULL, frequency='Daily', bands=NULL,output=NULL)
 
     # Print the sorted file names
     #print(sorted_files)
+    # NB (raster->terra migration): raster()/stack()/writeRaster() were all
+    # called bare here (no raster:: prefix, so they only ever resolved if the
+    # caller happened to have library(raster) attached). terra combines
+    # single-band SpatRasters into a multi-layer one via c() rather than a
+    # separate stack() call.
     # Load the first file to initialize the raster stack
-    rs <- raster(sorted_files[1])
+    rs <- terra::rast(sorted_files[1])
 
     # Loop over the remaining files and add them to the raster stack
     for (i in 2:length(sorted_files)) {
-      rs <- stack(rs, raster(sorted_files[i]))
+      rs <- c(rs, terra::rast(sorted_files[i]))
     }
     names(rs) <- bands
     #plot(rs)
     path_out<-paste(output,'/Stacks',sep="")
     ifelse(!dir.exists(path_out), dir.create(path_out), FALSE)
-    raster.file<-paste(path_out,'/SE2A-',dates[k],'',sep="")
-    writeRaster(rs, raster.file, "GTiff", overwrite=TRUE,bylayer=F)
+    # terra::writeRaster() infers the output format from the filename
+    # extension rather than raster::writeRaster()'s separate format=
+    # argument -- unlike the original, the filename here needs an explicit
+    # extension for that inference to work.
+    raster.file<-paste(path_out,'/SE2A-',dates[k],'.tif',sep="")
+    terra::writeRaster(rs, raster.file, filetype="GTiff", overwrite=TRUE)
 
 
 }

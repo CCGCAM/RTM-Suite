@@ -141,7 +141,13 @@ get.sentinel2_cube <- function(s_collection, shape, date_range,
  
 
   # Convert to stars or terra format for visualization
-  result_raster <- st_as_stars.cube(result_cube) |> rast()
+  # NB (fix): bare rast() only resolves if the CALLER happens to have
+  # library(terra) attached (not just installed) -- terra is Imported by
+  # this package but rast() was never called with its namespace prefix, so
+  # any caller with only `requireNamespace("terra")`/no attach hit
+  # "could not find function \"rast\"" even though the package itself
+  # declares and uses terra internally elsewhere (e.g. get.satellite_collection()).
+  result_raster <- st_as_stars.cube(result_cube) |> terra::rast()
 
   # Generate names based on bands and time range
   band_names <- paste0(selected_bands, "_",

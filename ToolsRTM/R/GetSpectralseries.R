@@ -42,13 +42,20 @@ GetSpectralseries<-function(netCDFs=NULL, bands=NULL, shapefile=NULL, factorSE =
 
     table.info<-list()
       for (i in c(bands)){
-        B.array <- raster::brick(paste(files_nc[nc_file],sep=''), varname=i)
+        # NB (raster->terra migration): raster::brick(..., varname=i) selected
+        # one NetCDF sub-dataset/variable by name -- terra's equivalent is
+        # rast(..., subds=i). raster::extract(df=, na.rm=, cellnumbers=) maps
+        # to terra::extract(cells=) -- terra::extract() already returns a
+        # data.frame by default (no df= argument needed) and does not drop
+        # NA rows itself (na.rm= has no terra equivalent; downstream code here
+        # doesn't rely on NA rows being pre-dropped).
+        B.array <- terra::rast(paste(files_nc[nc_file],sep=''), subds = i)
         if (class(shapefile)[1] == 'SpatialPointsDataFrame'){
-          table.info[[i]]<- t(raster::extract(B.array, shapefile, df = F, na.rm = T, cellnumbers = F) * factorSE)
+          table.info[[i]]<- t(terra::extract(B.array, shapefile, cells = FALSE) * factorSE)
 
         }  else if (class(shapefile)[1] == 'sf'){
-          shape.to<- as_Spatial(shapefile)
-          table.extract<- (raster::extract(B.array, shape.to, df = T, na.rm = T, cellnumbers = T))
+          shape.to<- terra::vect(shapefile)
+          table.extract<- (terra::extract(B.array, shape.to, cells = TRUE))
           levels(table.extract)<-levels(as.factor(shape.to[[names(shape.to)[1]]]))
 
           #table.extract<-cbind(ID_shape=levels(as.factor(shapefile[[names(shapefile)[1]]])),ID=table.extract[,'ID'],cell = table.extract[,'cell'],stack(table.extract[,c(3:dim(table.extract)[2])]* factorSE))
@@ -60,7 +67,7 @@ GetSpectralseries<-function(netCDFs=NULL, bands=NULL, shapefile=NULL, factorSE =
           table.info[[i]] <-table.extract
         } else {
 
-          table.extract<- (raster::extract(B.array, shapefile, df = T, na.rm = T, cellnumbers = T))
+          table.extract<- (terra::extract(B.array, shapefile, cells = TRUE))
           levels(table.extract)<-levels(as.factor(shapefile[[names(shapefile)[1]]]))
 
           #table.extract<-cbind(ID_shape=levels(as.factor(shapefile[[names(shapefile)[1]]])),ID=table.extract[,'ID'],cell = table.extract[,'cell'],stack(table.extract[,c(3:dim(table.extract)[2])]* factorSE))

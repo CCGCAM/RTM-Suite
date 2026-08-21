@@ -64,13 +64,20 @@ getTIFFs<-function(netCDFs=NULL, bands=NULL, output=NULL, pattern=NULL){
       for (k in c(1:dim(B.array)[3])){ 
         B.slice <- B.array[, , k] 
         CRS_ncdf<-'+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs '
-        r <- raster(t(B.slice), xmn=min(lon), xmx=max(lon), ymn=min(lat), ymx=max(lat), crs=CRS(CRS_ncdf))
+        # NB (raster->terra migration): raster()/CRS()/writeRaster() were all
+        # called bare here (no raster:: prefix). terra::rast()'s crs= takes a
+        # plain proj4/WKT string directly -- no separate CRS() wrapper (that
+        # was an sp/raster helper) needed.
+        r <- terra::rast(t(B.slice), extent = terra::ext(min(lon), max(lon), min(lat), max(lat)), crs = CRS_ncdf)
         path_daily=paste(output,'/daily','',sep='')
         ifelse(!dir.exists(path_daily), dir.create(path_daily), FALSE)
-        path_out=paste(path_daily,'/day-',dates[k],'',sep='') 
+        path_out=paste(path_daily,'/day-',dates[k],'',sep='')
         ifelse(!dir.exists(path_out), dir.create(path_out), FALSE)
-        filename<-paste(path_out,'/SE2A-',i,'-',dates[k],sep="")
-        writeRaster(r, filename, "GTiff", overwrite=TRUE)
+        # terra::writeRaster() infers format from the filename extension
+        # rather than a separate format= argument -- filename needs an
+        # explicit extension for that inference to work.
+        filename<-paste(path_out,'/SE2A-',i,'-',dates[k],'.tif',sep="")
+        terra::writeRaster(r, filename, filetype="GTiff", overwrite=TRUE)
         
       }
       

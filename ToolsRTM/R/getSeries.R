@@ -39,15 +39,22 @@ getSeries<-function(pathRaster=NULL, shapefile=NULL, band_names=NULL,factorR=NUL
         setTxtProgressBar(progress_bar, k)
         #rs <- stack(files)
         ## by order
-        rs <- brick(files[k])
+        # NB (raster->terra migration): bare brick() previously only resolved
+        # if the caller happened to have library(raster) attached (raster was
+        # never namespace-qualified here) -- see the ToolsRTM/vignettes/*
+        # entries on this same bug class. terra::extract(cells=) replaces
+        # raster::extract(cellnumbers=); terra::extract() already returns a
+        # data.frame by default (no df= argument) and does not itself drop NA
+        # rows (na.rm= has no terra equivalent).
+        rs <- terra::rast(files[k])
         names(rs) <- band_names
 
         if (class(shapefile)[1] == 'SpatialPointsDataFrame'){
-          r.extract <- raster::extract(rs, shapefile, df = T, na.rm = T, cellnumbers = F)
+          r.extract <- terra::extract(rs, shapefile, cells = FALSE)
           data.write<-data.frame(ID=r.extract[,'ID'],Date= dates[k],r.extract[,c(2:dim(r.extract)[2])]* factor)
           #sensor.bands<-names(data.write[,grep(colnames(data.write),pattern="B",fixed = TRUE)])
         } else {
-          r.extract <- raster::extract(rs, shapefile, df = T, na.rm = T, cellnumbers = T)
+          r.extract <- terra::extract(rs, shapefile, cells = TRUE)
           data.write<-data.frame(ID=r.extract[,'ID'],cell = r.extract[,'cell'],Date= dates[k],r.extract[,c(3:dim(r.extract)[2])]* factor)
           #sensor.bands<-names(data.write[,grep(colnames(data.write),pattern="B",fixed = TRUE)])
         }

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>03. SPART: Soil-Plant-Atmosphere Radiative Transfer</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">03. SPART: Soil-Plant-Atmosphere Radiative
+Transfer</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
+<p>Tutorials 01-02 stopped at top-of-canopy (TOC) reflectance – what a
+sensor would see immediately above the canopy, with no atmosphere in the
+way. <code>SPART()</code> goes one step further: soil, canopy, AND
+atmosphere, together, giving top-of-atmosphere (TOA) reflectance – what
+a real satellite actually measures. It deserves its own page rather than
+a paragraph inside a leaf/canopy comparison, because it represents a
+more complete modelling chain, not just another canopy option.</p>
+<pre class="text"><code>                 Atmosphere
+                     |
+              Incoming radiation
+                     |
+Soil ---------&gt; Vegetation canopy
+                     |
+              Canopy reflectance
+                     |
+                 Atmosphere
+                     |
+           Top-of-atmosphere signal</code></pre>
+<pre class="text"><code>PROSPECT + fourSAIL                 SPART
+--------------------                --------------------
+Leaf                                 Atmosphere
+ |                                    |
+Canopy                                Leaf + Canopy + Soil
+ |                                    |
+TOC reflectance                       Atmosphere
+                                       |
+                                      TOA observation</code></pre>
+<p>SPART couples three sub-models: <strong>BSM</strong>
+(Brightness-Shape-Moisture) for soil, <strong>fourSAIL</strong> for the
+vegetation canopy, and <strong>SMAC</strong> for atmospheric effects –
+the same three-model architecture SPART’s own reference implementation
+(Yang et al. 2020) uses.</p>
+<div id="configure-spart" class="section level2">
+<h2>3.1 Configure SPART</h2>
+<p>Inputs fall into five physical domains. <code>inputsSPART</code> (a
+<code>getLUT()</code>-ready table, same pattern as
+<code>inputsPROSAIL</code>) already groups them:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Domain</th>
+<th>Example columns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Leaf</td>
+<td><code>Cab</code>, <code>Car</code>, <code>Anth</code>,
+<code>LMA</code>, <code>EWT</code>, <code>N</code>, …</td>
+<td>Same as PROSPECT/fourSAIL (Tutorial 02)</td>
+</tr>
+<tr class="even">
+<td>Canopy structure</td>
+<td><code>LAI</code>,
+<code>LIDFa</code>/<code>LIDFb</code>/<code>TypeLidf</code>,
+<code>hspot</code></td>
+<td>Same as fourSAIL</td>
+</tr>
+<tr class="odd">
+<td>Soil</td>
+<td><code>psoil</code></td>
+<td>See the important caveat in Section 3.3 below</td>
+</tr>
+<tr class="even">
+<td>Geometry</td>
+<td><code>tts</code>, <code>tto</code>, <code>psi</code></td>
+<td>Sun zenith, view zenith, relative azimuth</td>
+</tr>
+<tr class="odd">
+<td>Atmosphere</td>
+<td><code>Pa</code>, <code>aot550</code>, <code>uo3</code>,
+<code>uh2o</code>, <code>alt_m</code>, <code>Pa0</code></td>
+<td>Air pressure, aerosol optical thickness, ozone, water vapour,
+altitude</td>
+</tr>
+</tbody>
+</table>
+<p>Full argument documentation lives at <code>?SPART</code> – this page
+focuses on how the pieces fit together, not an exhaustive parameter
+list.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>LUT <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> ToolsRTM<span class="sc">::</span>inputsSPART, <span class="at">nLUT =</span> <span class="dv">5</span>, <span class="at">setseed =</span> <span class="dv">1</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># inputsSPART only ships PROSPECT-PRO/-D columns -- add what other leaf</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># models need too (same requirement as foursail()/SPART() itself).</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>LUT<span class="sc">$</span>Cs <span class="ot">&lt;-</span> <span class="dv">0</span>; LUT<span class="sc">$</span>fqe <span class="ot">&lt;-</span> <span class="fl">0.01</span>; LUT<span class="sc">$</span>Cx <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>LUT<span class="sc">$</span>cell.d <span class="ot">&lt;-</span> <span class="dv">40</span>; LUT<span class="sc">$</span>inter.c <span class="ot">&lt;-</span> <span class="fl">0.045</span>; LUT<span class="sc">$</span>baseline.abs <span class="ot">&lt;-</span> <span class="fl">0.0006</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>LUT<span class="sc">$</span>leaf.thick <span class="ot">&lt;-</span> <span class="fl">1.6</span>; LUT<span class="sc">$</span>albino.abs <span class="ot">&lt;-</span> <span class="dv">0</span>; LUT<span class="sc">$</span>lign.cell <span class="ot">&lt;-</span> <span class="dv">2</span>; LUT<span class="sc">$</span>Nitrogen <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co"># A realistic, sea-level, clear-sky atmosphere for the worked example below</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co"># (getLUT()&#39;s own default sampling range for the atmosphere columns is wide</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co"># enough to occasionally draw physically implausible combinations -- see</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co"># the note at the end of Section 3.2).</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>LUT<span class="sc">$</span>Pa <span class="ot">&lt;-</span> <span class="dv">1000</span>; LUT<span class="sc">$</span>aot550 <span class="ot">&lt;-</span> <span class="fl">0.3246</span>; LUT<span class="sc">$</span>uo3 <span class="ot">&lt;-</span> <span class="fl">0.3480</span>; LUT<span class="sc">$</span>uh2o <span class="ot">&lt;-</span> <span class="fl">1.4116</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>LUT<span class="sc">$</span>alt_m <span class="ot">&lt;-</span> <span class="dv">0</span>; LUT<span class="sc">$</span>Pa0 <span class="ot">&lt;-</span> <span class="dv">1000</span></span></code></pre></div>
+</div>
+<div id="run-a-baseline-simulation" class="section level2">
+<h2>3.2 Run a baseline simulation</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> LUT[<span class="dv">1</span>, ], <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                               <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                               <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>Sentinel2A.MSI,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                               <span class="at">rsoil =</span> <span class="cn">NULL</span>, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">names</span>(sim<span class="sc">$</span>output)  <span class="co"># wave, rad.toa, rfl.toa, rfl.toc, rfl.toc.BRDF -- already at Sentinel-2A&#39;s own bands</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;wave&quot;         &quot;rad.toa&quot;      &quot;rfl.toa&quot;      &quot;rfl.toc&quot;      &quot;rfl.toc.BRDF&quot;</span></span></code></pre></div>
+<p>Unlike <code>foursail()</code>, SPART returns output already
+convolved to the chosen sensor’s bands (<code>sensor.i</code>) – there
+is no separate “simulate native, then convolve” step (Tutorial 07 covers
+convolution for <code>foursail()</code>/<code>inform()</code> output,
+which stays at 1nm resolution).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot</span>(sim<span class="sc">$</span>output<span class="sc">$</span>wave, sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#0072B2&quot;</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF, sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toa)),</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Wavelength (nm)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Reflectance&quot;</span>, <span class="at">main =</span> <span class="st">&quot;SPART: TOC vs. TOA (Sentinel-2A bands)&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">lines</span>(sim<span class="sc">$</span>output<span class="sc">$</span>wave, sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toa, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#D55E00&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;TOC (canopy)&quot;</span>, <span class="st">&quot;TOA (satellite)&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>), <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">lty =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>The dip near 942nm and the near-total collapse near 1372nm are real
+atmospheric water-vapour absorption bands – present in the TOA curve but
+absent from TOC, exactly what real atmospheric correction has to deal
+with. <strong>A note on <code>getLUT()</code>’s atmosphere
+sampling</strong>: at the wide default ranges <code>inputsSPART</code>
+samples from, some random rows combine a high <code>aot550</code>
+(aerosol loading) with a high <code>alt_m</code> (altitude) – a
+combination SMAC’s atmospheric correction doesn’t handle gracefully,
+producing negative (physically meaningless) TOA reflectance. Always
+sanity-check <code>range(sim$output$rfl.toa)</code> after a random draw;
+the fixed, realistic sea-level clear-sky atmosphere set in Section 3.1
+above avoids this for the rest of this page.</p>
+</div>
+<div id="soil-contribution" class="section level2">
+<h2>3.3 Soil contribution</h2>
+<p>Physically, a sparse canopy should let more soil show through than a
+dense one. <strong>Important caveat, found while building this
+page</strong>: the <code>psoil</code> column documented in
+<code>inputsSPART</code>/<code>?SPART</code> only has an effect when you
+pass your own <code>rsoil</code> – <code>SPART()</code>’s built-in BSM
+soil path (triggered whenever <code>rsoil = NULL</code>) hardcodes its
+own soil-moisture constants internally and never reads
+<code>inputLUT$psoil</code> at all, so sweeping <code>psoil</code> alone
+with <code>rsoil = NULL</code> produces byte-identical output regardless
+of its value. The demonstration below uses an explicit
+<code>rsoil</code> (as <code>foursail()</code> already requires in
+Tutorials 01-02) to sidestep this and show the real physics:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>soil_dark   <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.08</span>, <span class="dv">2001</span>)  <span class="co"># dark/wet-looking soil</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>soil_bright <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.30</span>, <span class="dv">2001</span>)  <span class="co"># bright/dry-looking soil</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>soil_effect <span class="ot">&lt;-</span> <span class="cf">function</span>(lai) {</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  row_i <span class="ot">&lt;-</span> LUT[<span class="dv">1</span>, ]; row_i<span class="sc">$</span>LAI <span class="ot">&lt;-</span> lai</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> row_i, <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                               <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>Sentinel2A.MSI, <span class="at">rsoil =</span> soil_dark, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> row_i, <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>                               <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>Sentinel2A.MSI, <span class="at">rsoil =</span> soil_bright, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="fu">mean</span>(b<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF) <span class="sc">-</span> <span class="fu">mean</span>(d<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>}</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mean TOC reflectance shift, dark vs. bright soil:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; Mean TOC reflectance shift, dark vs. bright soil:</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;  Sparse canopy (LAI=0.5):&quot;</span>, <span class="fu">round</span>(<span class="fu">soil_effect</span>(<span class="fl">0.5</span>), <span class="dv">4</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;   Sparse canopy (LAI=0.5): 0.1318</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;  Dense canopy  (LAI=6):  &quot;</span>, <span class="fu">round</span>(<span class="fu">soil_effect</span>(<span class="dv">6</span>), <span class="dv">4</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;   Dense canopy  (LAI=6):   0.0013</span></span></code></pre></div>
+<pre class="text"><code>Low LAI                          High LAI
+  |                                 |
+large soil contribution     small soil contribution
+  |                                 |
+stronger background effect  canopy-dominated signal</code></pre>
+<p>Confirmed: soil brightness shifts the sparse-canopy signal by roughly
+70x more than the dense-canopy signal – once the canopy closes, soil
+brightness barely reaches the sensor.</p>
+</div>
+<div id="atmospheric-contribution" class="section level2">
+<h2>3.4 Atmospheric contribution</h2>
+<p>Section 3.2’s plot already showed this directly: compare
+<code>rfl.toc.BRDF</code> (canopy-level, no atmosphere) against
+<code>rfl.toa</code> (after the SMAC atmosphere layer) for the same
+simulation. The progression is surface signal -&gt; atmosphere -&gt;
+sensor-observed signal, and the two curves diverge most exactly where
+atmospheric gases absorb strongly (water vapour, ozone), not uniformly
+across the spectrum.</p>
+</div>
+<div id="geometry" class="section level2">
+<h2>3.5 Geometry</h2>
+<p><code>tts</code> (sun zenith), <code>tto</code> (view zenith), and
+<code>psi</code> (relative azimuth) all feed into fourSAIL’s BRDF term
+inside SPART, the same way they do in <code>Compute_BRF()</code>
+(Tutorial 01) – this is what makes reflectance direction-dependent
+rather than a single fixed number per surface:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="cf">for</span> (tts_i <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">50</span>)) {</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  row_i <span class="ot">&lt;-</span> LUT[<span class="dv">1</span>, ]; row_i<span class="sc">$</span>tts <span class="ot">&lt;-</span> tts_i</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  s_i <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> row_i, <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>                                 <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>Sentinel2A.MSI, <span class="at">rsoil =</span> <span class="cn">NULL</span>, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Sun zenith (tts) =&quot;</span>, tts_i, <span class="st">&quot;deg -&gt; mean TOC BRDF:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(s_i<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF), <span class="dv">4</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>}</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; Sun zenith (tts) = 10 deg -&gt; mean TOC BRDF: 0.1814</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; Sun zenith (tts) = 30 deg -&gt; mean TOC BRDF: 0.1864</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; Sun zenith (tts) = 50 deg -&gt; mean TOC BRDF: 0.1917</span></span></code></pre></div>
+<p>Reflectance rises with sun zenith angle here (lower sun, longer
+optical path through the canopy, more multiple scattering reaching the
+sensor before absorption) – this direction-dependence IS what BRDF
+means; a Lambertian (direction-independent) assumption would miss it
+entirely.</p>
+</div>
+<div id="spart-and-satellite-observations" class="section level2">
+<h2>3.6 SPART and satellite observations</h2>
+<p>Because SPART already outputs at a chosen sensor’s bands, moving from
+simulation to a realistic EO-like observation needs no separate
+convolution step – just pick <code>sensor.i</code>. Only sensors SPART
+actually supports (bundled objects in <code>ToolsRTM</code>) are listed
+here:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>spart_sensors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;LANDSAT4.TM&quot;</span>, <span class="st">&quot;LANDSAT5.TM&quot;</span>, <span class="st">&quot;LANDSAT7.ETM&quot;</span>, <span class="st">&quot;LANDSAT8.OLI&quot;</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>                    <span class="st">&quot;Sentinel2A.MSI&quot;</span>, <span class="st">&quot;Sentinel2B.MSI&quot;</span>, <span class="st">&quot;Sentinel3A.OLCI&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>                    <span class="st">&quot;Sentinel3B.OLCI&quot;</span>, <span class="st">&quot;TerraAqua.MODIS&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>s_modis <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> LUT[<span class="dv">1</span>, ], <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>                                   <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>TerraAqua.MODIS, <span class="at">rsoil =</span> <span class="cn">NULL</span>, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Sentinel-2A bands:&quot;</span>, <span class="fu">length</span>(sim<span class="sc">$</span>output<span class="sc">$</span>wave), <span class="st">&quot; -- MODIS bands:&quot;</span>, <span class="fu">length</span>(s_modis<span class="sc">$</span>output<span class="sc">$</span>wave), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Sentinel-2A bands: 13  -- MODIS bands: 20</span></span></code></pre></div>
+<pre class="text"><code>Vegetation traits
+      +
+Canopy structure
+      +
+Soil
+      +
+Atmosphere
+      |
+      v
+    SPART
+      |
+      v
+Spectral observation, already at sensor bands
+      |
+      v
+Sentinel-2 / Landsat / MODIS / ...</code></pre>
+</div>
+<div id="spart-for-inversion" class="section level2">
+<h2>3.7 SPART for inversion</h2>
+<p>SPART slots into the exact same hybrid-inversion framework the rest
+of this series builds (Tutorials 10-13): simulate a LUT with
+<code>SPART()</code> instead of <code>foursail()</code>, and everything
+downstream (train/test split, <code>get.inversion()</code>,
+<code>getMLmodel()</code>) is unchanged, since it only ever depends on a
+table of (sensor-band reflectance, trait) pairs regardless of which
+model produced it.</p>
+<pre class="text"><code>Parameter LUT
+     |
+     v
+SPART simulations (already at sensor bands)
+     |
+     v
+Synthetic EO training dataset
+     |
+     v
+ML inversion
+     |
+     v
+Vegetation traits</code></pre>
+<p>Not developed further here – see Tutorial 10 for the full
+framework.</p>
+</div>
+<div id="take-home-message" class="section level2">
+<h2>Take-home message</h2>
+<p>Use plain
+<code>foursail()</code>/<code>foursail2()</code>/<code>inform()</code>
+(Tutorials 01-02, 04) when the question is about the canopy or leaf
+itself and TOC reflectance is enough – it’s simpler, faster, and every
+model in this package other than SPART works that way. Reach for
+<code>SPART()</code> specifically when the question involves what a
+satellite actually measures at TOA (atmospheric correction studies,
+comparing simulations directly against uncorrected satellite products,
+or any workflow where the atmosphere’s own contribution matters) – the
+extra atmosphere/soil-BSM machinery is not needed otherwise.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -57,20 +57,34 @@ getSpatialTrait<-function(rasterFiles=NULL,ForestLayer=NULL,Sensor=NULL,
   ## get Mosaic with FOrest Maks (Forest type 2018 later from COPERNICUS)
   ############################################################
   files.forest = ForestLayer
-  forest_m<-brick(files.forest[1])
-  
+  # NB (raster->terra migration): bare brick() previously only resolved if
+  # the caller happened to have library(raster) attached.
+  forest_m<-terra::rast(files.forest[1])
+
   ##### Generate a mask for forest map in fishnet area
-  forest_m<-raster::crop(forest_m,shape.area)
-  forest_m<-raster::clamp(forest_m, useValues=FALSE)
+  forest_m<-terra::crop(forest_m,shape.area)
+  # NB: neither this clamp() call nor the two later in this function pass
+  # lower=/upper= -- both raster::clamp() and terra::clamp() default those to
+  # -Inf/Inf, so with useValues=FALSE/values=FALSE and no bounds this was
+  # already a no-op in the original raster:: code (nothing is ever outside
+  # [-Inf, Inf]); preserved as-is here rather than guessing intended bounds.
+  forest_m<-terra::clamp(forest_m, values=FALSE)
   forest_m[forest_m < 1] = NA
   #raster::values(forest_m)[raster::values(forest_m) < 1] = NA
- 
+
   ##get_clouds of points
-  ncases= round((raster::ncell(forest_m)-raster::freq(forest_m, value = NA)) / 100,0)
+  ncases= round((terra::ncell(forest_m)-terra::freq(forest_m, value = NA)) / 100,0)
   if (ncases < 1500){
     ncases=1500
   }
-  shp_points <- raster::sampleRandom(forest_m, size = ncases, xy = TRUE, sp=TRUE, na.rm = TRUE)
+  # NB: raster::sampleRandom(..., sp=TRUE) returned an sp Spatial*DataFrame;
+  # terra's equivalent is spatSample(..., as.points=TRUE), which returns a
+  # SpatVector instead -- a genuine type change, not just a renamed function.
+  # $ID<- assignment, sf::st_as_sf(), and merge() below all have SpatVector
+  # methods in terra/sf so this should carry through unchanged, but this
+  # specific path could not be exercised against real forest-mask data here.
+  shp_points <- terra::spatSample(forest_m, size = ncases, method = "random",
+                                  xy = TRUE, as.points = TRUE, na.rm = TRUE)
   shp_points$ID<-c(1:dim(shp_points)[1])
   shp_sf<-sf::st_as_sf(shp_points,crs = st_crs(3035),quiet = TRUE)
   
@@ -83,10 +97,10 @@ getSpatialTrait<-function(rasterFiles=NULL,ForestLayer=NULL,Sensor=NULL,
   list.trait<-list()
   list.plot<-list()
   #for (i in c(1:length(files.sensor))){
-  raster.to<- raster::brick(files.sensor[1]) * factorR
+  raster.to<- terra::rast(files.sensor[1]) * factorR
   names(raster.to)<-names(sensor.bands)
   ##get Reflectance for predict specific trait
-  df.e <- raster::extract(raster.to, shp_points, df = T, na.rm = T, cellnumbers = T)
+  df.e <- terra::extract(raster.to, shp_points, cells = TRUE)
   df.e <- na.omit(df.e)
   colnames(df.e)<-c('ID', 'cell',sensor.rfl)
   df.e$pred<-predict(object = model.ML,df.e[,sensor.rfl])
@@ -231,7 +245,7 @@ getSpatialTrait<-function(rasterFiles=NULL,ForestLayer=NULL,Sensor=NULL,
  
   r.trait<-df.cor[1,'slope']* r.index[[index]] +df.cor[1,'intercept']
   
-  r.trait<-raster::clamp(r.trait, useValues=FALSE)
+  r.trait<-terra::clamp(r.trait, values=FALSE)
   if (trait == 'Cab'){
     r.trait[r.trait <= 0] = NA
     r.trait[r.trait >= 90] = NA
@@ -243,23 +257,23 @@ getSpatialTrait<-function(rasterFiles=NULL,ForestLayer=NULL,Sensor=NULL,
   }
   
   ############################################################
-#  r.trait<-raster::crop(r.trait,extent(forest_m))
-  #r.trait<-raster::crop(r.trait,forest_m)
-  forest.resample <- raster::resample(forest_m,
-                                      r.trait,
-                               method='bilinear')
+#  r.trait<-terra::crop(r.trait,ext(forest_m))
+  #r.trait<-terra::crop(r.trait,forest_m)
+  forest.resample <- terra::resample(forest_m,
+                                     r.trait,
+                              method='bilinear')
   ### save in a list the raster
-  list.trait<-raster::mask(r.trait,forest.resample)
-  list.trait<-raster::clamp(list.trait, useValues=FALSE)
-  
+  list.trait<-terra::mask(r.trait,forest.resample)
+  list.trait<-terra::clamp(list.trait, values=FALSE)
+
   ############################################################
   ### write raster only if there is a path
   ############################################################
-  
+
   if (!is.null(saveFile)){
-    writeRaster(list.trait, filename=paste(saveFile,trait,'_',names.files,sep=''), 
-                "GTiff", overwrite=TRUE,bylayer=F)
-    
+    terra::writeRaster(list.trait, filename=paste(saveFile,trait,'_',names.files,sep=''),
+                       filetype="GTiff", overwrite=TRUE)
+
   }
     ############################################################
     ############################################################  
@@ -318,22 +332,26 @@ GetMosaics<-function(ForestLayers=NULL, shapeLayer=NULL,
   shape.area<-sf::read_sf(shapeLayer,quiet = TRUE)
   Split <- strsplit(shapeLayer, "/")
   names.files = Split[[1]][length(Split[[1]])]#
-  e <- extent(shape.area)
-  template <- raster(e)
-  projection(template) <- crs_to_raster
-  writeRaster(template, file=paste(output,'Forest_mask_',names.files,'.tif',sep=''), format="GTiff", overwrite=T)
+  # NB (raster->terra migration): extent()/raster()/projection()<-/writeRaster()
+  # were all called bare here too (no raster:: prefix) -- same "only worked if
+  # the caller happened to have library(raster) attached" issue as elsewhere
+  # in this file.
+  e <- terra::ext(shape.area)
+  template <- terra::rast(e)
+  terra::crs(template) <- crs_to_raster
+  terra::writeRaster(template, filename=paste(output,'Forest_mask_',names.files,'.tif',sep=''), filetype="GTiff", overwrite=TRUE)
   gdal.file.list <- lapply(files.forest, terra::rast)
   gdal.mosaic <- do.call(terra::mosaic, gdal.file.list)
   terra::writeRaster(gdal.mosaic, filename=paste(output,'Forest_mask_',names.files,'.tif',sep=''), overwrite=TRUE)
   ## clean memory in raster folder
   file.remove(list.files(paste(tempdir(),'raster/',sep=''),full.names = T))
 
-  forest_m<-raster::brick(paste(output,'Forest_mask_',names.files,'.tif',sep=''))
-  projection(forest_m) <- crs_to_raster
+  forest_m<-terra::rast(paste(output,'Forest_mask_',names.files,'.tif',sep=''))
+  terra::crs(forest_m) <- crs_to_raster
   ##### Generate a mask for forest map in fishnet area
-  forest.sb<-raster::crop(forest_m,shape.area)
-  raster::values(forest.sb)[raster::values(forest.sb) < 1] = NA
-  writeRaster(forest.sb, filename=paste(output,'Forest_mask_',names.files,'_crop.tif',sep=''), "GTiff", overwrite=TRUE,bylayer=F)
+  forest.sb<-terra::crop(forest_m,shape.area)
+  terra::values(forest.sb)[terra::values(forest.sb) < 1] = NA
+  terra::writeRaster(forest.sb, filename=paste(output,'Forest_mask_',names.files,'_crop.tif',sep=''), filetype="GTiff", overwrite=TRUE)
   
   
   return(message('mosaic processing is done'))

@@ -15,12 +15,20 @@ navbar:
       href: ../scopeinr/index.html
 
 articles:
-- title: Articles
+- title: Tutorials
   navbar: ~
   contents:
-  - "ToolsRTM/ToolsRTM"
-  - "Getting-LUTs"
+  - "01-getting-started"
+  - "02-leaf-to-canopy"
+  - "03-spart"
+  - "04-comparing-models"
+  - "05-building-luts"
+  - "06-parallel-simulation"
+  - "07-sensor-convolution"
+  - "08-vegetation-indices"
+  - "09-sensitivity"
+  - "10-hybrid-inversion"
+  - "11-ml-inversion-comparison"
+  - "12-deep-learning-inversion"
   - "articles/course-pipeline"
-  - "InversionOpt"
-  - "articles/model-comparison-and-sensitivity"
   - "articles/marmit-soil-in-canopy"

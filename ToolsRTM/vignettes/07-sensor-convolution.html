@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>07. From RTM Spectra to Satellite Observations: Sensor Convolution</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">07. From RTM Spectra to Satellite
+Observations: Sensor Convolution</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
+<p>Every simulation so far stayed at native 1nm resolution (2101 or 2001
+points, Tutorial 02). A real sensor never measures that – it integrates
+incoming light over each band’s spectral response function (SRF), giving
+far fewer, wider bands. This page converts a native simulation into what
+a real sensor would actually report.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">LAI =</span> <span class="dv">3</span>, <span class="at">hspot =</span> <span class="fl">0.01</span>, <span class="at">LIDFa =</span> <span class="sc">-</span><span class="fl">0.35</span>, <span class="at">LIDFb =</span> <span class="sc">-</span><span class="fl">0.15</span>, <span class="at">TypeLidf =</span> <span class="dv">1</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">tts =</span> <span class="dv">30</span>, <span class="at">tto =</span> <span class="dv">0</span>, <span class="at">psi =</span> <span class="dv">0</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">N =</span> <span class="fl">1.5</span>, <span class="at">Cab =</span> <span class="dv">40</span>, <span class="at">Car =</span> <span class="dv">8</span>, <span class="at">Anth =</span> <span class="dv">2</span>, <span class="at">Cbrown =</span> <span class="dv">0</span>, <span class="at">EWT =</span> <span class="fl">0.009</span>, <span class="at">LMA =</span> <span class="fl">0.009</span>, <span class="at">alpha =</span> <span class="dv">40</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>rsoil <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> dataSpec_PDB[, <span class="dv">11</span>] <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> dataSpec_PDB[, <span class="dv">12</span>]</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>sail <span class="ot">&lt;-</span> <span class="fu">foursail</span>(<span class="at">inputLUT =</span> row, <span class="at">rsoil =</span> rsoil, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-D&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>reflectance <span class="ot">&lt;-</span> <span class="fu">Compute_BRF</span>(<span class="at">rdot =</span> sail<span class="sc">$</span>rdot, <span class="at">rsot =</span> sail<span class="sc">$</span>rsot, <span class="at">tts =</span> row<span class="sc">$</span>tts, <span class="at">data.light =</span> dataSpec_PDB)</span></code></pre></div>
+<div id="three-convolution-functions-one-for-each-kind-of-sensor-data" class="section level2">
+<h2>Three convolution functions, one for each kind of sensor data</h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>What it needs</th>
+<th>Sensors covered</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>get.spectral.convolution.srf()</code></td>
+<td>A real, MEASURED per-nm SRF, no atmospheric-correction
+coefficients</td>
+<td>PRISMA, Sentinel-2A, Sentinel-2B
+(<code>srf.prisma</code>/<code>srf.sentinel2a</code>/<code>srf.sentinel2b</code>)</td>
+</tr>
+<tr class="even">
+<td><code>get.spectral.convolution.rfl()</code></td>
+<td>A measured SRF bundled together WITH SMAC atmospheric-correction
+coefficients</td>
+<td>Landsat 4/5/7/8, Sentinel-3A/B OLCI, Terra/Aqua MODIS</td>
+</tr>
+<tr class="odd">
+<td><code>get.spectral.convolution.gaussian()</code></td>
+<td>No measured SRF at all – only nominal band characteristics (center +
+FWHM, or center + edges), approximated as Gaussian</td>
+<td>EnMAP, ALI, Hyperion, MODIS (19-band nominal), Quickbird, RapidEye,
+WorldView-2/3/4, and any sensor/camera you supply
+<code>centers</code>/<code>fwhm</code> for yourself</td>
+</tr>
+</tbody>
+</table>
+<p>Only sensors actually bundled/supported are listed above – see
+<code>unique(ToolsRTM::sensor.characteristics$Sensor)</code> for the
+full nominal- characteristics list behind the Gaussian path.</p>
+</div>
+<div id="measured-srf-sentinel-2a" class="section level2">
+<h2>1. Measured SRF: Sentinel-2A</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>band_values <span class="ot">&lt;-</span> <span class="fu">get.spectral.convolution.srf</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">df  =</span> <span class="fu">data.frame</span>(<span class="at">wave =</span> dataSpec_PDB[, <span class="dv">1</span>], <span class="at">rfl =</span> reflectance),</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">srf =</span> ToolsRTM<span class="sc">::</span>srf.sentinel2a)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">print</span>(band_values)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;    band        wl fwhm        RFL</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 1     1  442.6950   19 0.01561206</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 2     2  492.7152   64 0.02121222</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 3     3  559.8491   34 0.04542619</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 4     4  664.6218   29 0.01849372</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 5     5  704.1149   13 0.07719207</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 6     6  740.4918   13 0.29011048</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 7     7  782.7529   18 0.36197427</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 8     8  832.7904  104 0.36575364</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 9     9  864.7108   19 0.36756865</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; 10   10  945.0545   18 0.36618153</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 11   11 1373.4555   29 0.25070480</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; 12   12 1613.6805   89 0.20878414</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; 13   13 2202.3678  173 0.08395820</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="fu">plot</span>(dataSpec_PDB[, <span class="dv">1</span>], reflectance, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;grey60&quot;</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Wavelength (nm)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Reflectance&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Native 1nm vs Sentinel-2A bands&quot;</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="fu">points</span>(band_values<span class="sc">$</span>wl, band_values<span class="sc">$</span>RFL, <span class="at">col =</span> <span class="st">&quot;#B2182B&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">1.3</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="fu">lines</span>(band_values<span class="sc">$</span>wl, band_values<span class="sc">$</span>RFL, <span class="at">col =</span> <span class="st">&quot;#B2182B&quot;</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="smac-bundled-srf-modis" class="section level2">
+<h2>2. SMAC-bundled SRF: MODIS</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>modis_bands <span class="ot">&lt;-</span> <span class="fu">get.spectral.convolution.rfl</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">df =</span> <span class="fu">data.frame</span>(<span class="at">wave =</span> dataSpec_PDB[, <span class="dv">1</span>], <span class="at">rfl =</span> reflectance),</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>TerraAqua.MODIS)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;MODIS bands:&quot;</span>, <span class="fu">nrow</span>(modis_bands), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; MODIS bands: 20</span></span></code></pre></div>
+<p><strong>A real, documented gotcha with this path</strong>: for
+MODIS/Landsat/Sentinel-3 OLCI specifically, the bundled SRF tables are
+column-ordered by natural band number rather than by true center
+wavelength – confirmed once, fixed at the package source (see
+<code>NEWS</code>/package changelog for the R bug-fix history); using
+<code>get.spectral.convolution.rfl()</code>’s own band-order output (as
+above) rather than re-deriving indices by hand avoids re- hitting
+it.</p>
+</div>
+<div id="no-measured-srf-gaussian-approximation" class="section level2">
+<h2>3. No measured SRF: Gaussian approximation</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>enmap_bands <span class="ot">&lt;-</span> <span class="fu">get.spectral.convolution.gaussian</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">df =</span> <span class="fu">data.frame</span>(<span class="at">wave =</span> dataSpec_PDB[, <span class="dv">1</span>], <span class="at">rfl =</span> reflectance), <span class="at">sensor.i =</span> <span class="st">&quot;EnMAP&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;EnMAP bands:&quot;</span>, <span class="fu">nrow</span>(enmap_bands), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; EnMAP bands: 242</span></span></code></pre></div>
+<div id="worked-example-your-own-sensor-or-camera" class="section level3">
+<h3>Worked example: your own sensor or camera</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>own_centers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">444</span>, <span class="dv">475</span>, <span class="dv">502</span>, <span class="dv">531</span>, <span class="dv">550</span>, <span class="dv">560</span>, <span class="dv">570</span>, <span class="dv">650</span>, <span class="dv">668</span>, <span class="dv">678</span>, <span class="dv">705</span>, <span class="dv">717</span>, <span class="dv">740</span>, <span class="dv">754</span>, <span class="dv">842</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>own_fwhm    <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">28</span>,  <span class="dv">32</span>,  <span class="dv">18</span>,  <span class="dv">14</span>,  <span class="dv">12</span>,  <span class="dv">27</span>,  <span class="dv">14</span>,  <span class="dv">16</span>,  <span class="dv">14</span>,  <span class="dv">14</span>,  <span class="dv">10</span>,  <span class="dv">12</span>,  <span class="dv">18</span>,  <span class="dv">10</span>,  <span class="dv">57</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">wave =</span> dataSpec_PDB[, <span class="dv">1</span>], <span class="at">rfl =</span> reflectance)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>own_bands <span class="ot">&lt;-</span> <span class="fu">get.spectral.convolution.gaussian</span>(df, <span class="at">centers =</span> own_centers, <span class="at">fwhm =</span> own_fwhm)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co"># Centers-only (e.g. copied from an ENVI header&#39;s &quot;wavelength = {...}&quot; block,</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># no separate &quot;fwhm = {...}&quot; block) -- FWHM estimated from band spacing instead:</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>headwall_centers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">398.0166</span>, <span class="fl">400.247</span>, <span class="fl">402.4774</span>, <span class="fl">404.7078</span>, <span class="fl">406.9382</span>)  <span class="co"># (full header has 272)</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>headwall_bands <span class="ot">&lt;-</span> <span class="fu">get.spectral.convolution.gaussian</span>(df, <span class="at">centers =</span> headwall_centers)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>own_bands</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;    band  wl fwhm        RFL</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1     1 444   28 0.01567923</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 2     2 475   32 0.01650100</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 3     3 502   18 0.02098656</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; 4     4 531   14 0.04553117</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; 5     5 550   12 0.04843935</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; 6     6 560   27 0.04530615</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; 7     7 570   14 0.04167810</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; 8     8 650   16 0.02089493</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; 9     9 668   14 0.01787229</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; 10   10 678   14 0.01801478</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; 11   11 705   10 0.08189282</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; 12   12 717   12 0.15184254</span></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt; 13   13 740   18 0.28362162</span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; 14   14 754   10 0.32738876</span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; 15   15 842   57 0.36633320</span></span></code></pre></div>
+<p>Same function handles all three cases (a full center+FWHM calibration
+sheet, centers-only, or a bundled sensor name) because none of them have
+a measured SRF to fall back on, unlike Sections 1-2 above.</p>
+</div>
+</div>
+<div id="which-one-should-you-use" class="section level2">
+<h2>Which one should you use?</h2>
+<pre class="text"><code>Do you have a measured SRF?
+          |
+          +-- Yes, plain per-band SRF (no SMAC coeffs)
+          |      |
+          |      v
+          |   get.spectral.convolution.srf()
+          |   (PRISMA, Sentinel-2A/2B)
+          |
+          +-- Yes, bundled with SMAC atmospheric coefficients
+          |      |
+          |      v
+          |   get.spectral.convolution.rfl()
+          |   (Landsat 4/5/7/8, Sentinel-3A/B OLCI, MODIS)
+          |
+          +-- No measured SRF -- only nominal center/FWHM,
+                 or your own camera
+                 |
+                 v
+               get.spectral.convolution.gaussian()</code></pre>
+</div>
+<div id="whats-next" class="section level2">
+<h2>What’s next</h2>
+<ul>
+<li><strong>Tutorial 08</strong> – computing vegetation indices from
+convolved sensor-band reflectance (and clarifying which index function
+to use, tabular vs. spatial, full set vs. ML-curated).</li>
+<li><strong>Tutorial 11</strong> – training an inversion model on
+convolved, sensor-realistic reflectance instead of the native
+spectrum.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -43,7 +43,9 @@ getSpectraIndices<-function(rasterFiles=NULL,Sensor='Sentinel2a',SpecEq=NULL,Spe
   for (i in c(1:length(files))){
    
     bar.progress$tick()
-    r<- brick(files[i]) * factorR
+    # NB (raster->terra migration): bare brick() previously only resolved if
+    # the caller happened to have library(raster) attached.
+    r<- terra::rast(files[i]) * factorR
     names(r)<-names(Bands)
   
       if (is.null(single.bands) | single.bands == F){
@@ -294,7 +296,17 @@ getSpectraIndices<-function(rasterFiles=NULL,Sensor='Sentinel2a',SpecEq=NULL,Spe
         
 
       ifelse(!dir.exists(path.export), dir.create(path.export), FALSE)
-      writeRaster(stack(indices), filename=paste(path.export,'/',names(indices),'-',names_files[i],sep=''), bylayer=TRUE, format='GTiff',overwrite=TRUE)
+      # NB (raster->terra migration): raster::writeRaster(..., bylayer=TRUE)
+      # wrote one file per layer from a single call using a vector of
+      # filenames -- terra::writeRaster() has no bylayer= equivalent, so each
+      # layer is written individually here instead. Filenames also need an
+      # explicit .tif extension now: terra infers format from it rather than
+      # from a separate format= argument.
+      indices_stack <- terra::rast(indices)
+      out_filenames <- paste(path.export,'/',names(indices),'-',names_files[i],'.tif',sep='')
+      for (lyr in seq_len(terra::nlyr(indices_stack))) {
+        terra::writeRaster(indices_stack[[lyr]], filename = out_filenames[lyr], filetype='GTiff', overwrite=TRUE)
+      }
       
   } # end for files
   

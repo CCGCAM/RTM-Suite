@@ -31,7 +31,9 @@ getSpatial_index<-function(rasterFiles=NULL,Sensor='Sentinel2a',SpectraltoComput
     message('factor scale used: factorR=1/10000')
   }
 
-    r<- brick(rasterFiles) * factorR
+    # NB (raster->terra migration): bare brick() previously only resolved if
+    # the caller happened to have library(raster) attached.
+    r<- terra::rast(rasterFiles) * factorR
     names(r)<-names(Bands)
     index<-list()
     

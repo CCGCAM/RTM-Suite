@@ -32,8 +32,8 @@ plotspectra_image<-function(Raster = NULL,n_spectra=1, sensor='Sentinel2a', fact
     n_spectra=5
   }
   
-  print(raster::plotRGB(Raster, scale=300, stretch = "lin"))
-  points<-raster::click(Raster,n=n_spectra,id=T, xy=T, cell=T, type="p", pch=16, col="magenta", col.lab="red")
+  print(terra::plotRGB(Raster, scale=300, stretch = "lin"))
+  points<-terra::click(Raster,n=n_spectra,id=T, xy=T, cell=T, type="p", pch=16, col="magenta", col.lab="red")
   points_df <- points[,c(4:dim(points)[2])] * factor
   # convert raster cell number into row and column (used to extract spectral signature below)
   row <- points$cell%/%nrow(Raster)+1 # add 1 because R is 1-indexed
