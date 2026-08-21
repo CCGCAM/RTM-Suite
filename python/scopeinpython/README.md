@@ -64,6 +64,13 @@ print(result.Tcave, result.Tsave)      # converged leaf/soil temperatures
 This repo is deliberately just the installable package -- everything else (manuals, worked tutorials, the course materials this was built for) lives in [`CCGCAM/RTM-Suite`](https://github.com/CCGCAM/RTM-Suite), the monorepo this package is developed and verified in and kept in sync with:
 
 - **Manual** (every function's full docstring, browsable): [`docs/python/index.html`](https://github.com/CCGCAM/RTM-Suite/blob/main/docs/python/index.html)
+- **The R SCOPEinR tutorial series, 01-11** ([`docs/scopeinr/articles/index.html`](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/index.html)) is this package's fullest worked-example coverage -- topic-to-module bridge:
+  - Getting started / soil, canopy BRDF, input structure (R 01-02) -\> `scope()`/`get_scope()` in `scopeinpython.scope`, soil via `scopeinpython.soil`, canopy optics via `scopeinpython.rtmo`
+  - Energy balance (R 03) -\> `scopeinpython.ebal`, `scopeinpython.thermal`, `scopeinpython.rtmt_sb`
+  - Fluorescence / SIF (R 04) -\> `scopeinpython.fluspect`, `scopeinpython.fluspect_mscope`, `scopeinpython.rtmf`
+  - Photosynthesis/biochemistry (feeding R 07's sensitivity and R 09/11's SIF-vs-`Actot` capstone) -\> `scopeinpython.biochemical`
+  - Building LUTs / parallel runs (R 05-06) -\> `get_scope()`'s own LUT-row interface (this package uses Python's native multiprocessing/joblib idiom rather than R's `doParallel`, not yet written up as a dedicated example -- see the runnable pipeline script below meanwhile)
+  - **Not currently ported**: R's real-Sentinel-2/STAC capstone (R Tutorial 11, `Actot` retrieved from a real satellite time series and spatial map) has no Python equivalent yet -- `toolsrtm.satellite` (the sibling package) has the STAC machinery this would need, but the SCOPE-side capstone itself isn't built in Python. A real gap, not something worked around silently.
 - **Tutorial, step by step** (run SCOPE once -\> explore reflectance/ fluorescence/temperature/fluxes -\> a small LUT), R side-by-side with Python: [`Tutorials/How-in-Python-SCOPEinR.ipynb`](https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python-SCOPEinR.ipynb) (R version: `How-in-R-SCOPEinR.Rmd`)
 - **Complete reference manual** (every input table, sensitivity to soil/ photosynthesis settings, serial and parallel runs) -- currently R only: [`Tutorials/SCOPEinR_tutorial.Rmd`](https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/SCOPEinR_tutorial.Rmd)
 - **A real, runnable pipeline script** (run SCOPE once -\> explore every output -\> simulate a LUT of many runs): [`Scripts/Python/ForSCOPE_Python/README.md`](https://github.com/CCGCAM/RTM-Suite/blob/main/Scripts/Python/ForSCOPE_Python/README.md)

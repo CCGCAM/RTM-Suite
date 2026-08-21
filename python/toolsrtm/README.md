@@ -90,6 +90,16 @@ Convolve onto a real sensor's bands (here: Sentinel-2A) -- coarser and fewer ban
 This repo is deliberately just the installable package -- everything else (manuals, worked tutorials, the course materials this was built for) lives in [`CCGCAM/RTM-Suite`](https://github.com/CCGCAM/RTM-Suite), the monorepo this package is developed and verified in and kept in sync with:
 
 - **Manual** (every function's full docstring, browsable): [`docs/python/index.html`](https://github.com/CCGCAM/RTM-Suite/blob/main/docs/python/index.html)
+- **The R tutorial series, 01-18** ([`docs/toolsrtm/articles/index.html`](https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/index.html)) is this package's fullest worked-example coverage -- topic-to-module bridge, since this package doesn't mirror every R tutorial 1:1 (deliberate model differences are part of this suite's own design, not a gap):
+  - Getting started / leaf-to-canopy / model comparison (R 01-02, 04) -\> `toolsrtm.leaf`, `toolsrtm.fluspect`, `toolsrtm.liberty`, `toolsrtm.canopy`, `toolsrtm.inform`
+  - SPART, soil-plant-atmosphere (R 03) -\> `toolsrtm.spart`, `toolsrtm.smac`
+  - Sensor convolution incl. hyperspectral/VNIR (R 07-08) -\> `toolsrtm.srf` (measured-SRF, SMAC-bundled, and Gaussian-from-nominal-characteristics convolution, matching PRISMA/Sentinel-2/EnMAP/custom-sensor coverage)
+  - Vegetation indices (R 09) -\> `toolsrtm.indices`
+  - Hybrid/ML inversion (R 11-12) -\> `toolsrtm.inversion`
+  - Deep learning (R 13) -\> `toolsrtm.deep_learning` (TensorFlow + PyTorch, not R's single-backend `getMLmodel()`)
+  - Real EO application via STAC (R 15, 17-18) -\> `toolsrtm.satellite`
+  - MARMIT soil integration (R 16) -\> `toolsrtm.marmit`
+  - **Not currently ported**: R's LUT-distribution helpers (`get_distributionLUT()`/`getCor()`, R Tutorial 05) and its Sobol/Johnson sensitivity tooling (R Tutorial 09-10's ToolsRTM equivalent) have no Python module yet -- a real gap, not something this package silently works around.
 - **Tutorials, step by step** (simulate -\> sweep a trait -\> convolve onto a sensor, incl. your own sensor/camera -\> invert with ML, in R side-by-side with Python): [`Tutorials/How-in-Python.ipynb`](https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python.ipynb) (R version: `How-in-R.Rmd`) -- matches the `Apps/RTMs` Shiny app's own **"How in Python"** tab
 - **Complete R reference manual** (every leaf/canopy model, trait sampling, all 12 inversion algorithms via `caret`, TensorFlow/Keras deep learning): [`Tutorials/ToolsRTM_PROSAIL_tutorial.Rmd`](https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/ToolsRTM_PROSAIL_tutorial.Rmd) -- the Python equivalents of its inversion sections are `toolsrtm.inversion`/`toolsrtm.deep_learning` (this package) plus the runnable pipeline scripts linked below
 - **A real, runnable pipeline script** (simulate a LUT -\> compute indices -\> train an ML inversion model): [`Scripts/Python/README.md`](https://github.com/CCGCAM/RTM-Suite/blob/main/Scripts/Python/README.md)

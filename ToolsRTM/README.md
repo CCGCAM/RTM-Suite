@@ -121,9 +121,11 @@ install.packages(
 |------------------------------------|------------------------------------|
 | [RTM-Suite documentation](../docs/index.html) | Entry point for the complete R suite |
 | [ToolsRTM reference](../docs/toolsrtm/index.html) | Function reference and package articles |
-| [Course pipeline](../docs/toolsrtm/articles/course-pipeline.html) | Simulation, spectral convolution and inversion |
-| [Model comparison and sensitivity](../docs/toolsrtm/articles/model-comparison-and-sensitivity.html) | Comparison and sensitivity workflows |
+| [Tutorials 01-18](../docs/toolsrtm/articles/index.html) | The full numbered tutorial series: leaf/canopy RT, SPART, model comparison, LUTs, parallel simulation, hyperspectral sensors, indices, sensitivity, hybrid/ML/DL inversion, end-to-end pipeline, real Sentinel-2 (STAC) applications, MARMIT+SPART soil integration, and a forest time-series capstone |
+| [Real EO application](../docs/toolsrtm/articles/15-real-eo-application.html) | Real Sentinel-2 retrieval (STAC) and a genuine spatial trait map |
+| [Reference manuals](../docs/toolsrtm/articles/index.html) | The older comprehensive `ToolsRTM`/`Getting-LUTs`/`InversionOpt` manuals, kept alongside the tutorial series |
 | [SCOPEinR reference](../docs/scopeinr/index.html) | SCOPE model documentation |
+| [SCOPEinR tutorials 01-11](../docs/scopeinr/articles/index.html) | Energy balance, fluorescence, hybrid inversion, and a real-Sentinel-2 photosynthesis capstone |
 | [Tutorials](../Tutorials/) | Reproducible R tutorials included in RTM-Suite |
 | [Pipeline scripts](../Scripts/R/Pipeline/) | Adaptable simulate-to-invert workflows |
 

@@ -35,11 +35,9 @@ The complete documentation is maintained together in the [**RTM-Suite documentat
 
 - [**SCOPEinR reference manual**](https://ccgcam.github.io/RTM-Suite/scopeinr/index.html): complete documentation for SCOPE v2.1 in R, including model inputs and outputs, radiative transfer, energy balance, photosynthesis, chlorophyll fluorescence (SIF), and simulation utilities.
 
-- [**SCOPEinR tutorials**](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/index.html): step-by-step learning workflows covering SCOPE fundamentals, soil and canopy BRDF, energy balance, SIF, LUT generation, parallel simulations, sensitivity analysis, hybrid inversion, and end-to-end applications.
+- [**SCOPEinR tutorials, 01-11**](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/index.html): the numbered step-by-step series -- getting started, soil/canopy BRDF/input structure, energy balance, fluorescence (SIF), building LUTs, parallel runs, sensitivity (direct vs. indirect trait effects), hybrid inversion, SIF-vs-photosynthesis, an end-to-end pipeline, and closing with **[Tutorial 11, the capstone](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/11-photosynthesis-capstone.html)**: ML retrieval of net photosynthesis (`Actot`) applied to a real Sentinel-2 time series and spatial map (STAC, Speulderbos forest, NL) -- paired with ToolsRTM's own real-EO tutorials (15/17).
 
-- [**SCOPE course pipeline**](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/scope-pipeline.html): a complete simulation-to-inversion workflow, from SCOPE simulations and sensor spectral convolution to vegetation indices and retrieval of traits such as Cab, LAI, and Vcmax25.
-
-- [**SIF and photosynthesis**](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/sif-photosynthesis-proxy.html): explores whether solar-induced chlorophyll fluorescence provides information about photosynthetic functioning beyond reflectance-based greenness.
+- [**SCOPE course pipeline**](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/scope-pipeline.html) and [**SIF and photosynthesis**](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/sif-photosynthesis-proxy.html): the older, more comprehensive reference-manual versions of Tutorials 09-10 above, kept alongside the numbered series for their fuller detail.
 
 - [**RTM-Suite**](https://ccgcam.github.io/RTM-Suite/): the common documentation hub connecting SCOPEinR with ToolsRTM and their Python counterparts, including reference manuals, tutorials, examples, and reproducible pipelines.
 
