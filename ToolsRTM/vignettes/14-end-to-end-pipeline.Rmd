@@ -136,7 +136,7 @@ density, crown diameter, tree height, understory LAI) **constant** across
 every sampled row, so `LAI`'s own signal is weak relative to what actually
 dominates forest reflectance variation in this LUT. Want better LAI
 retrieval from INFORM? Vary those crown-geometry parameters too, not just
-LAI itself -- a direct, testable consequence of Tutorial 09's sensitivity
+LAI itself -- a direct, testable consequence of Tutorial 10's sensitivity
 framework applied to a real inversion result.
 
 ## 3. SPART: structurally different, same downstream pipeline
@@ -167,5 +167,5 @@ the `marmit-soil-in-canopy` article for the underlying MARMIT physics).
 
 ## What's next
 
-- **Tutorial 14** -- the same inversion framework applied to real
+- **Tutorial 15** -- the same inversion framework applied to real
   Sentinel-2 imagery retrieved via STAC, including a genuine spatial map.

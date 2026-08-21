@@ -172,7 +172,7 @@ Each trait leaves its signature in a different spectral region -- `Cab`
 in the visible/red-edge (chlorophyll absorption), `EWT` in the SWIR (water
 absorption), `LAI` mainly in the NIR plateau height (more leaf layers,
 more multiple scattering) while the visible saturates quickly once the
-canopy is closed enough to hide the soil. Tutorial 09 formalizes this with
+canopy is closed enough to hide the soil. Tutorial 10 formalizes this with
 proper global sensitivity analysis (Sobol/Johnson indices) rather than
 one-trait-at-a-time sweeps.
 

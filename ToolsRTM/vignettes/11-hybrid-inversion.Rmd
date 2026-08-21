@@ -54,10 +54,10 @@ last step:
   every spectrum in a reference LUT by how closely it matches an observed
   spectrum under a chosen merit function, then averages the trait values
   of the closest matches. Pure library search.
-- **`get.inversion()`** (Tutorial 11): fits a statistical/ML model
+- **`get.inversion()`** (Tutorial 12): fits a statistical/ML model
   (Random Forest, PLSR, SVM, ... 12 algorithms via `caret`) on a training
   LUT, then predicts on new spectra.
-- **`getMLmodel()`** (Tutorial 12): fits a deep-learning model on the
+- **`getMLmodel()`** (Tutorial 13): fits a deep-learning model on the
   same kind of data.
 
 ## 1. Simulate a LUT and convolve to Sentinel-2A
@@ -153,7 +153,7 @@ at scale.
 
 ## What's next
 
-- **Tutorial 11** -- `get.inversion()`: 12 ML algorithms, compared on this
+- **Tutorial 12** -- `get.inversion()`: 12 ML algorithms, compared on this
   same LUT.
-- **Tutorial 12** -- `getMLmodel()`: deep learning on the same data.
-- **Tutorial 13** -- the full pipeline end-to-end, LUT to trait maps.
+- **Tutorial 13** -- `getMLmodel()`: deep learning on the same data.
+- **Tutorial 14** -- the full pipeline end-to-end, LUT to trait maps.

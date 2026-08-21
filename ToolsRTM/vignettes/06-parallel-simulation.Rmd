@@ -120,5 +120,5 @@ LUT_ok <- LUT[ok, ]
 
 - **Tutorial 07** -- convolving these simulated spectra onto real sensor
   bands.
-- **Tutorial 13** -- the same simulate-in-parallel pattern as one step in
+- **Tutorial 14** -- the same simulate-in-parallel pattern as one step in
   a full end-to-end pipeline.

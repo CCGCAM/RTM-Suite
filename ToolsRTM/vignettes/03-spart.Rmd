@@ -260,7 +260,7 @@ ML inversion
 Vegetation traits
 ```
 
-Not developed further here -- see Tutorial 10 for the full framework.
+Not developed further here -- see Tutorial 11 for the full framework.
 
 ## Take-home message
 

@@ -178,13 +178,13 @@ What do I need to simulate?
 | Liberty | Leaf (needle) | cell.d, inter.c, lign.cell, Nitrogen, ... | Leaf rho/tau | Conifer/needle canopies | Not for broadleaf; numerically unstable at some parameter combinations near its own bounds |
 | fourSAIL | Canopy | LAI, LIDFa/b, hotspot, geometry | TOC rdot/rsot | Default, single-layer turbid-medium canopy | No explicit crown structure, no senescent/green split |
 | fourSAIL2 | Canopy | fourSAIL + fraction_brown, diss, Cv, Zeta | TOC rdot/rsot | Mixed green/senescent (two-layer) canopies | More parameters to estimate/assume |
-| INFORM | Canopy (forest) | fourSAIL + LAIu, sd, cd, h, skyl | TOC rsot (bare vector) | Forest with explicit crown geometry | LAI can be weakly identifiable if crown-geometry params are held fixed (Tutorial 13) |
+| INFORM | Canopy (forest) | fourSAIL + LAIu, sd, cd, h, skyl | TOC rsot (bare vector) | Forest with explicit crown geometry | LAI can be weakly identifiable if crown-geometry params are held fixed (Tutorial 14) |
 | SPART | Soil+canopy+atmosphere | fourSAIL + BSM soil + SMAC atmosphere | TOC and TOA, already at sensor bands | Atmospheric-correction studies, direct comparison to uncorrected satellite products | Needs realistic atmosphere inputs (Tutorial 03's caveat); `psoil` inert unless `rsoil` supplied |
 
 ## What's next
 
 - **Tutorial 05** -- building a proper LUT (many rows, per-trait
   distributions, correlated traits) instead of one fixed `common_lut`.
-- **Tutorial 09** -- formal sensitivity analysis (Sobol/Johnson), a more
+- **Tutorial 10** -- formal sensitivity analysis (Sobol/Johnson), a more
   rigorous version of "which trait matters where" than this page's visual
   comparison.

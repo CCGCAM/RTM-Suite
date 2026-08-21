@@ -133,8 +133,8 @@ Do you have a measured SRF?
 
 ## What's next
 
-- **Tutorial 08** -- computing vegetation indices from convolved
+- **Tutorial 09** -- computing vegetation indices from convolved
   sensor-band reflectance (and clarifying which index function to use,
   tabular vs. spatial, full set vs. ML-curated).
-- **Tutorial 11** -- training an inversion model on convolved,
+- **Tutorial 12** -- training an inversion model on convolved,
   sensor-realistic reflectance instead of the native spectrum.

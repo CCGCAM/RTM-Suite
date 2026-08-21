@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(ToolsRTM)
 ```
 
-`getMLmodel()` is `get.inversion()`'s (Tutorial 11) deep-learning sibling
+`getMLmodel()` is `get.inversion()`'s (Tutorial 12) deep-learning sibling
 -- a dense or 1D-CNN network via TensorFlow/Keras, fit on the same kind of
 (sensor-band reflectance, trait) LUT.
 
@@ -92,11 +92,11 @@ this package's `Scripts/R/` starts with the exact `Sys.setenv()`/
 
 | Method | Needs training? | Handles a small LUT well? | Typical use |
 |---|---|---|---|
-| `get.inversionOpt()` (Tutorial 10) | No -- pure search | Yes -- works from a handful of reference spectra | Quick, physically-grounded retrieval; no ML infrastructure needed |
-| `get.inversion()` (Tutorial 11) | Yes | Needs enough rows to fit reliably (hundreds+) | Production-scale retrieval, many predictors (full spectrum + indices) |
+| `get.inversionOpt()` (Tutorial 11) | No -- pure search | Yes -- works from a handful of reference spectra | Quick, physically-grounded retrieval; no ML infrastructure needed |
+| `get.inversion()` (Tutorial 12) | Yes | Needs enough rows to fit reliably (hundreds+) | Production-scale retrieval, many predictors (full spectrum + indices) |
 | `getMLmodel()` (this page) | Yes, more data-hungry | No -- needs thousands of rows | Large training sets, CNN over the full spectral shape |
 
 ## What's next
 
-- **Tutorial 13** -- simulate, convolve, index, and invert as one
+- **Tutorial 14** -- simulate, convolve, index, and invert as one
   end-to-end pipeline, across every canopy model this package supports.

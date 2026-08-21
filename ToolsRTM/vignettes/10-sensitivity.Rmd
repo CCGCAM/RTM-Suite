@@ -195,7 +195,7 @@ sensitivity method.
 
 ## What's next
 
-- **Tutorial 10** -- turning "which trait drives which band" into an
+- **Tutorial 11** -- turning "which trait drives which band" into an
   actual trait retrieval: hybrid inversion.
 - **Tutorial 04** -- if the question is "which model" rather than "which
   trait", see the model-comparison agreement/RMSE table there instead.
