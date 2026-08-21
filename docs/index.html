@@ -348,7 +348,7 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
     <div class="card-grid">
       <div class="card">
         <div class="card-title">RTMs</div>
-        <p>Model Explorer (3 canopy models × 5 leaf models, live SIF and sensitivity), PROSAIL-WithSatellite, How-in-R/Python tutorial tabs, Reference tab.</p>
+        <p>Model Explorer (3 canopy models × 5 leaf models, live SIF and sensitivity), PROSAIL-WithSatellite, SCOPE model, Look-up table generator, How-in-R/Python tutorial tabs, Reference tab.</p>
         <div class="card-links">
           <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs" target="_blank"><img src="https://img.shields.io/badge/GitHub-Apps%2FRTMs-181717?logo=github&logoColor=white" alt="Apps/RTMs on GitHub"></a>
         </div>
@@ -375,6 +375,18 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
         <img src="assets/shiny_app_sens.png" alt="Apps/RTMs Sensitivity tab: canopy and fluorescence-added leaf reflectance sensitivity to Cab, color-coded">
         <div class="shot-caption">Sensitivity — sweep any trait and watch the whole spectrum (and SIF) respond.</div>
       </div>
+      <div class="shot-card">
+        <img src="assets/shiny_app3.png" alt="Apps/RTMs SCOPE model tab: SCOPE reflectance, apparent reflectance and radiance simulated live from leaf and canopy sliders">
+        <div class="shot-caption">SCOPE model — run SCOPE reflectance and radiance simulations from the same interface.</div>
+      </div>
+      <div class="shot-card">
+        <img src="assets/shiny_app4.png" alt="Apps/RTMs Look-up table tab: leaf/canopy model and sensor selection, simulated average reflectance with uncertainty band across the generated LUT">
+        <div class="shot-caption">Create your Look-up table — pick models, sensor resolution and sample count, then generate and download a LUT.</div>
+      </div>
+      <div class="shot-card">
+        <img src="assets/shiny_app5.png" alt="Apps/RTMs Look-up table tab: sampled distribution of every leaf and canopy trait shown as histograms before running the simulations">
+        <div class="shot-caption">Review the sampled trait distributions before generating the LUT.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -391,7 +403,7 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
           <div><div class="tut-name">How in R / How in Python</div><div class="tut-desc">Shorter on-ramp: one simulation &rarr; sensitivity &rarr; sensor convolution &rarr; ML inversion.</div></div>
           <div class="tut-links">
             <a href="Tutorials/How-in-R.html">R (rendered)</a>
-            <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python.ipynb" target="_blank">Python (notebook) <img class="tut-badge" src="https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white" alt="GitHub"></a>
+            <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python.ipynb" target="_blank">Python (notebook)</a>
           </div>
         </div>
         <details class="tut-shots-toggle">
@@ -409,7 +421,7 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
           <div><div class="tut-name">How in R / How in Python — SCOPEinR</div><div class="tut-desc">The SCOPE equivalent: energy balance, fluorescence, a 100-row LUT, ML inversion.</div></div>
           <div class="tut-links">
             <a href="Tutorials/How-in-R-SCOPEinR.html">R (rendered)</a>
-            <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python-SCOPEinR.ipynb" target="_blank">Python (notebook) <img class="tut-badge" src="https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white" alt="GitHub"></a>
+            <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python-SCOPEinR.ipynb" target="_blank">Python (notebook)</a>
           </div>
         </div>
         <details class="tut-shots-toggle">
