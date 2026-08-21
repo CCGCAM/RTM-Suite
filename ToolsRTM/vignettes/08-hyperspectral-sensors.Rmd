@@ -93,6 +93,13 @@ own_fwhm    <- c(28,  32,  18,  14,  12,  27,  14,  16,  14,  14,  10,  12,  18,
 
 own_bands <- get.spectral.convolution.gaussian(df, centers = own_centers, fwhm = own_fwhm)
 own_bands
+
+plot(df$wave, df$rfl, type = "l", col = "grey70",
+     xlab = "Wavelength (nm)", ylab = "Reflectance", main = "Native 1nm vs. own 15-band rig")
+# Points, not a line -- only 15 sparse bands, a line would connect straight
+# across large gaps (e.g. 570->650nm) in a way that misrepresents the sensor.
+points(own_bands$wl, own_bands$RFL, col = "#2E8B57", pch = 19, cex = 1.2)
+legend("topright", c("Native 1nm", "Own 15-band rig"), col = c("grey70", "#2E8B57"), lty = c(1, NA), pch = c(NA, 19))
 ```
 
 Both center AND FWHM are known here (from the camera rig's own
@@ -128,7 +135,12 @@ cat("VNIR range:", round(range(headwall_vnir_centers), 1), "nm,", length(headwal
 headwall_vnir_bands <- get.spectral.convolution.gaussian(df, centers = headwall_vnir_centers)
 plot(df$wave, df$rfl, type = "l", col = "grey70",
      xlab = "Wavelength (nm)", ylab = "Reflectance", main = "Headwall Nano-Hyperspec VNIR (272 bands, centers only)")
-lines(headwall_vnir_bands$wl, headwall_vnir_bands$RFL, col = "#E31A1C", lwd = 1)
+# Points, not a solid line -- at 272 bands / 2.23nm spacing a solid line is
+# dense enough to fully cover the native grey line underneath; points let
+# the native spectrum show through between them. Same green used for the
+# hyperspectral/dense-sensor overlay throughout this page (Sections 2-4).
+points(headwall_vnir_bands$wl, headwall_vnir_bands$RFL, col = "#2E8B57", pch = 19, cex = 0.8)
+legend("topright", c("Native 1nm", "Headwall VNIR"), col = c("grey70", "#2E8B57"), lty = c(1, NA), pch = c(NA, 19))
 ```
 
 ### VNIR+SWIR variant
@@ -153,6 +165,11 @@ headwall_vnirswir_centers <- c(headwall_vnir_centers, swir_representative_center
 headwall_vnirswir_bands <- get.spectral.convolution.gaussian(df, centers = headwall_vnirswir_centers)
 cat("VNIR+SWIR (illustrative):", nrow(headwall_vnirswir_bands), "bands,",
     round(min(headwall_vnirswir_bands$wl)), "-", round(max(headwall_vnirswir_bands$wl)), "nm\n")
+
+plot(df$wave, df$rfl, type = "l", col = "grey70",
+     xlab = "Wavelength (nm)", ylab = "Reflectance", main = "Headwall VNIR+SWIR (illustrative)")
+points(headwall_vnirswir_bands$wl, headwall_vnirswir_bands$RFL, col = "#2E8B57", pch = 19, cex = 0.8)
+legend("topright", c("Native 1nm", "Headwall VNIR+SWIR"), col = c("grey70", "#2E8B57"), lty = c(1, NA), pch = c(NA, 19))
 ```
 
 Same `get.spectral.convolution.gaussian()` call, same centers-only /
@@ -175,6 +192,12 @@ comparison <- data.frame(
 )
 knitr::kable(comparison)
 ```
+
+`Approx_spacing_nm` is `NA` for the two irregular/mixed-sampling rows --
+the 15-band rig places bands at specific absorption features rather than
+uniform steps, and the illustrative VNIR+SWIR row mixes the real 2.23nm
+VNIR step with the representative 5nm SWIR step, so a single averaged
+number would misrepresent both.
 
 ```{r comparison-plot, fig.height = 6}
 op <- par(mfrow = c(2, 1), mar = c(4, 4, 2, 1))

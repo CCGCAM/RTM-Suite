@@ -11,7 +11,7 @@ Every module is verified against a real, unmodified call to the original R packa
 ## What's in it
 
 | Component | What it does |
-|------------------------------------|------------------------------------|
+|----|----|
 | **`soil`** | BSM (Brightness-Shape-Moisture) soil reflectance model |
 | **`rtmo`** | Optical top-of-canopy BRDF: leaf optics + soil + geometry -\> `rdd`/`rsd`/`rdo`/`rso`, gap probabilities |
 | **`fluspect` / `fluspect_mscope`** | SCOPE's own Fluspect-B-Cx leaf-optics variant, and the multi-layer (mSCOPE) canopy wrapper built on it |
