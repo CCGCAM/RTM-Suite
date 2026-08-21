@@ -22,14 +22,17 @@
 #'                                           cloud_threshold = 20)
 #'
 #' # Define the spatial shape (e.g., a polygon)
-#' shape <- sf::st_as_sf(data.frame(id = 1, geometry = sf::st_sfc(sf::st_polygon(list(rbind(c(4.8, 52.2), c(4.8, 52.4),
-#'                                                         c(5.0, 52.4), c(5.0, 52.2), c(4.8, 52.2))))), crs = 4326))
+#' poly <- list(rbind(c(4.8, 52.2), c(4.8, 52.4), c(5.0, 52.4), c(5.0, 52.2), c(4.8, 52.2)))
+#' shape <- sf::st_as_sf(data.frame(id = 1,
+#'                                   geometry = sf::st_sfc(sf::st_polygon(poly))),
+#'                        crs = 4326)
 #'
 #' # Define date range for aggregation
 #' date_range <- c("2023-01-01", "2023-01-31")
 #'
 #' # Retrieve the Sentinel-2 data cube
-#' sentinel2_cube <- get.sentinel2_cube(s_collection, shape, date_range, aggregation_method = "mean", get.dataset = TRUE)
+#' sentinel2_cube <- get.sentinel2_cube(s_collection, shape, date_range,
+#'                                       aggregation_method = "mean", get.dataset = TRUE)
 #'
 #' # Print the resulting data cube details
 #' print(sentinel2_cube)

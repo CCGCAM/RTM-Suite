@@ -22,8 +22,10 @@ This function performs spectral convolution on the input irradiance (or radiance
 \examples{
 \dontrun{
 # Example usage with sample irradiance data and sensor response function:
-df.irradiance <- data.frame(wavelength = seq(400, 700, 1), irradiance = rnorm(301))  # Example irradiance data
-sensor.i <- data.frame(wavelength = seq(400, 700, 1), response = runif(301))        # Example sensor response
+# Example irradiance data
+df.irradiance <- data.frame(wavelength = seq(400, 700, 1), irradiance = rnorm(301))
+# Example sensor response
+sensor.i <- data.frame(wavelength = seq(400, 700, 1), response = runif(301))
 get.spectral.convolution(df.irradiance, sensor.i, get.plots = TRUE)
 
 }

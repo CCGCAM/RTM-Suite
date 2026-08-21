@@ -4,10 +4,15 @@
 \alias{get.packages}
 \title{Get the packages}
 \usage{
-get.packages(path = ".")
+get.packages(path = ".", confirm = TRUE)
 }
 \arguments{
 \item{path}{The directory path to check for dependencies. Defaults to the current directory.}
+
+\item{confirm}{logical. If \code{TRUE} (the default) and the session is interactive, ask
+for confirmation before installing \pkg{renv} or any missing dependency. If \code{FALSE},
+never install anything; missing packages are only reported, not installed. Per CRAN policy,
+this function never installs packages in a non-interactive session regardless of \code{confirm}.}
 }
 \value{
 A character vector of unique package names found in the project dependencies.

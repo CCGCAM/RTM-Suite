@@ -3,6 +3,7 @@
 #'
 #' @param inputs  a table with the specific ranges, type of distribution ...
 #' @param nLUT  the number of rows for the LUT
+#' @param setseed integer, random seed used when sampling the LUT (default 123)
 #'
 #' @return a dataframe with all parameters
 #' @export

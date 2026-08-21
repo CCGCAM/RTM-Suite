@@ -54,6 +54,7 @@ here.
 \dontrun{
 inputs <- ToolsRTM::inputsPROSAIL
 LUT <- as.data.frame(ToolsRTM::getLUT(inputs = inputs, nLUT = 1, setseed = 1234))
-sim <- simulate_RTM(inputLUT = LUT[1, ], rsoil = rsoil, leaf.model = "PROSPECT-PRO", canopy.model = "fourSAIL")
+sim <- simulate_RTM(inputLUT = LUT[1, ], rsoil = rsoil, leaf.model = "PROSPECT-PRO",
+                     canopy.model = "fourSAIL")
 }
 }

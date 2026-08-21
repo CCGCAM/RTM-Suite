@@ -26,6 +26,10 @@ getMLmodel<-function(dataset=NULL, depVar='Cab',model='CNN',optimizer='adam',
                      data.trans='preProcess',method.preProcess='Normalize',
                      depVar.trans=FALSE) {
 
+  if (!requireNamespace("keras", quietly = TRUE)) {
+    stop("getMLmodel() requires the 'keras' package. Install it with install.packages(\"keras\") (and run keras::install_keras() once) and try again.", call. = FALSE)
+  }
+
   stopifnot(class(dataset) == 'data.frame')
 
   stopifnot(model != 'CNN' | model != 'Hidden-layers')
@@ -77,7 +81,7 @@ getMLmodel<-function(dataset=NULL, depVar='Cab',model='CNN',optimizer='adam',
   ##### Parameters for the models
   ##########################################################################################
 
-  callbacks = list(callback_early_stopping(monitor = "val_loss",mode='min',patience = 5, restore_best_weights = TRUE))
+  callbacks = list(keras::callback_early_stopping(monitor = "val_loss",mode='min',patience = 5, restore_best_weights = TRUE))
 
   if (is.null(n.epochs)){
     n.epochs = 100
@@ -96,25 +100,25 @@ getMLmodel<-function(dataset=NULL, depVar='Cab',model='CNN',optimizer='adam',
   }
 
   if (optimizer == 'adam') {
-    opt = optimizer_adam(learning_rate = 0.0001,beta_1 = 0.9, beta_2 = 0.999)
+    opt = keras::optimizer_adam(learning_rate = 0.0001,beta_1 = 0.9, beta_2 = 0.999)
 
   } else if (optimizer == 'adadelta') {
-    opt = optimizer_adadelta(learning_rate = 1, rho = 0.95, epsilon = NULL, decay = 0)
+    opt = keras::optimizer_adadelta(learning_rate = 1, rho = 0.95, epsilon = NULL, decay = 0)
     
   } else if (optimizer =='adagrad') {
-    opt = optimizer_adagrad(learning_rate = 0.01, epsilon = NULL, decay=0)
+    opt = keras::optimizer_adagrad(learning_rate = 0.01, epsilon = NULL, decay=0)
     
   } else if (optimizer =='adamax'){
-    opt = optimizer_adamax( learning_rate = 0.002, beta_1 = 0.9,beta_2 = 0.999)
+    opt = keras::optimizer_adamax( learning_rate = 0.002, beta_1 = 0.9,beta_2 = 0.999)
      
   } else if (optimizer =='nadam'){
-    opt = optimizer_nadam(learning_rate = 0.002, beta_1 = 0.9,  beta_2 = 0.999, epsilon = NULL, schedule_decay = 0.004)
+    opt = keras::optimizer_nadam(learning_rate = 0.002, beta_1 = 0.9,  beta_2 = 0.999, epsilon = NULL, schedule_decay = 0.004)
     
   } else if (optimizer =='rmsprop'){
-    opt = optimizer_rmsprop(learning_rate = 0.001, rho = 0.9, epsilon = NULL, decay = 0)
+    opt = keras::optimizer_rmsprop(learning_rate = 0.001, rho = 0.9, epsilon = NULL, decay = 0)
     
   } else if (optimizer =='sgd'){
-    opt = optimizer_sgd(learning_rate = 0.01, momentum = 0, decay = 0,  nesterov = FALSE)
+    opt = keras::optimizer_sgd(learning_rate = 0.01, momentum = 0, decay = 0,  nesterov = FALSE)
   } else {
     stop("Unknown optimizer: '", optimizer, "'. Supported: 'adam', 'adadelta', 'adagrad', 'adamax', 'nadam', 'rmsprop', 'sgd'.")
   }
@@ -140,40 +144,40 @@ getMLmodel<-function(dataset=NULL, depVar='Cab',model='CNN',optimizer='adam',
     ##############################################################################################################################
 
 
-    data.Xtrain.reshape <- array_reshape(split.data[['Xtrain']], c(nrow(split.data[['Xtrain']]), ncol(split.data[['Xtrain']])))
+    data.Xtrain.reshape <- keras::array_reshape(split.data[['Xtrain']], c(nrow(split.data[['Xtrain']]), ncol(split.data[['Xtrain']])))
     dim(data.Xtrain.reshape)
     # Create the configuration for the model
-    model.dML <- keras_model_sequential() |>
-      layer_dense(units=64,activation="relu",
+    model.dML <- keras::keras_model_sequential() |>
+      keras::layer_dense(units=64,activation="relu",
                   input_shape=c(dim(data.Xtrain.reshape)[2]))  |>
-      #layer_dropout(rate=0.1) |>
-      layer_dense(units = 32, activation = 'relu') |>
-      layer_dropout(rate=0.1) |>
-      layer_dense(units = 16, activation = 'relu') |>
-      #layer_dropout(rate=0.1) |>
-      layer_dense(units = 1, activation = 'relu')
+      #keras::layer_dropout(rate=0.1) |>
+      keras::layer_dense(units = 32, activation = 'relu') |>
+      keras::layer_dropout(rate=0.1) |>
+      keras::layer_dense(units = 16, activation = 'relu') |>
+      #keras::layer_dropout(rate=0.1) |>
+      keras::layer_dense(units = 1, activation = 'relu')
 
     # Compile the configuration for the model
-    model.dML |> compile(loss = "mse",
+    model.dML |> keras::compile(loss = "mse",
                                optimizer = opt,#'adam',#,get_optimizer(),#"adam", #'sgd' can also be used
                                metrics = list("mean_absolute_error"))
     model.dML |> summary()
 
 
     # fit the configuration for the model
-    history.model.dML<- model.dML |> fit(data.Xtrain.reshape, split.data[['Ytrain']],
+    history.model.dML<- model.dML |> keras::fit(data.Xtrain.reshape, split.data[['Ytrain']],
                                                epochs = n.epochs, batch_size = batch.size, verbose=1,shuffle=F,callbacks =callbacks,
                                                validation_split = 0.2)
 
     # evaluate the configuration for the model
-    model.dML |> evaluate(split.data[['Xval']], split.data[['Yval']])
+    model.dML |> keras::evaluate(split.data[['Xval']], split.data[['Yval']])
 
-    stats[['Hidden-layers']] <- model.dML |> evaluate(split.data[['Xval']], split.data[['Yval']])
+    stats[['Hidden-layers']] <- model.dML |> keras::evaluate(split.data[['Xval']], split.data[['Yval']])
 
     # Save the model
     if (save.model == TRUE){
-    model.dML |> save_model_hdf5(paste(path.model,'/model_3hlayers_for_',depVar,'.hdf5',sep=''))
-    model.dML |> save_model_hdf5(paste(path.model,'Model-3hlayers-for-',depVar,'-',method.preProcess,'.hdf5',sep=''))
+    model.dML |> keras::save_model_hdf5(paste(path.model,'/model_3hlayers_for_',depVar,'.hdf5',sep=''))
+    model.dML |> keras::save_model_hdf5(paste(path.model,'Model-3hlayers-for-',depVar,'-',method.preProcess,'.hdf5',sep=''))
     saveRDS(split.data[['Scalar.train']], file = paste(path.model,'1-ScalerX-Model-3hlayers-for-',depVar,'-',method.preProcess,'.rds',sep=''))
       
     }
@@ -187,44 +191,44 @@ getMLmodel<-function(dataset=NULL, depVar='Cab',model='CNN',optimizer='adam',
     #Reshaping the data for CNN
     ### These dimensions don't look correct; switch ncol() with nrow()
 
-    data.Xtrain.CNN <- array_reshape(split.data[['Xtrain']], c(nrow(split.data[['Xtrain']]), ncol(split.data[['Xtrain']]), 1))
-    data.Xval.CNN <- array_reshape(split.data[['Xval']], c(nrow(split.data[['Xval']]), ncol(split.data[['Xval']]), 1))
+    data.Xtrain.CNN <- keras::array_reshape(split.data[['Xtrain']], c(nrow(split.data[['Xtrain']]), ncol(split.data[['Xtrain']]), 1))
+    data.Xval.CNN <- keras::array_reshape(split.data[['Xval']], c(nrow(split.data[['Xval']]), ncol(split.data[['Xval']]), 1))
 
     # Create the configuration for the model
     dataset.dim=data.Xtrain.CNN
-    model.dML <- keras_model_sequential() |>
-      layer_conv_1d(filters=64, kernel_size=4, activation="relu",
+    model.dML <- keras::keras_model_sequential() |>
+      keras::layer_conv_1d(filters=64, kernel_size=4, activation="relu",
                     ### The input shape doesn't look correct; instead of
                     ### `c(ncol(dataTrain_x), nrow(dataTrain_x))` (354, 13)
                     ### I believe you want `dim(dataTest_x)` (13, 1)
                     input_shape=c(ncol(dataset.dim), 1)) |>
-      layer_max_pooling_1d(pool_size=2) |>
-      layer_conv_1d(filters=32, kernel_size=2, activation="relu") |>
-      layer_max_pooling_1d(pool_size=2) |>
-      #layer_dropout(rate=0.4) |>
-      layer_flatten() |>
-      layer_dense(units=16, activation="relu") |>
-      layer_dropout(rate=0.1) |>
-      layer_dense(units=1, activation="relu")
+      keras::layer_max_pooling_1d(pool_size=2) |>
+      keras::layer_conv_1d(filters=32, kernel_size=2, activation="relu") |>
+      keras::layer_max_pooling_1d(pool_size=2) |>
+      #keras::layer_dropout(rate=0.4) |>
+      keras::layer_flatten() |>
+      keras::layer_dense(units=16, activation="relu") |>
+      keras::layer_dropout(rate=0.1) |>
+      keras::layer_dense(units=1, activation="relu")
 
     # Compile the configuration for the model
 
-    model.dML |> compile(loss = "mse",
+    model.dML |> keras::compile(loss = "mse",
                           optimizer =  opt,#"adam", #'sgd' can also be used
                           metrics = list("mean_absolute_error")
     )
 
     model.dML |> summary()
     # fit the configuration for the model
-    history.model.dML <- model.dML |> fit(data.Xtrain.CNN, split.data[['Ytrain']],
+    history.model.dML <- model.dML |> keras::fit(data.Xtrain.CNN, split.data[['Ytrain']],
                                      epochs = n.epochs,batch_size = batch.size, verbose=1,shuffle=F,
                                      callbacks = callbacks,
                                      validation_split = 0.2)
     # evaluate the configuration for the model
-    stats[['CNN-model']] <-model.dML |> evaluate(data.Xval.CNN, split.data[['Yval']])
+    stats[['CNN-model']] <-model.dML |> keras::evaluate(data.Xval.CNN, split.data[['Yval']])
     # Save the model
     if (save.model == TRUE){
-      model.dML |> save_model_hdf5(paste(path.model,'Model-CNN-for-',depVar,'-',method.preProcess,'.hdf5',sep=''))
+      model.dML |> keras::save_model_hdf5(paste(path.model,'Model-CNN-for-',depVar,'-',method.preProcess,'.hdf5',sep=''))
       saveRDS(split.data[['Scalar.train']], file = paste(path.model,'1-ScalerX-Model-CNN-for-',depVar,'-',method.preProcess,'.rds',sep=''))
     }
   }

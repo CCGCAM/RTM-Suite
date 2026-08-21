@@ -12,7 +12,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Assuming you have a DataFrame named 'spectra_df' with columns representing wavelengths and spectral values
+#' # Assuming you have a DataFrame named 'spectra_df' with columns representing
+#' # wavelengths and spectral values
 #' derived_df <- get.spectral.derivative(spectra_df, m = 2, method = "sgolay")
 #' }
 

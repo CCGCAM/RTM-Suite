@@ -17,6 +17,7 @@
 #' 113(9), 1948–1966. https://doi.org/10.1016/j.rse.2009.05.002
 #'
 
+#' @param inputLUT a named numeric vector or one-row data frame with the Liberty model input parameters
 #' @return Length 4 list containing modeled reflectance, transmittance,
 #' wavelengths, and R (?).
 #' @author Alexey Shiklomanov and modifed by Carlos Camino

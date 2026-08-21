@@ -14,7 +14,11 @@
 #'
 #' 
 getTIFFs<-function(netCDFs=NULL, bands=NULL, output=NULL, pattern=NULL){
-  
+
+  if (!requireNamespace("ncdf4", quietly = TRUE)) {
+    stop("getTIFFs() requires the 'ncdf4' package. Install it with install.packages(\"ncdf4\") and try again.", call. = FALSE)
+  }
+
   is.nan.data.frame <- function(x) do.call(cbind, lapply(x, is.nan))
   
   if (is.null(pattern)){
@@ -33,7 +37,7 @@ getTIFFs<-function(netCDFs=NULL, bands=NULL, output=NULL, pattern=NULL){
     #	1.  Get variables from NetCDF    -----    
     ##############################################################################################################################
     
-    nc_data <- nc_open(paste(files_nc[nc_file],sep=''))
+    nc_data <- ncdf4::nc_open(paste(files_nc[nc_file],sep=''))
     # Save the print(nc) dump to a text file
     {
       sink(paste(files_nc[nc_file],'.txt',sep=''))
@@ -41,10 +45,10 @@ getTIFFs<-function(netCDFs=NULL, bands=NULL, output=NULL, pattern=NULL){
       sink()
     }
     
-    lon <- ncvar_get(nc_data, "x")
-    lat <- ncvar_get(nc_data, "y", verbose = F)
-    t <- ncvar_get(nc_data, "time")
-    tunits<-ncatt_get(nc_data,"time",attname="units")
+    lon <- ncdf4::ncvar_get(nc_data, "x")
+    lat <- ncdf4::ncvar_get(nc_data, "y", verbose = F)
+    t <- ncdf4::ncvar_get(nc_data, "time")
+    tunits<-ncdf4::ncatt_get(nc_data,"time",attname="units")
     tustr<-strsplit(tunits$value, " ")
     dates<-as.Date(t,origin=unlist(tustr)[3])
 
@@ -54,10 +58,10 @@ getTIFFs<-function(netCDFs=NULL, bands=NULL, output=NULL, pattern=NULL){
     
     
     for (i in c(bands)){
-      B.array <- ncvar_get(nc_data, i) # store the data in a 3-dimensional array
+      B.array <- ncdf4::ncvar_get(nc_data, i) # store the data in a 3-dimensional array
       dim(B.array) 
       
-      fillvalue <- ncatt_get(nc_data, i, "_FillValue")
+      fillvalue <- ncdf4::ncatt_get(nc_data, i, "_FillValue")
       fillvalue
       
       B.array[B.array == fillvalue$value] <- NA
@@ -83,7 +87,7 @@ getTIFFs<-function(netCDFs=NULL, bands=NULL, output=NULL, pattern=NULL){
       
     }
     
-    nc_close(nc_data) 
+    ncdf4::nc_close(nc_data) 
     
   }  ##### end loop for netcdf
   close(progress_bar)

@@ -28,4 +28,6 @@ Suggests:
     rstac,
     factoextra,
     gbm,
-    sensobol
+    sensobol,
+    keras,
+    tensorflow

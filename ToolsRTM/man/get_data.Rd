@@ -11,7 +11,7 @@ get_data(RTmodel = "PROSPECT-D", nLUT = 100, random.input = 100)
 
 \item{nLUT}{nummber of combinations}
 
-\item{seed}{the seed number for the  uniform distribution}
+\item{random.input}{the seed number for the  uniform distribution}
 }
 \value{
 a LUT

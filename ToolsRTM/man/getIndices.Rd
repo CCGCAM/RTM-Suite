@@ -33,11 +33,13 @@ using user-specified spectral domains and a scaling factor if needed.
 }
 \examples{
 # Example 1: Compute spectral indices using default VNIR domain
-data_example <- data.frame(R.400 = runif(10, 0, 1), R.670 = runif(10, 0, 1), R.800 = runif(10, 0, 1))
+data_example <- data.frame(R.400 = runif(10, 0, 1), R.670 = runif(10, 0, 1),
+                            R.800 = runif(10, 0, 1))
 result <- getIndices(data_example)
 
 # Example 2: Compute indices using SWIR domain with a scaling factor of 1/10000
-data_example <- data.frame(R.850 = runif(10, 0, 1), R.1200 = runif(10, 0, 1), R.1600 = runif(10, 0, 1))
+data_example <- data.frame(R.850 = runif(10, 0, 1), R.1200 = runif(10, 0, 1),
+                            R.1600 = runif(10, 0, 1))
 result <- getIndices(data_example, spectral.domain = "SWIR", factor = 1/10000)
 
 # Example 3: Compute indices for VNIR-SWIR domain with custom reflectance column pattern

@@ -13,6 +13,8 @@ rpoiscor(x, rho, na.rm = FALSE, ...)
 
 \item{na.rm}{a logical indicating whether to fit the distribution excluding missing values
 or to fail on missing values}
+
+\item{...}{unused, reserved for future extensions}
 }
 \value{
 a vector of the same length as x drawn from a normal distribution correlated with x at the level of rho

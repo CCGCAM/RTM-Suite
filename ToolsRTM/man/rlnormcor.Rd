@@ -10,6 +10,8 @@ rlnormcor(x, rho, ...)
 \item{x}{variable to draw from}
 
 \item{rho}{correlation coefficient between x and result of function}
+
+\item{...}{unused, reserved for future extensions}
 }
 \value{
 a single numeric value drawn from a normal distribution correlated with x at the level of rho

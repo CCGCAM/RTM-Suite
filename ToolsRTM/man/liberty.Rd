@@ -6,6 +6,9 @@
 \usage{
 liberty(inputLUT)
 }
+\arguments{
+\item{inputLUT}{a named numeric vector or one-row data frame with the Liberty model input parameters}
+}
 \value{
 Length 4 list containing modeled reflectance, transmittance,
 wavelengths, and R (?).

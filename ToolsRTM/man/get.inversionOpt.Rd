@@ -56,6 +56,7 @@ sensor_data <- matrix(runif(100), nrow = 10, ncol = 10) # Simulated sensor refle
 rtm_data <- matrix(runif(100), nrow = 10, ncol = 10)    # Simulated RTM reflectance
 lut_table <- data.frame(N = runif(10), Cab = runif(10), Cw = runif(10)) # Simulated LUT
 wavelengths <- seq(400, 700, length.out = 10)  # Simulated wavelengths
-result <- get.inversionOpt(sensor_data, rtm_data, lut_table, wavelengths, method = 'merit-RMSE', nOpt = 5)
+result <- get.inversionOpt(sensor_data, rtm_data, lut_table, wavelengths,
+                            method = 'merit-RMSE', nOpt = 5)
 print(result)
 }

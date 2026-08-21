@@ -12,7 +12,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' #spectral response function downloaded from: https://oceancolor.gsfc.nasa.gov/resources/docs/rsr_tables/
+#' #spectral response function downloaded from:
+#' #https://oceancolor.gsfc.nasa.gov/resources/docs/rsr_tables/
 #'
 #' # 1. Generate a Lookup Table (LUT) for PROSAIL inputs
 #'
@@ -23,7 +24,8 @@
 #' # 2. Simulate spectral reflectance using PROSAIL and apply BRDF effect
 #'
 #' # Simulate reflectance values using the PROSAIL model for the first LUT entry
-#' reflectance_values <- ToolsRTM::foursail(inputLUT = df.LUT[1,], rsoil = rsoil, LeafModel = 'PROSPECT-PRO')
+#' reflectance_values <- ToolsRTM::foursail(inputLUT = df.LUT[1,], rsoil = rsoil,
+#'                                           LeafModel = 'PROSPECT-PRO')
 #' rdot <- reflectance_values[[1]]  # Direct reflectance
 #' rsot <- reflectance_values[[2]]  # Diffuse reflectance
 #'
@@ -37,7 +39,8 @@
 #' # 3. Convolve the simulated reflectance with a sensor-specific SRF and plot the result
 #'
 #' # Here, we use the Sentinel-2A sensor for spectral resampling and plotting
-#' convolved_spectra <- get.spectra.convolved(rfl = sim.matrix, sensor = "Sentinel2a", plot.spectra = TRUE)
+#' convolved_spectra <- get.spectra.convolved(rfl = sim.matrix, sensor = "Sentinel2a",
+#'                                             plot.spectra = TRUE)
 #' }
 
 #rfl=sim.canopy; sensor="prisma"

@@ -10,6 +10,8 @@ getLUT(inputs = NULL, nLUT = 100, setseed = 123)
 \item{inputs}{a table with the specific ranges, type of distribution ...}
 
 \item{nLUT}{the number of rows for the LUT}
+
+\item{setseed}{integer, random seed used when sampling the LUT (default 123)}
 }
 \value{
 a dataframe with all parameters

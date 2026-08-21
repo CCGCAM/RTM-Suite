@@ -21,10 +21,11 @@ rnormcor <- function(x, rho) rnorm(1, rho*x, sqrt(1-rho^2))
 ##' 
 ##' @param x variable to draw from
 ##' @param rho correlation coefficient between x and result of function
+##' @param ... unused, reserved for future extensions
 ##' @return a single numeric value drawn from a normal distribution correlated with x at the level of rho
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
-##' @export 
+##' @export
 rlnormcor <- function(x, rho, ...) rlnorm(1, rho*x, sqrt(1-rho^2))
 
 ##' Generate a vector from a normal distribution correlated with another distribution
@@ -33,6 +34,7 @@ rlnormcor <- function(x, rho, ...) rlnorm(1, rho*x, sqrt(1-rho^2))
 ##' 
 ##' @param x variable to draw from
 ##' @param rho correlation coefficient between x and result of function
+##' @param ... unused, reserved for future extensions
 ##' @return a vector of the same length as x drawn from a normal distribution correlated with x at the level of rho
 ##' @details Rough estimate, biased by known amount for now
 ##' @author Jared E. Knowles
@@ -112,12 +114,13 @@ rchisqcor <- function(x, rho, na.rm = FALSE) {
 ##' 
 ##' @param x variable to draw from
 ##' @param rho correlation coefficient between x and result of function
-##' @param na.rm a logical indicating whether to fit the distribution excluding missing values 
+##' @param na.rm a logical indicating whether to fit the distribution excluding missing values
 ##' or to fail on missing values
+##' @param ... unused, reserved for future extensions
 ##' @return a vector of the same length as x drawn from a normal distribution correlated with x at the level of rho
 ##' @details Rough estimate
 ##' @author Jared E. Knowles
-##' @export 
+##' @export
 ##' @examples
 ##' x <- rnorm(1000, 1, 1)
 ##' y <- rpoiscor(x, 0.2)
@@ -306,6 +309,10 @@ rbinomcor <- function(x, rho, scale=NULL, na.rm = FALSE){
   return(y2)
 }
 
+
+# Internal helpers used by the na.rm branches above.
+anyInf <- function(x) any(is.infinite(x))
+vecNAsearch <- function(x) mean(is.na(x))
 
 sanitizeInf <- function(x){
   if(anyInf(x) == TRUE){

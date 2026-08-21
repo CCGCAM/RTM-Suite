@@ -73,28 +73,7 @@ get.marmit2 <- function(n_w, alpha_w, n_i, k_i, Rd, L, eps, d_i, wls) {
   return(Rm)
 }
 
-#' Sigmoid function
-#'
-#' This function calculates a sigmoid curve based on input parameters.
-#'
-#' @param x Numeric. Input value.
-#' @param K Numeric. Maximum value of the sigmoid.
-#' @param a Numeric. Steepness of the curve.
-#' @param psi Numeric. Offset parameter.
-#'
-#' @return Numeric. Sigmoid value for the input x.
-#'
-#' @examples
-#' \dontrun{
-#' # Example of sigmoid function
-#' result <- sigmoid.soil(0.5, K = 1, a = 5, psi = 2)
-#' print(result)
-#'
-#' }
-sigmoid.soil <- function(x, K, a, psi) {
-  y <- K / (1 + a * exp(-psi * x))
-  return(y)
-}
+# sigmoid.soil() is defined once, in marmit1.R (used here via get.marmit.rsoil()).
 
 # Define a function to compute the exponential integral E1(x)
 exp1_base <- function(x) {

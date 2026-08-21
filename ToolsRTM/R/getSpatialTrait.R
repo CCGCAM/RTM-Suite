@@ -9,6 +9,7 @@
 #' @param shapeLayer path with the shapefile with your study area. This shape is use for cropping images
 #' @param model.ML  Machine learning model
 #' @param trait trais to estimate (actually for Cab and LAI)
+#' @param factorR a numeric scaling factor applied to the raster reflectance values before index computation (e.g. to convert to 0-1 reflectance)
 #' @return a list with: i) a scatter-plot between trait and best indicator, and ii) spatial trait mappping mask with the forest map
 #' @export
 #'

@@ -33,6 +33,8 @@ COPERNICUS Land Monitoring Service}
 \item{model.ML}{Machine learning model}
 
 \item{trait}{trais to estimate (actually for Cab and LAI)}
+
+\item{factorR}{a numeric scaling factor applied to the raster reflectance values before index computation (e.g. to convert to 0-1 reflectance)}
 }
 \value{
 a list with: i) a scatter-plot between trait and best indicator, and ii) spatial trait mappping mask with the forest map

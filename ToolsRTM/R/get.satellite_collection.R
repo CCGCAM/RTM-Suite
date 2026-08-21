@@ -4,9 +4,9 @@
 #'
 #' @param scenario A character string representing the scenario, which is used to obtain the bounding box.
 #' @param collection A character string specifying the name of the satellite data collection (e.g., "sentinel-2-l2a").
-#' @param collection A character string specifying the name of the satellite data collection (e.g., "sentinel-2-l2a").
 #' @param cloud_server The cloud server to use. Options are "microsoft" or "amazon". Defaults to "microsoft".
 #' @param n.limit a integer with the maximum  number of images during the extractions.
+#' @param date_range A length-2 character/Date vector giving the start and end date to search (e.g. \code{c("2023-06-01", "2023-09-30")}).
 #' @param cloud_threshold A numeric value representing the maximum allowable cloud cover percentage.
 #' @param buffer_size A numeric value indicating the buffer size around the bounding box in meters (default is 300).
 #'
@@ -18,7 +18,9 @@
 #' # Example usage of the get.satellite_collection function
 #' scenario <- "your_scenario_here"  # Replace with your actual scenario
 #' # names ofr every single cloud server
-#' coleccion.microsoft <- c('sentinel-2-l2a','landsat-c2-l2','modis-17A2HGF-061','modis-09A1-061','modis-09Q1-061','modis-11A2-061','modis-15A2H-061','modis-15A3H-061')
+#' coleccion.microsoft <- c('sentinel-2-l2a', 'landsat-c2-l2', 'modis-17A2HGF-061',
+#'                           'modis-09A1-061', 'modis-09Q1-061', 'modis-11A2-061',
+#'                           'modis-15A2H-061', 'modis-15A3H-061')
 #' coleccion.aws <- c('sentinel-s2-l2a','sentinel-s2-l2a-cogs','landsat-8-l1-c1')
 #' collection <- "sentinel-2-l2a"  # Sentinel-2 Level-2A collection
 #' date_range <- c("2023-06-01", "2023-09-30")  # Date range for January 2023

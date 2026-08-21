@@ -4,7 +4,7 @@
 #'
 #' @param RTmodel RT model: options are: 'PROSPECT-PRO';'PROSPECT-D'; 'INFORM'; and 'fourSAILH'
 #' @param nLUT nummber of combinations
-#' @param seed  the seed number for the  uniform distribution
+#' @param random.input  the seed number for the  uniform distribution
 #'
 #' @return a LUT 
 #' @export
