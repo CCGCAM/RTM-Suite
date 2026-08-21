@@ -4,6 +4,8 @@
 
 library(ToolsRTM)
 library(ggplot2)
+library(doParallel)
+library(foreach)
 ```
 
 Tutorials 05-12 built the pipeline one stage at a time: LUT, parallel
@@ -43,7 +45,7 @@ separate script per model:
 
 ``` r
 
-run_pipeline <- function(canopy.model, leaf.model = "PROSPECT-D", n.samples = 80, seed = 1) {
+run_pipeline <- function(canopy.model, leaf.model = "PROSPECT-D", n.samples = 500, seed = 1) {
   LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n.samples, setseed = seed))
   LUT$Cs <- 0; LUT$fqe <- 0.01; LUT$Cx <- 0
   LUT$cell.d <- 40; LUT$inter.c <- 0.045; LUT$baseline.abs <- 0.0006
@@ -52,10 +54,18 @@ run_pipeline <- function(canopy.model, leaf.model = "PROSPECT-D", n.samples = 80
   LUT$LAIu <- 0.5; LUT$sd <- 650; LUT$cd <- 4.5; LUT$h <- 20; LUT$skyl <- 0.1
 
   rsoil <- rep(0.15, 2101)
-  refl <- t(sapply(seq_len(n.samples), function(i) {
+  # 500 simulations per canopy model, x3 models -- parallelized the same way
+  # as Tutorial 06, rather than a plain sapply(), to keep this vignette's
+  # build time reasonable at this sample size.
+  no_cores <- max(1, parallel::detectCores() - 2)
+  cl <- makeCluster(no_cores)
+  registerDoParallel(cl)
+  refl_list <- foreach(i = seq_len(n.samples), .packages = "ToolsRTM") %dopar% {
     suppressMessages(simulate_RTM(inputLUT = LUT[i, ], rsoil = rsoil,
                                    leaf.model = leaf.model, canopy.model = canopy.model))$rsot
-  }))
+  }
+  stopCluster(cl)
+  refl <- do.call(rbind, refl_list)
   colnames(refl) <- paste0("R.", 400:2500)
 
   refl_X <- as.data.frame(refl); colnames(refl_X) <- paste0("X", 400:2500); refl_X <- cbind(id = seq_len(n.samples), refl_X)
@@ -113,9 +123,9 @@ knitr::kable(results, digits = 3)
 
 | canopy_model | LAI_R2 |
 |:-------------|-------:|
-| fourSAIL     |  0.492 |
-| foursail2    |  0.561 |
-| INFORM       | -0.149 |
+| fourSAIL     |  0.829 |
+| foursail2    |  0.845 |
+| INFORM       |  0.177 |
 
 ## A genuine finding, not a bug: INFORM’s LAI barely inverts
 

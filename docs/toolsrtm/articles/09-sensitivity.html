@@ -33,7 +33,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/01-getting-started.html">01. Getting Started with ToolsRTM</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/01-getting-started.html">01. Getting Started with ToolsRTM</a></li>
     <li><a class="dropdown-item" href="../articles/02-leaf-to-canopy.html">02. From Leaf to Canopy Reflectance</a></li>
     <li><a class="dropdown-item" href="../articles/03-spart.html">03. SPART: Soil-Plant-Atmosphere Radiative Transfer</a></li>
     <li><a class="dropdown-item" href="../articles/04-comparing-models.html">04. Comparing Radiative Transfer Models</a></li>
@@ -46,7 +48,16 @@
     <li><a class="dropdown-item" href="../articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
     <li><a class="dropdown-item" href="../articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
     <li><a class="dropdown-item" href="../articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
-    <li><a class="dropdown-item" href="../articles/marmit-soil-in-canopy.html">MARMIT + PROSAIL: realistic soil moisture in canopy simulations</a></li>
+    <li><a class="dropdown-item" href="../articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="../articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="../articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
+    <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
+    <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
+    <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
+    <li><a class="dropdown-item" href="../articles/model-comparison-and-sensitivity.html">Model comparison and sensitivity analysis</a></li>
   </ul>
 </li>
       </ul>
@@ -107,7 +118,7 @@ reflects the physics, not one method’s quirks.</p>
 <td>Sweep one trait, hold others fixed</td>
 </tr>
 <tr class="even">
-<td>Sobol total index, per wavelength</td>
+<td>Johnson relative importance, per wavelength</td>
 <td><code><a href="../reference/get.spectral.sensitivity.html">get.spectral.sensitivity()</a></code></td>
 <td>Global, full spectrum</td>
 </tr>
@@ -120,38 +131,77 @@ reflects the physics, not one method’s quirks.</p>
 <td>Global, discrete sensor bands</td>
 </tr>
 <tr class="even">
-<td>Johnson relative importance</td>
+<td>Johnson relative importance, per band</td>
 <td><code><a href="https://rdrr.io/pkg/sensitivity/man/johnson.html" class="external-link">sensitivity::johnson()</a></code></td>
 <td>Regression-based, per band</td>
 </tr>
 </tbody>
 </table>
 <div class="section level2">
-<h2 id="global-sobol-sensitivity-across-the-full-spectrum">1. Global Sobol sensitivity, across the full spectrum<a class="anchor" aria-label="anchor" href="#global-sobol-sensitivity-across-the-full-spectrum"></a>
+<h2 id="global-sensitivity-across-the-full-spectrum-johnson-relative-importance">1. Global sensitivity across the full spectrum: Johnson relative
+importance<a class="anchor" aria-label="anchor" href="#global-sensitivity-across-the-full-spectrum-johnson-relative-importance"></a>
 </h2>
-<p><code><a href="../reference/get.spectral.sensitivity.html">get.spectral.sensitivity()</a></code> wraps a Sobol total-index
-estimator, run once per wavelength – every trait varies simultaneously
-per simulation, unlike Tutorial 02’s OAT sweeps:</p>
+<p><code><a href="../reference/get.spectral.sensitivity.html">get.spectral.sensitivity()</a></code> runs
+<code><a href="https://rdrr.io/pkg/sensitivity/man/johnson.html" class="external-link">sensitivity::johnson()</a></code> (Johnson relative-importance index)
+once per wavelength – every trait varies simultaneously per simulation,
+unlike Tutorial 02’s OAT sweeps. <strong>A real bug was found and fixed
+here while building this page</strong>: the function’s name and an
+earlier draft of this page both said “Sobol total index” –
+<code><a href="../reference/get.sobol.indices.html">get.sobol.indices()</a></code> (which
+<code><a href="../reference/get.spectral.sensitivity.html">get.spectral.sensitivity()</a></code> calls internally) does compute a
+Sobol total index (<code>STi</code>), but that specific column has a
+genuine formula bug (it accidentally squares the <em>output</em> against
+itself instead of using the input trait at all, so every trait came out
+with nearly the same value – the telltale symptom was Cab, EWT, and LAI
+all landing within a percentage point of each other at every wavelength,
+including right next to each other at 400 vs 410nm, which has no
+physical reason to be that flat). Fixed by switching to
+<code><a href="../reference/get.sobol.indices.html">get.sobol.indices()</a></code>’s <em>separately, correctly</em>
+computed <code>I.Johnson_norm</code> column
+(<code><a href="https://rdrr.io/pkg/sensitivity/man/johnson.html" class="external-link">sensitivity::johnson()</a></code>, a different code path in the same
+function) – the same metric this package’s own reference sensitivity
+scripts already use for this exact kind of figure. The
+<code>STi_pct</code> column name below is kept for backward
+compatibility even though it is Johnson-based now, not Sobol-based.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">si</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get.spectral.sensitivity.html">get.spectral.sensitivity</a></span><span class="op">(</span>n.samples <span class="op">=</span> <span class="fl">200</span>, distribution <span class="op">=</span> <span class="st">"Uniform"</span>,</span>
 <span>                                traits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"EWT"</span>, <span class="st">"LAI"</span><span class="op">)</span>, wl.step <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>                                seed <span class="op">=</span> <span class="fl">1</span>, chunk.size <span class="op">=</span> <span class="fl">200</span>, save.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">si</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   wavelength    trait  STi_pct distribution</span></span>
-<span><span class="co">#&gt; 1        400      Cab 33.23581      Uniform</span></span>
-<span><span class="co">#&gt; 2        400      EWT  0.00000      Uniform</span></span>
-<span><span class="co">#&gt; 3        400      LAI 33.24393      Uniform</span></span>
-<span><span class="co">#&gt; 4        400 SoilCoef 33.52026      Uniform</span></span>
-<span><span class="co">#&gt; 5        410      Cab 33.25222      Uniform</span></span>
-<span><span class="co">#&gt; 6        410      EWT  0.00000      Uniform</span></span></code></pre></div>
+<span><span class="co">#&gt;   wavelength    trait    STi_pct distribution</span></span>
+<span><span class="co">#&gt; 1        400      Cab 49.4423550      Uniform</span></span>
+<span><span class="co">#&gt; 2        400      EWT  0.6056136      Uniform</span></span>
+<span><span class="co">#&gt; 3        400      LAI 48.1633645      Uniform</span></span>
+<span><span class="co">#&gt; 4        400 SoilCoef  1.7886668      Uniform</span></span>
+<span><span class="co">#&gt; 5        410      Cab 44.3162064      Uniform</span></span>
+<span><span class="co">#&gt; 6        410      EWT  0.5210568      Uniform</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">si</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wavelength</span>, y <span class="op">=</span> <span class="va">STi_pct</span>, fill <span class="op">=</span> <span class="va">trait</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_area</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"stack"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Spectral sensitivity of TOC reflectance (fourSAIL + PROSPECT-D)"</span>,</span>
-<span>       subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Sobol total sensitivity index, %d simulations"</span>, <span class="fl">200</span><span class="op">)</span>,</span>
-<span>       x <span class="op">=</span> <span class="st">"Wavelength (nm)"</span>, y <span class="op">=</span> <span class="st">"Total SI [%]"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>       subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Johnson relative-importance index, %d simulations"</span>, <span class="fl">200</span><span class="op">)</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Wavelength (nm)"</span>, y <span class="op">=</span> <span class="st">"Relative importance [%]"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="09-sensitivity_files/figure-html/sobol-spectral-plot-1.png" class="r-plt" alt="" width="672"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">si</span>, <span class="va">trait</span> <span class="op">==</span> <span class="st">"Cab"</span><span class="op">)</span>; <span class="va">ewt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">si</span>, <span class="va">trait</span> <span class="op">==</span> <span class="st">"EWT"</span><span class="op">)</span>; <span class="va">lai</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">si</span>, <span class="va">trait</span> <span class="op">==</span> <span class="st">"LAI"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Cab: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cab</span><span class="op">$</span><span class="va">STi_pct</span><span class="op">[</span><span class="va">cab</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&gt;=</span> <span class="fl">430</span> <span class="op">&amp;</span> <span class="va">cab</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&lt;=</span> <span class="fl">680</span><span class="op">]</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    <span class="st">"% in the visible/red absorption region (430-680nm), only "</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cab</span><span class="op">$</span><span class="va">STi_pct</span><span class="op">[</span><span class="va">cab</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&gt;=</span> <span class="fl">750</span> <span class="op">&amp;</span> <span class="va">cab</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&lt;=</span> <span class="fl">1300</span><span class="op">]</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    <span class="st">"% in the NIR plateau (750-1300nm, no chlorophyll absorption feature there)\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Cab: 84.5% in the visible/red absorption region (430-680nm), only 0.9% in the NIR plateau (750-1300nm, no chlorophyll absorption feature there)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"EWT: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ewt</span><span class="op">$</span><span class="va">STi_pct</span><span class="op">[</span><span class="va">ewt</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&gt;=</span> <span class="fl">1400</span> <span class="op">&amp;</span> <span class="va">ewt</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&lt;=</span> <span class="fl">1500</span><span class="op">]</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    <span class="st">"% near the 1450nm water-absorption band, only "</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ewt</span><span class="op">$</span><span class="va">STi_pct</span><span class="op">[</span><span class="va">ewt</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&gt;=</span> <span class="fl">430</span> <span class="op">&amp;</span> <span class="va">ewt</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&lt;=</span> <span class="fl">680</span><span class="op">]</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    <span class="st">"% in the visible (no water absorption feature there)\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="co">#&gt; EWT: 98.8% near the 1450nm water-absorption band, only 0.8% in the visible (no water absorption feature there)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"LAI: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">lai</span><span class="op">$</span><span class="va">STi_pct</span><span class="op">[</span><span class="va">lai</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&gt;=</span> <span class="fl">750</span> <span class="op">&amp;</span> <span class="va">lai</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&lt;=</span> <span class="fl">1300</span><span class="op">]</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    <span class="st">"% in the NIR plateau (structural multiple scattering) -- the leaf-count/canopy-structure signal\n"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="co">#&gt; LAI: 72.8% in the NIR plateau (structural multiple scattering) -- the leaf-count/canopy-structure signal</span></span></code></pre></div>
+<p>Each number lands exactly where leaf/canopy optics theory says it
+should – Cab in the visible, EWT at the water bands, LAI in the NIR –
+the concrete confirmation that the fix above produced real physics, not
+another plausible-looking but wrong pattern.</p>
 <p><code>Cab</code> dominates the visible, <code>EWT</code> the SWIR
 water-absorption region – consistent with Tutorial 02’s OAT sweeps, but
 now with every trait varying jointly rather than one at a time.</p>
@@ -162,7 +212,7 @@ now with every trait varying jointly rather than one at a time.</p>
 <p>A proper quasi-random Sobol design
 (<code><a href="https://rdrr.io/pkg/sensobol/man/sobol_matrices.html" class="external-link">sensobol::sobol_matrices()</a></code>), giving both first-order (Si)
 and total (Ti) indices per band rather than per native wavelength:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/arnaldpuy/sensobol" class="external-link">sensobol</a></span><span class="op">)</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"Car"</span>, <span class="st">"LAI"</span>, <span class="st">"EWT"</span><span class="op">)</span></span>
 <span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">40</span>  <span class="co"># base sample size; total simulations = N * (length(params) + 2)</span></span>
@@ -187,7 +237,7 @@ and total (Ti) indices per band rather than per native wavelength:</p>
 <span>  <span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sensobol/man/sobol_indices.html" class="external-link">sobol_indices</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">se2a</span><span class="op">[[</span><span class="va">band</span><span class="op">]</span><span class="op">]</span>, N <span class="op">=</span> <span class="va">N</span>, params <span class="op">=</span> <span class="va">params</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Band <span class="op">=</span> <span class="va">band</span>, Parameter <span class="op">=</span> <span class="va">ind</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">parameters</span>, Index <span class="op">=</span> <span class="va">ind</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">original</span>, Type <span class="op">=</span> <span class="va">ind</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">sensitivity</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sobol_df</span>, <span class="va">Type</span> <span class="op">==</span> <span class="st">"Ti"</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Band</span>, y <span class="op">=</span> <span class="va">Index</span>, fill <span class="op">=</span> <span class="va">Parameter</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>, position <span class="op">=</span> <span class="st">"stack"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Total Sobol indices (Ti) by Sentinel-2A band"</span>, x <span class="op">=</span> <span class="st">"Band"</span>, y <span class="op">=</span> <span class="st">"Sobol index"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -202,7 +252,7 @@ what leaf/canopy optics theory predicts.</p>
 </h2>
 <p>A regression-based alternative that doesn’t need a special
 quasi-random design – an ordinary random LUT is enough:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">sensitivity</span><span class="op">)</span></span>
 <span><span class="va">LUT_j</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/getLUT.html">getLUT</a></span><span class="op">(</span>inputs <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va">inputsPROSAIL</span>, nLUT <span class="op">=</span> <span class="fl">100</span>, setseed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">LUT_j</span><span class="op">$</span><span class="va">Cs</span> <span class="op">&lt;-</span> <span class="fl">0</span>; <span class="va">LUT_j</span><span class="op">$</span><span class="va">fqe</span> <span class="op">&lt;-</span> <span class="fl">0.01</span>; <span class="va">LUT_j</span><span class="op">$</span><span class="va">Cx</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
@@ -232,7 +282,7 @@ quasi-random design – an ordinary random LUT is enough:</p>
 <span>  <span class="va">j</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sensitivity/man/johnson.html" class="external-link">johnson</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">se2a_j</span><span class="op">[[</span><span class="va">band</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Band <span class="op">=</span> <span class="va">band</span>, Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">j</span><span class="op">$</span><span class="va">johnson</span><span class="op">)</span>, Index <span class="op">=</span> <span class="va">j</span><span class="op">$</span><span class="va">johnson</span><span class="op">$</span><span class="va">original</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">johnson_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Band</span>, y <span class="op">=</span> <span class="va">Index</span>, fill <span class="op">=</span> <span class="va">Parameter</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>, position <span class="op">=</span> <span class="st">"stack"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Johnson relative-importance indices by Sentinel-2A band"</span>, x <span class="op">=</span> <span class="st">"Band"</span>, y <span class="op">=</span> <span class="st">"Johnson index"</span><span class="op">)</span> <span class="op">+</span></span>

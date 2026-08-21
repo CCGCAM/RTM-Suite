@@ -33,7 +33,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/01-getting-started.html">01. Getting Started with ToolsRTM</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/01-getting-started.html">01. Getting Started with ToolsRTM</a></li>
     <li><a class="dropdown-item" href="../articles/02-leaf-to-canopy.html">02. From Leaf to Canopy Reflectance</a></li>
     <li><a class="dropdown-item" href="../articles/03-spart.html">03. SPART: Soil-Plant-Atmosphere Radiative Transfer</a></li>
     <li><a class="dropdown-item" href="../articles/04-comparing-models.html">04. Comparing Radiative Transfer Models</a></li>
@@ -46,7 +48,16 @@
     <li><a class="dropdown-item" href="../articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
     <li><a class="dropdown-item" href="../articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
     <li><a class="dropdown-item" href="../articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
-    <li><a class="dropdown-item" href="../articles/marmit-soil-in-canopy.html">MARMIT + PROSAIL: realistic soil moisture in canopy simulations</a></li>
+    <li><a class="dropdown-item" href="../articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="../articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="../articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
+    <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
+    <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
+    <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
+    <li><a class="dropdown-item" href="../articles/model-comparison-and-sensitivity.html">Model comparison and sensitivity analysis</a></li>
   </ul>
 </li>
       </ul>
@@ -80,7 +91,9 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ToolsRTM</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/foreach" class="external-link">foreach</a></span><span class="op">)</span></span></code></pre></div>
 <p>Tutorials 05-12 built the pipeline one stage at a time: LUT, parallel
 simulation, sensor convolution, indices, sensitivity, and three flavours
 of inversion. This page runs the <strong>whole chain as one coherent
@@ -114,7 +127,7 @@ Vegetation traits</code></pre>
 based on <code>canopy.model</code> – <code>canopy.model</code> is a
 single variable, not a separate script per model:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">run_pipeline</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">canopy.model</span>, <span class="va">leaf.model</span> <span class="op">=</span> <span class="st">"PROSPECT-D"</span>, <span class="va">n.samples</span> <span class="op">=</span> <span class="fl">80</span>, <span class="va">seed</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">run_pipeline</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">canopy.model</span>, <span class="va">leaf.model</span> <span class="op">=</span> <span class="st">"PROSPECT-D"</span>, <span class="va">n.samples</span> <span class="op">=</span> <span class="fl">500</span>, <span class="va">seed</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">LUT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/getLUT.html">getLUT</a></span><span class="op">(</span>inputs <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va">inputsPROSAIL</span>, nLUT <span class="op">=</span> <span class="va">n.samples</span>, setseed <span class="op">=</span> <span class="va">seed</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">LUT</span><span class="op">$</span><span class="va">Cs</span> <span class="op">&lt;-</span> <span class="fl">0</span>; <span class="va">LUT</span><span class="op">$</span><span class="va">fqe</span> <span class="op">&lt;-</span> <span class="fl">0.01</span>; <span class="va">LUT</span><span class="op">$</span><span class="va">Cx</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
 <span>  <span class="va">LUT</span><span class="op">$</span><span class="va">cell.d</span> <span class="op">&lt;-</span> <span class="fl">40</span>; <span class="va">LUT</span><span class="op">$</span><span class="va">inter.c</span> <span class="op">&lt;-</span> <span class="fl">0.045</span>; <span class="va">LUT</span><span class="op">$</span><span class="va">baseline.abs</span> <span class="op">&lt;-</span> <span class="fl">0.0006</span></span>
@@ -123,10 +136,18 @@ single variable, not a separate script per model:</p>
 <span>  <span class="va">LUT</span><span class="op">$</span><span class="va">LAIu</span> <span class="op">&lt;-</span> <span class="fl">0.5</span>; <span class="va">LUT</span><span class="op">$</span><span class="va">sd</span> <span class="op">&lt;-</span> <span class="fl">650</span>; <span class="va">LUT</span><span class="op">$</span><span class="va">cd</span> <span class="op">&lt;-</span> <span class="fl">4.5</span>; <span class="va">LUT</span><span class="op">$</span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fl">20</span>; <span class="va">LUT</span><span class="op">$</span><span class="va">skyl</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
 <span></span>
 <span>  <span class="va">rsoil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="fl">2101</span><span class="op">)</span></span>
-<span>  <span class="va">refl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n.samples</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># 500 simulations per canopy model, x3 models -- parallelized the same way</span></span>
+<span>  <span class="co"># as Tutorial 06, rather than a plain sapply(), to keep this vignette's</span></span>
+<span>  <span class="co"># build time reasonable at this sample size.</span></span>
+<span>  <span class="va">no_cores</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="va">no_cores</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span>  <span class="va">refl_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></span><span class="op">(</span>i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n.samples</span><span class="op">)</span>, .packages <span class="op">=</span> <span class="st">"ToolsRTM"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">%dopar%</a></span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/simulate_RTM.html">simulate_RTM</a></span><span class="op">(</span>inputLUT <span class="op">=</span> <span class="va">LUT</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span>, rsoil <span class="op">=</span> <span class="va">rsoil</span>,</span>
 <span>                                   leaf.model <span class="op">=</span> <span class="va">leaf.model</span>, canopy.model <span class="op">=</span> <span class="va">canopy.model</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">rsot</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span>  <span class="va">refl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">refl_list</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">refl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"R."</span>, <span class="fl">400</span><span class="op">:</span><span class="fl">2500</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">refl_X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">refl</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">refl_X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="fl">400</span><span class="op">:</span><span class="fl">2500</span><span class="op">)</span>; <span class="va">refl_X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n.samples</span><span class="op">)</span>, <span class="va">refl_X</span><span class="op">)</span></span>
@@ -175,15 +196,15 @@ single variable, not a separate script per model:</p>
 <tbody>
 <tr class="odd">
 <td align="left">fourSAIL</td>
-<td align="right">0.492</td>
+<td align="right">0.829</td>
 </tr>
 <tr class="even">
 <td align="left">foursail2</td>
-<td align="right">0.561</td>
+<td align="right">0.845</td>
 </tr>
 <tr class="odd">
 <td align="left">INFORM</td>
-<td align="right">-0.149</td>
+<td align="right">0.177</td>
 </tr>
 </tbody>
 </table>

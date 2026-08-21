@@ -15,8 +15,22 @@ navbar:
       href: ../toolsrtm/index.html
 
 articles:
-- title: Articles
-  navbar: ~
+- title: Tutorials
+  navbar: Tutorials
+  contents:
+  - "articles/01-getting-started"
+  - "articles/02-soil-canopy-brdf"
+  - "articles/03-energy-balance"
+  - "articles/04-fluorescence"
+  - "articles/05-building-scope-luts"
+  - "articles/06-parallel-scope-runs"
+  - "articles/07-sensitivity"
+  - "articles/08-hybrid-inversion"
+  - "articles/09-sif-photosynthesis"
+  - "articles/10-end-to-end-pipeline"
+  - "articles/11-photosynthesis-capstone"
+- title: Reference manuals and deep dives
+  navbar: Manuals
   contents:
   - "articles/SCOPEinR"
   - "articles/getting-luts-scope"

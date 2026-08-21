@@ -18,16 +18,36 @@ method’s quirks.
 | Method | Function | Scope |
 |----|----|----|
 | One-at-a-time (OAT) | plain sweep (Tutorial 02) | Sweep one trait, hold others fixed |
-| Sobol total index, per wavelength | [`get.spectral.sensitivity()`](../reference/get.spectral.sensitivity.md) | Global, full spectrum |
+| Johnson relative importance, per wavelength | [`get.spectral.sensitivity()`](../reference/get.spectral.sensitivity.md) | Global, full spectrum |
 | Sobol Si/Ti, per band | [`sensobol::sobol_matrices()`](https://rdrr.io/pkg/sensobol/man/sobol_matrices.html) + [`foursail()`](../reference/foursail.md) + [`sensobol::sobol_indices()`](https://rdrr.io/pkg/sensobol/man/sobol_indices.html) | Global, discrete sensor bands |
-| Johnson relative importance | [`sensitivity::johnson()`](https://rdrr.io/pkg/sensitivity/man/johnson.html) | Regression-based, per band |
+| Johnson relative importance, per band | [`sensitivity::johnson()`](https://rdrr.io/pkg/sensitivity/man/johnson.html) | Regression-based, per band |
 
-## 1. Global Sobol sensitivity, across the full spectrum
+## 1. Global sensitivity across the full spectrum: Johnson relative importance
 
 [`get.spectral.sensitivity()`](../reference/get.spectral.sensitivity.md)
-wraps a Sobol total-index estimator, run once per wavelength – every
-trait varies simultaneously per simulation, unlike Tutorial 02’s OAT
-sweeps:
+runs
+[`sensitivity::johnson()`](https://rdrr.io/pkg/sensitivity/man/johnson.html)
+(Johnson relative-importance index) once per wavelength – every trait
+varies simultaneously per simulation, unlike Tutorial 02’s OAT sweeps.
+**A real bug was found and fixed here while building this page**: the
+function’s name and an earlier draft of this page both said “Sobol total
+index” – [`get.sobol.indices()`](../reference/get.sobol.indices.md)
+(which
+[`get.spectral.sensitivity()`](../reference/get.spectral.sensitivity.md)
+calls internally) does compute a Sobol total index (`STi`), but that
+specific column has a genuine formula bug (it accidentally squares the
+*output* against itself instead of using the input trait at all, so
+every trait came out with nearly the same value – the telltale symptom
+was Cab, EWT, and LAI all landing within a percentage point of each
+other at every wavelength, including right next to each other at 400 vs
+410nm, which has no physical reason to be that flat). Fixed by switching
+to [`get.sobol.indices()`](../reference/get.sobol.indices.md)’s
+*separately, correctly* computed `I.Johnson_norm` column
+([`sensitivity::johnson()`](https://rdrr.io/pkg/sensitivity/man/johnson.html),
+a different code path in the same function) – the same metric this
+package’s own reference sensitivity scripts already use for this exact
+kind of figure. The `STi_pct` column name below is kept for backward
+compatibility even though it is Johnson-based now, not Sobol-based.
 
 ``` r
 
@@ -35,13 +55,13 @@ si <- get.spectral.sensitivity(n.samples = 200, distribution = "Uniform",
                                 traits = c("Cab", "EWT", "LAI"), wl.step = 10,
                                 seed = 1, chunk.size = 200, save.path = tempfile())
 head(si)
-#>   wavelength    trait  STi_pct distribution
-#> 1        400      Cab 33.23581      Uniform
-#> 2        400      EWT  0.00000      Uniform
-#> 3        400      LAI 33.24393      Uniform
-#> 4        400 SoilCoef 33.52026      Uniform
-#> 5        410      Cab 33.25222      Uniform
-#> 6        410      EWT  0.00000      Uniform
+#>   wavelength    trait    STi_pct distribution
+#> 1        400      Cab 49.4423550      Uniform
+#> 2        400      EWT  0.6056136      Uniform
+#> 3        400      LAI 48.1633645      Uniform
+#> 4        400 SoilCoef  1.7886668      Uniform
+#> 5        410      Cab 44.3162064      Uniform
+#> 6        410      EWT  0.5210568      Uniform
 ```
 
 ``` r
@@ -49,12 +69,35 @@ head(si)
 ggplot(si, aes(x = wavelength, y = STi_pct, fill = trait)) +
   geom_area(position = "stack") +
   labs(title = "Spectral sensitivity of TOC reflectance (fourSAIL + PROSPECT-D)",
-       subtitle = sprintf("Sobol total sensitivity index, %d simulations", 200),
-       x = "Wavelength (nm)", y = "Total SI [%]") +
+       subtitle = sprintf("Johnson relative-importance index, %d simulations", 200),
+       x = "Wavelength (nm)", y = "Relative importance [%]") +
   theme_bw(base_size = 11) + theme(legend.position = "bottom")
 ```
 
 ![](09-sensitivity_files/figure-html/sobol-spectral-plot-1.png)
+
+``` r
+
+cab <- subset(si, trait == "Cab"); ewt <- subset(si, trait == "EWT"); lai <- subset(si, trait == "LAI")
+cat("Cab: ", round(mean(cab$STi_pct[cab$wavelength >= 430 & cab$wavelength <= 680]), 1),
+    "% in the visible/red absorption region (430-680nm), only ",
+    round(mean(cab$STi_pct[cab$wavelength >= 750 & cab$wavelength <= 1300]), 1),
+    "% in the NIR plateau (750-1300nm, no chlorophyll absorption feature there)\n", sep = "")
+#> Cab: 84.5% in the visible/red absorption region (430-680nm), only 0.9% in the NIR plateau (750-1300nm, no chlorophyll absorption feature there)
+cat("EWT: ", round(mean(ewt$STi_pct[ewt$wavelength >= 1400 & ewt$wavelength <= 1500]), 1),
+    "% near the 1450nm water-absorption band, only ",
+    round(mean(ewt$STi_pct[ewt$wavelength >= 430 & ewt$wavelength <= 680]), 1),
+    "% in the visible (no water absorption feature there)\n", sep = "")
+#> EWT: 98.8% near the 1450nm water-absorption band, only 0.8% in the visible (no water absorption feature there)
+cat("LAI: ", round(mean(lai$STi_pct[lai$wavelength >= 750 & lai$wavelength <= 1300]), 1),
+    "% in the NIR plateau (structural multiple scattering) -- the leaf-count/canopy-structure signal\n", sep = "")
+#> LAI: 72.8% in the NIR plateau (structural multiple scattering) -- the leaf-count/canopy-structure signal
+```
+
+Each number lands exactly where leaf/canopy optics theory says it should
+– Cab in the visible, EWT at the water bands, LAI in the NIR – the
+concrete confirmation that the fix above produced real physics, not
+another plausible-looking but wrong pattern.
 
 `Cab` dominates the visible, `EWT` the SWIR water-absorption region –
 consistent with Tutorial 02’s OAT sweeps, but now with every trait

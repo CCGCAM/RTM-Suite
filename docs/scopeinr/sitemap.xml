@@ -1,5 +1,12 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>/404.html</loc></url>
+<url><loc>/articles/01-getting-started.html</loc></url>
+<url><loc>/articles/02-soil-canopy-brdf.html</loc></url>
+<url><loc>/articles/03-energy-balance.html</loc></url>
+<url><loc>/articles/04-fluorescence.html</loc></url>
+<url><loc>/articles/05-building-scope-luts.html</loc></url>
+<url><loc>/articles/06-parallel-scope-runs.html</loc></url>
+<url><loc>/articles/07-sensitivity.html</loc></url>
 <url><loc>/articles/getting-luts-scope.html</loc></url>
 <url><loc>/articles/index.html</loc></url>
 <url><loc>/articles/inversion-scope.html</loc></url>

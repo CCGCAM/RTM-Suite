@@ -33,7 +33,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/01-getting-started.html">01. Getting Started with ToolsRTM</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/01-getting-started.html">01. Getting Started with ToolsRTM</a></li>
     <li><a class="dropdown-item" href="../articles/02-leaf-to-canopy.html">02. From Leaf to Canopy Reflectance</a></li>
     <li><a class="dropdown-item" href="../articles/03-spart.html">03. SPART: Soil-Plant-Atmosphere Radiative Transfer</a></li>
     <li><a class="dropdown-item" href="../articles/04-comparing-models.html">04. Comparing Radiative Transfer Models</a></li>
@@ -46,7 +48,16 @@
     <li><a class="dropdown-item" href="../articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
     <li><a class="dropdown-item" href="../articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
     <li><a class="dropdown-item" href="../articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
-    <li><a class="dropdown-item" href="../articles/marmit-soil-in-canopy.html">MARMIT + PROSAIL: realistic soil moisture in canopy simulations</a></li>
+    <li><a class="dropdown-item" href="../articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="../articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="../articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
+    <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
+    <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
+    <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
+    <li><a class="dropdown-item" href="../articles/model-comparison-and-sensitivity.html">Model comparison and sensitivity analysis</a></li>
   </ul>
 </li>
       </ul>
@@ -107,7 +118,7 @@ simulations across CPU cores.</p>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Sequential:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"s for"</span>, <span class="va">n.samples</span>, <span class="st">"simulations\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sequential: 2.03 s for 300 simulations</span></span></code></pre></div>
+<span><span class="co">#&gt; Sequential: 1.39 s for 300 simulations</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="parallel-with-doparallelforeach">3. Parallel with <code>doParallel</code>/<code>foreach</code><a class="anchor" aria-label="anchor" href="#parallel-with-doparallelforeach"></a>
@@ -126,9 +137,9 @@ simulations across CPU cores.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Parallel ("</span>, <span class="va">no_cores</span>, <span class="st">"cores):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"s for"</span>, <span class="va">n.samples</span>, <span class="st">"simulations\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Parallel ( 10 cores): 5.67 s for 300 simulations</span></span>
+<span><span class="co">#&gt; Parallel ( 10 cores): 3.42 s for 300 simulations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Speedup:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"x\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Speedup: 0.36 x</span></span></code></pre></div>
+<span><span class="co">#&gt; Speedup: 0.41 x</span></span></code></pre></div>
 <p>Three things matter for this pattern to actually work, not just look
 parallel:</p>
 <ul>
@@ -159,7 +170,7 @@ throughout.</li>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Per-simulation cost: sequential"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1000</span> <span class="op">*</span> <span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">n.samples</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>    <span class="st">"ms, parallel"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1000</span> <span class="op">*</span> <span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">n.samples</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"ms\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Per-simulation cost: sequential 6.77 ms, parallel 18.9 ms</span></span></code></pre></div>
+<span><span class="co">#&gt; Per-simulation cost: sequential 4.63 ms, parallel 11.4 ms</span></span></code></pre></div>
 <p><code><a href="../reference/foursail.html">foursail()</a></code> itself is fast (milliseconds per call) – the
 parallel speedup above has to overcome the fixed overhead of starting a
 cluster and shipping <code>ToolsRTM</code>/data to every worker, so it
