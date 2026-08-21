@@ -11,7 +11,7 @@ Every module is verified against a real, unmodified call to the original R packa
 ## What's in it
 
 | Component | What it does |
-|----|----|
+|------------------------------------|------------------------------------|
 | **`soil`** | BSM (Brightness-Shape-Moisture) soil reflectance model |
 | **`rtmo`** | Optical top-of-canopy BRDF: leaf optics + soil + geometry -\> `rdd`/`rsd`/`rdo`/`rso`, gap probabilities |
 | **`fluspect` / `fluspect_mscope`** | SCOPE's own Fluspect-B-Cx leaf-optics variant, and the multi-layer (mSCOPE) canopy wrapper built on it |
@@ -75,6 +75,34 @@ This repo is deliberately just the installable package -- everything else (manua
 - **Complete reference manual** (every input table, sensitivity to soil/ photosynthesis settings, serial and parallel runs) -- currently R only: [`Tutorials/SCOPEinR_tutorial.Rmd`](https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/SCOPEinR_tutorial.Rmd)
 - **A real, runnable pipeline script** (run SCOPE once -\> explore every output -\> simulate a LUT of many runs): [`Scripts/Python/ForSCOPE_Python/README.md`](https://github.com/CCGCAM/RTM-Suite/blob/main/Scripts/Python/ForSCOPE_Python/README.md)
 - **Full writeup** -- every module ported, with its numerical verification status: [`python/README.md`](https://github.com/CCGCAM/RTM-Suite/blob/main/python/README.md)
+
+### Citation
+
+If you use **ToolsRTM** or **SCOPEinR**, please consider citing:
+
+1.  Camino et al. (2024). **RT-Simulator: An Online Platform to Simulate Canopy Reflectance from Biochemical and Structural Plant Properties Using Radiative Transfer Models**. *IGARSS 2024*, Athens, Greece, pp. 2811-2814. [doi: 10.1109/IGARSS53475.2024.10642442](https://doi.org/10.1109/IGARSS53475.2024.10642442)
+
+2.  Arano et al. (2024). **Enhancing Chlorophyll Content Estimation with Sentinel-2 Imagery: A Fusion of Deep Learning and Biophysical Models**. *IGARSS 2024*, Athens, Greece, pp. 4486-4489. doi: [10.1109/IGARSS53475.2024.10641613](https://doi.org/10.1109/IGARSS53475.2024.10641613)
+
+3.  Camino et al. (in preparation). **Integrating Physiological Plant Traits with Sentinel-2 Imagery for Monitoring Gross Primary Production and Detecting Forest Disturbances**.
+
+### References
+
+The official SCOPE's github is available at <https://github.com/Christiaanvandertol/SCOPE>
+
+Yang, P., E. Prikaziuk, W. Verhoef, and C. van der Tol. 2020. "SCOPE 2.0: A Model to Simulate Vegetated Land Surface Fluxes and Satellite Signals." Geoscientific Model Development Discussions 2020: 1--26. <https://doi.org/10.5194/gmd-2020-251>.
+
+Van der Tol, C., W. Verhoef, J Timmermans, A Verhoef, and Z Su. 2009. "An Integrated Model of Soil-Canopy Spectral Radiances, Photosynthesis, Fluorescence, Temperature and Energy Balance." Biogeosciences 6 (12): 3109--29. <https://doi.org/10.5194/bg-6-3109-2009>.
+
+Other relevant references:
+
+Christiaan van der Tol, Micol Rossini, Sergio Cogliati, Wouter Verhoef, Roberto Colombo, Uwe Rascher, and Gina Mohammed. A model and measurement comparison of diurnal cycles of sun-induced chlorophyll fluorescence of crops. Remote Sens. Environ., 186:663--677, dec 2016. URL: <https://doi.org/10.1016/j.rse.2016.09.021>.
+
+Wout. Verhoef and Nationaal Lucht- en Ruimtevaartlaboratorium (Netherlands). Theory of radiative transfer models applied in optical remote sensing of vegetation canopies. [publisher not identified], 1998. ISBN 9054858044. URL: <https://library.wur.nl/WebQuery/wda/945481>.
+
+Peiqi Yang, Wout Verhoef, and Christiaan van der Tol. The mSCOPE model: A simple adaptation to the SCOPE model to describe reflectance, fluorescence and photosynthesis of vertically heterogeneous canopies. Remote Sens. Environ., 201:1--11, nov 2017. URL: <https://doi.org/10.1016/j.rse.2017.08.029>.
+
+Van der Tol, C.V, Berry J. A., Campbell P.K.E., and Rascher U. Models of fluorescence and photosynthesis for interpreting measurements of solar-induced chlorophyll fluorescence. J. Geophys. Res. Biogeosciences, 119(12):2312--2327, 2014.
 
 ## License
 

@@ -13,7 +13,10 @@
 #' 
 getPredicts<-function(model=NULL, type.model='CNN',data=NULL,data.trans=NULL ,
                       data.Y=NULL, depVar='Cab', scaler.depVar = NULL) {
-  
+
+  if (!requireNamespace("keras", quietly = TRUE)) {
+    stop("getPredicts() requires the 'keras' package. Install it with install.packages(\"keras\") (and run keras::install_keras() once) and try again.", call. = FALSE)
+  }
 
   if (is.null(data.trans)){
     stop('PLease insert a tranformation for applying: PCA or preProcess  ...')
@@ -80,7 +83,7 @@ getPredicts<-function(model=NULL, type.model='CNN',data=NULL,data.trans=NULL ,
     
   } else if (type.model == 'CNN'){
     
-    data.cnn <- array_reshape(data, c(nrow(data), ncol(data), 1))
+    data.cnn <- keras::array_reshape(data, c(nrow(data), ncol(data), 1))
     pred.model.cnn <- predict(model,data.cnn)
     pred.model.cnn<-as.matrix(pred.model.cnn)
     colnames(pred.model.cnn)<-depVar
@@ -99,7 +102,7 @@ getPredicts<-function(model=NULL, type.model='CNN',data=NULL,data.trans=NULL ,
     pred.model.3hlayers <- predict(model, data)
     pred.model.3hlayers<-as.matrix(pred.model.3hlayers)
     colnames(pred.model.3hlayers)<-depVar
-    data.cnn <- array_reshape(data, c(nrow(data), ncol(data), 1))
+    data.cnn <- keras::array_reshape(data, c(nrow(data), ncol(data), 1))
     pred.model.cnn <- predict(model,data.cnn)
     pred.model.cnn<-as.matrix(pred.model.cnn)
     colnames(pred.model.cnn)<-depVar

@@ -5,8 +5,8 @@
 #'
 #' @import ggplot2
 #' @importFrom stats aggregate as.formula complete.cases cor dnorm formula IQR
-#'   kmeans lm median na.omit na.pass plnorm pnorm prcomp predict qnorm qpois
-#'   quantile rlnorm
+#'   integrate kmeans lm median na.omit na.pass plnorm pnorm prcomp predict
+#'   qnorm qpois quantile rlnorm
 #' @importFrom utils flush.console read.table setTxtProgressBar stack
 #'   txtProgressBar write.csv write.table
 #' @importFrom graphics abline axis grid layout legend lines par points rect
