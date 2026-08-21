@@ -405,12 +405,21 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
       </div>
     </div>
 
-    <p class="section-subtitle" style="margin-top: 22px; margin-bottom: 0;">All apps under <code>Apps/</code> are standalone copies. The same simulators also ship inside the <code>ToolsRTM.app</code> R package (plus PROSAIL, PROSAIL-BRDF, MARMIT, SPART and Inversion, not duplicated here) and launch with one call:</p>
+    <p class="section-subtitle" style="margin-top: 22px; margin-bottom: 0;">All apps under <code>Apps/</code> are standalone copies. The same simulators also ship inside the <code>ToolsRTM.app</code> R package (plus PROSAIL, PROSAIL-BRDF, MARMIT, SPART and Inversion, not duplicated here) as <code>get.simulator()</code>. <code>ToolsRTM.app</code> isn't published as an installable remote — it's developed as source right here in RTM-Suite, so load it from a local clone:</p>
     <div class="code-card" style="margin-top: 10px;">
       <div class="code-card-body">
         <details class="code-collapse">
           <summary>Show code — <code>get.simulator()</code>, every option</summary>
-          <pre><code>library(ToolsRTM.app)
+          <pre><code>git clone https://github.com/CCGCAM/RTM-Suite.git
+cd RTM-Suite</code></pre>
+          <pre><code># In R, from the cloned repo root:
+
+# Option A — install it once (rebuild after pulling updates)
+devtools::install("ToolsRTM.app")
+library(ToolsRTM.app)
+
+# Option B — dev mode, no install step, always the current source
+devtools::load_all("ToolsRTM.app")
 
 # app: one of "PROSAIL", "PROSAIL-BRDF", "MARMIT", "SPART" (needs SCOPEinR),
 #      "SCOPE" (needs SCOPEinR), "getLUT", "RTMs", "Inversion", "STAC"
