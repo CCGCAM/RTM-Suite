@@ -787,8 +787,11 @@ use, in addition to citing RTM-Suite/ToolsRTM.
 - [08. Vegetation Indices and Spectral
   Features](08-vegetation-indices.md):
 - [09. Understanding RTM Sensitivity](09-sensitivity.md):
+- [10. From Physics to Vegetation Traits: Hybrid
+  Inversion](10-hybrid-inversion.md):
+- [11. Comparing ML Algorithms for RTM
+  Inversion](11-ml-inversion-comparison.md):
+- [12. Deep Learning for RTM Inversion](12-deep-learning-inversion.md):
 - [Full pipeline: simulate, convolve, invert](course-pipeline.md):
-- [Trait inversion: merit-function matching, ML, and deep
-  learning](InversionOpt.md):
 - [MARMIT + PROSAIL: realistic soil moisture in canopy
   simulations](marmit-soil-in-canopy.md):

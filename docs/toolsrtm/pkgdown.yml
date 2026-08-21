@@ -11,7 +11,9 @@ articles:
   07-sensor-convolution: 07-sensor-convolution.html
   08-vegetation-indices: 08-vegetation-indices.html
   09-sensitivity: 09-sensitivity.html
+  10-hybrid-inversion: 10-hybrid-inversion.html
+  11-ml-inversion-comparison: 11-ml-inversion-comparison.html
+  12-deep-learning-inversion: 12-deep-learning-inversion.html
   articles/course-pipeline: course-pipeline.html
-  InversionOpt: InversionOpt.html
   articles/marmit-soil-in-canopy: marmit-soil-in-canopy.html
-last_built: 2026-08-21T09:35Z
+last_built: 2026-08-21T09:50Z
