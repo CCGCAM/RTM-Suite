@@ -392,16 +392,34 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
         <div class="shot-caption">Sensitivity — sweep any trait and watch the whole spectrum (and SIF) respond.</div>
       </div>
       <div class="shot-card">
-        <img src="assets/shiny_app3.png" alt="Apps/RTMs SCOPE model tab: SCOPE reflectance, apparent reflectance and radiance simulated live from leaf and canopy sliders">
-        <div class="shot-caption">SCOPE model — run SCOPE reflectance and radiance simulations from the same interface.</div>
+        <img src="assets/shiny_app3.png" alt="Apps/SCOPE model tab: SCOPE reflectance, apparent reflectance and radiance simulated live from leaf and canopy sliders">
+        <div class="shot-caption">SCOPE — run full SCOPE 2.0 reflectance and radiance simulations, standalone.</div>
       </div>
       <div class="shot-card">
-        <img src="assets/shiny_app4.png" alt="Apps/RTMs Look-up table tab: leaf/canopy model and sensor selection, simulated average reflectance with uncertainty band across the generated LUT">
-        <div class="shot-caption">Create your Look-up table — pick models, sensor resolution and sample count, then generate and download a LUT.</div>
+        <img src="assets/shiny_app4.png" alt="Apps/LUTs Create your Look-up table tab: leaf/canopy model and sensor selection, simulated average reflectance with uncertainty band across the generated LUT">
+        <div class="shot-caption">LUTs — pick models, sensor resolution and sample count, then generate and download a LUT.</div>
       </div>
       <div class="shot-card">
-        <img src="assets/shiny_app5.png" alt="Apps/RTMs Look-up table tab: sampled distribution of every leaf and canopy trait shown as histograms before running the simulations">
-        <div class="shot-caption">Review the sampled trait distributions before generating the LUT.</div>
+        <img src="assets/shiny_app5.png" alt="Apps/LUTs tab: sampled distribution of every leaf and canopy trait shown as histograms before running the simulations">
+        <div class="shot-caption">LUTs — review the sampled trait distributions before generating the LUT.</div>
+      </div>
+    </div>
+
+    <p class="section-subtitle" style="margin-top: 22px; margin-bottom: 0;">All apps under <code>Apps/</code> are standalone copies. The same simulators also ship inside the <code>ToolsRTM.app</code> R package (plus PROSAIL, PROSAIL-BRDF, MARMIT, SPART and Inversion, not duplicated here) and launch with one call:</p>
+    <div class="code-card" style="margin-top: 10px;">
+      <div class="code-card-body">
+        <details class="code-collapse">
+          <summary>Show code — <code>get.simulator()</code>, every option</summary>
+          <pre><code>library(ToolsRTM.app)
+
+# app: one of "PROSAIL", "PROSAIL-BRDF", "MARMIT", "SPART" (needs SCOPEinR),
+#      "SCOPE" (needs SCOPEinR), "getLUT", "RTMs", "Inversion", "STAC"
+get.simulator("PROSAIL")
+get.simulator("SCOPE")
+get.simulator("getLUT")
+get.simulator("RTMs")
+get.simulator("STAC")</code></pre>
+        </details>
       </div>
     </div>
   </div>
