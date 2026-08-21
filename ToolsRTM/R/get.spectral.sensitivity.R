@@ -106,7 +106,10 @@ get.spectral.sensitivity <- function(n.samples = 1000, distribution = "Uniform",
   traits <- c(traits, "SoilCoef")
 
   ## ---- 2. Run the canopy model for every sample, in chunks (parallel) ----
-  if (is.null(n.cores)) n.cores <- max(1, parallel::detectCores() - 2)
+  if (is.null(n.cores)) {
+    n.cores <- max(1, parallel::detectCores() - 2)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) n.cores <- min(n.cores, 2L)
+  }
   cl <- parallel::makeCluster(n.cores)
   doParallel::registerDoParallel(cl)
   on.exit(parallel::stopCluster(cl), add = TRUE)

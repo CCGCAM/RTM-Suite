@@ -17,8 +17,6 @@
 hybrid_inversionE<-function(LUT=NULL,input=NULL,split=0.8,setseed=NULL,
                            collinearity=NULL, pattern=NULL,
                            Field.data=NULL, acron=NULL){
-  require("parallel")
-  
   if   (!is.null(Field.data)){
     if (is.null(acron)){
       message('please add the acronym for the ground data')
@@ -67,7 +65,8 @@ list.models<-list
 message('Step-1: processing hybrid inversion using SVM model ....')
 
 clusters <- max(1, parallel::detectCores()-1)
-cl <- makePSOCKcluster(clusters)
+if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+cl <- parallel::makePSOCKcluster(clusters)
 doParallel::registerDoParallel(cl)
 set.seed(setseed)
 ## Support Vector Machines (SVM)
@@ -82,11 +81,12 @@ list.models[['svm']]<- e1071::svm(fmla, kernel="radial", data = data.train, gamm
             cross=10,  # k-fold de 10 reduce overffiting
             probability=F,  ## probabilidad
             fitted=T) ### predichos
-stopCluster(cl)
+parallel::stopCluster(cl)
 
 message('Step-2: processing hybrid approach using Random Forest model')
 clusters <- max(1, parallel::detectCores()-1)
-cl <- makePSOCKcluster(clusters)
+if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+cl <- parallel::makePSOCKcluster(clusters)
 set.seed(setseed)
 ##random forest model RF
 #mtry: Number of variables randomly sampled as candidates at each split.
@@ -120,11 +120,12 @@ list.models[['rf']] <- caret::train(fmla, data=data.train, method="rf", metric='
 # results_tree <- resamples(store_maxtrees)
 # summary(results_tree)
 
-stopCluster(cl)
+parallel::stopCluster(cl)
 
 message('Step-3: processing hybrid approach using Gradient Boosting')
 clusters <- max(1, parallel::detectCores()-1)
-cl <- makePSOCKcluster(clusters)
+if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+cl <- parallel::makePSOCKcluster(clusters)
 ##Gradient Boosting
 set.seed(setseed)
 fit.control <- caret::trainControl(method="repeatedcv", allowParallel=T,
@@ -140,11 +141,12 @@ list.models[['gbm']]<- caret::train(fmla, data = data.train,  method = "gbm", me
               trControl = fit.control, tuneGrid =tune.grid, verbose = FALSE)
 
 
-stopCluster(cl)
+parallel::stopCluster(cl)
 
 message('Step-4: processing hybrid approach using a nnet')
 clusters <- max(1, parallel::detectCores()-1)
-cl <- makePSOCKcluster(clusters)
+if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+cl <- parallel::makePSOCKcluster(clusters)
 ##nnet Model 
 set.seed(setseed)
 fit.control <- caret::trainControl(method="repeatedcv", allowParallel=T,
@@ -184,13 +186,14 @@ for(i in 1:1000)
 }
 close(progress_bar)
 list.models[['nnet']] = model
-stopCluster(cl)
+parallel::stopCluster(cl)
 
 message('Step 5: processing hybrid approach using Ensemble by stacking approach ....')
 message('list of models: SVM,Gradient Boosting and Neural Network ')
 
 clusters <- max(1, parallel::detectCores()-1)
-cl <- makePSOCKcluster(clusters)
+if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+cl <- parallel::makePSOCKcluster(clusters)
 set.seed(setseed)
 
 algorithmList <- c('gbm', #Gradient-boosted machines

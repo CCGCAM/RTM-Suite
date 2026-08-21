@@ -50,6 +50,9 @@ cat("Sequential:", round(t_seq[["elapsed"]], 2), "s for", n.samples, "simulation
 
 ```{r parallel}
 no_cores <- max(1, parallel::detectCores() - 2)
+# CRAN check machines cap parallel workers at 2; respect that limit so this
+# vignette rebuilds cleanly under R CMD check --as-cran.
+if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) no_cores <- min(no_cores, 2L)
 cl <- makeCluster(no_cores)
 registerDoParallel(cl)
 

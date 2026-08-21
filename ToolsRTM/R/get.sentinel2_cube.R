@@ -89,7 +89,9 @@ get.sentinel2_cube <- function(s_collection, shape, date_range,
   # Mask to remove clouds and shadows using the SCL band
   mask <- gdalcubes::image_mask("SCL", values = c(0,1,3,8,9,10,11,12))  # Clouds,snow,water bad pixels and shadows
 
-  gdalcubes::gdalcubes_options(parallel = parallel::detectCores()-2)
+  .gc_par <- max(1, parallel::detectCores()-2)
+  if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) .gc_par <- min(.gc_par, 2L)
+  gdalcubes::gdalcubes_options(parallel = .gc_par)
   # Create a raster cube for the given collection and view
   cube <- gdalcubes::raster_cube(s_collection, view,mask)
   

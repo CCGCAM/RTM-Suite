@@ -51,6 +51,7 @@ get.inversion <- function(data, depVar, inputs, algorithm='PLSR',method.resampli
   # n.cores = 1 skips cluster creation entirely and runs sequentially.
   if(is.null(n.cores)) {
     n.cores <- max(1, parallel::detectCores() - 2)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) n.cores <- min(n.cores, 2L)
   }
 
   # Set the seed the resampling method in the Model

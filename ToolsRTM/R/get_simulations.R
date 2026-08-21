@@ -10,10 +10,6 @@
 #'
 #' 
 get_simulations<-function(inputLUT = NULL, psoil=0.5, rtm.model = 'PROSAIL'){
-  require("foreach")
-  require("dplyr")
-  
-  
   data <- ToolsRTM::dataSpec_PDB
   Rsoil1  <- data[,11]  # rsoil1 = dry soil
   Rsoil2 <- data[,12]  # rsoil2 = wet soil 
@@ -54,14 +50,15 @@ get_simulations<-function(inputLUT = NULL, psoil=0.5, rtm.model = 'PROSAIL'){
     
       nLUT = dim(inputLUT)[1]
       ## choose number of processors/cores
-      no_cores <- parallel::detectCores() - 2 
+      no_cores <- max(1, parallel::detectCores() - 2)
+      if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) no_cores <- min(no_cores, 2L)
       cl <- parallel::makeCluster(no_cores)
       doParallel::registerDoParallel(cl)
       
       start_time <- Sys.time()
       sim.rfl<-list()
       ### simulations
-        sims<-foreach(i=1:nLUT) %dopar% {
+        sims<-foreach::foreach(i=1:nLUT) %dopar% {
           data.foursail_pro<-ToolsRTM::foursail(inputLUT=inputLUT[i,],rsoil=rsoil,PROSPECTversion = 'PRO')
           rdot<-data.foursail_pro[[1]]
           rsot<-data.foursail_pro[[2]]
@@ -135,7 +132,7 @@ get_simulations<-function(inputLUT = NULL, psoil=0.5, rtm.model = 'PROSAIL'){
     start_time <- Sys.time()
     sim.rfl<-list()
     ### simulations
-    sims<-foreach(i=1:nLUT) %dopar% {
+    sims<-foreach::foreach(i=1:nLUT) %dopar% {
       rfl.inform<-ToolsRTM::inform(inputLUT = inputLUT[i,],rsoil=rsoil,PROSPECTversion = 'PRO')
       sim.rfl[[i]]<-rfl.inform
     } ##end paralle
@@ -185,14 +182,15 @@ get_simulations<-function(inputLUT = NULL, psoil=0.5, rtm.model = 'PROSAIL'){
     
       nLUT = dim(inputLUT)[1]
       ## choose number of processors/cores
-      no_cores <- parallel::detectCores() - 2 
+      no_cores <- max(1, parallel::detectCores() - 2)
+      if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) no_cores <- min(no_cores, 2L)
       cl <- parallel::makeCluster(no_cores)
       doParallel::registerDoParallel(cl)
       
       start_time <- Sys.time()
       sim.rfl<-list()
       ### simulations
-      sims<-foreach(i=1:nLUT) %dopar% {
+      sims<-foreach::foreach(i=1:nLUT) %dopar% {
         rfl.prospect<-ToolsRTM::prospect_PRO(N=inputLUT[i,'N'],Cab=inputLUT[i,'Cab'],Car=inputLUT[i,'Car'],
                                              Anth=inputLUT[i,'Anth'],Cbrown=inputLUT[i,'Cbrown'],
                                              EWT= inputLUT[i,'EWT'],inputLUT[i,'LMA'],

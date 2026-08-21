@@ -21,9 +21,6 @@
 hybrid_inversion<-function(LUT=NULL,input=NULL,split=0.8,setseed=NULL,method=NULL,
                            collinearity=NULL, pattern=NULL, trans=NULL,
                            Field.data=NULL, acron=NULL){
-  require("parallel")
-  
-  
   if   (!is.null(Field.data)){
     if (is.null(acron)){
       message('please add the acronym for the ground data')
@@ -78,7 +75,8 @@ hybrid_inversion<-function(LUT=NULL,input=NULL,split=0.8,setseed=NULL,method=NUL
     message('processing hybrid inversion using SVM model ....')
     
     clusters <- max(1, parallel::detectCores()-1)
-    cl <- makePSOCKcluster(clusters)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+    cl <- parallel::makePSOCKcluster(clusters)
     doParallel::registerDoParallel(cl)
     set.seed(setseed)
     ## Support Vector Machines (SVM)
@@ -98,7 +96,8 @@ hybrid_inversion<-function(LUT=NULL,input=NULL,split=0.8,setseed=NULL,method=NUL
   } else if (method == 'RF'){
     message('processing hybrid approach using Random Forest model')
     clusters <- max(1, parallel::detectCores()-1)
-    cl <- makePSOCKcluster(clusters)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+    cl <- parallel::makePSOCKcluster(clusters)
     set.seed(setseed)
     ##random forest model RF
     #mtry: Number of variables randomly sampled as candidates at each split.
@@ -138,7 +137,8 @@ hybrid_inversion<-function(LUT=NULL,input=NULL,split=0.8,setseed=NULL,method=NUL
   } else if (method == 'GB'){
     message('processing hybrid approach using Gradient Boosting')
     clusters <- max(1, parallel::detectCores()-1)
-    cl <- makePSOCKcluster(clusters)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+    cl <- parallel::makePSOCKcluster(clusters)
     ##Gradient Boosting
     set.seed(setseed)
     fit.control <- caret::trainControl(method="repeatedcv", allowParallel=T,
@@ -158,7 +158,8 @@ hybrid_inversion<-function(LUT=NULL,input=NULL,split=0.8,setseed=NULL,method=NUL
   } else if (method == 'nnet'){
     message('processing hybrid approach using a nnet')
     clusters <- max(1, parallel::detectCores()-1)
-    cl <- makePSOCKcluster(clusters)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+    cl <- parallel::makePSOCKcluster(clusters)
     ##nnet Model 
     set.seed(setseed)
     fit.control <- caret::trainControl(method="repeatedcv", allowParallel=T,
@@ -206,7 +207,8 @@ hybrid_inversion<-function(LUT=NULL,input=NULL,split=0.8,setseed=NULL,method=NUL
     message('list of models: SVM,Gradient Boosting and Neural Network ')
 
     clusters <- max(1, parallel::detectCores()-1)
-    cl <- makePSOCKcluster(clusters)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) clusters <- min(clusters, 2L)
+    cl <- parallel::makePSOCKcluster(clusters)
     set.seed(setseed)
    
     algorithmList <- c('gbm', #Gradient-boosted machines

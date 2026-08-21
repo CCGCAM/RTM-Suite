@@ -25,9 +25,7 @@
 #' }
 getSim_fromLUT<-function(trait='Cab',nmin=0, nmax=100, Interval=10, psoil=0.5,model='PROSAIL', method='ggplot'){
   
-  
-  require("foreach")
-  
+
   data <- ToolsRTM::dataSpec_PDB
   Rsoil1  <- data[,11]  # rsoil1 = dry soil
   Rsoil2 <- data[,12]  # rsoil2 = wet soil 
@@ -148,14 +146,15 @@ getSim_fromLUT<-function(trait='Cab',nmin=0, nmax=100, Interval=10, psoil=0.5,mo
                      hspot=hotspot, tts, tto, psi)
     nLUT = dim(LUT)[1]
     ## choose number of processors/cores
-    no_cores <- parallel::detectCores() - 2 
+    no_cores <- max(1, parallel::detectCores() - 2)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) no_cores <- min(no_cores, 2L)
     cl <- parallel::makeCluster(no_cores)
     doParallel::registerDoParallel(cl)
     
     start_time <- Sys.time()
     sim.rfl<-list()
     ### simulations
-      sims<-foreach(i=1:nLUT) %dopar% {
+      sims<-foreach::foreach(i=1:nLUT) %dopar% {
         data.foursail_pro<-ToolsRTM::foursail(inputLUT=LUT[i,],rsoil=rsoil,LeafModel = 'PROSPECT-PRO')
         rdot<-data.foursail_pro[[1]]
         rsot<-data.foursail_pro[[2]]
@@ -204,14 +203,15 @@ getSim_fromLUT<-function(trait='Cab',nmin=0, nmax=100, Interval=10, psoil=0.5,mo
     LUT<- data.frame(N,Cab,Car,Anth,Cbrown,EWT,LMA,alpha,Prot,CBC)
     nLUT = dim(LUT)[1]
     
-    no_cores <- parallel::detectCores() - 2 
+    no_cores <- max(1, parallel::detectCores() - 2)
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) no_cores <- min(no_cores, 2L)
     cl <- parallel::makeCluster(no_cores)
     doParallel::registerDoParallel(cl)
     
     start_time <- Sys.time()
     sim.rfl<-list()
       ### simulations
-      sims<-foreach(i=1:nLUT) %dopar% {
+      sims<-foreach::foreach(i=1:nLUT) %dopar% {
         rfl.prospect<-ToolsRTM::prospect_PRO(N=LUT[i,'N'],Cab=LUT[i,'Cab'],Car=LUT[i,'Car'],
                                            Anth=LUT[i,'Anth'],Cbrown=LUT[i,'Cbrown'],
                                            EWT= LUT[i,'EWT'],LUT[i,'LMA'],
@@ -272,7 +272,7 @@ getSim_fromLUT<-function(trait='Cab',nmin=0, nmax=100, Interval=10, psoil=0.5,mo
       start_time <- Sys.time()
       sim.rfl<-list()
       ### simulations
-        sims<-foreach(i=1:nLUT) %dopar% {
+        sims<-foreach::foreach(i=1:nLUT) %dopar% {
           rfl.inform<-ToolsRTM::inform(inputLUT = LUT[i,],rsoil=rsoil,LeafModel = 'PROSPECT-PRO')
           sim.rfl[[i]]<-rfl.inform
           

@@ -37,7 +37,9 @@ get.satellite_collection <- function(scenario, collection, cloud_server='microso
   if (missing(n.limit)) {
     n.limit = 500
   }
-  gdalcubes::gdalcubes_options(parallel = parallel::detectCores()-2)
+  .gc_par <- max(1, parallel::detectCores()-2)
+  if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) .gc_par <- min(.gc_par, 2L)
+  gdalcubes::gdalcubes_options(parallel = .gc_par)
   # Ensure the scenario is in sf format
   if (!inherits(scenario, "sf")) {
     scenario <- sf::st_as_sf(scenario)
