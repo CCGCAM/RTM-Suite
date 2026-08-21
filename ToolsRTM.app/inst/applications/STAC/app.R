@@ -440,9 +440,11 @@ server <- function(input, output,session) {
       print(summary(avg_raster_cube))
       #plot(avg_raster_cube)
 
-      showNotification("Converting data to raster format ...", type = "message")
-
-      avg_raster <- raster::brick(avg_raster_cube)
+      # NB (raster->terra migration): get.sentinel2_cube(get.dataset = FALSE)
+      # already returns a terra SpatRaster directly (see ToolsRTM::get.sentinel2_cube's
+      # own source) -- raster::brick() was converting an already-terra object
+      # into a legacy RasterBrick for no functional reason.
+      avg_raster <- avg_raster_cube
       avg_raster_val <- avg_raster_val(avg_raster)
       # Calculate NDVI for average and median raster cubes
       showNotification("Calculating NDVI for raster layers ...", type = "message")
@@ -620,10 +622,10 @@ server <- function(input, output,session) {
       extraction_coords_sf <- st_as_sf(extraction_coords, coords = c("Longitude", "Latitude"), crs = 4326)  # Assuming WGS84 (EPSG:4326)
       extraction_coords_transformed <- st_transform(extraction_coords_sf, st_crs(avg_raster))
 
-      # Extract pixel information using raster::extract
+      # Extract pixel information using terra::extract
       # Now extract using transformed coordinates
-      raster_values <- raster::extract(avg_raster, st_coordinates(extraction_coords_transformed))
-      ndvi_values <- raster::extract(ndvi_raster, st_coordinates(extraction_coords_transformed))
+      raster_values <- terra::extract(avg_raster, st_coordinates(extraction_coords_transformed))
+      ndvi_values <- terra::extract(ndvi_raster, st_coordinates(extraction_coords_transformed))
 
       print(raster_values)
 
@@ -753,20 +755,27 @@ server <- function(input, output,session) {
         avg_raster_val <- avg_raster_val()  # Get the pre-calculated avg_raster
         ndvi_avg_val <- ndvi_avg_val()  # Get the pre-calculated ndvi_avg
 
-        # Check if ndvi_avg is a valid RasterLayer
-        if (!is.null(ndvi_avg) && inherits(ndvi_avg, "RasterLayer")) {
-          # If NDVI is available, create a raster brick with avg_raster and ndvi_avg
-          combined_raster <- raster::stack(avg_raster, ndvi_avg)
+        # NB (raster->terra migration): avg_raster/ndvi_avg are terra
+        # SpatRasters now (avg_raster_cube comes straight from
+        # get.sentinel2_cube(); ndvi_avg is SpatRaster arithmetic on it) --
+        # the old inherits(ndvi_avg, "RasterLayer") check was always FALSE
+        # post-migration, silently taking the "NDVI not available" branch
+        # every time. Checking for "SpatRaster" instead restores the
+        # intended behavior.
+        if (!is.null(ndvi_avg) && inherits(ndvi_avg, "SpatRaster")) {
+          # If NDVI is available, combine avg_raster and ndvi_avg into one
+          # multi-layer SpatRaster (terra's equivalent of raster::stack()).
+          combined_raster <- c(avg_raster, ndvi_avg)
 
           # Optionally, you can set names for the combined raster layers
           names(combined_raster) <- c(names(avg_raster), "NDVI")
 
-          # Write the combined raster brick to a GeoTIFF file
-          raster::writeRaster(combined_raster, file, format = "GTiff", overwrite = TRUE)
+          # Write the combined raster to a GeoTIFF file
+          terra::writeRaster(combined_raster, file, filetype = "GTiff", overwrite = TRUE)
 
         } else {
           # If NDVI is not available, write only the avg_raster
-          raster::writeRaster(avg_raster, file, format = "GTiff", overwrite = TRUE)
+          terra::writeRaster(avg_raster, file, filetype = "GTiff", overwrite = TRUE)
         }
       }
     )
