@@ -165,10 +165,40 @@ ToolsRTM::getIndicesSE2()        |
 <span><span class="va">LUT</span><span class="op">$</span><span class="va">SIF760</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">sims</span>, <span class="kw">function</span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="va">s</span><span class="op">$</span><span class="va">data.rad</span><span class="op">$</span><span class="va">LoF_</span><span class="op">[</span><span class="va">i760</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="does-sif-help-retrieve-vcmax25-reflectanceindices-alone-vs--with-sif-added">4. Does SIF help retrieve <code>Vcmax25</code>? Reflectance+indices
+<h2 id="correlation-structure-traits-indices-and-actot-together">4. Correlation structure: traits, indices, and <code>Actot</code>,
+together<a class="anchor" aria-label="anchor" href="#correlation-structure-traits-indices-and-actot-together"></a>
+</h2>
+<p>Before inverting anything, look at how everything in this pipeline
+actually relates – sampled traits, a handful of the convolved indices,
+and the flux (<code>Actot</code>) this tutorial is ultimately about:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Actot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">sims</span>, <span class="kw">function</span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="va">r</span><span class="op">$</span><span class="va">data.fluxes</span><span class="op">$</span><span class="va">Actot</span><span class="op">)</span></span>
+<span><span class="va">corr_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Cab <span class="op">=</span> <span class="va">LUT</span><span class="op">$</span><span class="va">Cab</span>, LAI <span class="op">=</span> <span class="va">LUT</span><span class="op">$</span><span class="va">LAI</span>, EWT <span class="op">=</span> <span class="va">LUT</span><span class="op">$</span><span class="va">EWT</span>, Vcmax25 <span class="op">=</span> <span class="va">LUT</span><span class="op">$</span><span class="va">Vcmax25</span>,</span>
+<span>  SIF687 <span class="op">=</span> <span class="va">LUT</span><span class="op">$</span><span class="va">SIF687</span>, SIF760 <span class="op">=</span> <span class="va">LUT</span><span class="op">$</span><span class="va">SIF760</span>,</span>
+<span>  <span class="va">indices</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NDVI"</span>, <span class="st">"kNDVI"</span>, <span class="st">"MCARI"</span>, <span class="st">"CIre"</span>, <span class="st">"NDWI"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">indices</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  Actot <span class="op">=</span> <span class="va">Actot</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">corr_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">corr_vars</span>, use <span class="op">=</span> <span class="st">"pairwise.complete.obs"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">corrplot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="va">corr_mat</span>, method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"upper"</span>,</span>
+<span>                    addCoef.col <span class="op">=</span> <span class="st">"black"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">45</span>, number.cex <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>                    title <span class="op">=</span> <span class="st">"Traits, SIF, indices, and Actot: correlation structure"</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="10-end-to-end-pipeline_files/figure-html/corr-heatmap-1.png" class="r-plt" alt="" width="768"></p>
+<p><code>Vcmax25</code> and <code>Actot</code> correlate strongly (the
+direct physiological driver, Tutorial 03/07) – but <code>Vcmax25</code>
+itself barely correlates with anything optical (<code>Cab</code>, the
+indices, even <code>SIF687</code>/<code>SIF760</code>) in this LUT,
+exactly because <code><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE()</a></code> samples it independently.
+That single fact in the heatmap <strong>is</strong> why Section 5 below
+finds <code>Vcmax25</code> unretrievable, and why Section 6 fixes it by
+imposing a correlation the LUT doesn’t have on its own.</p>
+</div>
+<div class="section level2">
+<h2 id="does-sif-help-retrieve-vcmax25-reflectanceindices-alone-vs--with-sif-added">5. Does SIF help retrieve <code>Vcmax25</code>? Reflectance+indices
 alone vs. with SIF added<a class="anchor" aria-label="anchor" href="#does-sif-help-retrieve-vcmax25-reflectanceindices-alone-vs--with-sif-added"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">train_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">0.7</span> <span class="op">*</span> <span class="va">n_samples</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">test_idx</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, <span class="va">train_idx</span><span class="op">)</span></span>
@@ -186,7 +216,7 @@ alone vs. with SIF added<a class="anchor" aria-label="anchor" href="#does-sif-h
 <span></span>
 <span><span class="va">r2_no_sif</span> <span class="op">&lt;-</span> <span class="fu">fit_eval</span><span class="op">(</span><span class="va">feat_base</span><span class="op">)</span></span>
 <span><span class="va">r2_with_sif</span> <span class="op">&lt;-</span> <span class="fu">fit_eval</span><span class="op">(</span><span class="va">feat_sif</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Reflectance + indices only"</span>, <span class="st">"+ SIF687/SIF760 added"</span><span class="op">)</span>,</span>
 <span>                         R2_Vcmax25 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">r2_no_sif</span>, <span class="va">r2_with_sif</span><span class="op">)</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -208,19 +238,19 @@ alone vs. with SIF added<a class="anchor" aria-label="anchor" href="#does-sif-h
 <p><strong>Honest result</strong>: R² stays low (often at or near zero)
 whether or not SIF is included – consistent with Tutorial 08’s finding
 that <code>Vcmax25</code> has essentially no retrievable signature here,
-SIF included. The root cause: <code><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE()</a></code> samples
-<code>Vcmax25</code> fully independently of <code>Cab</code>/leaf
-nitrogen/everything else. In real leaves, Vcmax correlates with nitrogen
-and chlorophyll content – and that correlation is exactly what real
-SIF-Vcmax remote-sensing studies rely on as their proxy signal. Sampled
-independently here, there’s no such signal for <em>any</em> method to
-find.</p>
+SIF included, and with Section 4’s heatmap already showing why. The root
+cause: <code><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE()</a></code> samples <code>Vcmax25</code> fully
+independently of <code>Cab</code>/leaf nitrogen/everything else. In real
+leaves, Vcmax correlates with nitrogen and chlorophyll content – and
+that correlation is exactly what real SIF-Vcmax remote-sensing studies
+rely on as their proxy signal. Sampled independently here, there’s no
+such signal for <em>any</em> method to find.</p>
 </div>
 <div class="section level2">
-<h2 id="a-fair-test-correlate-vcmax25-with-cab-first">5. A fair test: correlate <code>Vcmax25</code> with <code>Cab</code>
+<h2 id="a-fair-test-correlate-vcmax25-with-cab-first">6. A fair test: correlate <code>Vcmax25</code> with <code>Cab</code>
 first<a class="anchor" aria-label="anchor" href="#a-fair-test-correlate-vcmax25-with-cab-first"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pigments</span> <span class="op">&lt;-</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ToolsRTM/man/getCor.html" class="external-link">getCor</a></span><span class="op">(</span>n_inputs <span class="op">=</span> <span class="fl">2</span>, setseed <span class="op">=</span> <span class="fl">9</span>, distribution <span class="op">=</span> <span class="st">"Uniform"</span>,</span>
 <span>                              nLUT <span class="op">=</span> <span class="va">n_samples</span>, rho <span class="op">=</span> <span class="fl">0.85</span>, Varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"Vcmax25"</span><span class="op">)</span>,</span>
 <span>                              MinRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, MaxRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">90</span>, <span class="fl">250</span><span class="op">)</span><span class="op">)</span></span>
@@ -232,13 +262,15 @@ first<a class="anchor" aria-label="anchor" href="#a-fair-test-correlate-vcmax25-
 <span>  <span class="va">ml_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">feat</span>, y <span class="op">=</span> <span class="va">target</span><span class="op">)</span></span>
 <span>  <span class="va">rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/randomForest/man/randomForest.html" class="external-link">randomForest</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">ml_data</span><span class="op">[</span><span class="va">train_idx</span>, <span class="op">]</span>, ntree <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span>  <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">rf</span>, <span class="va">ml_data</span><span class="op">[</span><span class="va">test_idx</span>, <span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="fu">r2_f</span><span class="op">(</span><span class="va">ml_data</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="va">test_idx</span><span class="op">]</span>, <span class="va">pred</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="va">pred</span>, obs <span class="op">=</span> <span class="va">ml_data</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="va">test_idx</span><span class="op">]</span>, R2 <span class="op">=</span> <span class="fu">r2_f</span><span class="op">(</span><span class="va">ml_data</span><span class="op">$</span><span class="va">y</span><span class="op">[</span><span class="va">test_idx</span><span class="op">]</span>, <span class="va">pred</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="va">r2_corr_no_sif</span>   <span class="op">&lt;-</span> <span class="fu">fit_eval_corr</span><span class="op">(</span><span class="va">feat_base</span>, <span class="va">LUT_corr</span><span class="op">$</span><span class="va">Vcmax25</span><span class="op">)</span></span>
-<span><span class="va">r2_corr_with_sif</span> <span class="op">&lt;-</span> <span class="fu">fit_eval_corr</span><span class="op">(</span><span class="va">feat_sif</span>,  <span class="va">LUT_corr</span><span class="op">$</span><span class="va">Vcmax25</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<span><span class="va">res_corr_no_sif</span>   <span class="op">&lt;-</span> <span class="fu">fit_eval_corr</span><span class="op">(</span><span class="va">feat_base</span>, <span class="va">LUT_corr</span><span class="op">$</span><span class="va">Vcmax25</span><span class="op">)</span></span>
+<span><span class="va">res_corr_with_sif</span> <span class="op">&lt;-</span> <span class="fu">fit_eval_corr</span><span class="op">(</span><span class="va">feat_sif</span>,  <span class="va">LUT_corr</span><span class="op">$</span><span class="va">Vcmax25</span><span class="op">)</span></span>
+<span><span class="va">r2_corr_no_sif</span>   <span class="op">&lt;-</span> <span class="va">res_corr_no_sif</span><span class="op">$</span><span class="va">R2</span></span>
+<span><span class="va">r2_corr_with_sif</span> <span class="op">&lt;-</span> <span class="va">res_corr_with_sif</span><span class="op">$</span><span class="va">R2</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  setup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Independent Vcmax25 (Section 4), no SIF"</span>, <span class="st">"Independent Vcmax25, + SIF"</span>,</span>
+<span>  setup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Independent Vcmax25 (Section 5), no SIF"</span>, <span class="st">"Independent Vcmax25, + SIF"</span>,</span>
 <span>            <span class="st">"Cab~Vcmax25 correlated (rho=0.85), no SIF"</span>, <span class="st">"Cab~Vcmax25 correlated, + SIF"</span><span class="op">)</span>,</span>
 <span>  R2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">r2_no_sif</span>, <span class="va">r2_with_sif</span>, <span class="va">r2_corr_no_sif</span>, <span class="va">r2_corr_with_sif</span><span class="op">)</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -248,7 +280,7 @@ first<a class="anchor" aria-label="anchor" href="#a-fair-test-correlate-vcmax25-
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">Independent Vcmax25 (Section 4), no SIF</td>
+<td align="left">Independent Vcmax25 (Section 5), no SIF</td>
 <td align="right">-0.160</td>
 </tr>
 <tr class="even">
@@ -265,6 +297,15 @@ first<a class="anchor" aria-label="anchor" href="#a-fair-test-correlate-vcmax25-
 </tr>
 </tbody>
 </table>
+<p>The pipeline’s actual best retrieval result, plotted rather than left
+as a table entry – the correlated-LUT, SIF-added setup (highest R²
+above):</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_corr_with_sif</span><span class="op">$</span><span class="va">obs</span>, <span class="va">res_corr_with_sif</span><span class="op">$</span><span class="va">pred</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#2166AC"</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Observed Vcmax25"</span>, ylab <span class="op">=</span> <span class="st">"Predicted Vcmax25"</span>,</span>
+<span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Best pipeline result: Cab~Vcmax25 correlated + SIF (R2=%.2f)"</span>, <span class="va">r2_corr_with_sif</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"grey40"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="10-end-to-end-pipeline_files/figure-html/fair-test-plot-1.png" class="r-plt" alt="" width="576"></p>
 <p>With a realistic Cab~Vcmax25 correlation imposed (the same mechanism
 Tutorial 05 introduced), <code>Vcmax25</code> becomes retrievable at all
 – through its correlation with Cab’s own real optical signature, not

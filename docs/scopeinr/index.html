@@ -76,13 +76,17 @@
 <h3 id="scopeinr">SCOPEinR<a class="anchor" aria-label="anchor" href="#scopeinr"></a>
 </h3>
 <p><a href="https://www.r-project.org/" class="external-link"><img src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&amp;logoColor=white" alt="R &gt;= 4.3"></a> <a href="https://gitlab.com/caminoccg/scopeinr" class="external-link"><img src="https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&amp;logoColor=white" alt="SCOPEinR on GitLab"></a> <a href="https://github.com/CCGCAM/RTM-Suite" class="external-link"><img src="https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&amp;logoColor=white" alt="RTM–Suite on GitHub"></a> <a href="https://github.com/CCGCAM/scopeinpython" class="external-link"><img src="https://img.shields.io/badge/GitHub-scopeinpython%20(Python)-181717?logo=github&amp;logoColor=white" alt="scopeinpython (Python port) on GitHub"></a></p>
-<p><strong>SCOPEinR</strong> is an R package designed for implementing the Soil Canopy Observation, Photochemistry, and Energy Fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB, this model allows users to simulate interactions between soil, canopy, and atmospheric processes (Van der Tol et al., 2009; Yang et al., 2020).</p>
-<p><strong>SCOPEinR</strong> also powers <a href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs" class="external-link"><code>Apps/RTMs</code></a>, a point-and-click Shiny app (no code required) for simulating canopy reflectance and chlorophyll fluorescence at Top of Canopy (TOC) level – run it locally via <code>shiny::runApp("Apps/RTMs")</code>. For comprehensive inter-comparison with other key radiative transfer (RT) models, it is recommended to install the <strong>ToolsRTM</strong> package alongside <strong>SCOPEinR</strong>.</p>
+<p><strong>SCOPEinR</strong> is an R package designed for implementing the Soil Canopy Observation, Photochemistry, and Energy Fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB. SCOPE is a physically based model that simulates the interactions between <strong>soil, vegetation and atmosphere</strong>, linking radiative transfer with photosynthesis, chlorophyll fluorescence and energy balance processes (Van der Tol et al., 2009; Yang et al., 2020).</p>
+<p><a href="https://ccgcam.github.io/RTM-Suite/scopeinr/index.html" class="external-link"><strong>SCOPEinR documentation — SCOPE Model v2.1 in R</strong></a></p>
+<p><strong>SCOPEinR</strong> also powers <a href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs" class="external-link"><code>Apps/RTMs</code></a>, a point-and-click Shiny app (no code required) for simulating canopy reflectance and chlorophyll fluorescence at Top of Canopy (TOC) level – run it locally via <code>shiny::runApp("Apps/RTMs")</code>.</p>
+<p>For broader radiative transfer model simulations and inter-comparisons, <strong>SCOPEinR</strong> can be used alongside <strong>ToolsRTM</strong>, which provides additional leaf, soil, canopy and soil–plant–atmosphere RT models within the <strong>RTM-Suite</strong> framework.</p>
 </div>
 <div class="section level3">
 <h3 id="rtm-suite-ecosystem">RTM-Suite ecosystem<a class="anchor" aria-label="anchor" href="#rtm-suite-ecosystem"></a>
 </h3>
 <p>SCOPEinR is part of <strong>RTM-Suite</strong>, which brings together the R packages, interactive applications, tutorials, reproducible pipelines, and generated documentation for radiative transfer modelling.</p>
+<p><img src="reference/figures/Website_rtm-suite.png"></p>
+<p><strong>Fig.</strong> The <a href="https://ccgcam.github.io/RTM-Suite/" class="external-link">RTM-Suite website</a> — see <strong>Documentation</strong> for R/Python reference manuals, <strong>Tutorials</strong> for step-by-step walkthroughs (R and Python side by side), and <strong>Examples</strong> for copy-paste runnable code with real generated figures.</p>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -133,25 +137,18 @@
 </table>
 </div>
 <div class="section level3">
-<h3 id="manuals-and-learning-resources">Manuals and learning resources<a class="anchor" aria-label="anchor" href="#manuals-and-learning-resources"></a>
+<h3 id="documentation-and-learning-resources">Documentation and learning resources<a class="anchor" aria-label="anchor" href="#documentation-and-learning-resources"></a>
 </h3>
 <p>The complete documentation is maintained together in the <a href="../docs/index.html"><strong>RTM-Suite documentation hub</strong></a>, so the R and Python implementations, tutorials, package references, and model-comparison material can be explored from one place.</p>
+<p><strong>SCOPEinR</strong> is part of <a href="https://ccgcam.github.io/RTM-Suite/" class="external-link"><strong>RTM-Suite</strong></a>, a unified documentation hub for the R packages (<code>ToolsRTM</code>, <code>SCOPEinR</code>) and their Python counterparts (<code>toolsrtm</code>, <code>scopeinpython</code>). It brings together reference manuals, tutorials, examples, and reproducible workflows for radiative transfer modelling.</p>
 <ul>
-<li>
-<a href="../docs/toolsrtm/index.html"><strong>ToolsRTM reference manual</strong></a>: functions, model families, examples, and articles.</li>
-<li>
-<a href="../docs/scopeinr/index.html"><strong>SCOPEinR reference manual</strong></a>: SCOPE inputs, outputs, energy balance, photosynthesis, and fluorescence.</li>
-<li>
-<a href="../docs/scopeinr/articles/scope-pipeline.html"><strong>SCOPE course pipeline</strong></a>: a reproducible workflow for energy balance, fluorescence, and trait inversion, including a real SIF-versus-Vcmax25 experiment.</li>
-<li>
-<a href="../Tutorials/"><strong>RTM-Suite tutorials</strong></a>: complete R workflows and corresponding Python learning resources.</li>
+<li><p><a href="https://ccgcam.github.io/RTM-Suite/scopeinr/index.html" class="external-link"><strong>SCOPEinR reference manual</strong></a>: complete documentation for SCOPE v2.1 in R, including model inputs and outputs, radiative transfer, energy balance, photosynthesis, chlorophyll fluorescence (SIF), and simulation utilities.</p></li>
+<li><p><a href="https://ccgcam.github.io/RTM-Suite/scopeinr/articles/index.html" class="external-link"><strong>SCOPEinR tutorials</strong></a>: step-by-step learning workflows covering SCOPE fundamentals, soil and canopy BRDF, energy balance, SIF, LUT generation, parallel simulations, sensitivity analysis, hybrid inversion, and end-to-end applications.</p></li>
+<li><p><a href="https://ccgcam.github.io/RTM-Suite/scopeinr/articles/scope-pipeline.html" class="external-link"><strong>SCOPE course pipeline</strong></a>: a complete simulation-to-inversion workflow, from SCOPE simulations and sensor spectral convolution to vegetation indices and retrieval of traits such as Cab, LAI, and Vcmax25.</p></li>
+<li><p><a href="https://ccgcam.github.io/RTM-Suite/scopeinr/articles/sif-photosynthesis-proxy.html" class="external-link"><strong>SIF and photosynthesis</strong></a>: explores whether solar-induced chlorophyll fluorescence provides information about photosynthetic functioning beyond reflectance-based greenness.</p></li>
+<li><p><a href="https://ccgcam.github.io/RTM-Suite/" class="external-link"><strong>RTM-Suite</strong></a>: the common documentation hub connecting SCOPEinR with ToolsRTM and their Python counterparts, including reference manuals, tutorials, examples, and reproducible pipelines.</p></li>
 </ul>
-<p>Documentation is also available from inside the installed packages through their help pages, vignettes, and pkgdown articles.</p>
-<p><strong>SCOPEinR</strong> is one library within <a href="https://ccgcam.github.io/RTM-Suite/" class="external-link"><strong>RTM-Suite</strong></a>, which links both the R packages (<code>ToolsRTM</code>, <code>SCOPEinR</code>) and their Python ports (<code>toolsrtm</code>, <code>scopeinpython</code>) behind one common site — with reference manuals, worked tutorials, and runnable example pipelines for both languages side by side.</p>
-<div class="float">
-<img src="reference/figures/Website_rtm-suite.png" alt="RTM-Suite website"><div class="figcaption">RTM-Suite website</div>
-</div>
-<p><strong>Fig.</strong> The <a href="https://ccgcam.github.io/RTM-Suite/" class="external-link">RTM-Suite website</a> — see <strong>Documentation</strong> for R/Python reference manuals, <strong>Tutorials</strong> for step-by-step walkthroughs (R and Python side by side), and <strong>Examples</strong> for copy-paste runnable code with real generated figures.</p>
+<p>Documentation is also accessible from the installed R package through its help pages and vignettes.</p>
 </div>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -310,23 +307,25 @@
 <p><strong>Note</strong> Figure 8-10 showed also the effects form other plant traits</p>
 </div>
 <div class="section level3">
-<h3 id="references">References:<a class="anchor" aria-label="anchor" href="#references"></a>
+<h3 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h3>
+<p>If you use <strong>ToolsRTM</strong> or <strong>SCOPEinR</strong>, please consider citing:</p>
+<ol style="list-style-type: decimal">
+<li><p>Camino et al. (2024). <strong>RT-Simulator: An Online Platform to Simulate Canopy Reflectance from Biochemical and Structural Plant Properties Using Radiative Transfer Models</strong>. <em>IGARSS 2024</em>, Athens, Greece, pp. 2811-2814. <a href="https://doi.org/10.1109/IGARSS53475.2024.10642442" class="external-link">doi: 10.1109/IGARSS53475.2024.10642442</a></p></li>
+<li><p>Arano et al. (2024). <strong>Enhancing Chlorophyll Content Estimation with Sentinel-2 Imagery: A Fusion of Deep Learning and Biophysical Models</strong>. <em>IGARSS 2024</em>, Athens, Greece, pp. 4486-4489. doi: <a href="https://doi.org/10.1109/IGARSS53475.2024.10641613" class="external-link">10.1109/IGARSS53475.2024.10641613</a></p></li>
+<li><p>Camino et al. (in preparation). <strong>Integrating Physiological Plant Traits with Sentinel-2 Imagery for Monitoring Gross Primary Production and Detecting Forest Disturbances</strong>.</p></li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h3>
 <p>The official SCOPE’s github is available at <a href="https://github.com/Christiaanvandertol/SCOPE" class="external-link uri">https://github.com/Christiaanvandertol/SCOPE</a></p>
 <p>Yang, P., E. Prikaziuk, W. Verhoef, and C. van der Tol. 2020. “SCOPE 2.0: A Model to Simulate Vegetated Land Surface Fluxes and Satellite Signals.” Geoscientific Model Development Discussions 2020: 1–26. <a href="https://doi.org/10.5194/gmd-2020-251" class="external-link uri">https://doi.org/10.5194/gmd-2020-251</a>.</p>
 <p>Van der Tol, C., W. Verhoef, J Timmermans, A Verhoef, and Z Su. 2009. “An Integrated Model of Soil-Canopy Spectral Radiances, Photosynthesis, Fluorescence, Temperature and Energy Balance.” Biogeosciences 6 (12): 3109–29. <a href="https://doi.org/10.5194/bg-6-3109-2009" class="external-link uri">https://doi.org/10.5194/bg-6-3109-2009</a>.</p>
-<p>Other Main References:</p>
-<p>G.James Collatz, J.Timothy Ball, Cyril Grivet, and Joseph A Berry. Physiological and environmental regulation of stomatal conductance, photosynthesis and transpiration: a model that includes a laminar boundary layer. Agric. For. Meteorol., 54(2-4):107–136, apr 1991. URL: <a href="https://doi.org/10.1016/0168-1923(91)90002-8" class="external-link uri">https://doi.org/10.1016/0168-1923(91)90002-8</a>.</p>
-<p>GJ Collatz, M Ribas-Carbo, and JA Berry. Coupled Photosynthesis-Stomatal Conductance Model for Leaves of C sub4/subPlants. Aust. J. Plant Physiol., 19(5):519, 1992. URL: <a href="https://doi.org/10.1071/PP9920519" class="external-link uri">https://doi.org/10.1071/PP9920519</a>.</p>
-<p>Albert Porcar-Castell. A high-resolution portrait of the annual dynamics of photochemical and non-photochemical quenching in needles of Pinus sylvestris. Physiol. Plant., 143(2):139–153, oct 2011. URL: <a href="https://doi.org/10.1111/j.1399-3054.2011.01488.x" class="external-link uri">https://doi.org/10.1111/j.1399-3054.2011.01488.x</a>.</p>
-<p>G. Schaepman-Strub, M. E. Schaepman, T. H. Painter, S. Dangel, and J. V. Martonchik. Reflectance quantities in optical remote sensing-definitions and case studies. Remote Sens. Environ., 103(1):27–42, 2006. <a href="doi:10.1016/j.rse.2006.03.002" class="uri">doi:10.1016/j.rse.2006.03.002</a>.</p>
+<p>Other relevant references:</p>
 <p>Christiaan van der Tol, Micol Rossini, Sergio Cogliati, Wouter Verhoef, Roberto Colombo, Uwe Rascher, and Gina Mohammed. A model and measurement comparison of diurnal cycles of sun-induced chlorophyll fluorescence of crops. Remote Sens. Environ., 186:663–677, dec 2016. URL: <a href="https://doi.org/10.1016/j.rse.2016.09.021" class="external-link uri">https://doi.org/10.1016/j.rse.2016.09.021</a>.</p>
 <p>Wout. Verhoef and Nationaal Lucht- en Ruimtevaartlaboratorium (Netherlands). Theory of radiative transfer models applied in optical remote sensing of vegetation canopies. [publisher not identified], 1998. ISBN 9054858044. URL: <a href="https://library.wur.nl/WebQuery/wda/945481" class="external-link uri">https://library.wur.nl/WebQuery/wda/945481</a>.</p>
-<p>Wouter Verhoef, Christiaan van der Tol, and Elizabeth M. Middleton. Hyperspectral radiative transfer modeling to explore the combined retrieval of biophysical parameters and canopy fluorescence from FLEX – Sentinel-3 tandem mission multi-sensor data. Remote Sens. Environ., 204(August 2016):942–963, 2018. URL: <a href="https://doi.org/10.1016/j.rse.2017.08.006" class="external-link uri">https://doi.org/10.1016/j.rse.2017.08.006</a>, <a href="doi:10.1016/j.rse.2017.08.006" class="uri">doi:10.1016/j.rse.2017.08.006</a>.</p>
-<p>Nastassia Vilfan, Christiaan van der Tol, Onno Muller, Uwe Rascher, and Wouter Verhoef. Fluspect-B: A model for leaf fluorescence, reflectance and transmittance spectra. Remote Sens. Environ., 186:596–615, 2016. URL: <a href="http://dx.doi.org/10.1016/j.rse.2016.09.017" class="external-link uri">http://dx.doi.org/10.1016/j.rse.2016.09.017</a>, <a href="doi:10.1016/j.rse.2016.09.017" class="uri">doi:10.1016/j.rse.2016.09.017</a>.</p>
 <p>Peiqi Yang, Wout Verhoef, and Christiaan van der Tol. The mSCOPE model: A simple adaptation to the SCOPE model to describe reflectance, fluorescence and photosynthesis of vertically heterogeneous canopies. Remote Sens. Environ., 201:1–11, nov 2017. URL: <a href="https://doi.org/10.1016/j.rse.2017.08.029" class="external-link uri">https://doi.org/10.1016/j.rse.2017.08.029</a>.</p>
-<p>XINYOU YIN, JEREMY HARBINSON, and PAUL C. STRUIK. Mathematical review of literature to assess alternative electron transports and interphotosystem excitation partitioning of steady-state C3 photosynthesis under limiting light. Plant, Cell Environ., 29(9):1771–1782, sep 2006. URL: <a href="http://doi.wiley.com/10.1111/j.1365-3040.2006.01554.x" class="external-link uri">http://doi.wiley.com/10.1111/j.1365-3040.2006.01554.x</a>, <a href="doi:10.1111/j.1365-3040.2006.01554.x" class="uri">doi:10.1111/j.1365-3040.2006.01554.x</a>.</p>
-<p>Xinyou Yin and Paul C. Struik. Crop systems biology as an avenue to bridge applied crop science and fundamental plant biology. In Proc. - 2012 IEEE 4th Int. Symp. Plant Growth Model. Simulation, Vis. Appl. PMA 2012, 15–17. IEEE, oct 2012. URL: <a href="https://doi.org/10.1109/PMA.2012.6524806" class="external-link uri">https://doi.org/10.1109/PMA.2012.6524806</a>.</p>
 <p>Van der Tol, C.V, Berry J. A., Campbell P.K.E., and Rascher U. Models of fluorescence and photosynthesis for interpreting measurements of solar-induced chlorophyll fluorescence. J. Geophys. Res. Biogeosciences, 119(12):2312–2327, 2014.</p>
 </div>
 <div class="section level3">

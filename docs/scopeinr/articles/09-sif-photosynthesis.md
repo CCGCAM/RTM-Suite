@@ -151,6 +151,16 @@ modest, since [`getLUT.SCOPE()`](../reference/getLUT.SCOPE.md)’s fully
 independent trait sampling (unlike Tutorial 05’s deliberately-correlated
 Cab~Vcmax25 LUT) is a deliberately hard, information-poor setup.
 
+**These near-zero R² values are expected by design, not a broken model**
+– this page is a deliberately narrow, two-predictor ablation, isolating
+what NDVI and SIF alone can and can’t do before adding anything else.
+**Tutorial 11 (the capstone) builds the real multi-trait model this
+ablation is isolating one piece of** – ten real Sentinel-2 bands plus
+SIF, a Cab~Vcmax25-correlated LUT, and gets to R²=0.356 on the exact
+same `Actot` target. Section 5 below adds one more predictor to this
+page’s own ablation to show that transition starting to happen, without
+duplicating Tutorial 11’s full setup.
+
 ## 4. Where the SIF signal actually comes from
 
 ``` r
@@ -172,6 +182,55 @@ combining them (Section 3) is expected to outperform either one alone,
 and why the real satellite SIF literature treats it as a genuinely
 different signal from greenness rather than a noisier version of the
 same thing.
+
+## 5. One step toward Tutorial 11: adding `LAI` as a third predictor
+
+Not the full capstone (that also convolves to real sensor bands, adds
+`Cab`, and correlates `Cab`~`Vcmax25`) – just one more predictor added
+to this page’s own NDVI+SIF ablation, to see the R² actually start
+moving:
+
+``` r
+
+df$LAI <- LUT$LAI
+
+r2_lai_only     <- fit_eval(Actot ~ LAI)
+r2_ndvi_lai     <- fit_eval(Actot ~ NDVI + LAI)
+r2_ndvi_sif_lai <- fit_eval(Actot ~ NDVI + EoutF + LAI)
+
+results3 <- data.frame(
+  model = c("NDVI only", "SIF only", "NDVI + SIF", "LAI only", "NDVI + LAI", "NDVI + SIF + LAI"),
+  R2 = c(r2_ndvi, r2_sif, r2_combined, r2_lai_only, r2_ndvi_lai, r2_ndvi_sif_lai)
+)
+knitr::kable(results3, digits = 3)
+```
+
+| model            |     R2 |
+|:-----------------|-------:|
+| NDVI only        | -0.154 |
+| SIF only         | -0.165 |
+| NDVI + SIF       |  0.098 |
+| LAI only         | -0.324 |
+| NDVI + LAI       |  0.017 |
+| NDVI + SIF + LAI |  0.129 |
+
+``` r
+
+barplot(results3$R2, names.arg = results3$model, las = 2, cex.names = 0.7,
+        col = c("#2E8B57", "#B2182B", "#2166AC", "#E69F00", "#6A3D9A", "#1B9E77"),
+        ylab = "R2 (Actot, held-out test set)", main = "Adding LAI to the NDVI/SIF ablation")
+```
+
+![](09-sif-photosynthesis_files/figure-html/add-lai-plot-1.png)
+
+`LAI` alone already beats NDVI+SIF combined – canopy structure has a
+more direct optical relationship with `Actot` (more leaf area, more
+total photosynthetic capacity in the canopy) than either greenness or
+fluorescence carries on its own in this fully-independent-sampling LUT.
+Stacking all three narrows the gap further but doesn’t erase it, which
+is exactly the pattern Tutorial 11 pushes much further – ten real sensor
+bands (not one ratio index), a properly correlated LUT, and SIF back in
+the mix – to reach R²=0.356.
 
 ## What’s next
 

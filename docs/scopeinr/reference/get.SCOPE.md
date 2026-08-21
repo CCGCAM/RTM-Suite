@@ -56,8 +56,8 @@ get.SCOPE(
 
   Not currently functional – SCOPE always uses its own multi-layer
   canopy engine (`getRTMo`), which is not the same code as
-  [`ToolsRTM::foursail()`](https://rdrr.io/pkg/ToolsRTM/man/foursail.html)/`foursail2()`/`inform()`
-  and isn't swappable without reimplementing those inside SCOPE's
+  `ToolsRTM::foursail()`/`foursail2()`/`inform()` and isn't swappable
+  without reimplementing those inside SCOPE's
   multi-layer/gap-probability framework. Passing anything other than
   `'fourSAIL'` triggers a warning. Kept as an argument for forward
   compatibility.

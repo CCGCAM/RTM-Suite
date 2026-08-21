@@ -241,7 +241,7 @@ db.sims <-SCOPEinR::get.SCOPE.parallel(LUT=LUT,options.SCOPE=table.with.opts,opt
 #> Executing SCOPE 2.1. version ...
 ```
 
-Total simulations: 100 Total execution time: 34.34537
+Total simulations: 100 Total execution time: 54.32586
 
 ``` r
 

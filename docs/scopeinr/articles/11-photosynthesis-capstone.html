@@ -264,6 +264,12 @@ individual window can fail for ordinary reasons:</p>
 <span>                 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-07-01"</span>,<span class="st">"2024-07-31"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-09-01"</span>,<span class="st">"2024-09-30"</span><span class="op">)</span>,</span>
 <span>                 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-11-01"</span>,<span class="st">"2024-11-30"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Section 6 below needs a real retrieved cube (not just the scalar site-mean</span></span>
+<span><span class="co"># used for the time series) to build spatial maps from -- stashed here as</span></span>
+<span><span class="co"># each window is retrieved, so that section reuses data already fetched for</span></span>
+<span><span class="co"># the time series instead of issuing further STAC calls.</span></span>
+<span><span class="va">cubes_by_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">get_one_date</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">w</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>    <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ToolsRTM/man/get.satellite_collection.html" class="external-link">get.satellite_collection</a></span><span class="op">(</span>scenario <span class="op">=</span> <span class="va">scenario</span>, collection <span class="op">=</span> <span class="st">"sentinel-2-l2a"</span>,</span>
@@ -272,6 +278,7 @@ individual window can fail for ordinary reasons:</p>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">sc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"no cloud-free items this window"</span><span class="op">)</span></span>
 <span>    <span class="va">cube</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ToolsRTM/man/get.sentinel2_cube.html" class="external-link">get.sentinel2_cube</a></span><span class="op">(</span><span class="va">sc</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, shape <span class="op">=</span> <span class="va">shape</span>, date_range <span class="op">=</span> <span class="va">w</span>,</span>
 <span>                                aggregation_method <span class="op">=</span> <span class="st">"mean"</span>, get.dataset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    <span class="va">cubes_by_date</span><span class="op">[[</span><span class="va">w</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;&lt;-</span> <span class="va">cube</span></span>
 <span>    <span class="va">refl</span> <span class="op">&lt;-</span> <span class="va">cube</span><span class="op">[[</span><span class="va">real_names</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="fl">10000</span></span>
 <span>    <span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/global.html" class="external-link">global</a></span><span class="op">(</span><span class="va">refl</span>, <span class="st">"mean"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">means</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">real_names</span></span>
@@ -328,7 +335,74 @@ NDVI at this exact site) – not noise, and not a value forced to look
 plausible after the fact.</p>
 </div>
 <div class="section level2">
-<h2 id="what-this-result-is-and-isnt">6. What this result is, and isn’t<a class="anchor" aria-label="anchor" href="#what-this-result-is-and-isnt"></a>
+<h2 id="a-genuine-spatial-map-not-just-site-mean-scalars">6. A genuine spatial map, not just site-mean scalars<a class="anchor" aria-label="anchor" href="#a-genuine-spatial-map-not-just-site-mean-scalars"></a>
+</h2>
+<p>Sections 4-5 reduced every date to one site-mean
+NDVI/<code>Actot</code> value. This section reuses one of those exact
+same already-retrieved cubes (no new STAC call) to show the actual 2D
+image and a real per-pixel retrieval – the same spatial pattern verified
+in ToolsRTM’s own real-EO tutorials
+(<code>15-real-eo-application.Rmd</code>’s NDVI/LAI maps,
+<code>17-forest-time-series.Rmd</code>’s STAC retrieval), applied here
+to <code>Actot</code> instead of a structural trait.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ok_dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cubes_by_date</span><span class="op">)</span></span>
+<span><span class="co"># Prefer the July window (peak growing-season, most likely fully cloud-free) if</span></span>
+<span><span class="co"># it succeeded; otherwise fall back to whichever window's cube was retrieved.</span></span>
+<span><span class="va">map_date</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="st">"2024-07-01"</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="va">ok_dates</span><span class="op">)</span> <span class="st">"2024-07-01"</span> <span class="kw">else</span> <span class="va">ok_dates</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">map_cube</span> <span class="op">&lt;-</span> <span class="va">cubes_by_date</span><span class="op">[[</span><span class="va">map_date</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Building spatial maps from the"</span>, <span class="va">map_date</span>, <span class="st">"cube ("</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">map_cube</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">" x "</span><span class="op">)</span>, <span class="st">"rows x cols x bands )\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Building spatial maps from the 2024-07-01 cube ( 33 x 33 x 11 rows x cols x bands )</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="a--true-color-quicklook-of-the-actual-sentinel-2-capture">6a. True-color quicklook of the actual Sentinel-2 capture<a class="anchor" aria-label="anchor" href="#a--true-color-quicklook-of-the-actual-sentinel-2-capture"></a>
+</h3>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">map_refl</span> <span class="op">&lt;-</span> <span class="va">map_cube</span><span class="op">[[</span><span class="va">real_names</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="fl">10000</span></span>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plotRGB.html" class="external-link">plotRGB</a></span><span class="op">(</span><span class="va">map_cube</span>, r <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">real_names</span> <span class="op">==</span> <span class="st">"B04"</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">real_names</span> <span class="op">==</span> <span class="st">"B03"</span><span class="op">)</span>,</span>
+<span>               b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">real_names</span> <span class="op">==</span> <span class="st">"B02"</span><span class="op">)</span>, stretch <span class="op">=</span> <span class="st">"lin"</span>,</span>
+<span>               main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Speulderbos, Sentinel-2 true color --"</span>, <span class="va">map_date</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="11-photosynthesis-capstone_files/figure-html/rgb-quicklook-1.png" class="r-plt" alt="" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="b--ndvi-mapped">6b. NDVI, mapped<a class="anchor" aria-label="anchor" href="#b--ndvi-mapped"></a>
+</h3>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ndvi_map</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">map_refl</span><span class="op">[[</span><span class="st">"B08"</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="va">map_refl</span><span class="op">[[</span><span class="st">"B04"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">map_refl</span><span class="op">[[</span><span class="st">"B08"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">map_refl</span><span class="op">[[</span><span class="st">"B04"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ndvi_map</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"NDVI"</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ndvi_map</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Speulderbos NDVI --"</span>, <span class="va">map_date</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="11-photosynthesis-capstone_files/figure-html/ndvi-map-1.png" class="r-plt" alt="" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="c--actot-mapped-the-reflectance-only-model-applied-per-pixel">6c. <code>Actot</code>, mapped – the reflectance-only model applied
+per pixel<a class="anchor" aria-label="anchor" href="#c--actot-mapped-the-reflectance-only-model-applied-per-pixel"></a>
+</h3>
+<p>Every pixel’s 10-band reflectance goes through
+<code>rf_reflonly</code> (Section 3) – the same building block
+ToolsRTM’s <code><a href="https://rdrr.io/pkg/ToolsRTM/man/getSpatialTrait.html" class="external-link">getSpatialTrait()</a></code> uses internally, done here
+explicitly:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pix_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">map_refl</span>, xy <span class="op">=</span> <span class="cn">TRUE</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">ok_rows</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html" class="external-link">complete.cases</a></span><span class="op">(</span><span class="va">pix_df</span><span class="op">[</span>, <span class="va">real_names</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">Actot_pixels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA_real_</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pix_df</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Actot_pixels</span><span class="op">[</span><span class="va">ok_rows</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">rf_reflonly</span>, <span class="va">pix_df</span><span class="op">[</span><span class="va">ok_rows</span>, <span class="va">real_names</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">actot_map</span> <span class="op">&lt;-</span> <span class="va">map_refl</span><span class="op">[[</span><span class="st">"B04"</span><span class="op">]</span><span class="op">]</span>  <span class="co"># reuse its grid/extent/crs</span></span>
+<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">actot_map</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">Actot_pixels</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">actot_map</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Actot_pred"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">actot_map</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Speulderbos, per-pixel retrieved Actot --"</span>, <span class="va">map_date</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="11-photosynthesis-capstone_files/figure-html/actot-map-1.png" class="r-plt" alt="" width="672"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Per-pixel Actot range:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">Actot_pixels</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">" to "</span><span class="op">)</span>,</span>
+<span>    <span class="st">"umol m-2 s-1 ("</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">ok_rows</span><span class="op">)</span>, <span class="st">"/"</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pix_df</span><span class="op">)</span>, <span class="st">"valid pixels )\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Per-pixel Actot range: 4.83 to 9.95 umol m-2 s-1 ( 1089 / 1089 valid pixels )</span></span></code></pre></div>
+<p>A real forest canopy, mapped – not just the site-average scalar
+Sections 4-5 tracked through time, but where within that same scene
+photosynthesis is predicted to be higher or lower.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="what-this-result-is-and-isnt">7. What this result is, and isn’t<a class="anchor" aria-label="anchor" href="#what-this-result-is-and-isnt"></a>
 </h2>
 <p><code>Actot</code> is SCOPE’s simulated flux, not a directly-measured
 GPP – so this page retrieves “what a SCOPE-trained model, fed real

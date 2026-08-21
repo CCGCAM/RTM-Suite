@@ -187,6 +187,12 @@ windows <- list(c("2024-03-01","2024-03-31"), c("2024-05-01","2024-05-31"),
                  c("2024-07-01","2024-07-31"), c("2024-09-01","2024-09-30"),
                  c("2024-11-01","2024-11-30"))
 
+# Section 6 below needs a real retrieved cube (not just the scalar site-mean
+# used for the time series) to build spatial maps from -- stashed here as
+# each window is retrieved, so that section reuses data already fetched for
+# the time series instead of issuing further STAC calls.
+cubes_by_date <- list()
+
 get_one_date <- function(w) {
   tryCatch({
     sc <- get.satellite_collection(scenario = scenario, collection = "sentinel-2-l2a",
@@ -195,6 +201,7 @@ get_one_date <- function(w) {
     if (is.null(sc[[1]])) stop("no cloud-free items this window")
     cube <- get.sentinel2_cube(sc[[1]], shape = shape, date_range = w,
                                 aggregation_method = "mean", get.dataset = FALSE)
+    cubes_by_date[[w[1]]] <<- cube
     refl <- cube[[real_names]] / 10000
     means <- as.numeric(terra::global(refl, "mean", na.rm = TRUE)[, 1])
     names(means) <- real_names
@@ -260,7 +267,85 @@ beech component senesces (the same pattern ToolsRTM Tutorial 16 found in
 NDVI at this exact site) – not noise, and not a value forced to look
 plausible after the fact.
 
-## 6. What this result is, and isn’t
+## 6. A genuine spatial map, not just site-mean scalars
+
+Sections 4-5 reduced every date to one site-mean NDVI/`Actot` value.
+This section reuses one of those exact same already-retrieved cubes (no
+new STAC call) to show the actual 2D image and a real per-pixel
+retrieval – the same spatial pattern verified in ToolsRTM’s own real-EO
+tutorials (`15-real-eo-application.Rmd`’s NDVI/LAI maps,
+`17-forest-time-series.Rmd`’s STAC retrieval), applied here to `Actot`
+instead of a structural trait.
+
+``` r
+
+ok_dates <- names(cubes_by_date)
+# Prefer the July window (peak growing-season, most likely fully cloud-free) if
+# it succeeded; otherwise fall back to whichever window's cube was retrieved.
+map_date <- if ("2024-07-01" %in% ok_dates) "2024-07-01" else ok_dates[1]
+map_cube <- cubes_by_date[[map_date]]
+cat("Building spatial maps from the", map_date, "cube (", paste(dim(map_cube), collapse = " x "), "rows x cols x bands )\n")
+#> Building spatial maps from the 2024-07-01 cube ( 33 x 33 x 11 rows x cols x bands )
+```
+
+### 6a. True-color quicklook of the actual Sentinel-2 capture
+
+``` r
+
+map_refl <- map_cube[[real_names]] / 10000
+terra::plotRGB(map_cube, r = which(real_names == "B04"), g = which(real_names == "B03"),
+               b = which(real_names == "B02"), stretch = "lin",
+               main = paste("Speulderbos, Sentinel-2 true color --", map_date))
+```
+
+![](11-photosynthesis-capstone_files/figure-html/rgb-quicklook-1.png)
+
+### 6b. NDVI, mapped
+
+``` r
+
+ndvi_map <- (map_refl[["B08"]] - map_refl[["B04"]]) / (map_refl[["B08"]] + map_refl[["B04"]])
+names(ndvi_map) <- "NDVI"
+plot(ndvi_map, main = paste("Speulderbos NDVI --", map_date))
+```
+
+![](11-photosynthesis-capstone_files/figure-html/ndvi-map-1.png)
+
+### 6c. `Actot`, mapped – the reflectance-only model applied per pixel
+
+Every pixel’s 10-band reflectance goes through `rf_reflonly` (Section 3)
+– the same building block ToolsRTM’s
+[`getSpatialTrait()`](https://rdrr.io/pkg/ToolsRTM/man/getSpatialTrait.html)
+uses internally, done here explicitly:
+
+``` r
+
+pix_df <- as.data.frame(map_refl, xy = TRUE, na.rm = FALSE)
+ok_rows <- stats::complete.cases(pix_df[, real_names])
+Actot_pixels <- rep(NA_real_, nrow(pix_df))
+Actot_pixels[ok_rows] <- as.numeric(predict(rf_reflonly, pix_df[ok_rows, real_names]))
+
+actot_map <- map_refl[["B04"]]  # reuse its grid/extent/crs
+terra::values(actot_map) <- Actot_pixels
+names(actot_map) <- "Actot_pred"
+
+plot(actot_map, main = paste("Speulderbos, per-pixel retrieved Actot --", map_date))
+```
+
+![](11-photosynthesis-capstone_files/figure-html/actot-map-1.png)
+
+``` r
+
+cat("Per-pixel Actot range:", paste(round(range(Actot_pixels, na.rm = TRUE), 2), collapse = " to "),
+    "umol m-2 s-1 (", sum(ok_rows), "/", nrow(pix_df), "valid pixels )\n")
+#> Per-pixel Actot range: 4.83 to 9.95 umol m-2 s-1 ( 1089 / 1089 valid pixels )
+```
+
+A real forest canopy, mapped – not just the site-average scalar Sections
+4-5 tracked through time, but where within that same scene
+photosynthesis is predicted to be higher or lower.
+
+## 7. What this result is, and isn’t
 
 `Actot` is SCOPE’s simulated flux, not a directly-measured GPP – so this
 page retrieves “what a SCOPE-trained model, fed real Sentinel-2

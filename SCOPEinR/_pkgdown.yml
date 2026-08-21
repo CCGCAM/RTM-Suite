@@ -14,20 +14,30 @@ navbar:
       text: "ToolsRTM"
       href: ../toolsrtm/index.html
 
+footer:
+  structure:
+    left: developed_by
+    right: built_with
+  components:
+    developed_by: >
+      Developed by Carlos Camino (WUR)
+      <a href="https://orcid.org/0000-0001-5188-4406" target="orcid.widget" aria-label="ORCID">
+      <span class="fab fa-orcid orcid" aria-hidden="true"></span></a>.
+
 articles:
 - title: Tutorials
   navbar: Tutorials
   contents:
-  - "articles/01-getting-started"
-  - "articles/02-soil-canopy-brdf"
-  - "articles/03-energy-balance"
-  - "articles/04-fluorescence"
-  - "articles/05-building-scope-luts"
-  - "articles/06-parallel-scope-runs"
-  - "articles/07-sensitivity"
-  - "articles/08-hybrid-inversion"
-  - "articles/09-sif-photosynthesis"
-  - "articles/10-end-to-end-pipeline"
+  - "01-getting-started"
+  - "02-soil-canopy-brdf"
+  - "03-energy-balance"
+  - "04-fluorescence"
+  - "05-building-scope-luts"
+  - "06-parallel-scope-runs"
+  - "07-sensitivity"
+  - "08-hybrid-inversion"
+  - "09-sif-photosynthesis"
+  - "10-end-to-end-pipeline"
   - "articles/11-photosynthesis-capstone"
 - title: Reference manuals and deep dives
   navbar: Manuals

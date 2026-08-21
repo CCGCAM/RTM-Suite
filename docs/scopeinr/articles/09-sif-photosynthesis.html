@@ -231,6 +231,16 @@ the absolute retrieval skill here stays modest, since
 <code><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE()</a></code>’s fully independent trait sampling (unlike
 Tutorial 05’s deliberately-correlated Cab~Vcmax25 LUT) is a deliberately
 hard, information-poor setup.</p>
+<p><strong>These near-zero R² values are expected by design, not a
+broken model</strong> – this page is a deliberately narrow,
+two-predictor ablation, isolating what NDVI and SIF alone can and can’t
+do before adding anything else. <strong>Tutorial 11 (the capstone)
+builds the real multi-trait model this ablation is isolating one piece
+of</strong> – ten real Sentinel-2 bands plus SIF, a
+Cab~Vcmax25-correlated LUT, and gets to R²=0.356 on the exact same
+<code>Actot</code> target. Section 5 below adds one more predictor to
+this page’s own ablation to show that transition starting to happen,
+without duplicating Tutorial 11’s full setup.</p>
 </div>
 <div class="section level2">
 <h2 id="where-the-sif-signal-actually-comes-from">4. Where the SIF signal actually comes from<a class="anchor" aria-label="anchor" href="#where-the-sif-signal-actually-comes-from"></a>
@@ -251,6 +261,73 @@ exactly why combining them (Section 3) is expected to outperform either
 one alone, and why the real satellite SIF literature treats it as a
 genuinely different signal from greenness rather than a noisier version
 of the same thing.</p>
+</div>
+<div class="section level2">
+<h2 id="one-step-toward-tutorial-11-adding-lai-as-a-third-predictor">5. One step toward Tutorial 11: adding <code>LAI</code> as a third
+predictor<a class="anchor" aria-label="anchor" href="#one-step-toward-tutorial-11-adding-lai-as-a-third-predictor"></a>
+</h2>
+<p>Not the full capstone (that also convolves to real sensor bands, adds
+<code>Cab</code>, and correlates <code>Cab</code>~<code>Vcmax25</code>)
+– just one more predictor added to this page’s own NDVI+SIF ablation, to
+see the R² actually start moving:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span><span class="op">$</span><span class="va">LAI</span> <span class="op">&lt;-</span> <span class="va">LUT</span><span class="op">$</span><span class="va">LAI</span></span>
+<span></span>
+<span><span class="va">r2_lai_only</span>     <span class="op">&lt;-</span> <span class="fu">fit_eval</span><span class="op">(</span><span class="va">Actot</span> <span class="op">~</span> <span class="va">LAI</span><span class="op">)</span></span>
+<span><span class="va">r2_ndvi_lai</span>     <span class="op">&lt;-</span> <span class="fu">fit_eval</span><span class="op">(</span><span class="va">Actot</span> <span class="op">~</span> <span class="va">NDVI</span> <span class="op">+</span> <span class="va">LAI</span><span class="op">)</span></span>
+<span><span class="va">r2_ndvi_sif_lai</span> <span class="op">&lt;-</span> <span class="fu">fit_eval</span><span class="op">(</span><span class="va">Actot</span> <span class="op">~</span> <span class="va">NDVI</span> <span class="op">+</span> <span class="va">EoutF</span> <span class="op">+</span> <span class="va">LAI</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">results3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NDVI only"</span>, <span class="st">"SIF only"</span>, <span class="st">"NDVI + SIF"</span>, <span class="st">"LAI only"</span>, <span class="st">"NDVI + LAI"</span>, <span class="st">"NDVI + SIF + LAI"</span><span class="op">)</span>,</span>
+<span>  R2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">r2_ndvi</span>, <span class="va">r2_sif</span>, <span class="va">r2_combined</span>, <span class="va">r2_lai_only</span>, <span class="va">r2_ndvi_lai</span>, <span class="va">r2_ndvi_sif_lai</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">results3</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">model</th>
+<th align="right">R2</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">NDVI only</td>
+<td align="right">-0.154</td>
+</tr>
+<tr class="even">
+<td align="left">SIF only</td>
+<td align="right">-0.165</td>
+</tr>
+<tr class="odd">
+<td align="left">NDVI + SIF</td>
+<td align="right">0.098</td>
+</tr>
+<tr class="even">
+<td align="left">LAI only</td>
+<td align="right">-0.324</td>
+</tr>
+<tr class="odd">
+<td align="left">NDVI + LAI</td>
+<td align="right">0.017</td>
+</tr>
+<tr class="even">
+<td align="left">NDVI + SIF + LAI</td>
+<td align="right">0.129</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span><span class="va">results3</span><span class="op">$</span><span class="va">R2</span>, names.arg <span class="op">=</span> <span class="va">results3</span><span class="op">$</span><span class="va">model</span>, las <span class="op">=</span> <span class="fl">2</span>, cex.names <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>        col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2E8B57"</span>, <span class="st">"#B2182B"</span>, <span class="st">"#2166AC"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#6A3D9A"</span>, <span class="st">"#1B9E77"</span><span class="op">)</span>,</span>
+<span>        ylab <span class="op">=</span> <span class="st">"R2 (Actot, held-out test set)"</span>, main <span class="op">=</span> <span class="st">"Adding LAI to the NDVI/SIF ablation"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="09-sif-photosynthesis_files/figure-html/add-lai-plot-1.png" class="r-plt" alt="" width="576"></p>
+<p><code>LAI</code> alone already beats NDVI+SIF combined – canopy
+structure has a more direct optical relationship with <code>Actot</code>
+(more leaf area, more total photosynthetic capacity in the canopy) than
+either greenness or fluorescence carries on its own in this
+fully-independent-sampling LUT. Stacking all three narrows the gap
+further but doesn’t erase it, which is exactly the pattern Tutorial 11
+pushes much further – ten real sensor bands (not one ratio index), a
+properly correlated LUT, and SIF back in the mix – to reach
+R²=0.356.</p>
 </div>
 <div class="section level2">
 <h2 id="whats-next">What’s next<a class="anchor" aria-label="anchor" href="#whats-next"></a>

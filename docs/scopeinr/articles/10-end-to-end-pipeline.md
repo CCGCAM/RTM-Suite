@@ -88,7 +88,39 @@ LUT$SIF687 <- sapply(sims, function(s) s$data.rad$LoF_[i687])
 LUT$SIF760 <- sapply(sims, function(s) s$data.rad$LoF_[i760])
 ```
 
-## 4. Does SIF help retrieve `Vcmax25`? Reflectance+indices alone vs. with SIF added
+## 4. Correlation structure: traits, indices, and `Actot`, together
+
+Before inverting anything, look at how everything in this pipeline
+actually relates – sampled traits, a handful of the convolved indices,
+and the flux (`Actot`) this tutorial is ultimately about:
+
+``` r
+
+Actot <- sapply(sims, function(r) r$data.fluxes$Actot)
+corr_vars <- data.frame(
+  Cab = LUT$Cab, LAI = LUT$LAI, EWT = LUT$EWT, Vcmax25 = LUT$Vcmax25,
+  SIF687 = LUT$SIF687, SIF760 = LUT$SIF760,
+  indices[, intersect(c("NDVI", "kNDVI", "MCARI", "CIre", "NDWI"), names(indices))],
+  Actot = Actot
+)
+corr_mat <- cor(corr_vars, use = "pairwise.complete.obs")
+
+corrplot::corrplot(corr_mat, method = "color", type = "upper",
+                    addCoef.col = "black", tl.col = "black", tl.srt = 45, number.cex = 0.7,
+                    title = "Traits, SIF, indices, and Actot: correlation structure", mar = c(0, 0, 2, 0))
+```
+
+![](10-end-to-end-pipeline_files/figure-html/corr-heatmap-1.png)
+
+`Vcmax25` and `Actot` correlate strongly (the direct physiological
+driver, Tutorial 03/07) – but `Vcmax25` itself barely correlates with
+anything optical (`Cab`, the indices, even `SIF687`/`SIF760`) in this
+LUT, exactly because [`getLUT.SCOPE()`](../reference/getLUT.SCOPE.md)
+samples it independently. That single fact in the heatmap **is** why
+Section 5 below finds `Vcmax25` unretrievable, and why Section 6 fixes
+it by imposing a correlation the LUT doesn’t have on its own.
+
+## 5. Does SIF help retrieve `Vcmax25`? Reflectance+indices alone vs. with SIF added
 
 ``` r
 
@@ -124,15 +156,16 @@ knitr::kable(data.frame(model = c("Reflectance + indices only", "+ SIF687/SIF760
 
 **Honest result**: R² stays low (often at or near zero) whether or not
 SIF is included – consistent with Tutorial 08’s finding that `Vcmax25`
-has essentially no retrievable signature here, SIF included. The root
-cause: [`getLUT.SCOPE()`](../reference/getLUT.SCOPE.md) samples
-`Vcmax25` fully independently of `Cab`/leaf nitrogen/everything else. In
-real leaves, Vcmax correlates with nitrogen and chlorophyll content –
-and that correlation is exactly what real SIF-Vcmax remote-sensing
-studies rely on as their proxy signal. Sampled independently here,
-there’s no such signal for *any* method to find.
+has essentially no retrievable signature here, SIF included, and with
+Section 4’s heatmap already showing why. The root cause:
+[`getLUT.SCOPE()`](../reference/getLUT.SCOPE.md) samples `Vcmax25` fully
+independently of `Cab`/leaf nitrogen/everything else. In real leaves,
+Vcmax correlates with nitrogen and chlorophyll content – and that
+correlation is exactly what real SIF-Vcmax remote-sensing studies rely
+on as their proxy signal. Sampled independently here, there’s no such
+signal for *any* method to find.
 
-## 5. A fair test: correlate `Vcmax25` with `Cab` first
+## 6. A fair test: correlate `Vcmax25` with `Cab` first
 
 ``` r
 
@@ -147,26 +180,41 @@ fit_eval_corr <- function(feat, target) {
   ml_data <- data.frame(feat, y = target)
   rf <- randomForest(y ~ ., data = ml_data[train_idx, ], ntree = 300)
   pred <- predict(rf, ml_data[test_idx, ])
-  r2_f(ml_data$y[test_idx], pred)
+  list(pred = pred, obs = ml_data$y[test_idx], R2 = r2_f(ml_data$y[test_idx], pred))
 }
-r2_corr_no_sif   <- fit_eval_corr(feat_base, LUT_corr$Vcmax25)
-r2_corr_with_sif <- fit_eval_corr(feat_sif,  LUT_corr$Vcmax25)
+res_corr_no_sif   <- fit_eval_corr(feat_base, LUT_corr$Vcmax25)
+res_corr_with_sif <- fit_eval_corr(feat_sif,  LUT_corr$Vcmax25)
+r2_corr_no_sif   <- res_corr_no_sif$R2
+r2_corr_with_sif <- res_corr_with_sif$R2
 ```
 
 ``` r
 
 knitr::kable(data.frame(
-  setup = c("Independent Vcmax25 (Section 4), no SIF", "Independent Vcmax25, + SIF",
+  setup = c("Independent Vcmax25 (Section 5), no SIF", "Independent Vcmax25, + SIF",
             "Cab~Vcmax25 correlated (rho=0.85), no SIF", "Cab~Vcmax25 correlated, + SIF"),
   R2 = c(r2_no_sif, r2_with_sif, r2_corr_no_sif, r2_corr_with_sif)), digits = 3)
 ```
 
 | setup                                     |     R2 |
 |:------------------------------------------|-------:|
-| Independent Vcmax25 (Section 4), no SIF   | -0.160 |
+| Independent Vcmax25 (Section 5), no SIF   | -0.160 |
 | Independent Vcmax25, + SIF                | -0.123 |
 | Cab~Vcmax25 correlated (rho=0.85), no SIF | -0.221 |
 | Cab~Vcmax25 correlated, + SIF             | -0.154 |
+
+The pipeline’s actual best retrieval result, plotted rather than left as
+a table entry – the correlated-LUT, SIF-added setup (highest R² above):
+
+``` r
+
+plot(res_corr_with_sif$obs, res_corr_with_sif$pred, pch = 19, col = "#2166AC",
+     xlab = "Observed Vcmax25", ylab = "Predicted Vcmax25",
+     main = sprintf("Best pipeline result: Cab~Vcmax25 correlated + SIF (R2=%.2f)", r2_corr_with_sif))
+abline(0, 1, col = "grey40", lty = 2)
+```
+
+![](10-end-to-end-pipeline_files/figure-html/fair-test-plot-1.png)
 
 With a realistic Cab~Vcmax25 correlation imposed (the same mechanism
 Tutorial 05 introduced), `Vcmax25` becomes retrievable at all – through
