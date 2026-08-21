@@ -28,16 +28,16 @@ articles:
 - title: Tutorials
   navbar: Tutorials
   contents:
-  - "01-getting-started"
-  - "02-soil-canopy-brdf"
-  - "03-energy-balance"
-  - "04-fluorescence"
-  - "05-building-scope-luts"
-  - "06-parallel-scope-runs"
-  - "07-sensitivity"
-  - "08-hybrid-inversion"
-  - "09-sif-photosynthesis"
-  - "10-end-to-end-pipeline"
+  - "t01-getting-started"
+  - "t02-soil-canopy-brdf"
+  - "t03-energy-balance"
+  - "t04-fluorescence"
+  - "t05-building-scope-luts"
+  - "t06-parallel-scope-runs"
+  - "t07-sensitivity"
+  - "t08-hybrid-inversion"
+  - "t09-sif-photosynthesis"
+  - "t10-end-to-end-pipeline"
   - "articles/11-photosynthesis-capstone"
 - title: Reference manuals and deep dives
   navbar: Manuals

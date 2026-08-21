@@ -60,10 +60,11 @@ get.SCOPE.parallel <- function(LUT, options.SCOPE = NULL,
     # Determine number of CPU cores for parallel processing
 
     if (missing(n.cores) | is.null(n.cores)){
-      num_cores = parallel::detectCores() - 1
+      num_cores = max(1, parallel::detectCores() - 1)
     } else {
       num_cores = n.cores
     }
+    if (nzchar(Sys.getenv("_R_CHECK_LIMIT_CORES_"))) num_cores <- min(num_cores, 2L)
     #num_cores <- ifelse(is.null(server) | server == T, parallel::detectCores() / 10, parallel::detectCores() - 1)
     #rows_to_select <- sample(nrow(LUT), n.LUT) this is not good
     rows_to_select <- c(1:n.LUT)

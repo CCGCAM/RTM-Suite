@@ -20,4 +20,7 @@ input/._setoptions.csv
 examples/Vcmax/*
 examples/*
 docs/*
-vignettes/*
+vignettes/*.html
+vignettes/*.R
+vignettes/*_cache/
+vignettes/*_files/
