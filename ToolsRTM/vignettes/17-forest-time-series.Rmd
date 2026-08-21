@@ -1,8 +1,8 @@
 ---
-title: "16. Monitoring a Forest Site Through Time"
+title: "17. Monitoring a Forest Site Through Time"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{16. Monitoring a Forest Site Through Time}
+  %\VignetteIndexEntry{17. Monitoring a Forest Site Through Time}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

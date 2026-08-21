@@ -734,6 +734,12 @@ to citing RTM-Suite/SCOPEinR.
 - [06. Large-Scale and Parallel SCOPE Runs](06-parallel-scope-runs.md):
 - [07. Sensitivity: Direct vs. Indirect Trait
   Effects](07-sensitivity.md):
+- [08. Hybrid Inversion from SCOPE Reflectance](08-hybrid-inversion.md):
+- [09. Does SIF Add Information About
+  Photosynthesis?](09-sif-photosynthesis.md):
+- [10. End-to-End SCOPE Pipeline](10-end-to-end-pipeline.md):
+- [11. Capstone: ML Inversion of Net Photosynthesis, Applied to Real
+  Sentinel-2](11-photosynthesis-capstone.md):
 
 ### Reference manuals and deep dives
 

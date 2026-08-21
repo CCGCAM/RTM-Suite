@@ -210,8 +210,8 @@ function maps the `Cab` values to the x-axis and `Vcmax25` values to the
 y-axis. The `geom_point` function adds points to the plot, with `alpha`
 set to 0.6 for transparency. The plot is titled “Relationship Between
 Chlorophyll Content (Cab) and Vcmax25,” with appropriately labeled axes.
-The `theme_bw()` function is applied to give the plot a clean,
-minimalistic appearance.
+The [`theme_bw()`](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+function is applied to give the plot a clean, minimalistic appearance.
 
 This process allows for a detailed examination of how changes in
 chlorophyll content correlate with variations in Vcmax25, providing
@@ -241,7 +241,7 @@ db.sims <-SCOPEinR::get.SCOPE.parallel(LUT=LUT,options.SCOPE=table.with.opts,opt
 #> Executing SCOPE 2.1. version ...
 ```
 
-Total simulations: 100 Total execution time: 59.63886
+Total simulations: 100 Total execution time: 34.34537
 
 ``` r
 

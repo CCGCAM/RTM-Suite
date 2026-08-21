@@ -1,8 +1,8 @@
 ---
-title: "15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere"
+title: "16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere}
+  %\VignetteIndexEntry{16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

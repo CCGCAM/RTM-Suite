@@ -1,8 +1,8 @@
 ---
-title: "10. From Physics to Vegetation Traits: Hybrid Inversion"
+title: "11. From Physics to Vegetation Traits: Hybrid Inversion"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{10. From Physics to Vegetation Traits: Hybrid Inversion}
+  %\VignetteIndexEntry{11. From Physics to Vegetation Traits: Hybrid Inversion}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

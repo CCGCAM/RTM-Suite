@@ -1,8 +1,8 @@
 ---
-title: "14. From Satellite Reflectance to Vegetation Traits: Real EO Application"
+title: "15. From Satellite Reflectance to Vegetation Traits: Real EO Application"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{14. From Satellite Reflectance to Vegetation Traits: Real EO Application}
+  %\VignetteIndexEntry{15. From Satellite Reflectance to Vegetation Traits: Real EO Application}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -9,10 +9,14 @@ articles:
   articles/05-building-scope-luts: 05-building-scope-luts.html
   articles/06-parallel-scope-runs: 06-parallel-scope-runs.html
   articles/07-sensitivity: 07-sensitivity.html
+  articles/08-hybrid-inversion: 08-hybrid-inversion.html
+  articles/09-sif-photosynthesis: 09-sif-photosynthesis.html
+  articles/10-end-to-end-pipeline: 10-end-to-end-pipeline.html
+  articles/11-photosynthesis-capstone: 11-photosynthesis-capstone.html
   articles/getting-luts-scope: getting-luts-scope.html
   articles/inversion-scope: inversion-scope.html
   articles/scope-pipeline: scope-pipeline.html
   articles/SCOPEinR: SCOPEinR.html
   articles/sensitivity-scope: sensitivity-scope.html
   articles/sif-photosynthesis-proxy: sif-photosynthesis-proxy.html
-last_built: 2026-08-21T11:04Z
+last_built: 2026-08-21T11:31Z

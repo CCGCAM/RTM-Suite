@@ -1,8 +1,8 @@
 ---
-title: "08. Vegetation Indices and Spectral Features"
+title: "09. Vegetation Indices and Spectral Features"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{08. Vegetation Indices and Spectral Features}
+  %\VignetteIndexEntry{09. Vegetation Indices and Spectral Features}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

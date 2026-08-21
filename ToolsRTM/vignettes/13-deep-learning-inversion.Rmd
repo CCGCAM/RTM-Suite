@@ -1,8 +1,8 @@
 ---
-title: "12. Deep Learning for RTM Inversion"
+title: "13. Deep Learning for RTM Inversion"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{12. Deep Learning for RTM Inversion}
+  %\VignetteIndexEntry{13. Deep Learning for RTM Inversion}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
