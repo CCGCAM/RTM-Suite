@@ -44,15 +44,16 @@
     <li><a class="dropdown-item" href="articles/05-building-luts.html">05. Building Look-Up Tables</a></li>
     <li><a class="dropdown-item" href="articles/06-parallel-simulation.html">06. Large-Scale and Parallel RTM Simulation</a></li>
     <li><a class="dropdown-item" href="articles/07-sensor-convolution.html">07. From RTM Spectra to Satellite Observations: Sensor Convolution</a></li>
-    <li><a class="dropdown-item" href="articles/08-vegetation-indices.html">08. Vegetation Indices and Spectral Features</a></li>
-    <li><a class="dropdown-item" href="articles/09-sensitivity.html">09. Understanding RTM Sensitivity</a></li>
-    <li><a class="dropdown-item" href="articles/10-hybrid-inversion.html">10. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
-    <li><a class="dropdown-item" href="articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
-    <li><a class="dropdown-item" href="articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
-    <li><a class="dropdown-item" href="articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
-    <li><a class="dropdown-item" href="articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><a class="dropdown-item" href="articles/08-hyperspectral-sensors.html">08. Hyperspectral and VNIR Sensor Convolution</a></li>
+    <li><a class="dropdown-item" href="articles/09-vegetation-indices.html">09. Vegetation Indices and Spectral Features</a></li>
+    <li><a class="dropdown-item" href="articles/10-sensitivity.html">10. Understanding RTM Sensitivity</a></li>
+    <li><a class="dropdown-item" href="articles/11-hybrid-inversion.html">11. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
+    <li><a class="dropdown-item" href="articles/12-ml-inversion-comparison.html">12. Comparing ML Algorithms for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="articles/13-deep-learning-inversion.html">13. Deep Learning for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="articles/14-end-to-end-pipeline.html">14. End-to-End RTM Inversion Pipeline</a></li>
+    <li><a class="dropdown-item" href="articles/15-real-eo-application.html">15. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="articles/16-marmit-soil-in-canopy.html">16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="articles/17-forest-time-series.html">17. Monitoring a Forest Site Through Time</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
@@ -81,26 +82,39 @@
 </h3>
 <p><a href="https://www.r-project.org/" class="external-link"><img src="https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&amp;logoColor=white" alt="R &gt;= 4.3"></a> <a href="https://gitlab.com/caminoccg/toolsrtm" class="external-link"><img src="https://img.shields.io/badge/GitLab-ToolsRTM-FC6D26?logo=gitlab&amp;logoColor=white" alt="ToolsRTM on GitLab"></a> <a href="https://github.com/CCGCAM/RTM-Suite" class="external-link"><img src="https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&amp;logoColor=white" alt="RTM–Suite on GitHub"></a> <a href="https://github.com/CCGCAM/ToolsRTMinPython" class="external-link"><img src="https://img.shields.io/badge/GitHub-toolsrtm%20(Python)-181717?logo=github&amp;logoColor=white" alt="toolsrtm (Python port) on GitHub"></a></p>
 <p>The <strong>ToolsRTM</strong> package provides a comprehensive suite of tools for simulating canopy reflectance using various radiative transfer (RT) models at multiple satellite resolutions. Currently in the testing phase, this package is designed to facilitate detailed simulations, enabling versatile and accurate analyses of canopy reflectance characteristics.</p>
+<p><a href="https://ccgcam.github.io/RTM-Suite/toolsrtm/index.html" class="external-link"><strong>ToolsRTM documentation — A Package for Simulating RT Models</strong></a></p>
 <p>For canopy-level simulations, the package features models such as <strong>INFORM</strong>, <strong>fourSAIL</strong>, and <strong>fourSAIL2</strong>. When it comes to leaf-level simulations, it includes the <strong>PROSPECT</strong> model (with D and PRO variants), <strong>Liberty</strong>, and <strong>FLUSPECT</strong> (B-Cx). These models empower users to conduct sophisticated simulations that capture the intricate dynamics of reflectance behavior in both leaf and canopy contexts.</p>
-<p>Additionally, the <strong>SPART</strong> model (Soil-Plant-Atmosphere Radiative Transfer model) is tailored for satellite measurements in the solar spectrum. It integrates three computationally efficient RT models: the <strong>BSM</strong> model for soil, <strong>PROSAIL</strong> for vegetation canopies, and <strong>SMAC</strong> for the atmosphere. These components are interconnected using the four-stream theory and the adding method, allowing SPART to simulate directional top-of-atmosphere (TOA) spectral observations. This approach accounts for significant effects, such as sun-observer geometries and the non-Lambertian reflectance of the land surface.</p>
-<p>This package specifically simulates the <strong>MARMIT</strong> (Multilayer rAdiative tRansfer Model of soIl reflecTance), a radiative transfer model that predicts the spectral reflectance of bare soil across the solar domain, from 400 nm to 2500 nm with a 1 nm resolution, based on its surface water content. The high-level <code><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code> wrapper (built on <code>get.marmit1</code>/<code>get.marmit2</code>) loads a soil’s dry reference spectrum and runs MARMIT directly.</p>
-<p>Only the <strong>Bablet 2016</strong> soil database ships with the package, to keep install size small. The other 7 MARMIT databases (Dupiau 2020, Humper 2015, Lesaignoux 2008, Liu 2002, Lobell 2002, Marcq 2012, Philpot 2014) live in this monorepo’s own <a href="../databases/"><code>databases/</code></a> folder (repo root, ~200MB total). Point <code><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code> at it directly with <code>db_root</code>, no copying required:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu"><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil</a></span><span class="op">(</span>database <span class="op">=</span> <span class="st">"Liu_2002"</span>, id <span class="op">=</span> <span class="fl">1</span>, db_root <span class="op">=</span> <span class="st">"databases"</span><span class="op">)</span></span></code></pre></div>
-<p>(run from the repo root, or pass an absolute path to <code>databases/</code>).</p>
-<p>For more information, please visit: MARMIT <a href="https://pss-gitlab.math.univ-paris-diderot.fr/marmit/marmit" class="external-link">GitLab</a></p>
 <p><img src="reference/figures/rtm_sims.png"></p>
 <p><strong>Fig. 1.</strong> Simulations performed with ToolsRTM Package for several radiative transfer models .</p>
-<p><strong>ToolsRTM</strong> is one library within <a href="https://ccgcam.github.io/RTM-Suite/" class="external-link"><strong>RTM-Suite</strong></a>, which links both the R packages (<code>ToolsRTM</code>, <code>SCOPEinR</code>) and their Python ports (<code>toolsrtm</code>, <code>scopeinpython</code>) behind one common site — with reference manuals, worked tutorials, and runnable example pipelines for both languages side by side.</p>
+<p>Additionally, the <strong>SPART</strong> model (Soil-Plant-Atmosphere Radiative Transfer model) is tailored for satellite measurements in the solar spectrum. It integrates three computationally efficient RT models: the <strong>BSM</strong> model for soil, <strong>PROSAIL</strong> for vegetation canopies, and <strong>SMAC</strong> for the atmosphere. These components are interconnected using the four-stream theory and the adding method, allowing SPART to simulate directional top-of-atmosphere (TOA) spectral observations. This approach accounts for significant effects, such as sun-observer geometries and the non-Lambertian reflectance of the land surface.</p>
+<p><strong>ToolsRTM</strong> includes <strong>MARMIT</strong> (Multilayer rAdiative tRansfer Model of soIl reflecTance), a radiative transfer model for simulating the spectral reflectance of bare soil as a function of surface water content. MARMIT simulates soil reflectance across the <strong>400–2500 nm</strong> spectral range at <strong>1 nm resolution</strong>. The high-level <code><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code> wrapper, built on <code><a href="reference/get.marmit1.html">get.marmit1()</a></code> and <code><a href="reference/get.marmit2.html">get.marmit2()</a></code>, loads a dry-soil reference spectrum and runs the MARMIT simulation directly.</p>
+<p>The package includes the <strong>Bablet 2016</strong> soil database by default to keep the installation lightweight. Seven additional MARMIT soil databases are available in the RTM-Suite <a href="../databases/"><code>databases/</code></a> directory:</p>
+<ul>
+<li>Dupiau 2020</li>
+<li>Humper 2015</li>
+<li>Lesaignoux 2008</li>
+<li>Liu 2002</li>
+<li>Lobell 2002</li>
+<li>Marcq 2012</li>
+<li>Philpot 2014</li>
+</ul>
+<p>Together, these databases represent approximately <strong>200 MB</strong> of additional soil spectral data. They can be used directly with <code><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code> by specifying their location through the <code>db_root</code> argument, without copying the files into the R package.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="fu"><a href="reference/get.marmit.rsoil.html">get.marmit.rsoil</a></span><span class="op">(</span>database <span class="op">=</span> <span class="st">"Liu_2002"</span>, id <span class="op">=</span> <span class="fl">1</span>, db_root <span class="op">=</span> <span class="st">"databases"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="rtm-suite-a-unified-r-and-python-framework">RTM-Suite: A Unified R and Python Framework<a class="anchor" aria-label="anchor" href="#rtm-suite-a-unified-r-and-python-framework"></a>
+</h3>
+<p><strong>ToolsRTM</strong> is one library within <strong>RTM-Suite</strong>, which links both the R packages (<code>ToolsRTM</code>, <code>SCOPEinR</code>) and their Python ports (<code>toolsrtm</code>, <code>scopeinpython</code>) behind one common site — with reference manuals, worked tutorials, and runnable example pipelines for both languages side by side.</p>
 <div class="float">
 <img src="reference/figures/Website_rtm-suite.png" alt="RTM-Suite website"><div class="figcaption">RTM-Suite website</div>
 </div>
 <p><strong>Fig. 2.</strong> The <a href="https://ccgcam.github.io/RTM-Suite/" class="external-link">RTM-Suite website</a> — see <strong>Documentation</strong> for R/Python reference manuals, <strong>Tutorials</strong> for step-by-step walkthroughs (R and Python side by side), and <strong>Examples</strong> for copy-paste runnable code with real generated figures.</p>
 </div>
 <div class="section level3">
-<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h3 id="installation-in-r">Installation in R<a class="anchor" aria-label="anchor" href="#installation-in-r"></a>
 </h3>
-<p>ToolsRTM requires R 4.3 or newer. Install the development version directly from GitLab:</p>
+<p><strong>ToolsRTM</strong> requires R 4.3 or newer. Install the development version directly from GitLab:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
@@ -211,65 +225,43 @@
 <p><strong>Fig. 3.</strong> Interactive reflectance simulator using PROSAIL model based on shiny app.</p>
 </div>
 <div class="section level3">
-<h3 id="citation-of-the-main-radiative-transfer-models">Citation of the main radiative transfer models<a class="anchor" aria-label="anchor" href="#citation-of-the-main-radiative-transfer-models"></a>
+<h3 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h3>
-<p>For further details on the the radiative transfer modelsl, please refer to the original publications by the authors.</p>
+<p>If you use <strong>ToolsRTM</strong> or <strong>SCOPEinR</strong>, please consider citing:</p>
+<ol style="list-style-type: decimal">
+<li><p>Camino et al. (2024). <strong>RT-Simulator: An Online Platform to Simulate Canopy Reflectance from Biochemical and Structural Plant Properties Using Radiative Transfer Models</strong>. <em>IGARSS 2024</em>, Athens, Greece, pp. 2811-2814. <a href="https://doi.org/10.1109/IGARSS53475.2024.10642442" class="external-link">doi: 10.1109/IGARSS53475.2024.10642442</a></p></li>
+<li><p>Arano et al. (2024). <strong>Enhancing Chlorophyll Content Estimation with Sentinel-2 Imagery: A Fusion of Deep Learning and Biophysical Models</strong>. <em>IGARSS 2024</em>, Athens, Greece, pp. 4486-4489. doi: <a href="https://doi.org/10.1109/IGARSS53475.2024.10641613" class="external-link">10.1109/IGARSS53475.2024.10641613</a></p></li>
+<li><p>Camino et al. (in preparation). <strong>Integrating Physiological Plant Traits with Sentinel-2 Imagery for Monitoring Gross Primary Production and Detecting Forest Disturbances</strong>.</p></li>
+</ol>
 <div class="section level4">
-<h4 id="prospect-model">PROSPECT model<a class="anchor" aria-label="anchor" href="#prospect-model"></a>
+<h4 id="references">
+<strong>References</strong><a class="anchor" aria-label="anchor" href="#references"></a>
 </h4>
-<p>Féret J-B, Gitelson AA, Noble SD &amp; Jacquemoud S, 2017. PROSPECT-D: Towards modeling leaf optical properties through a complete lifecycle. Remote Sensing of Environment, 193, 204–215. <a href="https://doi.org/10.1016/j.rse.2017.03.004" class="external-link uri">https://doi.org/10.1016/j.rse.2017.03.004</a></p>
-<p>Féret, J.B., Berger, K., de Boissieu, F., Malenovský, Z., 2021. PROSPECT-PRO for estimating content of nitrogen-containing leaf proteins and other carbon-based constituents. Remote Sens. Environ. 252. <a href="https://doi.org/10.1016/j.rse.2020.112173" class="external-link uri">https://doi.org/10.1016/j.rse.2020.112173</a></p>
-<p>Jacquemoud S, Baret F, Hanocq J-F, 1992. Modeling spectral and bidirectional soil reflectance. Remote Sensing of Environment, 41, 123–132. <a href="https://doi.org/10.1016/0034-4257(92)90072-R" class="external-link uri">https://doi.org/10.1016/0034-4257(92)90072-R</a></p>
-<p>Jacquemoud, S., Baret, F., 1990. PROSPECT: a model of leaf optical properties spectra. Remote Sens. Environ. 34, 75–91. <a href="https://doi.org/10.1016/0034-4257(90)90100-Z" class="external-link uri">https://doi.org/10.1016/0034-4257(90)90100-Z</a>.</p>
-<p>More info: <a href="http://teledetection.ipgp.fr/prosail/" class="external-link uri">http://teledetection.ipgp.fr/prosail/</a></p>
-</div>
-<div class="section level4">
-<h4 id="fluspect-model">FLUSPECT model<a class="anchor" aria-label="anchor" href="#fluspect-model"></a>
-</h4>
-<p>Vilfan, N., van der Tol, C., Muller, O., Rascher, U., Verhoef, W., 2016. Fluspect-B: A model for leaf fluorescence, reflectance and transmittance spectra. Remote Sens. Environ. 186, 596?615. <a href="doi:10.1016/j.rse.2016.09.017" class="uri">doi:10.1016/j.rse.2016.09.017</a></p>
-</div>
-<div class="section level4">
-<h4 id="liberty-model">Liberty model<a class="anchor" aria-label="anchor" href="#liberty-model"></a>
-</h4>
-<p>Dawson, T. P., Curran, P. J., &amp; Plummer, S. E. (1998). LIBERTY—Modeling the Effects of Leaf Biochemical Concentration on Reflectance Spectra. Remote Sensing of Environment, 65(1), 50–60. <a href="https://doi.org/10.1016/S0034-4257(98)00007-8" class="external-link uri">https://doi.org/10.1016/S0034-4257(98)00007-8</a></p>
-<p>Di Vittorio, A. V. (2009). Enhancing a leaf radiative transfer model to estimate concentrations and in vivo specific absorption coefficients of total carotenoids and chlorophylls a and b from single-needle reflectance and transmittance. Remote Sensing of Environment, 113(9), 1948–1966. <a href="https://doi.org/10.1016/j.rse.2009.05.002" class="external-link uri">https://doi.org/10.1016/j.rse.2009.05.002</a></p>
-</div>
-<div class="section level4">
-<h4 id="foursail--foursail-2-models">fourSAIL &amp; fourSAIL-2 models<a class="anchor" aria-label="anchor" href="#foursail--foursail-2-models"></a>
-</h4>
-<p>Verhoef W &amp; Bach H, 2007. Coupled soil–leaf-canopy and atmosphere radiative transfer modeling to simulate hyperspectral multi-angular surface reflectance and TOA radiance data. Remote Sensing of Environment, 109:166-182. <a href="doi:10.1016/j.rse.2006.12.013" class="uri">doi:10.1016/j.rse.2006.12.013</a></p>
-<p>Verhoef W, Jia L, Xiao Q &amp; Su Z, 2007. Unified optical-thermal four-stream radiative transfer theory for homogeneous vegetation canopies. IEEE Transactions in Geosciences and Remote Sensing, 45:1808–1822. <a href="https://doi.org/10.1109/TGRS.2007.895844" class="external-link uri">https://doi.org/10.1109/TGRS.2007.895844</a> PROSAIL</p>
-<p>Jacquemoud S, Verhoef W, Baret F, Bacour C, Zarco-Tejada PJ, Asner GP, François C &amp; Ustin SL, 2009. PROSPECT+ SAIL models: A review of use for vegetation characterization. Remote Sensing of Environment, 113:S56–S66. <a href="https://doi.org/doi:10.1016/j.rse.2008.01.026" class="external-link uri">https://doi.org/doi:10.1016/j.rse.2008.01.026</a></p>
-<p>Berger K, Atzberger C, Danner M, D’Urso G, Mauser W, Vuolo F &amp; Hank T 2018. Evaluation of the PROSAIL Model Capabilities for Future Hyperspectral Model Environments: A Review Study. Remote Sensing, 10:85. <a href="https://doi.org/10.3390/rs10010085" class="external-link uri">https://doi.org/10.3390/rs10010085</a></p>
-</div>
-<div class="section level4">
-<h4 id="invertible-forest-reflectance-model">Invertible Forest Reflectance Model<a class="anchor" aria-label="anchor" href="#invertible-forest-reflectance-model"></a>
-</h4>
-<p>Atzberger, C., 2000. Development of an Invertible Forest Reflectance Model: The INFOR- model.</p>
-<p>Schlerf, M., Atzberger, C., 2006. Inversion of a forest reflectance model to estimate structural canopy variables from hyperspectral remote sensing data. Remote Sens. Environ. 100, 281–294. <a href="https://doi.org/10.1016/j.rse.2005.10.006" class="external-link uri">https://doi.org/10.1016/j.rse.2005.10.006</a>.</p>
-<p>Atzberger, C. 2000: Development of an invertible forest reflectance model: The INFOR-Model.In: Buchroithner (Ed.): A decade of trans-european remote sensing cooperation. Proceedings of the 20th EARSeL Symposium Dresden, Germany, 14.-16. June 2000: 39-44.</p>
-<p>Rosema, A., Verhoef, W., Noorbergen, H. 1992: A new forest light interaction model in support of forest monitoring. Remote Sensing of Environment, 42: 23-41.</p>
-<p>Jacquemoud S., Ustin S.L., Verdebout J., Schmuck G., Andreoli G., Hosgood B. (1996): Estimating leaf biochemistry using the PROSPECT leaf optical properties model, Remote Sens. Environ., 56:194-202.</p>
-<p>Verhoef, W. 1984: Light scattering by leaf layers with application to canopy reflectance modeling: The SAIL model. Remote Sensing of Environment, 16: 125-141.</p>
-<p>Basic version of INFORM: Clement Atzberger, 1999 INFORM modifications and validation: Martin Schlerf, 2004-2007</p>
-</div>
-<div class="section level4">
-<h4 id="the-spart-model-a-soil-plant-atmosphere-radiative-transfer-model-for-satellite-measurements-in-the-solar-spectrum">The SPART model: a soil-plant-atmosphere radiative transfer model for satellite measurements in the solar spectrum<a class="anchor" aria-label="anchor" href="#the-spart-model-a-soil-plant-atmosphere-radiative-transfer-model-for-satellite-measurements-in-the-solar-spectrum"></a>
-</h4>
-<p>Yang, P., van der Tol, C., Yin, T., &amp; Verhoef, W. (2020). The SPART model: A soil-plant-atmosphere radiative transfer model for satellite measurements in the solar spectrum. Remote Sensing of Environment, 247, 111870.</p>
-</div>
-<div class="section level4">
-<h4 id="scope-model-the-soil-canopy-observation-photochemistry-and-energy-fluxes-model">SCOPE model: The Soil Canopy Observation, Photochemistry and Energy fluxes model<a class="anchor" aria-label="anchor" href="#scope-model-the-soil-canopy-observation-photochemistry-and-energy-fluxes-model"></a>
-</h4>
-<p>Yang, P., Verhoef, W., &amp; van der Tol, C. (2017). The mSCOPE model: A simple adaptation to the SCOPE model to describe reflectance, fluorescence and photosynthesis of vertically heterogeneous canopies. Remote sensing of environment, 201, 1-11.</p>
-<p>Yang, P., Prikaziuk, E., Verhoef, W., &amp; Van der Tol, C. (2021). <strong>SCOPE 2.0: A model to simulate vegetated land surface fluxes and satellite signals</strong>. <em>Geoscientific Model Development</em>, 14, 4697–4712. <a href="https://doi.org/10.5194/gmd-14-4697-2021" class="external-link uri">https://doi.org/10.5194/gmd-14-4697-2021</a>.</p>
-<p>Van der Tol, C., Verhoef, W., Timmermans, J., Verhoef, A., &amp; Su, Z. (2009). <strong>An integrated model of soil-canopy spectral radiances, photosynthesis, fluorescence, temperature, and energy balance</strong>. <em>Biogeosciences</em>, 6(12), 3109–3129. <a href="https://doi.org/10.5194/bg-6-3109-2009" class="external-link uri">https://doi.org/10.5194/bg-6-3109-2009</a>.</p>
-</div>
-<div class="section level4">
-<h4 id="marmit-model-multilayer-radiative-transfer-model-of-soil-reflectance">MARMIT model (Multilayer rAdiative tRansfer Model of soIl reflecTance)<a class="anchor" aria-label="anchor" href="#marmit-model-multilayer-radiative-transfer-model-of-soil-reflectance"></a>
-</h4>
-<p>Bablet A., Vu P.V.H., Jacquemoud S., Viallefont-Robinet F., Fabre S., Briottet X., Sadeghi M., Whiting M.L., Baret F. and Tian J. (2018), MARMIT: a multilayer radiative transfer model of soil reflectance to estimate surface soil moisture content in the solar domain (400–2500 nm), Remote Sensing of Environment, 217:1-17. <a href="https://doi.org/10.1016/j.rse.2018.07.031" class="external-link uri">https://doi.org/10.1016/j.rse.2018.07.031</a>.</p>
-<p>Dupiau A., Jacquemoud S., Briottet X., Fabre S., Viallefont-Robinet F., Philpot W., Di Biagio C., Hébert H. and Formenti P. (2022), MARMIT-2: an improved version of the MARMIT model to predict soil reflectance as a function of surface water content in the solar domain, Remote Sensing of Environment, 272:112951. <a href="https://doi.org/10.1016/j.rse.2022.112951" class="external-link uri">https://doi.org/10.1016/j.rse.2022.112951</a>.</p>
+<p><strong>Leaf models</strong></p>
+<ul>
+<li><p>Jacquemoud, S., Baret, F. (1990). <em>PROSPECT: A model of leaf optical properties spectra.</em> Remote Sensing of Environment, 34(2), 75-91. <a href="https://doi.org/10.1016/0034-4257(90)90100-Z" class="external-link">10.1016/0034-4257(90)90100-Z</a></p></li>
+<li><p>Féret, J.-B. et al. (2017). <em>PROSPECT-D: Towards modeling leaf optical properties through a complete lifecycle.</em> Remote Sensing of Environment, 193, 204-215. <a href="https://doi.org/10.1016/j.rse.2017.03.004" class="external-link">10.1016/j.rse.2017.03.004</a> (PROSPECT-D, adds anthocyanins)</p></li>
+<li><p>Féret, J.-B. et al. (2021). <em>PROSPECT-PRO for estimating content of nitrogen-containing leaf proteins and other carbon-based constituents.</em> Remote Sensing of Environment, 252, 112173. <a href="https://doi.org/10.1016/j.rse.2020.112173" class="external-link">10.1016/j.rse.2020.112173</a> (PROSPECT-PRO, splits dry matter into protein + carbon-based constituents)</p></li>
+<li><p>Dawson, T.P., Curran, P.J., Plummer, S.E. (1998). <em>LIBERTY — Modelling the effects of leaf biochemical concentration on reflectance spectra.</em> Remote Sensing of Environment, 65(1), 50-60. <a href="https://doi.org/10.1016/S0034-4257(98)00007-8" class="external-link">10.1016/S0034-4257(98)00007-8</a></p></li>
+<li><p>Vilfan, N., van der Tol, C., Muller, O., Rascher, U., Verhoef, W. (2016). <em>Fluspect-B: A model for leaf fluorescence, reflectance and transmittance spectra.</em> Remote Sensing of Environment, 186, 596-615. <a href="https://doi.org/10.1016/j.rse.2016.09.017" class="external-link">10.1016/j.rse.2016.09.017</a></p></li>
+<li><p>Vilfan, N., Van der Tol, C., Yang, P., Wyber, R., Malenovský, Z., Robinson, S.A., Verhoef, W. (2018). <em>Extending Fluspect to simulate xanthophyll driven leaf reflectance dynamics.</em> Remote Sensing of Environment, 211, 345-356. <a href="https://doi.org/10.1016/j.rse.2018.04.012" class="external-link">10.1016/j.rse.2018.04.012</a> (Fluspect-B-Cx, adds the xanthophyll/Cx de-epoxidation state)</p></li>
+</ul>
+<p><strong>Canopy models</strong></p>
+<ul>
+<li><p>Verhoef, W. (1984). <em>Light scattering by leaf layers with application to canopy reflectance modeling: The SAIL model.</em> Remote Sensing of Environment, 16(2), 125-141. <a href="https://doi.org/10.1016/0034-4257(84)90057-9" class="external-link">10.1016/0034-4257(84)90057-9</a></p></li>
+<li><p>Verhoef, W. (1998). <em>Theory of radiative transfer models applied in optical remote sensing of vegetation canopies.</em> PhD thesis, Wageningen University. (4SAIL, the extended/corrected SAIL version this suite’s <code>fourSAIL</code> implements)</p></li>
+<li><p>Verhoef, W., Bach, H. (2007). <em>Coupled soil-leaf-canopy and atmosphere radiative transfer modeling to simulate hyperspectral multi-angular surface reflectance and TOA radiance data.</em> Remote Sensing of Environment, 109, 166-182. <a href="https://doi.org/10.1016/j.rse.2006.12.013" class="external-link">10.1016/j.rse.2006.12.013</a> (introduces 4SAIL2, this suite’s <code>fourSAIL2</code>)</p></li>
+<li><p>Atzberger, C. (2000). <em>Development of an invertible forest reflectance model: The INFOR-model.</em> In: <em>A Decade of Trans-European Remote Sensing Cooperation</em>, Proceedings of the 20th EARSeL Symposium, Dresden, Germany, 39-44. (no DOI, conference proceedings)</p></li>
+</ul>
+<p><strong>Soil, atmosphere &amp; SCOPE</strong></p>
+<ul>
+<li><p>Bablet, A., Vu, P.V.H., Jacquemoud, S., Viallefont-Robinet, F., Fabre, S., Briottet, X., Sadeghi, M., Whiting, M.L., Baret, F., Tian, J. (2018). <em>MARMIT: a multilayer radiative transfer model of soil reflectance to estimate surface soil moisture content in the solar domain (400-2500 nm).</em> Remote Sensing of Environment, 217:1-17. <a href="https://doi.org/10.1016/j.rse.2018.07.031" class="external-link">10.1016/j.rse.2018.07.031</a></p></li>
+<li><p>Dupiau, A., Jacquemoud, S., Briottet, X., Fabre, S., Viallefont-Robinet, F., Philpot, W., Di Biagio, C., Hébert, H., Formenti, P. (2022). <em>MARMIT-2: an improved version of the MARMIT model to predict soil reflectance as a function of surface water content in the solar domain.</em> Remote Sensing of Environment, 272:112951. <a href="https://doi.org/10.1016/j.rse.2022.112951" class="external-link">10.1016/j.rse.2022.112951</a></p></li>
+<li><p>Rahman, H., Dedieu, G. (1994). <em>SMAC: a simplified method for the atmospheric correction of satellite measurements in the solar spectrum.</em> International Journal of Remote Sensing, 15(1), 123-143.</p></li>
+<li><p>Yang, P., van der Tol, C., Yin, T., Verhoef, W. (2020). <em>The SPART model: A soil-plant-atmosphere radiative transfer model for satellite measurements in the solar spectrum.</em> Remote Sensing of Environment, 247, 111870. <a href="https://doi.org/10.1016/j.rse.2020.111870" class="external-link">10.1016/j.rse.2020.111870</a></p></li>
+<li><p>Van der Tol, C., Verhoef, W., Timmermans, J., Verhoef, A., Su, Z. (2009). <em>An integrated model of soil-canopy spectral radiances, photosynthesis, fluorescence, temperature and energy balance.</em> Biogeosciences 6(12), 3109-29. <a href="https://doi.org/10.5194/bg-6-3109-2009" class="external-link">10.5194/bg-6-3109-2009</a></p></li>
+<li><p>Yang, P., Prikaziuk, E., Verhoef, W., van der Tol, C. (2021). <em>SCOPE 2.0: A model to simulate vegetated land surface fluxes and satellite signals.</em> Geoscientific Model Development, 14, 4697-4712. <a href="https://doi.org/10.5194/gmd-14-4697-2021" class="external-link">10.5194/gmd-14-4697-2021</a></p></li>
+</ul>
 </div>
 </div>
 <div class="section level3">

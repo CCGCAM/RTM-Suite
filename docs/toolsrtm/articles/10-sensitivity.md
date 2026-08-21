@@ -1,4 +1,4 @@
-# 09. Understanding RTM Sensitivity
+# 10. Understanding RTM Sensitivity
 
 ``` r
 
@@ -74,7 +74,7 @@ ggplot(si, aes(x = wavelength, y = STi_pct, fill = trait)) +
   theme_bw(base_size = 11) + theme(legend.position = "bottom")
 ```
 
-![](09-sensitivity_files/figure-html/sobol-spectral-plot-1.png)
+![](10-sensitivity_files/figure-html/sobol-spectral-plot-1.png)
 
 ``` r
 
@@ -146,7 +146,7 @@ ggplot(subset(sobol_df, Type == "Ti"), aes(x = Band, y = Index, fill = Parameter
   theme_bw()
 ```
 
-![](09-sensitivity_files/figure-html/sobol-perband-plot-1.png)
+![](10-sensitivity_files/figure-html/sobol-perband-plot-1.png)
 
 `LAI` dominates the NIR band (B8); pigments (`Cab`/`Car`) dominate the
 red band (B4) – exactly what leaf/canopy optics theory predicts.
@@ -197,7 +197,7 @@ ggplot(johnson_df, aes(x = Band, y = Index, fill = Parameter)) +
   theme_bw()
 ```
 
-![](09-sensitivity_files/figure-html/johnson-plot-1.png)
+![](10-sensitivity_files/figure-html/johnson-plot-1.png)
 
 `EWT` dominating B11 (SWIR, a classic water-absorption region) agrees
 with Section 2’s Sobol result – two different statistical methods
@@ -218,7 +218,7 @@ sensitivity method.
 
 ## What’s next
 
-- **Tutorial 10** – turning “which trait drives which band” into an
+- **Tutorial 11** – turning “which trait drives which band” into an
   actual trait retrieval: hybrid inversion.
 - **Tutorial 04** – if the question is “which model” rather than “which
   trait”, see the model-comparison agreement/RMSE table there instead.

@@ -1,17 +1,17 @@
-# 11. Comparing ML Algorithms for RTM Inversion
+# 12. Comparing ML Algorithms for RTM Inversion
 
 ``` r
 
 library(ToolsRTM)
 ```
 
-Tutorial 10 introduced
+Tutorial 11 introduced
 [`get.inversion()`](../reference/get.inversion.md) in passing (Random
 Forest only). This page compares several of its 12 supported algorithms
 (via `caret`) on the same LUT/train-test split, so the comparison is
 apples-to-apples.
 
-## 1. Same LUT, same split as Tutorial 10
+## 1. Same LUT, same split as Tutorial 11
 
 ``` r
 
@@ -76,7 +76,7 @@ fits <- lapply(algorithms, function(algo) {
 })
 ```
 
-![](11-ml-inversion-comparison_files/figure-html/fit-algorithms-1.png)![](11-ml-inversion-comparison_files/figure-html/fit-algorithms-2.png)![](11-ml-inversion-comparison_files/figure-html/fit-algorithms-3.png)![](11-ml-inversion-comparison_files/figure-html/fit-algorithms-4.png)
+![](12-ml-inversion-comparison_files/figure-html/fit-algorithms-1.png)![](12-ml-inversion-comparison_files/figure-html/fit-algorithms-2.png)![](12-ml-inversion-comparison_files/figure-html/fit-algorithms-3.png)![](12-ml-inversion-comparison_files/figure-html/fit-algorithms-4.png)
 
 ``` r
 
@@ -109,9 +109,9 @@ plot(test_df$Cab, pred_best, pch = 19, col = "#2166AC",
 abline(0, 1, col = "grey40", lty = 2)
 ```
 
-![](11-ml-inversion-comparison_files/figure-html/best-plot-1.png)
+![](12-ml-inversion-comparison_files/figure-html/best-plot-1.png)
 
-## 3. Comparing against Tutorial 10’s merit-function matching
+## 3. Comparing against Tutorial 11’s merit-function matching
 
 ``` r
 
@@ -142,14 +142,14 @@ At this LUT size (150 rows, 105 training), a fitted ML model and pure
 LUT-search inversion are often close – the gap widens in the ML model’s
 favour with more training data, and in
 [`get.inversionOpt()`](../reference/get.inversionOpt.md)’s favour when
-too little data is available to fit a model reliably (Tutorial 10’s
+too little data is available to fit a model reliably (Tutorial 11’s
 discussion of when to use which).
 
 ## What’s next
 
-- **Tutorial 12** – deep learning
+- **Tutorial 13** – deep learning
   ([`getMLmodel()`](../reference/getMLmodel.md)) on the same kind of
   data, and when it’s worth the extra complexity over the algorithms
   here.
-- **Tutorial 13** – this whole simulate-convolve-invert chain as one
+- **Tutorial 14** – this whole simulate-convolve-invert chain as one
   coherent pipeline, across every canopy model this package supports.

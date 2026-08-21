@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>09. Understanding RTM Sensitivity • ToolsRTM</title>
+<title>10. Understanding RTM Sensitivity • ToolsRTM</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="09. Understanding RTM Sensitivity">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="10. Understanding RTM Sensitivity">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,15 +42,16 @@
     <li><a class="dropdown-item" href="../articles/05-building-luts.html">05. Building Look-Up Tables</a></li>
     <li><a class="dropdown-item" href="../articles/06-parallel-simulation.html">06. Large-Scale and Parallel RTM Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/07-sensor-convolution.html">07. From RTM Spectra to Satellite Observations: Sensor Convolution</a></li>
-    <li><a class="dropdown-item" href="../articles/08-vegetation-indices.html">08. Vegetation Indices and Spectral Features</a></li>
-    <li><a class="dropdown-item" href="../articles/09-sensitivity.html">09. Understanding RTM Sensitivity</a></li>
-    <li><a class="dropdown-item" href="../articles/10-hybrid-inversion.html">10. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
-    <li><a class="dropdown-item" href="../articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
-    <li><a class="dropdown-item" href="../articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
-    <li><a class="dropdown-item" href="../articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><a class="dropdown-item" href="../articles/08-hyperspectral-sensors.html">08. Hyperspectral and VNIR Sensor Convolution</a></li>
+    <li><a class="dropdown-item" href="../articles/09-vegetation-indices.html">09. Vegetation Indices and Spectral Features</a></li>
+    <li><a class="dropdown-item" href="../articles/10-sensitivity.html">10. Understanding RTM Sensitivity</a></li>
+    <li><a class="dropdown-item" href="../articles/11-hybrid-inversion.html">11. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/12-ml-inversion-comparison.html">12. Comparing ML Algorithms for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/13-deep-learning-inversion.html">13. Deep Learning for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/14-end-to-end-pipeline.html">14. End-to-End RTM Inversion Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/15-real-eo-application.html">15. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="../articles/16-marmit-soil-in-canopy.html">16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="../articles/17-forest-time-series.html">17. Monitoring a Forest Site Through Time</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
@@ -80,11 +81,11 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>09. Understanding RTM Sensitivity</h1>
+      <h1>10. Understanding RTM Sensitivity</h1>
             
       
 
-      <div class="d-none name"><code>09-sensitivity.Rmd</code></div>
+      <div class="d-none name"><code>10-sensitivity.Rmd</code></div>
     </div>
 
     
@@ -182,7 +183,7 @@ compatibility even though it is Johnson-based now, not Sobol-based.</p>
 <span>       subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Johnson relative-importance index, %d simulations"</span>, <span class="fl">200</span><span class="op">)</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Wavelength (nm)"</span>, y <span class="op">=</span> <span class="st">"Relative importance [%]"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="09-sensitivity_files/figure-html/sobol-spectral-plot-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="10-sensitivity_files/figure-html/sobol-spectral-plot-1.png" class="r-plt" alt="" width="672"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">si</span>, <span class="va">trait</span> <span class="op">==</span> <span class="st">"Cab"</span><span class="op">)</span>; <span class="va">ewt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">si</span>, <span class="va">trait</span> <span class="op">==</span> <span class="st">"EWT"</span><span class="op">)</span>; <span class="va">lai</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">si</span>, <span class="va">trait</span> <span class="op">==</span> <span class="st">"LAI"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Cab: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cab</span><span class="op">$</span><span class="va">STi_pct</span><span class="op">[</span><span class="va">cab</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&gt;=</span> <span class="fl">430</span> <span class="op">&amp;</span> <span class="va">cab</span><span class="op">$</span><span class="va">wavelength</span> <span class="op">&lt;=</span> <span class="fl">680</span><span class="op">]</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -242,7 +243,7 @@ and total (Ti) indices per band rather than per native wavelength:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>, position <span class="op">=</span> <span class="st">"stack"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Total Sobol indices (Ti) by Sentinel-2A band"</span>, x <span class="op">=</span> <span class="st">"Band"</span>, y <span class="op">=</span> <span class="st">"Sobol index"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="09-sensitivity_files/figure-html/sobol-perband-plot-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="10-sensitivity_files/figure-html/sobol-perband-plot-1.png" class="r-plt" alt="" width="672"></p>
 <p><code>LAI</code> dominates the NIR band (B8); pigments
 (<code>Cab</code>/<code>Car</code>) dominate the red band (B4) – exactly
 what leaf/canopy optics theory predicts.</p>
@@ -287,7 +288,7 @@ quasi-random design – an ordinary random LUT is enough:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>, position <span class="op">=</span> <span class="st">"stack"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Johnson relative-importance indices by Sentinel-2A band"</span>, x <span class="op">=</span> <span class="st">"Band"</span>, y <span class="op">=</span> <span class="st">"Johnson index"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="09-sensitivity_files/figure-html/johnson-plot-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="10-sensitivity_files/figure-html/johnson-plot-1.png" class="r-plt" alt="" width="672"></p>
 <p><code>EWT</code> dominating B11 (SWIR, a classic water-absorption
 region) agrees with Section 2’s Sobol result – two different statistical
 methods converging on the same physical story is reassuring, not
@@ -311,7 +312,7 @@ into a correlation- or regression-based sensitivity method.</p>
 </h2>
 <ul>
 <li>
-<strong>Tutorial 10</strong> – turning “which trait drives which
+<strong>Tutorial 11</strong> – turning “which trait drives which
 band” into an actual trait retrieval: hybrid inversion.</li>
 <li>
 <strong>Tutorial 04</strong> – if the question is “which model”

@@ -136,7 +136,7 @@ cor_lut <- getCor(n_inputs = 2, nLUT = 300, distribution = "Normal", setseed = 1
                    MinRange = c(10, 0.5), MaxRange = c(80, 7))
 cat("Target rho: 0.7. Achieved correlation:",
     round(cor(cor_lut$LUT$Cab, cor_lut$LUT$LAI), 2), "\n")
-#> Target rho: 0.7. Achieved correlation: 0.66
+#> Target rho: 0.7. Achieved correlation: 0.68
 ```
 
 ``` r
@@ -174,5 +174,5 @@ plot(400:2500, sim1$rsot, type = "l", col = "#0072B2",
 
 - **Tutorial 06** – simulating every row of a LUT efficiently with
   parallel processing, instead of a single row or a small loop.
-- **Tutorial 10** – using a LUT as the training data for hybrid trait
+- **Tutorial 11** – using a LUT as the training data for hybrid trait
   inversion.

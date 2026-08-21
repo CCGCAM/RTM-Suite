@@ -1,4 +1,4 @@
-# 14. From Satellite Reflectance to Vegetation Traits: Real EO Application
+# 15. From Satellite Reflectance to Vegetation Traits: Real EO Application
 
 ``` r
 
@@ -10,7 +10,7 @@ Every tutorial so far worked on *simulated* spectra. This closing page
 applies the exact same hybrid-inversion framework (Tutorials 10-13) to a
 **real** Sentinel-2 image, retrieved live via STAC (SpatioTemporal Asset
 Catalog) – and, unlike Tutorial 03’s single-pixel SPART geometry sweep
-or Tutorial 13’s single-spectrum test set, produces a genuine **2D
+or Tutorial 14’s single-spectrum test set, produces a genuine **2D
 spatial map**, not a point value.
 
 ``` text
@@ -105,11 +105,11 @@ if (retrieval$ok) {
 }
 ```
 
-![](14-real-eo-application_files/figure-html/ndvi-1.png)
+![](15-real-eo-application_files/figure-html/ndvi-1.png)
 
 This is the spatial equivalent of
 [`ToolsRTM::getSpatial_index()`](../reference/getSpatial_index.md)/
-[`getSpectraIndices()`](../reference/getSpectraIndices.md) (Tutorial 08)
+[`getSpectraIndices()`](../reference/getSpectraIndices.md) (Tutorial 09)
 – computed directly here with `terra` arithmetic for transparency, since
 those two functions expect a GeoTIFF path on disk rather than an
 in-memory cube.
@@ -148,7 +148,7 @@ if (retrieval$ok) {
 }
 ```
 
-![](14-real-eo-application_files/figure-html/train-model-1.png)
+![](15-real-eo-application_files/figure-html/train-model-1.png)
 
 ## 4. A genuine spatial trait map
 
@@ -175,7 +175,7 @@ if (retrieval$ok) {
 }
 ```
 
-![](14-real-eo-application_files/figure-html/trait-map-1.png)
+![](15-real-eo-application_files/figure-html/trait-map-1.png)
 
     #> Predicted LAI range across the scene: 2.95 to 3.73
 
@@ -207,7 +207,7 @@ stating plainly, not glossing over:
   seasonal-average question, less so for a single-date one.
 
 None of this invalidates the framework – it’s exactly why Tutorials 05
-(LUT design), 09 (sensitivity – which traits actually matter for which
+(LUT design), 10 (sensitivity – which traits actually matter for which
 bands), and 03 (soil realism) matter before trusting a real-world
 inversion result, and why operational retrieval systems calibrate LUT
 ranges against the actual study area rather than using generic defaults
@@ -219,11 +219,11 @@ Every stage from Tutorial 01 through this page is a real, runnable piece
 of the same chain – from one hand-written trait row to a real
 satellite-derived trait map. Two pages close out the series from here:
 
-- **Tutorial 15** – MARMIT + SPART: whether the soil-moisture realism
+- **Tutorial 16** – MARMIT + SPART: whether the soil-moisture realism
   this page’s LUT training glossed over (Section 5’s domain-gap
   discussion) actually survives to TOA, answered directly rather than
   assumed.
-- **Tutorial 16** – the same real-EO approach as this page, extended to
+- **Tutorial 17** – the same real-EO approach as this page, extended to
   a real multi-date time series over a forest site, comparing NDVI
   against hybrid-inverted Cab/LAI/EWT through a growing season.
 

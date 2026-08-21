@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>12. Deep Learning for RTM Inversion • ToolsRTM</title>
+<title>13. Deep Learning for RTM Inversion • ToolsRTM</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="12. Deep Learning for RTM Inversion">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="13. Deep Learning for RTM Inversion">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,15 +42,16 @@
     <li><a class="dropdown-item" href="../articles/05-building-luts.html">05. Building Look-Up Tables</a></li>
     <li><a class="dropdown-item" href="../articles/06-parallel-simulation.html">06. Large-Scale and Parallel RTM Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/07-sensor-convolution.html">07. From RTM Spectra to Satellite Observations: Sensor Convolution</a></li>
-    <li><a class="dropdown-item" href="../articles/08-vegetation-indices.html">08. Vegetation Indices and Spectral Features</a></li>
-    <li><a class="dropdown-item" href="../articles/09-sensitivity.html">09. Understanding RTM Sensitivity</a></li>
-    <li><a class="dropdown-item" href="../articles/10-hybrid-inversion.html">10. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
-    <li><a class="dropdown-item" href="../articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
-    <li><a class="dropdown-item" href="../articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
-    <li><a class="dropdown-item" href="../articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><a class="dropdown-item" href="../articles/08-hyperspectral-sensors.html">08. Hyperspectral and VNIR Sensor Convolution</a></li>
+    <li><a class="dropdown-item" href="../articles/09-vegetation-indices.html">09. Vegetation Indices and Spectral Features</a></li>
+    <li><a class="dropdown-item" href="../articles/10-sensitivity.html">10. Understanding RTM Sensitivity</a></li>
+    <li><a class="dropdown-item" href="../articles/11-hybrid-inversion.html">11. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/12-ml-inversion-comparison.html">12. Comparing ML Algorithms for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/13-deep-learning-inversion.html">13. Deep Learning for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/14-end-to-end-pipeline.html">14. End-to-End RTM Inversion Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/15-real-eo-application.html">15. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="../articles/16-marmit-soil-in-canopy.html">16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="../articles/17-forest-time-series.html">17. Monitoring a Forest Site Through Time</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
@@ -80,11 +81,11 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>12. Deep Learning for RTM Inversion</h1>
+      <h1>13. Deep Learning for RTM Inversion</h1>
             
       
 
-      <div class="d-none name"><code>12-deep-learning-inversion.Rmd</code></div>
+      <div class="d-none name"><code>13-deep-learning-inversion.Rmd</code></div>
     </div>
 
     
@@ -92,7 +93,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ToolsRTM</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> is <code><a href="../reference/get.inversion.html">get.inversion()</a></code>’s (Tutorial
-11) deep-learning sibling – a dense or 1D-CNN network via
+12) deep-learning sibling – a dense or 1D-CNN network via
 TensorFlow/Keras, fit on the same kind of (sensor-band reflectance,
 trait) LUT.</p>
 <div class="section level2">
@@ -184,7 +185,7 @@ above for that reason.</p>
 <tbody>
 <tr class="odd">
 <td>
-<code><a href="../reference/get.inversionOpt.html">get.inversionOpt()</a></code> (Tutorial 10)</td>
+<code><a href="../reference/get.inversionOpt.html">get.inversionOpt()</a></code> (Tutorial 11)</td>
 <td>No – pure search</td>
 <td>Yes – works from a handful of reference spectra</td>
 <td>Quick, physically-grounded retrieval; no ML infrastructure
@@ -192,7 +193,7 @@ needed</td>
 </tr>
 <tr class="even">
 <td>
-<code><a href="../reference/get.inversion.html">get.inversion()</a></code> (Tutorial 11)</td>
+<code><a href="../reference/get.inversion.html">get.inversion()</a></code> (Tutorial 12)</td>
 <td>Yes</td>
 <td>Needs enough rows to fit reliably (hundreds+)</td>
 <td>Production-scale retrieval, many predictors (full spectrum +
@@ -213,7 +214,7 @@ indices)</td>
 </h2>
 <ul>
 <li>
-<strong>Tutorial 13</strong> – simulate, convolve, index, and invert
+<strong>Tutorial 14</strong> – simulate, convolve, index, and invert
 as one end-to-end pipeline, across every canopy model this package
 supports.</li>
 </ul>

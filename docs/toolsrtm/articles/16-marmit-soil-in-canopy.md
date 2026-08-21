@@ -1,4 +1,4 @@
-# 15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere
+# 16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere
 
 ``` r
 
@@ -76,7 +76,7 @@ matplot(wl, sapply(soils, function(s) s$rsoil.wet), type = "l", lty = 1, col = c
 legend("topright", wetness_steps$label, col = cols, lty = 1, cex = 0.8)
 ```
 
-![](15-marmit-soil-in-canopy_files/figure-html/soil-sweep-plot-1.png)
+![](16-marmit-soil-in-canopy_files/figure-html/soil-sweep-plot-1.png)
 
 Soil reflectance darkens broadly with wetness (as real wet soil looks
 darker than dry soil), with the strongest relative change in the SWIR
@@ -106,7 +106,7 @@ matplot(dataSpec_PDB[, 1], toc_by_soil, type = "l", lty = 1, col = cols,
 legend("topright", wetness_steps$label, col = cols, lty = 1, cex = 0.8)
 ```
 
-![](15-marmit-soil-in-canopy_files/figure-html/foursail-fixed-lai-1.png)
+![](16-marmit-soil-in-canopy_files/figure-html/foursail-fixed-lai-1.png)
 
 The canopy’s own spectral shape (chlorophyll absorption, red edge, NIR
 plateau) stays recognizable throughout – but the SWIR bands still shift
@@ -157,7 +157,7 @@ lines(wetness_steps$eps, refl_dense, type = "o", pch = 19, col = "#2166AC")
 legend("topright", c("LAI = 0.5 (sparse)", "LAI = 6 (dense)"), col = c("#B2182B", "#2166AC"), pch = 19, lty = 1)
 ```
 
-![](15-marmit-soil-in-canopy_files/figure-html/lai-dependence-plot-1.png)
+![](16-marmit-soil-in-canopy_files/figure-html/lai-dependence-plot-1.png)
 
 The sparse canopy’s SWIR reflectance swings much more across the wetness
 sweep than the dense canopy’s – a real, physically-expected result: at
@@ -225,7 +225,7 @@ lines(wetness_steps$eps, toa_means, type = "o", pch = 19, col = "#D55E00")
 legend("topright", c("TOC (canopy)", "TOA (satellite)"), col = c("#2166AC", "#D55E00"), pch = 19, lty = 1)
 ```
 
-![](15-marmit-soil-in-canopy_files/figure-html/marmit-spart-plot-1.png)
+![](16-marmit-soil-in-canopy_files/figure-html/marmit-spart-plot-1.png)
 
 Confirmed directly, not assumed: the soil-moisture signal that Section 3
 showed at the canopy level is still present at TOA – the atmosphere

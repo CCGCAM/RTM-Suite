@@ -52,7 +52,7 @@ A soil spectrum is also required –
 shows through the canopy gaps. A 50/50 blend of the package’s own
 bundled dry/wet reference soil spectra is a reasonable,
 physically-motivated default (Tutorial 05 covers building LUTs properly;
-Tutorial 09’s sibling article on soil/MARMIT integration covers a
+Tutorial 10’s sibling article on soil/MARMIT integration covers a
 moisture-realistic alternative):
 
 ``` r

@@ -11,20 +11,22 @@
   Simulation](06-parallel-simulation.md):
 - [07. From RTM Spectra to Satellite Observations: Sensor
   Convolution](07-sensor-convolution.md):
-- [08. Vegetation Indices and Spectral
-  Features](08-vegetation-indices.md):
-- [09. Understanding RTM Sensitivity](09-sensitivity.md):
-- [10. From Physics to Vegetation Traits: Hybrid
-  Inversion](10-hybrid-inversion.md):
-- [11. Comparing ML Algorithms for RTM
-  Inversion](11-ml-inversion-comparison.md):
-- [12. Deep Learning for RTM Inversion](12-deep-learning-inversion.md):
-- [13. End-to-End RTM Inversion Pipeline](13-end-to-end-pipeline.md):
-- [14. From Satellite Reflectance to Vegetation Traits: Real EO
-  Application](14-real-eo-application.md):
-- [15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to
-  Atmosphere](15-marmit-soil-in-canopy.md):
-- [16. Monitoring a Forest Site Through Time](16-forest-time-series.md):
+- [08. Hyperspectral and VNIR Sensor
+  Convolution](08-hyperspectral-sensors.md):
+- [09. Vegetation Indices and Spectral
+  Features](09-vegetation-indices.md):
+- [10. Understanding RTM Sensitivity](10-sensitivity.md):
+- [11. From Physics to Vegetation Traits: Hybrid
+  Inversion](11-hybrid-inversion.md):
+- [12. Comparing ML Algorithms for RTM
+  Inversion](12-ml-inversion-comparison.md):
+- [13. Deep Learning for RTM Inversion](13-deep-learning-inversion.md):
+- [14. End-to-End RTM Inversion Pipeline](14-end-to-end-pipeline.md):
+- [15. From Satellite Reflectance to Vegetation Traits: Real EO
+  Application](15-real-eo-application.md):
+- [16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to
+  Atmosphere](16-marmit-soil-in-canopy.md):
+- [17. Monitoring a Forest Site Through Time](17-forest-time-series.md):
 
 ### Reference manuals and deep dives
 

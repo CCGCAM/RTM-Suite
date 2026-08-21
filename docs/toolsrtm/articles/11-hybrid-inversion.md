@@ -1,4 +1,4 @@
-# 10. From Physics to Vegetation Traits: Hybrid Inversion
+# 11. From Physics to Vegetation Traits: Hybrid Inversion
 
 ``` r
 
@@ -43,10 +43,10 @@ the last step:
   LUT by how closely it matches an observed spectrum under a chosen
   merit function, then averages the trait values of the closest matches.
   Pure library search.
-- **[`get.inversion()`](../reference/get.inversion.md)** (Tutorial 11):
+- **[`get.inversion()`](../reference/get.inversion.md)** (Tutorial 12):
   fits a statistical/ML model (Random Forest, PLSR, SVM, … 12 algorithms
   via `caret`) on a training LUT, then predicts on new spectra.
-- **[`getMLmodel()`](../reference/getMLmodel.md)** (Tutorial 12): fits a
+- **[`getMLmodel()`](../reference/getMLmodel.md)** (Tutorial 13): fits a
   deep-learning model on the same kind of data.
 
 ## 1. Simulate a LUT and convolve to Sentinel-2A
@@ -145,7 +145,7 @@ plot(LUT_test$Cab, opt_rmse[[2]]$Cab, pch = 19, col = "#2166AC",
 abline(0, 1, col = "grey40", lty = 2)
 ```
 
-![](10-hybrid-inversion_files/figure-html/inversionopt-plot-1.png)
+![](11-hybrid-inversion_files/figure-html/inversionopt-plot-1.png)
 
 ## Why this method, and when
 
@@ -159,8 +159,8 @@ trading that simplicity for better accuracy at scale.
 
 ## What’s next
 
-- **Tutorial 11** – [`get.inversion()`](../reference/get.inversion.md):
+- **Tutorial 12** – [`get.inversion()`](../reference/get.inversion.md):
   12 ML algorithms, compared on this same LUT.
-- **Tutorial 12** – [`getMLmodel()`](../reference/getMLmodel.md): deep
+- **Tutorial 13** – [`getMLmodel()`](../reference/getMLmodel.md): deep
   learning on the same data.
-- **Tutorial 13** – the full pipeline end-to-end, LUT to trait maps.
+- **Tutorial 14** – the full pipeline end-to-end, LUT to trait maps.

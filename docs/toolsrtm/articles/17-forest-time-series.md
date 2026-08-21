@@ -1,4 +1,4 @@
-# 16. Monitoring a Forest Site Through Time
+# 17. Monitoring a Forest Site Through Time
 
 ``` r
 
@@ -6,7 +6,7 @@ library(ToolsRTM)
 library(ggplot2)
 ```
 
-Tutorial 14 retrieved ONE real Sentinel-2 scene and produced a spatial
+Tutorial 15 retrieved ONE real Sentinel-2 scene and produced a spatial
 trait map. This closing page retrieves a real **time series** – several
 dates across a growing season, over a real forest site – and compares a
 plain spectral index (NDVI) against physically-retrieved traits (Cab,
@@ -76,7 +76,7 @@ fits <- lapply(c("Cab", "LAI", "EWT"), function(trait) {
 })
 ```
 
-![](16-forest-time-series_files/figure-html/train-1.png)![](16-forest-time-series_files/figure-html/train-2.png)![](16-forest-time-series_files/figure-html/train-3.png)
+![](17-forest-time-series_files/figure-html/train-1.png)![](17-forest-time-series_files/figure-html/train-2.png)![](17-forest-time-series_files/figure-html/train-3.png)
 
 ``` r
 
@@ -161,7 +161,7 @@ ggplot(ts_long, aes(x = date, y = value)) +
   theme_bw(base_size = 11)
 ```
 
-![](16-forest-time-series_files/figure-html/timeseries-plot-1.png)
+![](17-forest-time-series_files/figure-html/timeseries-plot-1.png)
 
 If `2024-03-01` is missing from the plot above, that window had no
 cloud-free Sentinel-2 scene in the archive at this cloud-cover threshold
@@ -205,10 +205,10 @@ the actual retrieved numbers.
 ``` text
 01 Getting Started -> 02 Leaf-to-Canopy -> 03 SPART -> 04 Model Comparison
 -> 05 LUTs -> 06 Parallel Simulation -> 07 Sensor Convolution
--> 08 Vegetation Indices -> 09 Sensitivity -> 10 Hybrid Inversion
--> 11 ML Comparison -> 12 Deep Learning -> 13 End-to-End Pipeline
--> 14 Real EO Application -> 15 MARMIT + SPART Soil-to-Atmosphere
--> 16 Forest Time Series (this page)
+-> 08 Hyperspectral Sensors -> 09 Vegetation Indices -> 10 Sensitivity
+-> 11 Hybrid Inversion -> 12 ML Comparison -> 13 Deep Learning
+-> 14 End-to-End Pipeline -> 15 Real EO Application
+-> 16 MARMIT + SPART Soil-to-Atmosphere -> 17 Forest Time Series (this page)
 ```
 
 From one hand-written trait row (Tutorial 01) to a real, multi-date

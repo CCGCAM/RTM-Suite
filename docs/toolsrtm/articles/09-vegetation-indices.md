@@ -1,4 +1,4 @@
-# 08. Vegetation Indices and Spectral Features
+# 09. Vegetation Indices and Spectral Features
 
 ``` r
 
@@ -91,7 +91,7 @@ plot(LUT$Cab, idx_full$NDVI, pch = 19, col = "#0072B2",
      xlab = "Cab", ylab = "NDVI", main = "One of the 70: NDVI vs. Cab")
 ```
 
-![](08-vegetation-indices_files/figure-html/cab-relationship-1.png)
+![](09-vegetation-indices_files/figure-html/cab-relationship-1.png)
 
 ## 3. Spatial indices: `getSpectraIndices()` and `getSpatial_index()`
 
@@ -115,7 +115,7 @@ getSpatial_index(rasterFiles = "path/to/one_scene.tif", Sensor = "Sentinel2a",
                   SpectraltoCompute = "NDVI", factorR = 1/10000)
 ```
 
-Tutorial 14 uses this spatial path for real, on an actual Sentinel-2
+Tutorial 15 uses this spatial path for real, on an actual Sentinel-2
 image retrieved via STAC, to produce a genuine 2D index/trait map.
 
 ## Which one should you use?
@@ -144,8 +144,8 @@ What are you computing indices from?
 
 ## What’s next
 
-- **Tutorial 09** – formal sensitivity analysis: which traits actually
+- **Tutorial 10** – formal sensitivity analysis: which traits actually
   drive which indices and bands, and by how much.
-- **Tutorial 11** – using
+- **Tutorial 12** – using
   [`getIndicesSE2.ML()`](../reference/getIndicesSE2.ML.md)’s curated set
   as ML predictor features alongside raw bands.

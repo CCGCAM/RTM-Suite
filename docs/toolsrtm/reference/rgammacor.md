@@ -51,9 +51,9 @@ y <- rgammacor(x, 0.2)
 #> Warning: NaNs produced
 #> Warning: NaNs produced
 cor(x,y) # very close to 0.2
-#> [1] 0.2579034
+#> [1] 0.2072903
 mean(y) 
-#> [1] 0.5146983
+#> [1] 0.5069454
 sd(y)  
-#> [1] 0.4027045
+#> [1] 0.3784633
 ```

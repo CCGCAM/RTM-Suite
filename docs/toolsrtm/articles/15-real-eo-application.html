@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>14. From Satellite Reflectance to Vegetation Traits: Real EO Application • ToolsRTM</title>
+<title>15. From Satellite Reflectance to Vegetation Traits: Real EO Application • ToolsRTM</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="14. From Satellite Reflectance to Vegetation Traits: Real EO Application">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="15. From Satellite Reflectance to Vegetation Traits: Real EO Application">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,15 +42,16 @@
     <li><a class="dropdown-item" href="../articles/05-building-luts.html">05. Building Look-Up Tables</a></li>
     <li><a class="dropdown-item" href="../articles/06-parallel-simulation.html">06. Large-Scale and Parallel RTM Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/07-sensor-convolution.html">07. From RTM Spectra to Satellite Observations: Sensor Convolution</a></li>
-    <li><a class="dropdown-item" href="../articles/08-vegetation-indices.html">08. Vegetation Indices and Spectral Features</a></li>
-    <li><a class="dropdown-item" href="../articles/09-sensitivity.html">09. Understanding RTM Sensitivity</a></li>
-    <li><a class="dropdown-item" href="../articles/10-hybrid-inversion.html">10. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
-    <li><a class="dropdown-item" href="../articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
-    <li><a class="dropdown-item" href="../articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
-    <li><a class="dropdown-item" href="../articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><a class="dropdown-item" href="../articles/08-hyperspectral-sensors.html">08. Hyperspectral and VNIR Sensor Convolution</a></li>
+    <li><a class="dropdown-item" href="../articles/09-vegetation-indices.html">09. Vegetation Indices and Spectral Features</a></li>
+    <li><a class="dropdown-item" href="../articles/10-sensitivity.html">10. Understanding RTM Sensitivity</a></li>
+    <li><a class="dropdown-item" href="../articles/11-hybrid-inversion.html">11. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/12-ml-inversion-comparison.html">12. Comparing ML Algorithms for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/13-deep-learning-inversion.html">13. Deep Learning for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/14-end-to-end-pipeline.html">14. End-to-End RTM Inversion Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/15-real-eo-application.html">15. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="../articles/16-marmit-soil-in-canopy.html">16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="../articles/17-forest-time-series.html">17. Monitoring a Forest Site Through Time</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
@@ -80,11 +81,11 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>14. From Satellite Reflectance to Vegetation Traits: Real EO Application</h1>
+      <h1>15. From Satellite Reflectance to Vegetation Traits: Real EO Application</h1>
             
       
 
-      <div class="d-none name"><code>14-real-eo-application.Rmd</code></div>
+      <div class="d-none name"><code>15-real-eo-application.Rmd</code></div>
     </div>
 
     
@@ -96,7 +97,7 @@
 closing page applies the exact same hybrid-inversion framework
 (Tutorials 10-13) to a <strong>real</strong> Sentinel-2 image, retrieved
 live via STAC (SpatioTemporal Asset Catalog) – and, unlike Tutorial 03’s
-single-pixel SPART geometry sweep or Tutorial 13’s single-spectrum test
+single-pixel SPART geometry sweep or Tutorial 14’s single-spectrum test
 set, produces a genuine <strong>2D spatial map</strong>, not a point
 value.</p>
 <pre class="text"><code>Real Sentinel-2 scene (STAC)
@@ -179,10 +180,10 @@ and for the trait model built below:</p>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ndvi</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"NDVI"</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ndvi</span>, main <span class="op">=</span> <span class="st">"Real Sentinel-2 NDVI, Wageningen NL area (cloud-masked mean composite)"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="14-real-eo-application_files/figure-html/ndvi-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="15-real-eo-application_files/figure-html/ndvi-1.png" class="r-plt" alt="" width="672"></p>
 <p>This is the spatial equivalent of
 <code><a href="../reference/getSpatial_index.html">ToolsRTM::getSpatial_index()</a></code>/
-<code><a href="../reference/getSpectraIndices.html">getSpectraIndices()</a></code> (Tutorial 08) – computed directly here
+<code><a href="../reference/getSpectraIndices.html">getSpectraIndices()</a></code> (Tutorial 09) – computed directly here
 with <code>terra</code> arithmetic for transparency, since those two
 functions expect a GeoTIFF path on disk rather than an in-memory
 cube.</p>
@@ -217,7 +218,7 @@ to the same 10 the cube has, and rename to match:</p>
 <span>  <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get.inversion.html">get.inversion</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">train_df</span>, depVar <span class="op">=</span> <span class="st">"LAI"</span>, inputs <span class="op">=</span> <span class="va">real_names</span>,</span>
 <span>                        algorithm <span class="op">=</span> <span class="st">"RF"</span>, n.samples <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">train_df</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="14-real-eo-application_files/figure-html/train-model-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="15-real-eo-application_files/figure-html/train-model-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="a-genuine-spatial-trait-map">4. A genuine spatial trait map<a class="anchor" aria-label="anchor" href="#a-genuine-spatial-trait-map"></a>
@@ -240,7 +241,7 @@ into a raster), done here explicitly and self-contained:</p>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lai_rast</span>, main <span class="op">=</span> <span class="st">"Real Sentinel-2 pixels -&gt; hybrid-inverted LAI (trained on simulated LUT)"</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Predicted LAI range across the scene:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">pred_lai</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">" to "</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="14-real-eo-application_files/figure-html/trait-map-1.png" class="r-plt" alt="" width="672"></p>
+<p><img src="15-real-eo-application_files/figure-html/trait-map-1.png" class="r-plt" alt="" width="672"></p>
 <pre><code><span><span class="co">#&gt; Predicted LAI range across the scene: 2.95 to 3.73</span></span></code></pre>
 <p>A real, per-pixel trait map – retrieved and simulated in the same
 page, verified end to end, not an illustrative mockup.</p>
@@ -271,7 +272,7 @@ date range, not one instantaneous acquisition – appropriate for a
 seasonal-average question, less so for a single-date one.</li>
 </ul>
 <p>None of this invalidates the framework – it’s exactly why Tutorials
-05 (LUT design), 09 (sensitivity – which traits actually matter for
+05 (LUT design), 10 (sensitivity – which traits actually matter for
 which bands), and 03 (soil realism) matter before trusting a real-world
 inversion result, and why operational retrieval systems calibrate LUT
 ranges against the actual study area rather than using generic defaults
@@ -286,12 +287,12 @@ satellite-derived trait map. Two pages close out the series from
 here:</p>
 <ul>
 <li>
-<strong>Tutorial 15</strong> – MARMIT + SPART: whether the
+<strong>Tutorial 16</strong> – MARMIT + SPART: whether the
 soil-moisture realism this page’s LUT training glossed over (Section 5’s
 domain-gap discussion) actually survives to TOA, answered directly
 rather than assumed.</li>
 <li>
-<strong>Tutorial 16</strong> – the same real-EO approach as this
+<strong>Tutorial 17</strong> – the same real-EO approach as this
 page, extended to a real multi-date time series over a forest site,
 comparing NDVI against hybrid-inverted Cab/LAI/EWT through a growing
 season.</li>

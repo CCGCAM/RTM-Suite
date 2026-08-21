@@ -1,4 +1,4 @@
-# 13. End-to-End RTM Inversion Pipeline
+# 14. End-to-End RTM Inversion Pipeline
 
 ``` r
 
@@ -94,7 +94,7 @@ set.seed(1)
 res_foursail  <- run_pipeline("fourSAIL")
 ```
 
-![](13-end-to-end-pipeline_files/figure-html/run-all-1.png)
+![](14-end-to-end-pipeline_files/figure-html/run-all-1.png)
 
 ``` r
 
@@ -102,7 +102,7 @@ set.seed(1)
 res_foursail2 <- run_pipeline("foursail2")
 ```
 
-![](13-end-to-end-pipeline_files/figure-html/run-all-2.png)
+![](14-end-to-end-pipeline_files/figure-html/run-all-2.png)
 
 ``` r
 
@@ -110,7 +110,7 @@ set.seed(1)
 res_inform    <- run_pipeline("INFORM")
 ```
 
-![](13-end-to-end-pipeline_files/figure-html/run-all-3.png)
+![](14-end-to-end-pipeline_files/figure-html/run-all-3.png)
 
 ``` r
 
@@ -140,7 +140,7 @@ plot(res_inform$obs, res_inform$pred, pch = 19, col = "#D55E00",
 abline(0, 1, lty = 2, col = "grey40")
 ```
 
-![](13-end-to-end-pipeline_files/figure-html/inform-vs-foursail2-1.png)
+![](14-end-to-end-pipeline_files/figure-html/inform-vs-foursail2-1.png)
 
 ``` r
 
@@ -155,7 +155,7 @@ density, crown diameter, tree height, understory LAI) **constant**
 across every sampled row, so `LAI`’s own signal is weak relative to what
 actually dominates forest reflectance variation in this LUT. Want better
 LAI retrieval from INFORM? Vary those crown-geometry parameters too, not
-just LAI itself – a direct, testable consequence of Tutorial 09’s
+just LAI itself – a direct, testable consequence of Tutorial 10’s
 sensitivity framework applied to a real inversion result.
 
 ## 3. SPART: structurally different, same downstream pipeline
@@ -192,6 +192,6 @@ the underlying MARMIT physics).
 
 ## What’s next
 
-- **Tutorial 14** – the same inversion framework applied to real
+- **Tutorial 15** – the same inversion framework applied to real
   Sentinel-2 imagery retrieved via STAC, including a genuine spatial
   map.

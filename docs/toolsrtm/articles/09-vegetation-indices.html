@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>08. Vegetation Indices and Spectral Features • ToolsRTM</title>
+<title>09. Vegetation Indices and Spectral Features • ToolsRTM</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="08. Vegetation Indices and Spectral Features">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="09. Vegetation Indices and Spectral Features">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,15 +42,16 @@
     <li><a class="dropdown-item" href="../articles/05-building-luts.html">05. Building Look-Up Tables</a></li>
     <li><a class="dropdown-item" href="../articles/06-parallel-simulation.html">06. Large-Scale and Parallel RTM Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/07-sensor-convolution.html">07. From RTM Spectra to Satellite Observations: Sensor Convolution</a></li>
-    <li><a class="dropdown-item" href="../articles/08-vegetation-indices.html">08. Vegetation Indices and Spectral Features</a></li>
-    <li><a class="dropdown-item" href="../articles/09-sensitivity.html">09. Understanding RTM Sensitivity</a></li>
-    <li><a class="dropdown-item" href="../articles/10-hybrid-inversion.html">10. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
-    <li><a class="dropdown-item" href="../articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
-    <li><a class="dropdown-item" href="../articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
-    <li><a class="dropdown-item" href="../articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
-    <li><a class="dropdown-item" href="../articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><a class="dropdown-item" href="../articles/08-hyperspectral-sensors.html">08. Hyperspectral and VNIR Sensor Convolution</a></li>
+    <li><a class="dropdown-item" href="../articles/09-vegetation-indices.html">09. Vegetation Indices and Spectral Features</a></li>
+    <li><a class="dropdown-item" href="../articles/10-sensitivity.html">10. Understanding RTM Sensitivity</a></li>
+    <li><a class="dropdown-item" href="../articles/11-hybrid-inversion.html">11. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/12-ml-inversion-comparison.html">12. Comparing ML Algorithms for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/13-deep-learning-inversion.html">13. Deep Learning for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/14-end-to-end-pipeline.html">14. End-to-End RTM Inversion Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/15-real-eo-application.html">15. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="../articles/16-marmit-soil-in-canopy.html">16. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="../articles/17-forest-time-series.html">17. Monitoring a Forest Site Through Time</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
@@ -80,11 +81,11 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>08. Vegetation Indices and Spectral Features</h1>
+      <h1>09. Vegetation Indices and Spectral Features</h1>
             
       
 
-      <div class="d-none name"><code>08-vegetation-indices.Rmd</code></div>
+      <div class="d-none name"><code>09-vegetation-indices.Rmd</code></div>
     </div>
 
     
@@ -222,7 +223,7 @@ though it isn’t one of the “classic” 70.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">LUT</span><span class="op">$</span><span class="va">Cab</span>, <span class="va">idx_full</span><span class="op">$</span><span class="va">NDVI</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#0072B2"</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"Cab"</span>, ylab <span class="op">=</span> <span class="st">"NDVI"</span>, main <span class="op">=</span> <span class="st">"One of the 70: NDVI vs. Cab"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="08-vegetation-indices_files/figure-html/cab-relationship-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="09-vegetation-indices_files/figure-html/cab-relationship-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="spatial-indices-getspectraindices-and-getspatial_index">3. Spatial indices: <code>getSpectraIndices()</code> and
@@ -244,7 +245,7 @@ signatures show the distinction clearly:</p>
 <span><span class="co"># calls internally when producing a spatial trait map.</span></span>
 <span><span class="fu"><a href="../reference/getSpatial_index.html">getSpatial_index</a></span><span class="op">(</span>rasterFiles <span class="op">=</span> <span class="st">"path/to/one_scene.tif"</span>, Sensor <span class="op">=</span> <span class="st">"Sentinel2a"</span>,</span>
 <span>                  SpectraltoCompute <span class="op">=</span> <span class="st">"NDVI"</span>, factorR <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">10000</span><span class="op">)</span></span></code></pre></div>
-<p>Tutorial 14 uses this spatial path for real, on an actual Sentinel-2
+<p>Tutorial 15 uses this spatial path for real, on an actual Sentinel-2
 image retrieved via STAC, to produce a genuine 2D index/trait map.</p>
 </div>
 <div class="section level2">
@@ -275,10 +276,10 @@ image retrieved via STAC, to produce a genuine 2D index/trait map.</p>
 </h2>
 <ul>
 <li>
-<strong>Tutorial 09</strong> – formal sensitivity analysis: which
+<strong>Tutorial 10</strong> – formal sensitivity analysis: which
 traits actually drive which indices and bands, and by how much.</li>
 <li>
-<strong>Tutorial 11</strong> – using
+<strong>Tutorial 12</strong> – using
 <code><a href="../reference/getIndicesSE2.ML.html">getIndicesSE2.ML()</a></code>’s curated set as ML predictor features
 alongside raw bands.</li>
 </ul>

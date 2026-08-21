@@ -9,18 +9,19 @@ articles:
   05-building-luts: 05-building-luts.html
   06-parallel-simulation: 06-parallel-simulation.html
   07-sensor-convolution: 07-sensor-convolution.html
-  08-vegetation-indices: 08-vegetation-indices.html
-  09-sensitivity: 09-sensitivity.html
-  10-hybrid-inversion: 10-hybrid-inversion.html
-  11-ml-inversion-comparison: 11-ml-inversion-comparison.html
-  12-deep-learning-inversion: 12-deep-learning-inversion.html
-  13-end-to-end-pipeline: 13-end-to-end-pipeline.html
-  14-real-eo-application: 14-real-eo-application.html
-  15-marmit-soil-in-canopy: 15-marmit-soil-in-canopy.html
-  16-forest-time-series: 16-forest-time-series.html
+  08-hyperspectral-sensors: 08-hyperspectral-sensors.html
+  09-vegetation-indices: 09-vegetation-indices.html
+  10-sensitivity: 10-sensitivity.html
+  11-hybrid-inversion: 11-hybrid-inversion.html
+  12-ml-inversion-comparison: 12-ml-inversion-comparison.html
+  13-deep-learning-inversion: 13-deep-learning-inversion.html
+  14-end-to-end-pipeline: 14-end-to-end-pipeline.html
+  15-real-eo-application: 15-real-eo-application.html
+  16-marmit-soil-in-canopy: 16-marmit-soil-in-canopy.html
+  17-forest-time-series: 17-forest-time-series.html
   articles/course-pipeline: course-pipeline.html
   Getting-LUTs: Getting-LUTs.html
   InversionOpt: InversionOpt.html
   articles/model-comparison-and-sensitivity: model-comparison-and-sensitivity.html
   ToolsRTM/ToolsRTM: ToolsRTM/ToolsRTM.html
-last_built: 2026-08-21T10:38Z
+last_built: 2026-08-21T12:06Z

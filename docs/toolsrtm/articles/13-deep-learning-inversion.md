@@ -1,4 +1,4 @@
-# 12. Deep Learning for RTM Inversion
+# 13. Deep Learning for RTM Inversion
 
 ``` r
 
@@ -6,7 +6,7 @@ library(ToolsRTM)
 ```
 
 [`getMLmodel()`](../reference/getMLmodel.md) is
-[`get.inversion()`](../reference/get.inversion.md)’s (Tutorial 11)
+[`get.inversion()`](../reference/get.inversion.md)’s (Tutorial 12)
 deep-learning sibling – a dense or 1D-CNN network via TensorFlow/Keras,
 fit on the same kind of (sensor-band reflectance, trait) LUT.
 
@@ -90,11 +90,11 @@ that reason.
 
 | Method | Needs training? | Handles a small LUT well? | Typical use |
 |----|----|----|----|
-| [`get.inversionOpt()`](../reference/get.inversionOpt.md) (Tutorial 10) | No – pure search | Yes – works from a handful of reference spectra | Quick, physically-grounded retrieval; no ML infrastructure needed |
-| [`get.inversion()`](../reference/get.inversion.md) (Tutorial 11) | Yes | Needs enough rows to fit reliably (hundreds+) | Production-scale retrieval, many predictors (full spectrum + indices) |
+| [`get.inversionOpt()`](../reference/get.inversionOpt.md) (Tutorial 11) | No – pure search | Yes – works from a handful of reference spectra | Quick, physically-grounded retrieval; no ML infrastructure needed |
+| [`get.inversion()`](../reference/get.inversion.md) (Tutorial 12) | Yes | Needs enough rows to fit reliably (hundreds+) | Production-scale retrieval, many predictors (full spectrum + indices) |
 | [`getMLmodel()`](../reference/getMLmodel.md) (this page) | Yes, more data-hungry | No – needs thousands of rows | Large training sets, CNN over the full spectral shape |
 
 ## What’s next
 
-- **Tutorial 13** – simulate, convolve, index, and invert as one
+- **Tutorial 14** – simulate, convolve, index, and invert as one
   end-to-end pipeline, across every canopy model this package supports.
