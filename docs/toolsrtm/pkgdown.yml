@@ -2,10 +2,16 @@ pandoc: '3.10'
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  01-getting-started: 01-getting-started.html
+  02-leaf-to-canopy: 02-leaf-to-canopy.html
+  03-spart: 03-spart.html
+  04-comparing-models: 04-comparing-models.html
+  05-building-luts: 05-building-luts.html
+  06-parallel-simulation: 06-parallel-simulation.html
+  07-sensor-convolution: 07-sensor-convolution.html
+  08-vegetation-indices: 08-vegetation-indices.html
+  09-sensitivity: 09-sensitivity.html
   articles/course-pipeline: course-pipeline.html
-  Getting-LUTs: Getting-LUTs.html
   InversionOpt: InversionOpt.html
   articles/marmit-soil-in-canopy: marmit-soil-in-canopy.html
-  articles/model-comparison-and-sensitivity: model-comparison-and-sensitivity.html
-  ToolsRTM/ToolsRTM: ToolsRTM/ToolsRTM.html
-last_built: 2026-08-20T15:27Z
+last_built: 2026-08-21T09:35Z

@@ -10,7 +10,7 @@ Authors@R: person(given = "Carlos",
 Maintainer: Carlos Camino <carlos.caminogonzalez@wur.nl>
 Description: A series of tools for simulating spectra with radiative transfer models and Sentinel-2 data.
 Depends: R (>= 4.3.0)
-Imports: caret, signal, tidyr, dplyr, expint, stats, fmsb, doParallel, foreach, sensitivity, wavelets, parallel, raster, terra, sf, e1071, nnet, pls, ggplot2, MASS, randomForest, corrplot, MLmetrics, caretEnsemble, plyr, progress, scales, stringr, reshape2
+Imports: caret, signal, tidyr, dplyr, expint, stats, fmsb, doParallel, foreach, sensitivity, wavelets, parallel, terra, sf, e1071, nnet, pls, ggplot2, MASS, randomForest, corrplot, MLmetrics, caretEnsemble, plyr, progress, scales, stringr, reshape2
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -27,4 +27,5 @@ Suggests:
     ncdf4,
     rstac,
     factoextra,
-    gbm
+    gbm,
+    sensobol
