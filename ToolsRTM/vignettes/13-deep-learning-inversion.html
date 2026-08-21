@@ -12,7 +12,7 @@
 
 
 
-<title>12. Deep Learning for RTM Inversion</title>
+<title>13. Deep Learning for RTM Inversion</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -337,13 +337,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">12. Deep Learning for RTM Inversion</h1>
+<h1 class="title toc-ignore">13. Deep Learning for RTM Inversion</h1>
 
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
 <p><code>getMLmodel()</code> is <code>get.inversion()</code>’s (Tutorial
-11) deep-learning sibling – a dense or 1D-CNN network via
+12) deep-learning sibling – a dense or 1D-CNN network via
 TensorFlow/Keras, fit on the same kind of (sensor-band reflectance,
 trait) LUT.</p>
 <div id="same-simulate-and-split-pattern-as-tutorials-10-11" class="section level2">
@@ -431,14 +431,14 @@ above for that reason.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>get.inversionOpt()</code> (Tutorial 10)</td>
+<td><code>get.inversionOpt()</code> (Tutorial 11)</td>
 <td>No – pure search</td>
 <td>Yes – works from a handful of reference spectra</td>
 <td>Quick, physically-grounded retrieval; no ML infrastructure
 needed</td>
 </tr>
 <tr class="even">
-<td><code>get.inversion()</code> (Tutorial 11)</td>
+<td><code>get.inversion()</code> (Tutorial 12)</td>
 <td>Yes</td>
 <td>Needs enough rows to fit reliably (hundreds+)</td>
 <td>Production-scale retrieval, many predictors (full spectrum +
@@ -456,7 +456,7 @@ indices)</td>
 <div id="whats-next" class="section level2">
 <h2>What’s next</h2>
 <ul>
-<li><strong>Tutorial 13</strong> – simulate, convolve, index, and invert
+<li><strong>Tutorial 14</strong> – simulate, convolve, index, and invert
 as one end-to-end pipeline, across every canopy model this package
 supports.</li>
 </ul>
