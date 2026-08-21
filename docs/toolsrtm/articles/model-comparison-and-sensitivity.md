@@ -75,10 +75,13 @@ sampling scenario against a Gaussian one:
 ### Global Sobol sensitivity, per Sentinel-2A band
 
 `2-Sobol_perband_sensitivity.R` uses the `sensobol` package’s proper
-quasi-random design (`sobol_matrices()` → evaluate
-[`foursail()`](../reference/foursail.md) at every design point →
-`sobol_indices()`) to get first-order (Si) and total (Ti) indices per
-band, rather than per native wavelength:
+quasi-random design
+([`sobol_matrices()`](https://rdrr.io/pkg/sensobol/man/sobol_matrices.html)
+→ evaluate [`foursail()`](../reference/foursail.md) at every design
+point →
+[`sobol_indices()`](https://rdrr.io/pkg/sensobol/man/sobol_indices.html))
+to get first-order (Si) and total (Ti) indices per band, rather than per
+native wavelength:
 
 ![](figures/comparison-sensitivity/2-Sobol_Si_byband.png)
 
@@ -105,12 +108,14 @@ statistical methods converging on the same physical story.
 ## A practical note on zero-variance predictors
 
 Building `Scripts/Sensibility/3-Johnson_relative_importance.R` surfaced
-a real, generically-useful gotcha: `johnson()`’s correlation-matrix step
-fails outright (`eigen(): infinite or missing values`) if any predictor
-column has zero variance – e.g. `LMA` is constant when a LUT is built
-with `LeafModel = "PROSPECT-PRO"`, since that variant uses `CBC`/`Prot`
-for dry matter instead. The script now drops any zero-variance column
-before calling `johnson()`, with a message naming what got dropped,
-rather than crashing. Worth checking for in your own code any time you
-feed a LUT-derived data.frame into a correlation- or regression-based
-method.
+a real, generically-useful gotcha:
+[`johnson()`](https://rdrr.io/pkg/sensitivity/man/johnson.html)’s
+correlation-matrix step fails outright
+(`eigen(): infinite or missing values`) if any predictor column has zero
+variance – e.g. `LMA` is constant when a LUT is built with
+`LeafModel = "PROSPECT-PRO"`, since that variant uses `CBC`/`Prot` for
+dry matter instead. The script now drops any zero-variance column before
+calling [`johnson()`](https://rdrr.io/pkg/sensitivity/man/johnson.html),
+with a message naming what got dropped, rather than crashing. Worth
+checking for in your own code any time you feed a LUT-derived data.frame
+into a correlation- or regression-based method.

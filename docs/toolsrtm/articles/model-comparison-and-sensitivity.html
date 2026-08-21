@@ -33,16 +33,31 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/01-getting-started.html">01. Getting Started with ToolsRTM</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Tutorials</h6></li>
+    <li><a class="dropdown-item" href="../articles/01-getting-started.html">01. Getting Started with ToolsRTM</a></li>
     <li><a class="dropdown-item" href="../articles/02-leaf-to-canopy.html">02. From Leaf to Canopy Reflectance</a></li>
     <li><a class="dropdown-item" href="../articles/03-spart.html">03. SPART: Soil-Plant-Atmosphere Radiative Transfer</a></li>
     <li><a class="dropdown-item" href="../articles/04-comparing-models.html">04. Comparing Radiative Transfer Models</a></li>
     <li><a class="dropdown-item" href="../articles/05-building-luts.html">05. Building Look-Up Tables</a></li>
     <li><a class="dropdown-item" href="../articles/06-parallel-simulation.html">06. Large-Scale and Parallel RTM Simulation</a></li>
-    <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
+    <li><a class="dropdown-item" href="../articles/07-sensor-convolution.html">07. From RTM Spectra to Satellite Observations: Sensor Convolution</a></li>
+    <li><a class="dropdown-item" href="../articles/08-vegetation-indices.html">08. Vegetation Indices and Spectral Features</a></li>
+    <li><a class="dropdown-item" href="../articles/09-sensitivity.html">09. Understanding RTM Sensitivity</a></li>
+    <li><a class="dropdown-item" href="../articles/10-hybrid-inversion.html">10. From Physics to Vegetation Traits: Hybrid Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/11-ml-inversion-comparison.html">11. Comparing ML Algorithms for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/12-deep-learning-inversion.html">12. Deep Learning for RTM Inversion</a></li>
+    <li><a class="dropdown-item" href="../articles/13-end-to-end-pipeline.html">13. End-to-End RTM Inversion Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/14-real-eo-application.html">14. From Satellite Reflectance to Vegetation Traits: Real EO Application</a></li>
+    <li><a class="dropdown-item" href="../articles/15-marmit-soil-in-canopy.html">15. MARMIT + fourSAIL + SPART: Realistic Soil Moisture, Canopy to Atmosphere</a></li>
+    <li><a class="dropdown-item" href="../articles/16-forest-time-series.html">16. Monitoring a Forest Site Through Time</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
+    <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
     <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
+    <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
     <li><a class="dropdown-item" href="../articles/model-comparison-and-sensitivity.html">Model comparison and sensitivity analysis</a></li>
-    <li><a class="dropdown-item" href="../articles/marmit-soil-in-canopy.html">MARMIT + PROSAIL: realistic soil moisture in canopy simulations</a></li>
   </ul>
 </li>
       </ul>
@@ -176,8 +191,8 @@ one:</p>
 </h3>
 <p><code>2-Sobol_perband_sensitivity.R</code> uses the
 <code>sensobol</code> package’s proper quasi-random design
-(<code>sobol_matrices()</code> → evaluate <code><a href="../reference/foursail.html">foursail()</a></code> at
-every design point → <code>sobol_indices()</code>) to get first-order
+(<code><a href="https://rdrr.io/pkg/sensobol/man/sobol_matrices.html" class="external-link">sobol_matrices()</a></code> → evaluate <code><a href="../reference/foursail.html">foursail()</a></code> at
+every design point → <code><a href="https://rdrr.io/pkg/sensobol/man/sobol_indices.html" class="external-link">sobol_indices()</a></code>) to get first-order
 (Si) and total (Ti) indices per band, rather than per native
 wavelength:</p>
 <p><img src="figures/comparison-sensitivity/2-Sobol_Si_byband.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
@@ -209,14 +224,14 @@ story.</p>
 </h2>
 <p>Building
 <code>Scripts/Sensibility/3-Johnson_relative_importance.R</code>
-surfaced a real, generically-useful gotcha: <code>johnson()</code>’s
+surfaced a real, generically-useful gotcha: <code><a href="https://rdrr.io/pkg/sensitivity/man/johnson.html" class="external-link">johnson()</a></code>’s
 correlation-matrix step fails outright
 (<code>eigen(): infinite or missing values</code>) if any predictor
 column has zero variance – e.g. <code>LMA</code> is constant when a LUT
 is built with <code>LeafModel = "PROSPECT-PRO"</code>, since that
 variant uses <code>CBC</code>/<code>Prot</code> for dry matter instead.
 The script now drops any zero-variance column before calling
-<code>johnson()</code>, with a message naming what got dropped, rather
+<code><a href="https://rdrr.io/pkg/sensitivity/man/johnson.html" class="external-link">johnson()</a></code>, with a message naming what got dropped, rather
 than crashing. Worth checking for in your own code any time you feed a
 LUT-derived data.frame into a correlation- or regression-based
 method.</p>

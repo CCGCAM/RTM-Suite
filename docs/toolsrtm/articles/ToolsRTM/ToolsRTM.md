@@ -157,7 +157,7 @@ Change in EWT with INFORM
 
 ``` r
 
-LUT <- ToolsRTM::getSim_fromLUT(trait = 'LAI', nmin = 1, nmax = 5, Interval = 0.5, 
+LUT <- ToolsRTM::getSim_fromLUT(trait = 'LAI', nmin = 1, nmax = 5, Interval = 0.5,
                                 model = 'PROSAIL', method = 'ggplot')
 #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 #> ℹ Please use `linewidth` instead.
@@ -507,7 +507,7 @@ is then visualized with ggplot2. Key Steps:
     # Perform linear interpolation to resample to Sentinel-2 bands
     reflectance.i <- signal::interp1(wave, sim.canopy[i, ], center_wvl, method = "spline")
     # Store the interpolated reflectance in the list
-    SE2_df[[i]] <- data.frame(center_wvl = center_wvl, reflectance = reflectance.i, 
+    SE2_df[[i]] <- data.frame(center_wvl = center_wvl, reflectance = reflectance.i,
                               n.sim=i,trait=LUT[,depVar][i])
     refl.se2[[i]] <- reflectance.i
   }
@@ -528,7 +528,7 @@ is then visualized with ggplot2. Key Steps:
     )
   # Define the colors for the greens
   gradient_colors <- colorRampPalette(c("cornsilk4",'gold3', "darkolivegreen4"))(nSamples)
-  
+
   # ggplot scatter plot with modifications
   plot.ind <- ggplot(df.SE2, aes(x = center_wvl, y = reflectance,color=as.factor(trait))) + #ylim(0,1) +
     #geom_tile(aes(color = trait), width = 1) +
@@ -595,7 +595,7 @@ chlorophyll content and canopy structure. Key Steps:
   gradient_colors <- colorRampPalette(c("cornsilk4",'gold3', "darkolivegreen4"))(200)
 
   # Create a ggplot scatter plot with modifications
-  plot.ind <- ggplot(LUT_SE2_Indices, aes_string(x = depVar, y = 'CR.red.nir',color=depVar)) + 
+  plot.ind <- ggplot(LUT_SE2_Indices, aes_string(x = depVar, y = 'CR.red.nir',color=depVar)) +
     geom_point(size = 5,alpha=0.8) +
     viridis::scale_color_viridis() +
     # Add plot title and legend title
