@@ -1,11 +1,21 @@
 # ==============================================================================
-# Spectral global sensitivity analysis (Sobol total index), reproducing the
-# style of outs/sensibilidad.png: stacked "Total SI [%]" vs wavelength, one
-# trait per color band, comparing a Uniform-PDF sampling scenario against a
-# Gaussian-PDF one.
+# Spectral global sensitivity analysis (Johnson relative-importance index),
+# reproducing the style of outs/sensibilidad.png: stacked "Total SI [%]" vs
+# wavelength, one trait per color band, comparing a Uniform-PDF sampling
+# scenario against a Gaussian-PDF one.
 #
-# Uses ToolsRTM::get.spectral.sensitivity() (new function, wraps the existing
-# ToolsRTM::get.sobol.indices() Sobol estimator, run once per wavelength).
+# Uses ToolsRTM::get.spectral.sensitivity(), which wraps
+# ToolsRTM::get.sobol.indices(), run once per wavelength. NB: despite this
+# script's title/plot labels below ("Total SI", a Sobol-index name kept for
+# continuity with the reference figure this reproduces), the underlying
+# metric is Johnson relative importance (get.sobol.indices()'s
+# I.Johnson_norm column), not a Sobol total index -- get.sobol.indices()'s
+# own STi formula has a real bug (computes the same near-constant value for
+# every trait; see ToolsRTM/R/get.sobol.indices.R's source comments), so
+# get.spectral.sensitivity() was fixed to read I.Johnson_norm instead. This
+# script needed no code changes -- it only calls get.spectral.sensitivity()
+# and plots whatever STi_pct column comes back, which is correct again as of
+# that fix.
 # ==============================================================================
 
 rm(list = ls())  # avoid leftover objects from a previous run/session leaking in

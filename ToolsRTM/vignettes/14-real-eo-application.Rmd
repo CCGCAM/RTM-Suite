@@ -202,37 +202,21 @@ inversion result, and why operational retrieval systems calibrate LUT
 ranges against the actual study area rather than using generic defaults
 unmodified.
 
-## Take-home: the whole series, one pipeline
+## Take-home
 
-```text
-Getting Started (01)
-      |
-Leaf -> Canopy RT (02)
-      |
-SPART: Soil -> Plant -> Atmosphere (03)
-      |
-RTM Model Comparison (04)
-      |
-LUT Generation (05)
-      |
-Parallel Simulation (06)
-      |
-Sensor Convolution (07)
-      |
-Spectral Indices (08)
-      |
-Sensitivity Analysis (09)
-      |
-Hybrid Inversion (10) -> ML (11) -> Deep Learning (12)
-      |
-End-to-End Pipeline (13)
-      |
-Real EO Application (14) -- this page
-```
+Every stage from Tutorial 01 through this page is a real, runnable piece
+of the same chain -- from one hand-written trait row to a real
+satellite-derived trait map. Two pages close out the series from here:
 
-Every stage in this series is a real, runnable piece of the same chain --
-from one hand-written trait row (Tutorial 01) to a real satellite-derived
-trait map (this page). See the **Reference manuals and deep dives**
-section of this site's Articles menu for the comprehensive, all-12-
-algorithm reference manual (`ToolsRTM`, `Getting-LUTs`, `InversionOpt`
-vignettes) this tutorial series complements rather than replaces.
+- **Tutorial 15** -- MARMIT + SPART: whether the soil-moisture realism
+  this page's LUT training glossed over (Section 5's domain-gap
+  discussion) actually survives to TOA, answered directly rather than
+  assumed.
+- **Tutorial 16** -- the same real-EO approach as this page, extended to
+  a real multi-date time series over a forest site, comparing NDVI
+  against hybrid-inverted Cab/LAI/EWT through a growing season.
+
+See the **Reference manuals and deep dives** section of this site's
+Articles menu for the comprehensive, all-12-algorithm reference manual
+(`ToolsRTM`, `Getting-LUTs`, `InversionOpt` vignettes) this tutorial
+series complements rather than replaces.

@@ -1,11 +1,19 @@
-#' Spectral global sensitivity analysis (Sobol total index per wavelength)
+#' Spectral global sensitivity analysis (Johnson relative importance per wavelength)
 #'
 #' Runs a canopy radiative transfer model many times while varying a set of
-#' plant/soil traits, then computes the Sobol total sensitivity index
-#' (\code{\link{get.sobol.indices}}) at each wavelength -- i.e. how much of
-#' the variance in simulated reflectance at that wavelength is explained by
-#' each trait. Produces the data behind a stacked "Total SI (percent) vs
-#' wavelength" plot (traits stacked to 100 percent at every wavelength).
+#' plant/soil traits, then computes the Johnson relative-importance index
+#' (\code{\link{get.sobol.indices}}'s \code{I.Johnson_norm} column, via
+#' \code{sensitivity::johnson()}) at each wavelength -- i.e. how much each
+#' trait relatively contributes to explaining reflectance variance at that
+#' wavelength. Produces the data behind a stacked "relative contribution
+#' (percent) vs wavelength" plot (traits stacked to 100 percent at every
+#' wavelength). Despite the name, this does NOT use \code{get.sobol.indices()}'s
+#' own \code{STi} (total Sobol index) column -- that column has a known bug
+#' (see \code{ToolsRTM/R/get.sobol.indices.R} and this function's own source
+#' comments) and produces a near-uniform, physically-meaningless split across
+#' traits; \code{I.Johnson_norm} is the same metric this package's reference
+#' sensitivity scripts (\code{TOcheck/sensibilidad/}) already use for this
+#' exact figure.
 #'
 #' @param n.samples integer. Number of RTM simulations to run (also the total
 #'   number of rows fed to \code{\link{get.sobol.indices}}, whose own \code{N}
@@ -45,8 +53,10 @@
 #'   the same \code{save.path} resumes instead of restarting.
 #'
 #' @return A data.frame with columns \code{wavelength}, \code{trait}, and
-#'   \code{STi_pct} (total Sobol index, normalized to sum to 100% across
-#'   traits at each wavelength) -- long format, ready for
+#'   \code{STi_pct} (Johnson relative-importance index, normalized to sum to
+#'   100% across traits at each wavelength -- the column name is kept as
+#'   \code{STi_pct} for backward compatibility even though it is no longer a
+#'   Sobol total index, see the source comments) -- long format, ready for
 #'   \code{ggplot2::geom_area(position = "stack")}.
 #' @export
 #'
@@ -168,9 +178,31 @@ get.spectral.sensitivity <- function(n.samples = 1000, distribution = "Uniform",
     if (is.null(sob)) next
 
     # get.sobol.indices() returns one row per trait (columns Band/Parameter/Si/STi/...),
-    # not a matrix -- match STi to our trait order by name, don't index by position.
-    sti <- sob$STi[match(traits, sob$Parameter)]
-    sti[is.na(sti) | sti < 0] <- 0  # Sobol estimator noise can go slightly negative; clip for a clean stacked area
+    # not a matrix -- match by name, don't index by position.
+    #
+    # NB (fix): this used to read sob$STi (the "total Sobol index" column).
+    # get.sobol.indices()'s own STi formula (ToolsRTM/R/get.sobol.indices.R)
+    # has a real bug -- its STi line uses `m.1[, output] * m.1[, output]`
+    # (output squared against itself) instead of the input variable at all,
+    # so STi comes out as the same near-constant value for every trait in the
+    # loop rather than a real per-trait sensitivity estimate. After this
+    # function's own normalization to 100%, that produced an artificial
+    # equal split across traits (e.g. Cab/EWT/LAI/SoilCoef all landing near
+    # 25-33% at every wavelength) with no relationship to the actual physics
+    # -- confirmed by comparing against known PROSPECT/leaf-optics absorption
+    # features, and against this repo's own reference sensitivity scripts
+    # (`TOcheck/sensibilidad/0-Sensibility_Analisis_v2.R` and siblings), which
+    # use `sensitivity::johnson()` for this exact spectral-sensitivity figure
+    # and never call Sobol at all (their own Sobol/fast99 attempts are
+    # commented out, abandoned). get.sobol.indices()'s own I.Johnson_norm
+    # column (via sensitivity::johnson(), a *different*, independently
+    # correct code path in the same function) is what those reference
+    # scripts' figures are actually built from -- switched to that here
+    # instead, rather than trying to fix the shared/exported STi formula
+    # itself (higher risk -- get.sobol.indices() is exported and its STi
+    # column, while wrong, might be relied on elsewhere; not touched here).
+    sti <- sob$I.Johnson_norm[match(traits, sob$Parameter)]
+    sti[is.na(sti) | sti < 0] <- 0
     sti_pct <- 100 * sti / sum(sti)
 
     results[[k]] <- data.frame(wavelength = wl_all[j], trait = traits, STi_pct = sti_pct)

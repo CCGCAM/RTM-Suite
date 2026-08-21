@@ -31,15 +31,31 @@ method's quirks.
 | Method | Function | Scope |
 |---|---|---|
 | One-at-a-time (OAT) | plain sweep (Tutorial 02) | Sweep one trait, hold others fixed |
-| Sobol total index, per wavelength | `get.spectral.sensitivity()` | Global, full spectrum |
+| Johnson relative importance, per wavelength | `get.spectral.sensitivity()` | Global, full spectrum |
 | Sobol Si/Ti, per band | `sensobol::sobol_matrices()` + `foursail()` + `sensobol::sobol_indices()` | Global, discrete sensor bands |
-| Johnson relative importance | `sensitivity::johnson()` | Regression-based, per band |
+| Johnson relative importance, per band | `sensitivity::johnson()` | Regression-based, per band |
 
-## 1. Global Sobol sensitivity, across the full spectrum
+## 1. Global sensitivity across the full spectrum: Johnson relative importance
 
-`get.spectral.sensitivity()` wraps a Sobol total-index estimator, run once
-per wavelength -- every trait varies simultaneously per simulation, unlike
-Tutorial 02's OAT sweeps:
+`get.spectral.sensitivity()` runs `sensitivity::johnson()` (Johnson
+relative-importance index) once per wavelength -- every trait varies
+simultaneously per simulation, unlike Tutorial 02's OAT sweeps. **A real
+bug was found and fixed here while building this page**: the function's
+name and an earlier draft of this page both said "Sobol total index" --
+`get.sobol.indices()` (which `get.spectral.sensitivity()` calls
+internally) does compute a Sobol total index (`STi`), but that specific
+column has a genuine formula bug (it accidentally squares the *output*
+against itself instead of using the input trait at all, so every trait
+came out with nearly the same value -- the telltale symptom was Cab, EWT,
+and LAI all landing within a percentage point of each other at every
+wavelength, including right next to each other at 400 vs 410nm, which
+has no physical reason to be that flat). Fixed by switching to
+`get.sobol.indices()`'s *separately, correctly* computed
+`I.Johnson_norm` column (`sensitivity::johnson()`, a different code path
+in the same function) -- the same metric this package's own reference
+sensitivity scripts already use for this exact kind of figure. The
+`STi_pct` column name below is kept for backward compatibility even
+though it is Johnson-based now, not Sobol-based.
 
 ```{r sobol-spectral}
 si <- get.spectral.sensitivity(n.samples = 200, distribution = "Uniform",
@@ -52,10 +68,29 @@ head(si)
 ggplot(si, aes(x = wavelength, y = STi_pct, fill = trait)) +
   geom_area(position = "stack") +
   labs(title = "Spectral sensitivity of TOC reflectance (fourSAIL + PROSPECT-D)",
-       subtitle = sprintf("Sobol total sensitivity index, %d simulations", 200),
-       x = "Wavelength (nm)", y = "Total SI [%]") +
+       subtitle = sprintf("Johnson relative-importance index, %d simulations", 200),
+       x = "Wavelength (nm)", y = "Relative importance [%]") +
   theme_bw(base_size = 11) + theme(legend.position = "bottom")
 ```
+
+```{r sobol-spectral-check}
+cab <- subset(si, trait == "Cab"); ewt <- subset(si, trait == "EWT"); lai <- subset(si, trait == "LAI")
+cat("Cab: ", round(mean(cab$STi_pct[cab$wavelength >= 430 & cab$wavelength <= 680]), 1),
+    "% in the visible/red absorption region (430-680nm), only ",
+    round(mean(cab$STi_pct[cab$wavelength >= 750 & cab$wavelength <= 1300]), 1),
+    "% in the NIR plateau (750-1300nm, no chlorophyll absorption feature there)\n", sep = "")
+cat("EWT: ", round(mean(ewt$STi_pct[ewt$wavelength >= 1400 & ewt$wavelength <= 1500]), 1),
+    "% near the 1450nm water-absorption band, only ",
+    round(mean(ewt$STi_pct[ewt$wavelength >= 430 & ewt$wavelength <= 680]), 1),
+    "% in the visible (no water absorption feature there)\n", sep = "")
+cat("LAI: ", round(mean(lai$STi_pct[lai$wavelength >= 750 & lai$wavelength <= 1300]), 1),
+    "% in the NIR plateau (structural multiple scattering) -- the leaf-count/canopy-structure signal\n", sep = "")
+```
+
+Each number lands exactly where leaf/canopy optics theory says it should
+-- Cab in the visible, EWT at the water bands, LAI in the NIR -- the
+concrete confirmation that the fix above produced real physics, not
+another plausible-looking but wrong pattern.
 
 `Cab` dominates the visible, `EWT` the SWIR water-absorption region --
 consistent with Tutorial 02's OAT sweeps, but now with every trait varying

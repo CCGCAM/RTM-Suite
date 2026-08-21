@@ -32,6 +32,8 @@ articles:
   - "12-deep-learning-inversion"
   - "13-end-to-end-pipeline"
   - "14-real-eo-application"
+  - "15-marmit-soil-in-canopy"
+  - "16-forest-time-series"
 - title: Reference manuals and deep dives
   navbar: Manuals
   contents:
@@ -40,4 +42,3 @@ articles:
   - "InversionOpt"
   - "articles/course-pipeline"
   - "articles/model-comparison-and-sensitivity"
-  - "articles/marmit-soil-in-canopy"
