@@ -10,21 +10,26 @@ library(randomForest)
 A real, active remote-sensing research question: satellites now measure
 solar-induced chlorophyll fluorescence (SIF) alongside ordinary
 reflectance, and a large literature (Guanter et al. 2014 and many since)
-argues SIF tracks Gross Primary Production (GPP, ~ `Actot` in SCOPE’s
-own units) more directly than greenness indices like NDVI do – because
-fluorescence is mechanistically tied to the light reactions that drive
-carbon assimilation, while NDVI only sees canopy structure and
-chlorophyll content. Testing this against *real* satellite data needs
-independent GPP measurements (eddy-covariance towers) and is confounded
-by atmosphere, geometry, and canopy structure all at once.
+argues SIF tracks Gross Primary Production (GPP) more directly than
+greenness indices like NDVI do – because fluorescence is mechanistically
+tied to the light reactions that drive carbon assimilation, while NDVI
+only sees canopy structure and chlorophyll content. Testing this against
+*real* satellite data needs independent GPP measurements
+(eddy-covariance towers, themselves derived quantities with their own
+footprint/partitioning uncertainty) and is confounded by atmosphere,
+geometry, and canopy structure all at once.
 
-SCOPE lets you test the underlying question directly instead, with exact
-ground truth: it simulates `Actot` and `EoutF` (canopy-integrated SIF)
-from the *same* underlying biochemistry and radiative transfer, for LUT
-rows where every trait is known exactly. This page asks: **in
-SCOPE-simulated data, does SIF explain `Actot` better than a
-reflectance-only greenness index – and does adding SIF on top of
-greenness improve on greenness alone?**
+`Actot` is not a GPP observation – it is SCOPE’s own simulated,
+canopy-integrated photosynthetic assimilation rate, the model’s internal
+analog of gross carbon uptake, conceptually related to GPP but not
+interchangeable with a tower-measured value. What SCOPE *does* offer is
+exact internal consistency: it simulates `Actot` and `EoutF`
+(canopy-integrated SIF) from the *same* underlying biochemistry and
+radiative transfer, for LUT rows where every trait is known exactly. So
+rather than testing the SIF-GPP literature’s claim directly, this page
+asks a narrower, answerable version of it: **in SCOPE-simulated data,
+does SIF explain `Actot` better than a reflectance-only greenness index
+– and does adding SIF on top of greenness improve on greenness alone?**
 
 ## 1. Simulate a 300-row LUT
 
