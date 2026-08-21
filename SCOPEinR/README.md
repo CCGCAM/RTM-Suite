@@ -154,7 +154,7 @@ scope_sims_parallel <- SCOPEinR::get.SCOPE.parallel(
 )
 ```
 
-Set `get.csv = TRUE` to let the function write the simulation outputs to its output directory. For large production LUTs, process bounded chunks rather than keeping every full SCOPE result in memory at once. See [Tutorial 10 — End-to-End Pipeline](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/10-end-to-end-pipeline.html) for the complete simulation, sensor-convolution, and trait-inversion workflow.
+Set `get.csv = TRUE` to let the function write the simulation outputs to its output directory. For large production LUTs, process bounded chunks rather than keeping every full SCOPE result in memory at once. See [Tutorial 10 — End-to-End Pipeline](https://ccgcam.github.io/RTM-Suite/scopeinr/articles/t10-end-to-end-pipeline.html) for the complete simulation, sensor-convolution, and trait-inversion workflow.
 
 ### 1.6 Get some additional plots by main plant trait.
 
