@@ -792,6 +792,6 @@ use, in addition to citing RTM-Suite/ToolsRTM.
 - [11. Comparing ML Algorithms for RTM
   Inversion](11-ml-inversion-comparison.md):
 - [12. Deep Learning for RTM Inversion](12-deep-learning-inversion.md):
-- [Full pipeline: simulate, convolve, invert](course-pipeline.md):
+- [13. End-to-End RTM Inversion Pipeline](13-end-to-end-pipeline.md):
 - [MARMIT + PROSAIL: realistic soil moisture in canopy
   simulations](marmit-soil-in-canopy.md):

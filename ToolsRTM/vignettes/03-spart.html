@@ -512,7 +512,15 @@ large soil contribution     small soil contribution
 stronger background effect  canopy-dominated signal</code></pre>
 <p>Confirmed: soil brightness shifts the sparse-canopy signal by roughly
 70x more than the dense-canopy signal – once the canopy closes, soil
-brightness barely reaches the sensor.</p>
+brightness barely reaches the sensor. This page used two fixed flat
+<code>rsoil</code> spectra to isolate the LAI effect; for a
+physically-realistic <em>moisture</em>-driven soil spectrum instead of
+an arbitrary brightness value, see
+<code>ToolsRTM::get.marmit.rsoil()</code> (MARMIT, Bablet et al.) – it
+plugs into
+<code>foursail()</code>’s/<code>foursail2()</code>’s/<code>inform()</code>’s
+own <code>rsoil</code> argument the same way, and into
+<code>SPART()</code>’s here.</p>
 </div>
 <div id="atmospheric-contribution" class="section level2">
 <h2>3.4 Atmospheric contribution</h2>

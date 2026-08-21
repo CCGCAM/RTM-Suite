@@ -70,7 +70,7 @@ get.sentinel2_cube <- function(s_collection, shape, date_range,
   }
   
   # Define the cube view (spatial extent and resolution)
-  view <- cube_view(
+  view <- gdalcubes::cube_view(
     srs = crs_cube,
     extent = list(
       t0 = as.character(date_range[[1]]),
@@ -87,11 +87,11 @@ get.sentinel2_cube <- function(s_collection, shape, date_range,
 
 
   # Mask to remove clouds and shadows using the SCL band
-  mask <- image_mask("SCL", values = c(0,1,3,8,9,10,11,12))  # Clouds,snow,water bad pixels and shadows
+  mask <- gdalcubes::image_mask("SCL", values = c(0,1,3,8,9,10,11,12))  # Clouds,snow,water bad pixels and shadows
 
   gdalcubes::gdalcubes_options(parallel = parallel::detectCores()-2)
   # Create a raster cube for the given collection and view
-  cube <- raster_cube(s_collection, view,mask)
+  cube <- gdalcubes::raster_cube(s_collection, view,mask)
   
   # Check available bands in the cube
   available_bands <- names(cube)  # Adjust based on how you access bands
@@ -106,36 +106,36 @@ get.sentinel2_cube <- function(s_collection, shape, date_range,
   # Calculate the result cube based on the selected aggregation method
   if (aggregation_method == "mean") {
     result_cube <- cube |>
-      select_bands(selected_bands) |>
-      reduce_time(paste0("mean(", selected_bands, ")"))
+      gdalcubes::select_bands(selected_bands) |>
+      gdalcubes::reduce_time(paste0("mean(", selected_bands, ")"))
     
   } else if (aggregation_method == "median") {
     result_cube <- cube |>
-      select_bands(selected_bands) |>
-      reduce_time(paste0("median(", selected_bands, ")"))
+      gdalcubes::select_bands(selected_bands) |>
+      gdalcubes::reduce_time(paste0("median(", selected_bands, ")"))
     
   } else if (aggregation_method == "min") {
     result_cube <- cube |>
-      select_bands(selected_bands) |>
-      reduce_time(paste0("min(", selected_bands, ")"))
+      gdalcubes::select_bands(selected_bands) |>
+      gdalcubes::reduce_time(paste0("min(", selected_bands, ")"))
     
   } else if (aggregation_method == "max") {
     result_cube <- cube |>
-      select_bands(selected_bands) |>
-      reduce_time(paste0("max(", selected_bands, ")"))
+      gdalcubes::select_bands(selected_bands) |>
+      gdalcubes::reduce_time(paste0("max(", selected_bands, ")"))
     
   } else if (aggregation_method == "first") {
     result_cube <- cube |>
-      select_bands(selected_bands) |>
-      #reduce_time(paste0("min(", selected_bands, ")"))
-      slice_time(as.character(date_range[[1]]))
+      gdalcubes::select_bands(selected_bands) |>
+      #gdalcubes::reduce_time(paste0("min(", selected_bands, ")"))
+      gdalcubes::slice_time(as.character(date_range[[1]]))
     
   } else {
     # Default case if aggregation_method is invalid
     warning("Invalid aggregation method specified. Using 'mean' as the default.")
     result_cube <- cube |>
-      select_bands(selected_bands) |>
-      reduce_time(paste0("mean(", selected_bands, ")"))
+      gdalcubes::select_bands(selected_bands) |>
+      gdalcubes::reduce_time(paste0("mean(", selected_bands, ")"))
   }
   
  
@@ -147,7 +147,7 @@ get.sentinel2_cube <- function(s_collection, shape, date_range,
   # any caller with only `requireNamespace("terra")`/no attach hit
   # "could not find function \"rast\"" even though the package itself
   # declares and uses terra internally elsewhere (e.g. get.satellite_collection()).
-  result_raster <- st_as_stars.cube(result_cube) |> terra::rast()
+  result_raster <- gdalcubes::st_as_stars.cube(result_cube) |> terra::rast()
 
   # Generate names based on bands and time range
   band_names <- paste0(selected_bands, "_",

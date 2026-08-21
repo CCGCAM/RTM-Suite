@@ -67,27 +67,35 @@ get.satellite_collection <- function(scenario, collection, cloud_server='microso
 
     # Search for items using the planetary computer STAC API
     items <- planetary_computer |>
-      stac_search(collections = collection,
+      rstac::stac_search(collections = collection,
                   bbox = bbox[1:4],  # Use the reduced bounding box
                   datetime = paste0(date_range[[1]], "/", date_range[[2]]),
                   limit = n.limit) |>
-      post_request() |> items_fetch(progress = FALSE)
+      rstac::post_request() |> rstac::items_fetch(progress = FALSE)
       print(length(items$features))
 
   } else {
     # Search for items using the planetary computer STAC API
     items <- planetary_computer |>
-      stac_search(collections = collection,
+      rstac::stac_search(collections = collection,
                   bbox = bbox[1:4],  # Use the reduced bounding box
                   datetime = paste0(date_range[[1]], "/", date_range[[2]]),
                   limit = n.limit) |>
-      post_request()
+      rstac::post_request()
     print(length(items$features))
   }
 
+  # NB (fix): stac_search()/post_request()/items_fetch()/items_sign()/
+  # sign_planetary_computer()/stac_image_collection() were all called bare
+  # (no rstac::/gdalcubes:: prefix) throughout this function -- they only
+  # ever resolved if the CALLER happened to have both library(rstac) and
+  # library(gdalcubes) attached first (neither package is even in this
+  # package's Imports, only Suggests), so a fresh call to
+  # get.satellite_collection() with just library(ToolsRTM) attached failed
+  # with e.g. "could not find function \"post_request\"".
   # Sign the STAC items for authentication
-  items <- items_sign(items,
-    sign_planetary_computer())
+  items <- rstac::items_sign(items,
+    rstac::sign_planetary_computer())
 
   
   if (length(items$features) == 0) {
@@ -128,7 +136,7 @@ get.satellite_collection <- function(scenario, collection, cloud_server='microso
     
     clt <- tryCatch(
       items$features |>
-        stac_image_collection(asset_names = assets),
+        gdalcubes::stac_image_collection(asset_names = assets),
       error = function(e) {
         NULL  # Return NA if an error occurs
       }
@@ -143,7 +151,7 @@ get.satellite_collection <- function(scenario, collection, cloud_server='microso
     # Create image collection with cloud cover filtering for collections that require it
     clt <- tryCatch(
       items$features |>
-        stac_image_collection(asset_names = assets,
+        gdalcubes::stac_image_collection(asset_names = assets,
                               property_filter = function(x) {
                                 x[["eo:cloud_cover"]] < cloud_threshold
                               }),
@@ -156,7 +164,7 @@ get.satellite_collection <- function(scenario, collection, cloud_server='microso
   } else {
     clt <- tryCatch(
       items$features |>
-        stac_image_collection(asset_names = assets),
+        gdalcubes::stac_image_collection(asset_names = assets),
       error = function(e) {
         NA  # Return NA if an error occurs
       }
@@ -215,7 +223,7 @@ get.satellite_collection <- function(scenario, collection, cloud_server='microso
     
     # Create the filtered collection for cloud cover and the specific date
     clt_first <- items$features |>
-      stac_image_collection(
+      gdalcubes::stac_image_collection(
         asset_names = assets,
         property_filter = function(x) {
           # Check if the cloud cover is below the threshold
@@ -233,7 +241,7 @@ get.satellite_collection <- function(scenario, collection, cloud_server='microso
     
     # Create the filtered collection for cloud cover and the specific date
     clt_first <- items$features |>
-      stac_image_collection(
+      gdalcubes::stac_image_collection(
         asset_names = assets,
         property_filter = function(x) {
           # Check if the cloud cover is below the threshold

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>14. From Satellite Reflectance to Vegetation Traits: Real EO Application</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">14. From Satellite Reflectance to
+Vegetation Traits: Real EO Application</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code></pre></div>
+<p>Every tutorial so far worked on <em>simulated</em> spectra. This
+closing page applies the exact same hybrid-inversion framework
+(Tutorials 10-13) to a <strong>real</strong> Sentinel-2 image, retrieved
+live via STAC (SpatioTemporal Asset Catalog) – and, unlike Tutorial 03’s
+single-pixel SPART geometry sweep or Tutorial 13’s single-spectrum test
+set, produces a genuine <strong>2D spatial map</strong>, not a point
+value.</p>
+<pre class="text"><code>Real Sentinel-2 scene (STAC)
+        |
+        v
+Reflectance cube (DN -&gt; reflectance)
+        |
+        v
+   +----+----+
+   |         |
+   v         v
+NDVI map   Per-pixel hybrid inversion
+           (trained on a SIMULATED LUT,
+            Tutorials 10-13)
+   |         |
+   v         v
+Spatial index map   Spatial trait map (LAI)</code></pre>
+<div id="retrieve-a-real-sentinel-2-image-via-stac" class="section level2">
+<h2>1. Retrieve a real Sentinel-2 image via STAC</h2>
+<p><code>ToolsRTM::get.satellite_collection()</code> searches and signs
+a STAC collection (Microsoft Planetary Computer by default);
+<code>get.sentinel2_cube()</code> builds an actual gridded raster cube
+from it over a chosen area/date range (<code>gdalcubes</code> under the
+hood). Both are real, exported package functions – the same ones
+<code>Apps/STAC</code>’s Shiny app itself uses. Wrapped in
+<code>tryCatch()</code> since live network/STAC access is inherently
+less reliable in a documentation build than a local simulation:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>retrieval <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>({</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">library</span>(sf)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="co"># Wageningen, NL -- open farmland, a plausible study area for this package</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  pt <span class="ot">&lt;-</span> <span class="fu">st_point</span>(<span class="fu">c</span>(<span class="fl">5.6667</span>, <span class="fl">51.9667</span>)) <span class="sc">|&gt;</span> <span class="fu">st_sfc</span>(<span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  scenario <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">1</span>), <span class="at">geometry =</span> <span class="fu">st_sfc</span>(pt[[<span class="dv">1</span>]], <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  sc <span class="ot">&lt;-</span> <span class="fu">get.satellite_collection</span>(<span class="at">scenario =</span> scenario, <span class="at">collection =</span> <span class="st">&quot;sentinel-2-l2a&quot;</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>                                  <span class="at">cloud_server =</span> <span class="st">&quot;microsoft&quot;</span>, <span class="at">n.limit =</span> <span class="dv">20</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>                                  <span class="at">date_range =</span> <span class="fu">c</span>(<span class="st">&quot;2024-06-01&quot;</span>, <span class="st">&quot;2024-08-31&quot;</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>                                  <span class="at">cloud_threshold =</span> <span class="dv">20</span>, <span class="at">buffer_size =</span> <span class="dv">1500</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  bbox <span class="ot">&lt;-</span> <span class="fu">get_bounding_box</span>(scenario, <span class="dv">1500</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  shape <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">1</span>), <span class="at">geometry =</span> <span class="fu">st_sfc</span>(<span class="fu">st_polygon</span>(<span class="fu">list</span>(<span class="fu">rbind</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>    <span class="fu">c</span>(bbox[<span class="st">&quot;xmin&quot;</span>], bbox[<span class="st">&quot;ymin&quot;</span>]), <span class="fu">c</span>(bbox[<span class="st">&quot;xmin&quot;</span>], bbox[<span class="st">&quot;ymax&quot;</span>]),</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="fu">c</span>(bbox[<span class="st">&quot;xmax&quot;</span>], bbox[<span class="st">&quot;ymax&quot;</span>]), <span class="fu">c</span>(bbox[<span class="st">&quot;xmax&quot;</span>], bbox[<span class="st">&quot;ymin&quot;</span>]),</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="fu">c</span>(bbox[<span class="st">&quot;xmin&quot;</span>], bbox[<span class="st">&quot;ymin&quot;</span>])))), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>  cube <span class="ot">&lt;-</span> <span class="fu">get.sentinel2_cube</span>(sc[[<span class="dv">1</span>]], <span class="at">shape =</span> shape, <span class="at">date_range =</span> <span class="fu">c</span>(<span class="st">&quot;2024-06-01&quot;</span>, <span class="st">&quot;2024-08-31&quot;</span>),</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>                              <span class="at">aggregation_method =</span> <span class="st">&quot;mean&quot;</span>, <span class="at">get.dataset =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">ok =</span> <span class="cn">TRUE</span>, <span class="at">cube =</span> cube)</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>}, <span class="at">error =</span> <span class="cf">function</span>(e) <span class="fu">list</span>(<span class="at">ok =</span> <span class="cn">FALSE</span>, <span class="at">msg =</span> <span class="fu">conditionMessage</span>(e)))</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span>retrieval<span class="sc">$</span>ok) {</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;STAC retrieval skipped -- no network/STAC access from this build environment (&quot;</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>      retrieval<span class="sc">$</span>msg, <span class="st">&quot;). Everything below needs `retrieval$cube` and is skipped too.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="cf">if</span> (retrieval<span class="sc">$</span>ok) {</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  cube <span class="ot">&lt;-</span> retrieval<span class="sc">$</span>cube</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Real Sentinel-2 cube retrieved:&quot;</span>, <span class="fu">paste</span>(<span class="fu">dim</span>(cube), <span class="at">collapse =</span> <span class="st">&quot; x &quot;</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>      <span class="st">&quot;(rows x cols x bands), bands:&quot;</span>, <span class="fu">paste</span>(<span class="fu">names</span>(cube), <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>get.sentinel2_cube()</code> already masks clouds/shadows/snow
+via the SCL band and mean-aggregates every cloud-free date in range onto
+one 20m grid – one real, composited scene, not a single tile from a
+single overpass.</p>
+</div>
+<div id="dn-to-reflectance-and-a-real-spatial-ndvi-map" class="section level2">
+<h2>2. DN to reflectance, and a real spatial NDVI map</h2>
+<p>Sentinel-2 L2A digital numbers scale to reflectance by 1/10000. The
+10 bands the cube provides (<code>B02</code>-<code>B12</code>, excluding
+the 60m-only atmospheric bands
+<code>B01</code>/<code>B09</code>/<code>B10</code>) are enough for NDVI
+and for the trait model built below:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="cf">if</span> (retrieval<span class="sc">$</span>ok) {</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  refl_cube <span class="ot">&lt;-</span> cube[[<span class="fu">c</span>(<span class="st">&quot;B02&quot;</span>,<span class="st">&quot;B03&quot;</span>,<span class="st">&quot;B04&quot;</span>,<span class="st">&quot;B05&quot;</span>,<span class="st">&quot;B06&quot;</span>,<span class="st">&quot;B07&quot;</span>,<span class="st">&quot;B08&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)]] <span class="sc">/</span> <span class="dv">10000</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  ndvi <span class="ot">&lt;-</span> (refl_cube[[<span class="st">&quot;B08&quot;</span>]] <span class="sc">-</span> refl_cube[[<span class="st">&quot;B04&quot;</span>]]) <span class="sc">/</span> (refl_cube[[<span class="st">&quot;B08&quot;</span>]] <span class="sc">+</span> refl_cube[[<span class="st">&quot;B04&quot;</span>]])</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">names</span>(ndvi) <span class="ot">&lt;-</span> <span class="st">&quot;NDVI&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">plot</span>(ndvi, <span class="at">main =</span> <span class="st">&quot;Real Sentinel-2 NDVI, Wageningen NL area (cloud-masked mean composite)&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>}</span></code></pre></div>
+<p>This is the spatial equivalent of
+<code>ToolsRTM::getSpatial_index()</code>/
+<code>getSpectraIndices()</code> (Tutorial 08) – computed directly here
+with <code>terra</code> arithmetic for transparency, since those two
+functions expect a GeoTIFF path on disk rather than an in-memory
+cube.</p>
+</div>
+<div id="train-a-hybrid-inversion-model-on-a-simulated-lut" class="section level2">
+<h2>3. Train a hybrid-inversion model on a SIMULATED LUT</h2>
+<p>Same pattern as Tutorials 10-13 – the model is trained entirely on
+<code>foursail()</code> simulations, never on real data. The training
+bands must match what the real cube actually provides:
+<code>get.spectra.convolved()</code> returns Sentinel-2A’s full 13-band
+set (<code>B1</code>-<code>B12</code>, including the 60m bands); subset
+to the same 10 the cube has, and rename to match:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="cf">if</span> (retrieval<span class="sc">$</span>ok) {</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  n_samples <span class="ot">&lt;-</span> <span class="dv">150</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  LUT <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> ToolsRTM<span class="sc">::</span>inputsPROSAIL, <span class="at">nLUT =</span> n_samples, <span class="at">setseed =</span> <span class="dv">1</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  wl <span class="ot">&lt;-</span> <span class="dv">400</span><span class="sc">:</span><span class="dv">2500</span>; rsoil <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.15</span>, <span class="fu">length</span>(wl))</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  sim_refl <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(n_samples), <span class="cf">function</span>(i) {</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="fu">foursail</span>(<span class="at">inputLUT =</span> LUT[i, ], <span class="at">rsoil =</span> rsoil, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>)<span class="sc">$</span>rsot</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  }))</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  refl_X <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sim_refl); <span class="fu">colnames</span>(refl_X) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, wl)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  refl_X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">id =</span> <span class="fu">seq_len</span>(n_samples), refl_X)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  se2a_full <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">get.spectra.convolved</span>(<span class="at">rfl =</span> refl_X, <span class="at">sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>, <span class="at">plot.spectra =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">names</span>(se2a_full) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;B1&quot;</span>,<span class="st">&quot;B2&quot;</span>,<span class="st">&quot;B3&quot;</span>,<span class="st">&quot;B4&quot;</span>,<span class="st">&quot;B5&quot;</span>,<span class="st">&quot;B6&quot;</span>,<span class="st">&quot;B7&quot;</span>,<span class="st">&quot;B8&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B9&quot;</span>,<span class="st">&quot;B10&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  keep <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;B2&quot;</span>,<span class="st">&quot;B3&quot;</span>,<span class="st">&quot;B4&quot;</span>,<span class="st">&quot;B5&quot;</span>,<span class="st">&quot;B6&quot;</span>,<span class="st">&quot;B7&quot;</span>,<span class="st">&quot;B8&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)       <span class="co"># matches the cube&#39;s 10 bands</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  real_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;B02&quot;</span>,<span class="st">&quot;B03&quot;</span>,<span class="st">&quot;B04&quot;</span>,<span class="st">&quot;B05&quot;</span>,<span class="st">&quot;B06&quot;</span>,<span class="st">&quot;B07&quot;</span>,<span class="st">&quot;B08&quot;</span>,<span class="st">&quot;B8A&quot;</span>,<span class="st">&quot;B11&quot;</span>,<span class="st">&quot;B12&quot;</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  se2a <span class="ot">&lt;-</span> se2a_full[, keep]; <span class="fu">names</span>(se2a) <span class="ot">&lt;-</span> real_names</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  train_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(LUT, se2a)</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">get.inversion</span>(<span class="at">data =</span> train_df, <span class="at">depVar =</span> <span class="st">&quot;LAI&quot;</span>, <span class="at">inputs =</span> real_names,</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>                        <span class="at">algorithm =</span> <span class="st">&quot;RF&quot;</span>, <span class="at">n.samples =</span> <span class="fu">nrow</span>(train_df), <span class="at">seed =</span> <span class="dv">42</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="a-genuine-spatial-trait-map" class="section level2">
+<h2>4. A genuine spatial trait map</h2>
+<p>Every pixel’s 10-band reflectance goes through the fitted model –
+this is the same building block <code>ToolsRTM::getSpatialTrait()</code>
+uses internally (pixel extraction, prediction, then reassembled back
+into a raster), done here explicitly and self-contained:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="cf">if</span> (retrieval<span class="sc">$</span>ok) {</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  pix_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(refl_cube, <span class="at">xy =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  ok_rows <span class="ot">&lt;-</span> <span class="fu">complete.cases</span>(pix_df[, real_names])</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  pred_lai <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_real_</span>, <span class="fu">nrow</span>(pix_df))</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  pred_lai[ok_rows] <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit<span class="sc">$</span>model, <span class="at">newdata =</span> pix_df[ok_rows, real_names]))</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  lai_rast <span class="ot">&lt;-</span> refl_cube[[<span class="st">&quot;B04&quot;</span>]]  <span class="co"># reuse its grid/extent/crs</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">values</span>(lai_rast) <span class="ot">&lt;-</span> pred_lai</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">names</span>(lai_rast) <span class="ot">&lt;-</span> <span class="st">&quot;LAI_pred&quot;</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">plot</span>(lai_rast, <span class="at">main =</span> <span class="st">&quot;Real Sentinel-2 pixels -&gt; hybrid-inverted LAI (trained on simulated LUT)&quot;</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Predicted LAI range across the scene:&quot;</span>, <span class="fu">paste</span>(<span class="fu">round</span>(<span class="fu">range</span>(pred_lai, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">2</span>), <span class="at">collapse =</span> <span class="st">&quot; to &quot;</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>}</span></code></pre></div>
+<p>A real, per-pixel trait map – retrieved and simulated in the same
+page, verified end to end, not an illustrative mockup.</p>
+</div>
+<div id="the-real-vs-simulated-domain-gap" class="section level2">
+<h2>5. The real-vs-simulated domain gap</h2>
+<p>The LAI map above is only as good as how well the <em>simulated</em>
+LUT (Tutorial 05’s trait ranges, this package’s own leaf/canopy physics)
+matches the <em>real</em> canopy/soil/atmosphere conditions actually
+present in the scene – a real, known limitation of the hybrid approach
+worth stating plainly, not glossing over:</p>
+<ul>
+<li>The LUT’s trait ranges (<code>inputsPROSAIL</code>’s defaults) may
+not match this specific location’s actual vegetation (crop type,
+phenological stage, senescence).</li>
+<li>The flat <code>rsoil = 0.15</code> used for training doesn’t reflect
+this scene’s real soil brightness/moisture (Tutorial 03’s
+soil-contribution section, and <code>get.marmit.rsoil()</code>, address
+this directly).</li>
+<li>Sun-view geometry differs between the training LUT’s fixed
+<code>tts</code>/<code>tto</code>/<code>psi</code> and the real overpass
+geometry (available from the STAC item’s own metadata,
+<code>get.satellite_collection()</code>’s returned <code>df.data</code>
+– not used here for simplicity).</li>
+<li>The image is a cloud-masked <em>mean composite</em> over the whole
+date range, not one instantaneous acquisition – appropriate for a
+seasonal-average question, less so for a single-date one.</li>
+</ul>
+<p>None of this invalidates the framework – it’s exactly why Tutorials
+05 (LUT design), 09 (sensitivity – which traits actually matter for
+which bands), and 03 (soil realism) matter before trusting a real-world
+inversion result, and why operational retrieval systems calibrate LUT
+ranges against the actual study area rather than using generic defaults
+unmodified.</p>
+</div>
+<div id="take-home-the-whole-series-one-pipeline" class="section level2">
+<h2>Take-home: the whole series, one pipeline</h2>
+<pre class="text"><code>Getting Started (01)
+      |
+Leaf -&gt; Canopy RT (02)
+      |
+SPART: Soil -&gt; Plant -&gt; Atmosphere (03)
+      |
+RTM Model Comparison (04)
+      |
+LUT Generation (05)
+      |
+Parallel Simulation (06)
+      |
+Sensor Convolution (07)
+      |
+Spectral Indices (08)
+      |
+Sensitivity Analysis (09)
+      |
+Hybrid Inversion (10) -&gt; ML (11) -&gt; Deep Learning (12)
+      |
+End-to-End Pipeline (13)
+      |
+Real EO Application (14) -- this page</code></pre>
+<p>Every stage in this series is a real, runnable piece of the same
+chain – from one hand-written trait row (Tutorial 01) to a real
+satellite-derived trait map (this page). See the <strong>Reference
+manuals and deep dives</strong> section of this site’s Articles menu for
+the comprehensive, all-12- algorithm reference manual
+(<code>ToolsRTM</code>, <code>Getting-LUTs</code>,
+<code>InversionOpt</code> vignettes) this tutorial series complements
+rather than replaces.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

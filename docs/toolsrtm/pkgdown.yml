@@ -14,6 +14,6 @@ articles:
   10-hybrid-inversion: 10-hybrid-inversion.html
   11-ml-inversion-comparison: 11-ml-inversion-comparison.html
   12-deep-learning-inversion: 12-deep-learning-inversion.html
-  articles/course-pipeline: course-pipeline.html
+  13-end-to-end-pipeline: 13-end-to-end-pipeline.html
   articles/marmit-soil-in-canopy: marmit-soil-in-canopy.html
-last_built: 2026-08-21T09:50Z
+last_built: 2026-08-21T09:57Z

@@ -16,7 +16,7 @@ navbar:
 
 articles:
 - title: Tutorials
-  navbar: ~
+  navbar: Tutorials
   contents:
   - "01-getting-started"
   - "02-leaf-to-canopy"
@@ -31,4 +31,13 @@ articles:
   - "11-ml-inversion-comparison"
   - "12-deep-learning-inversion"
   - "13-end-to-end-pipeline"
+  - "14-real-eo-application"
+- title: Reference manuals and deep dives
+  navbar: Manuals
+  contents:
+  - "ToolsRTM/ToolsRTM"
+  - "Getting-LUTs"
+  - "InversionOpt"
+  - "articles/course-pipeline"
+  - "articles/model-comparison-and-sensitivity"
   - "articles/marmit-soil-in-canopy"
