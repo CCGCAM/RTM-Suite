@@ -296,7 +296,7 @@ getSpectraIndices<-function(rasterFiles=NULL,Sensor='Sentinel2a',SpecEq=NULL,Spe
         
 
       ifelse(!dir.exists(path.export), dir.create(path.export), FALSE)
-      # NB (raster->terra migration): raster::writeRaster(..., bylayer=TRUE)
+      # NB (raster->terra migration): the raster package's writeRaster(..., bylayer=TRUE)
       # wrote one file per layer from a single call using a vector of
       # filenames -- terra::writeRaster() has no bylayer= equivalent, so each
       # layer is written individually here instead. Filenames also need an

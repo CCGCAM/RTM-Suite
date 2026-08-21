@@ -8,7 +8,7 @@
 # PREVIOUS loop iteration's value on iteration 1); (3) the function `return()`s
 # `rast.2020`, a variable that is never defined anywhere in this function;
 # (4) `readOGR()` depends on the `rgdal` package, archived from CRAN since
-# 2023 and no longer installable via `install.packages()`. Only the raster::
+# 2023 and no longer installable via `install.packages()`. Only the the raster package's 
 # dependency itself is migrated to terra:: below; the function remains
 # non-callable as written.
 getAnomalies<-function(rasterFiles=NULL,indice=NULL, Sensor='Sentinel2a',

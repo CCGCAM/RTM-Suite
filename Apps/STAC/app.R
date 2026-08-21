@@ -442,7 +442,7 @@ server <- function(input, output,session) {
 
       # NB (raster->terra migration): get.sentinel2_cube(get.dataset = FALSE)
       # already returns a terra SpatRaster directly (see ToolsRTM::get.sentinel2_cube's
-      # own source) -- raster::brick() was converting an already-terra object
+      # own source) -- the raster package's brick() was converting an already-terra object
       # into a legacy RasterBrick for no functional reason.
       avg_raster <- avg_raster_cube
       avg_raster_val <- avg_raster_val(avg_raster)
@@ -764,7 +764,7 @@ server <- function(input, output,session) {
         # intended behavior.
         if (!is.null(ndvi_avg) && inherits(ndvi_avg, "SpatRaster")) {
           # If NDVI is available, combine avg_raster and ndvi_avg into one
-          # multi-layer SpatRaster (terra's equivalent of raster::stack()).
+          # multi-layer SpatRaster (terra's equivalent of the raster package's stack()).
           combined_raster <- c(avg_raster, ndvi_avg)
 
           # Optionally, you can set names for the combined raster layers

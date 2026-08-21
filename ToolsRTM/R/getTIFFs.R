@@ -65,7 +65,7 @@ getTIFFs<-function(netCDFs=NULL, bands=NULL, output=NULL, pattern=NULL){
         B.slice <- B.array[, , k] 
         CRS_ncdf<-'+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs '
         # NB (raster->terra migration): raster()/CRS()/writeRaster() were all
-        # called bare here (no raster:: prefix). terra::rast()'s crs= takes a
+        # called bare here (no the raster package's  prefix). terra::rast()'s crs= takes a
         # plain proj4/WKT string directly -- no separate CRS() wrapper (that
         # was an sp/raster helper) needed.
         r <- terra::rast(t(B.slice), extent = terra::ext(min(lon), max(lon), min(lat), max(lat)), crs = CRS_ncdf)

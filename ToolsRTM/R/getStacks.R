@@ -48,7 +48,7 @@ getStacks<-function(rasterFiles=NULL, frequency='Daily', bands=NULL,output=NULL)
     # Print the sorted file names
     #print(sorted_files)
     # NB (raster->terra migration): raster()/stack()/writeRaster() were all
-    # called bare here (no raster:: prefix, so they only ever resolved if the
+    # called bare here (no the raster package's  prefix, so they only ever resolved if the
     # caller happened to have library(raster) attached). terra combines
     # single-band SpatRasters into a multi-layer one via c() rather than a
     # separate stack() call.
@@ -64,7 +64,7 @@ getStacks<-function(rasterFiles=NULL, frequency='Daily', bands=NULL,output=NULL)
     path_out<-paste(output,'/Stacks',sep="")
     ifelse(!dir.exists(path_out), dir.create(path_out), FALSE)
     # terra::writeRaster() infers the output format from the filename
-    # extension rather than raster::writeRaster()'s separate format=
+    # extension rather than the raster package's writeRaster()'s separate format=
     # argument -- unlike the original, the filename here needs an explicit
     # extension for that inference to work.
     raster.file<-paste(path_out,'/SE2A-',dates[k],'.tif',sep="")

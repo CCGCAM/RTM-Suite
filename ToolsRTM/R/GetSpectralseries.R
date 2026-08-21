@@ -42,9 +42,9 @@ GetSpectralseries<-function(netCDFs=NULL, bands=NULL, shapefile=NULL, factorSE =
 
     table.info<-list()
       for (i in c(bands)){
-        # NB (raster->terra migration): raster::brick(..., varname=i) selected
+        # NB (raster->terra migration): the raster package's brick(..., varname=i) selected
         # one NetCDF sub-dataset/variable by name -- terra's equivalent is
-        # rast(..., subds=i). raster::extract(df=, na.rm=, cellnumbers=) maps
+        # rast(..., subds=i). the raster package's extract(df=, na.rm=, cellnumbers=) maps
         # to terra::extract(cells=) -- terra::extract() already returns a
         # data.frame by default (no df= argument needed) and does not drop
         # NA rows itself (na.rm= has no terra equivalent; downstream code here

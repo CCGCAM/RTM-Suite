@@ -33,7 +33,7 @@ getKmeans <- function(stack,k=12,iter.max=100,nstart=10,geo=T,geo.weight=1){
 
 
   # NB: terra::as.data.frame() defaults to na.rm = TRUE (drops NA cells),
-  # unlike raster::as.data.frame() which kept every cell by default -- the
+  # unlike the raster package's as.data.frame() which kept every cell by default -- the
   # xyFromCell() call right below assumes oDF has exactly ncell(stk) rows,
   # one per cell index 1:ncell in order, so na.rm must stay FALSE here to
   # preserve that row<->cell alignment (same reasoning applies below wherever

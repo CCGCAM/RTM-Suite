@@ -43,7 +43,7 @@ getSeries<-function(pathRaster=NULL, shapefile=NULL, band_names=NULL,factorR=NUL
         # if the caller happened to have library(raster) attached (raster was
         # never namespace-qualified here) -- see the ToolsRTM/vignettes/*
         # entries on this same bug class. terra::extract(cells=) replaces
-        # raster::extract(cellnumbers=); terra::extract() already returns a
+        # the raster package's extract(cellnumbers=); terra::extract() already returns a
         # data.frame by default (no df= argument) and does not itself drop NA
         # rows (na.rm= has no terra equivalent).
         rs <- terra::rast(files[k])

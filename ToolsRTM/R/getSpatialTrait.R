@@ -64,20 +64,20 @@ getSpatialTrait<-function(rasterFiles=NULL,ForestLayer=NULL,Sensor=NULL,
   ##### Generate a mask for forest map in fishnet area
   forest_m<-terra::crop(forest_m,shape.area)
   # NB: neither this clamp() call nor the two later in this function pass
-  # lower=/upper= -- both raster::clamp() and terra::clamp() default those to
+  # lower=/upper= -- both the raster package's clamp() and terra::clamp() default those to
   # -Inf/Inf, so with useValues=FALSE/values=FALSE and no bounds this was
-  # already a no-op in the original raster:: code (nothing is ever outside
+  # already a no-op in the original the raster package's  code (nothing is ever outside
   # [-Inf, Inf]); preserved as-is here rather than guessing intended bounds.
   forest_m<-terra::clamp(forest_m, values=FALSE)
   forest_m[forest_m < 1] = NA
-  #raster::values(forest_m)[raster::values(forest_m) < 1] = NA
+  #the raster package's values(forest_m)[the raster package's values(forest_m) < 1] = NA
 
   ##get_clouds of points
   ncases= round((terra::ncell(forest_m)-terra::freq(forest_m, value = NA)) / 100,0)
   if (ncases < 1500){
     ncases=1500
   }
-  # NB: raster::sampleRandom(..., sp=TRUE) returned an sp Spatial*DataFrame;
+  # NB: the raster package's sampleRandom(..., sp=TRUE) returned an sp Spatial*DataFrame;
   # terra's equivalent is spatSample(..., as.points=TRUE), which returns a
   # SpatVector instead -- a genuine type change, not just a renamed function.
   # $ID<- assignment, sf::st_as_sf(), and merge() below all have SpatVector
@@ -249,8 +249,8 @@ getSpatialTrait<-function(rasterFiles=NULL,ForestLayer=NULL,Sensor=NULL,
   if (trait == 'Cab'){
     r.trait[r.trait <= 0] = NA
     r.trait[r.trait >= 90] = NA
-    #raster::values(r.trait)[raster::values(r.trait) <= 0] = NA
-    #raster::values(r.trait)[raster::values(r.trait) >= 90] = NA
+    #the raster package's values(r.trait)[the raster package's values(r.trait) <= 0] = NA
+    #the raster package's values(r.trait)[the raster package's values(r.trait) >= 90] = NA
   } else if (trait == 'LAI') {
     r.trait[r.trait <= 0] = NA
     r.trait[r.trait >= 7] = NA
@@ -333,7 +333,7 @@ GetMosaics<-function(ForestLayers=NULL, shapeLayer=NULL,
   Split <- strsplit(shapeLayer, "/")
   names.files = Split[[1]][length(Split[[1]])]#
   # NB (raster->terra migration): extent()/raster()/projection()<-/writeRaster()
-  # were all called bare here too (no raster:: prefix) -- same "only worked if
+  # were all called bare here too (no the raster package's  prefix) -- same "only worked if
   # the caller happened to have library(raster) attached" issue as elsewhere
   # in this file.
   e <- terra::ext(shape.area)
