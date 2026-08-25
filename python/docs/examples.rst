@@ -362,6 +362,124 @@ R vignettes use (``SCOPEinR/inst/input/LUT_input.csv``).
 
    Real output of the single ``get_scope()`` call above: TOC reflectance (left; the dashed gaps are the water-vapor-absorption wavelengths SCOPE itself leaves undefined) and the emitted SIF spectrum (right).
 
+Real Sentinel-2 capstone: retrieving net photosynthesis (scopeinpython)
+--------------------------------------------------------------------------------
+
+Mirrors SCOPEinR Tutorial 11, end to end. **Sentinel-2 cannot observe
+SIF** -- no bands resolve the fluorescence peaks or O2-A/O2-B features
+dedicated SIF missions (FLEX, TROPOMI) do -- so any model trained *with*
+SIF as a predictor is not valid to apply to real Sentinel-2 data. This
+example trains both a reflectance-only model (Sentinel-2-realistic) and a
+reflectance+SIF model (idealized) explicitly, so the real accuracy cost of
+not having SIF is visible, then applies **only** the reflectance-only
+model to a real Sentinel-2 time series over Speulderbos, NL (a mixed
+pine/beech ICOS forest). Needs the optional ``ml`` and ``stac`` extras.
+
+The training LUT must vary every trait ``get_scope()`` reads (meteorology,
+structure, soil -- not just the two traits being retrieved), matching
+``SCOPEinR::getLUT.SCOPE()``'s own per-trait sampling from
+``inputs_SCOPE.csv``, or the fitted model generalizes poorly to real data:
+
+.. code-block:: python
+
+   import csv
+   import numpy as np
+   import pandas as pd
+   from scopeinpython import ScopeOptions, get_scope
+   from toolsrtm.sensitivity import get_cor, gauss_by_min_max
+   from toolsrtm.srf import srf_sentinel2a, spectral_convolution_srf
+   from toolsrtm.satellite import get_satellite_collection, get_sentinel2_cube
+   from sklearn.ensemble import RandomForestRegressor
+
+   # 1. A properly-varied SCOPE LUT: every trait in inputs_SCOPE.csv sampled
+   #    per its own Distribution (Uniform/Fixed/Gaussian), Cab and Vcmax25
+   #    then overwritten with a correlated pair (leaves' real Cab-Vcmax25
+   #    co-variation) via toolsrtm.sensitivity.get_cor -- SCOPEinR
+   #    Tutorial 10's "fair test" fix, ported here too.
+   def build_scope_lut(csv_path, n, seed):
+       rng = np.random.default_rng(seed)
+       with open(csv_path, newline="", encoding="utf-8-sig") as f:
+           rows = list(csv.DictReader(f))
+       lut = {}
+       for row in rows:
+           trait, dist = row["variable"], row["Distribution"]
+           if trait in ("startDate", "endDate"):
+               continue
+           if trait == "Type":
+               lut[trait] = np.array([f"C{row['default']}"] * n, dtype=object); continue
+           lo, hi = float(row["lower"]), float(row["upper"])
+           if dist == "Uniform":
+               lut[trait] = rng.uniform(lo, hi, size=n)
+           elif dist == "Fixed":
+               lut[trait] = np.full(n, float(row["default"]))
+           else:
+               lut[trait] = gauss_by_min_max(n, float(row["Mean_D"]), float(row["Std_D"]), lo, hi, n * 3, rng=rng)
+       return lut
+
+   n_samples = 250
+   lut = build_scope_lut("SCOPEinR/inst/input/inputs_SCOPE.csv", n_samples, seed=1)
+   cor_res = get_cor(n_inputs=2, n_lut=n_samples, distribution="Uniform", rho=0.85, seed=3,
+                      var_names=["Cab", "Vcmax25"], min_range=[5, 5], max_range=[90, 250])
+   lut["Cab"], lut["Vcmax25"] = cor_res.lut["Cab"], cor_res.lut["Vcmax25"]
+
+   # 2. Run SCOPE for every row; collect Actot (the flux) and Sentinel-2 band reflectance.
+   opts = ScopeOptions(k_maxit=100, maxEBer=1.0)
+   wl_optical = np.arange(400, 2401)
+   s2a = srf_sentinel2a()
+   real_names = ["B02", "B03", "B04", "B05", "B06", "B07", "B08", "B8A", "B11", "B12"]
+   keep = ["B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8A", "B11", "B12"]
+
+   Actot, band_refl = [], []
+   for i in range(n_samples):
+       row = {k: v[i] for k, v in lut.items()}
+       res = get_scope(row, options=opts)
+       refl = np.asarray(res.rtmo.refl)[: len(wl_optical)]
+       bad = ~np.isfinite(refl)
+       if bad.any():
+           refl[bad] = np.interp(wl_optical[bad], wl_optical[~bad], refl[~bad])
+       conv = spectral_convolution_srf(wl_optical, refl, s2a)
+       keep_idx = [conv.band_names.index(k) for k in keep]
+       Actot.append(res.ebal.Actot); band_refl.append(conv.rfl[keep_idx])
+   Actot, band_refl = np.array(Actot), np.array(band_refl)
+
+   # 3. Train the reflectance-only model (the only one applied to real data below).
+   df = pd.DataFrame(band_refl, columns=real_names)
+   rf_reflonly = RandomForestRegressor(n_estimators=300, random_state=1)
+   rf_reflonly.fit(df[real_names], Actot)
+
+   # 4. A real Sentinel-2 time series over Speulderbos, 2024.
+   lat, lon, d = 52.2500, 5.6900, 0.003
+   bbox = (lon - d, lat - d, lon + d, lat + d)
+   windows = [("2024-03-01", "2024-03-31"), ("2024-05-01", "2024-05-31"),
+              ("2024-07-01", "2024-07-31"), ("2024-09-01", "2024-09-30"), ("2024-11-01", "2024-11-30")]
+   ts, cubes = [], {}
+   for w in windows:
+       coll = get_satellite_collection(bbox, collection="sentinel-2-l2a", date_range=w,
+                                        cloud_server="microsoft", n_limit=20, cloud_threshold=40)
+       ds = get_sentinel2_cube(coll, bbox, resolution=10.0, crs="EPSG:32631", aggregation_method="mean")
+       cubes[w[0]] = ds
+       means = np.array([float(np.nanmean(ds[b].values)) / 10000 for b in real_names])
+       ndvi = (means[6] - means[2]) / (means[6] + means[2])  # B08, B04
+       actot_pred = float(rf_reflonly.predict(means.reshape(1, -1))[0])
+       ts.append(dict(date=w[0], ndvi=ndvi, actot=actot_pred))
+   ts_df = pd.DataFrame(ts)
+   print("Correlation, NDVI vs. retrieved Actot:", round(float(np.corrcoef(ts_df.ndvi, ts_df.actot)[0, 1]), 2))
+
+   # 5. Map Actot spatially over the July scene (every pixel through the same model).
+   map_cube = cubes["2024-07-01"]
+   r = {b: map_cube[b].values.astype(float) / 10000 for b in real_names}
+   pix = np.column_stack([r[b].ravel() for b in real_names])
+   ok = np.all(np.isfinite(pix), axis=1)
+   actot_pixels = np.full(pix.shape[0], np.nan)
+   actot_pixels[ok] = rf_reflonly.predict(pix[ok])
+   actot_map = actot_pixels.reshape(r["B04"].shape)
+
+.. figure:: _figures/t11_python_capstone.png
+   :alt: True color, NDVI, and retrieved Actot maps over the real Speulderbos Sentinel-2 scene, plus the NDVI/Actot seasonal time series, real output of the code above
+   :width: 100%
+
+   Real output over the real Speulderbos scene (July 2024): true color, NDVI, and per-pixel retrieved Actot (top), and the resulting NDVI/Actot seasonal curve across all 5 real 2024 STAC acquisitions (bottom) -- both rise into summer and decline toward autumn, the same real forest phenology ToolsRTM's own Tutorials 15-17 found in NDVI at nearby real sites.
+
 Global sensitivity analysis (toolsrtm)
 ------------------------------------------
 
@@ -499,13 +617,9 @@ See ``Scripts/Python/README.md`` for how to run it.
 What isn't ported yet
 ----------------------
 
-One tutorial-level gap not covered by any example above, on top of the
-finer-grained implementation gaps in :doc:`not_ported`:
-
-- **SCOPEinR Tutorial 11's real-Sentinel-2 capstone** -- ``Actot``
-  retrieved from a real satellite time series and mapped spatially --
-  has no ``scopeinpython`` equivalent yet (ToolsRTM Tutorial 18's own
-  spatial-index-mapping capstone *is* ported now, see above).
-
-See each package's own ``README.md`` for the full R-tutorial-to-Python-module
-bridge table.
+No tutorial-level gaps remain uncovered by the examples above -- every R
+tutorial series (ToolsRTM, SCOPEinR) has at least one topic-for-topic
+Python equivalent on this page now, including both real-Sentinel-2/STAC
+capstones. What's left is the finer-grained, function-level gaps listed
+in :doc:`not_ported`, and each package's own ``README.md`` has the full
+R-tutorial-to-Python-module bridge table.

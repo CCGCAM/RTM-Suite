@@ -357,4 +357,115 @@ plt.savefig(os.path.join(OUTDIR, "t18_python_capstone.png"), dpi=140)
 plt.close(fig)
 print("wrote t18_python_capstone.png")
 
+# ---------------------------------------------------------------- 14. Real Sentinel-2 capstone (Speulderbos, SCOPEinR t11 port)
+import csv as _csv
+from scopeinpython import ScopeOptions, get_scope
+from toolsrtm.sensitivity import get_cor as _get_cor, gauss_by_min_max as _gauss_by_min_max
+from sklearn.ensemble import RandomForestRegressor
+
+
+def _build_scope_lut(csv_path, n, seed):
+    rng = np.random.default_rng(seed)
+    with open(csv_path, newline="", encoding="utf-8-sig") as f:
+        rows = list(_csv.DictReader(f))
+    lut = {}
+    for row in rows:
+        trait, dist = row["variable"], row["Distribution"]
+        if trait in ("startDate", "endDate"):
+            continue
+        if trait == "Type":
+            lut[trait] = np.array([f"C{row['default']}"] * n, dtype=object)
+            continue
+        lo, hi = float(row["lower"]), float(row["upper"])
+        if dist == "Uniform":
+            lut[trait] = rng.uniform(lo, hi, size=n)
+        elif dist == "Fixed":
+            lut[trait] = np.full(n, float(row["default"]))
+        else:
+            lut[trait] = _gauss_by_min_max(n, float(row["Mean_D"]), float(row["Std_D"]), lo, hi, n * 3, rng=rng)
+    return lut
+
+
+n_samples_t11 = 250
+lut_t11 = _build_scope_lut("SCOPEinR/inst/input/inputs_SCOPE.csv", n_samples_t11, seed=1)
+cor_res_t11 = _get_cor(n_inputs=2, n_lut=n_samples_t11, distribution="Uniform", rho=0.85, seed=3,
+                        var_names=["Cab", "Vcmax25"], min_range=[5, 5], max_range=[90, 250])
+lut_t11["Cab"], lut_t11["Vcmax25"] = cor_res_t11.lut["Cab"], cor_res_t11.lut["Vcmax25"]
+
+opts_t11 = ScopeOptions(k_maxit=100, maxEBer=1.0)
+wl_optical_t11 = np.arange(400, 2401)
+s2a_t11 = srf_sentinel2a()
+real_names_t11 = ["B02", "B03", "B04", "B05", "B06", "B07", "B08", "B8A", "B11", "B12"]
+keep_t11 = ["B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8A", "B11", "B12"]
+
+Actot_t11, band_refl_t11 = [], []
+for i in range(n_samples_t11):
+    row = {k: v[i] for k, v in lut_t11.items()}
+    res = get_scope(row, options=opts_t11)
+    refl = np.asarray(res.rtmo.refl)[: len(wl_optical_t11)]
+    bad = ~np.isfinite(refl)
+    if bad.any():
+        refl[bad] = np.interp(wl_optical_t11[bad], wl_optical_t11[~bad], refl[~bad])
+    conv = spectral_convolution_srf(wl_optical_t11, refl, s2a_t11)
+    keep_idx = [conv.band_names.index(k) for k in keep_t11]
+    Actot_t11.append(res.ebal.Actot)
+    band_refl_t11.append(conv.rfl[keep_idx])
+Actot_t11, band_refl_t11 = np.array(Actot_t11), np.array(band_refl_t11)
+print("t11 capstone: SCOPE sims done, Actot range", Actot_t11.min(), Actot_t11.max())
+
+df_t11 = pd.DataFrame(band_refl_t11, columns=real_names_t11)
+rf_reflonly_t11 = RandomForestRegressor(n_estimators=300, random_state=1)
+rf_reflonly_t11.fit(df_t11[real_names_t11], Actot_t11)
+
+lat_t11, lon_t11, d_t11 = 52.2500, 5.6900, 0.003
+bbox_t11 = (lon_t11 - d_t11, lat_t11 - d_t11, lon_t11 + d_t11, lat_t11 + d_t11)
+windows_t11 = [("2024-03-01", "2024-03-31"), ("2024-05-01", "2024-05-31"),
+               ("2024-07-01", "2024-07-31"), ("2024-09-01", "2024-09-30"), ("2024-11-01", "2024-11-30")]
+ts_t11, cubes_t11 = [], {}
+for w in windows_t11:
+    coll = get_satellite_collection(bbox_t11, collection="sentinel-2-l2a", date_range=w,
+                                     cloud_server="microsoft", n_limit=20, cloud_threshold=40)
+    ds = get_sentinel2_cube(coll, bbox_t11, resolution=10.0, crs="EPSG:32631", aggregation_method="mean")
+    cubes_t11[w[0]] = ds
+    means = np.array([float(np.nanmean(ds[b].values)) / 10000 for b in real_names_t11])
+    ndvi = (means[6] - means[2]) / (means[6] + means[2])
+    actot_pred = float(rf_reflonly_t11.predict(means.reshape(1, -1))[0])
+    ts_t11.append(dict(date=w[0], ndvi=ndvi, actot=actot_pred))
+ts_df_t11 = pd.DataFrame(ts_t11)
+print("t11 capstone: NDVI/Actot correlation:", np.corrcoef(ts_df_t11.ndvi, ts_df_t11.actot)[0, 1])
+
+map_cube_t11 = cubes_t11["2024-07-01"]
+r_t11 = {b: map_cube_t11[b].values.astype(float) / 10000 for b in real_names_t11}
+ndvi_map_t11 = (r_t11["B08"] - r_t11["B04"]) / (r_t11["B08"] + r_t11["B04"])
+pix_t11 = np.column_stack([r_t11[b].ravel() for b in real_names_t11])
+ok_t11 = np.all(np.isfinite(pix_t11), axis=1)
+actot_pixels_t11 = np.full(pix_t11.shape[0], np.nan)
+actot_pixels_t11[ok_t11] = rf_reflonly_t11.predict(pix_t11[ok_t11])
+actot_map_t11 = actot_pixels_t11.reshape(r_t11["B04"].shape)
+
+rgb_t11 = np.stack([r_t11["B04"], r_t11["B03"], r_t11["B02"]], axis=-1)
+lo_t11, hi_t11 = np.nanpercentile(rgb_t11, 2), np.nanpercentile(rgb_t11, 98)
+rgb_scaled_t11 = np.clip((rgb_t11 - lo_t11) / (hi_t11 - lo_t11), 0, 1)
+
+fig = plt.figure(figsize=(13, 9))
+ax1 = fig.add_subplot(2, 3, 1); ax1.imshow(rgb_scaled_t11); ax1.set_title("True color -- 2024-07-01")
+ax2 = fig.add_subplot(2, 3, 2)
+im2 = ax2.imshow(ndvi_map_t11, cmap="RdYlGn"); ax2.set_title("NDVI")
+fig.colorbar(im2, ax=ax2, fraction=0.046)
+ax3 = fig.add_subplot(2, 3, 3)
+im3 = ax3.imshow(actot_map_t11, cmap="viridis"); ax3.set_title("Retrieved Actot")
+fig.colorbar(im3, ax=ax3, fraction=0.046)
+ax4 = fig.add_subplot(2, 1, 2)
+dates = pd.to_datetime(ts_df_t11.date)
+ax4b = ax4.twinx()
+ax4.plot(dates, ts_df_t11.ndvi, "o-", color="#2E8B57", label="NDVI")
+ax4b.plot(dates, ts_df_t11.actot, "o-", color="#B2182B", label="Actot")
+ax4.set_ylabel("NDVI", color="#2E8B57"); ax4b.set_ylabel("Actot (umol/m2/s)", color="#B2182B")
+ax4.set_title("Speulderbos, 2024: NDVI vs. retrieved net photosynthesis (Actot)")
+fig.suptitle("Speulderbos forest (real Sentinel-2, STAC)", y=1.0)
+plt.tight_layout()
+plt.savefig(os.path.join(OUTDIR, "t11_python_capstone.png"), dpi=140, bbox_inches="tight")
+plt.close(fig)
+print("wrote t11_python_capstone.png")
+
 print("All figures written to", OUTDIR)
