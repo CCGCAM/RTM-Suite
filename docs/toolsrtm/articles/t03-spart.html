@@ -479,11 +479,172 @@ one for <em>moisture</em>-driven soil spectra specifically.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">soil_mat</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#D55E00"</span>, <span class="st">"#0072B2"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">lai_seq</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>       lty <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">19</span>, cex <span class="op">=</span> <span class="fl">0.7</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="t03-spart_files/figure-html/soil-lai-plot-1.png" class="r-plt" alt="" width="768"></p>
-<p>Band-by-band, not just averaged: soil brightness matters most in the
-visible and NIR (bands 1-9, up to ~871nm) at low LAI, and the whole
-curve collapses toward zero as LAI rises from 0.01 to 6 – the canopy
-closing progressively removes the soil’s spectral signature rather than
-uniformly damping it.</p>
+<p>Band-by-band, not just averaged, and the picture is more nuanced than
+a single “visible + NIR” story: at near-bare canopy (LAI=0.01) the
+bright-minus-dark difference is almost flat across the whole spectrum
+(0.217-0.219 at every band) – soil so completely dominates the signal
+that wavelength barely matters yet. As soon as some canopy is present
+(LAI=0.5-2), the effect becomes clearly wavelength-dependent: moderate
+in the visible (445-701nm), strongest in the red-edge/NIR (743-942nm –
+roughly 1.4-1.5x the visible bands at LAI=0.5-1), and still appreciable
+– though below the NIR peak – in the near-SWIR bands (1372nm, 1639nm);
+only the longest SWIR band here (2256nm) falls back to visible-like
+levels. At every band the effect then decreases progressively with LAI,
+and is essentially gone (&lt;0.004 everywhere) by LAI=6. <strong>The
+contribution of the soil background is spectrally dependent, not a fixed
+“these bands only” rule</strong> – and it shrinks toward zero across the
+whole spectrum, at different rates per band, as the canopy closes. One
+caveat worth repeating: this comparison uses two flat, artificial
+reference soils (<code>rsoil = 0.08</code> vs <code>0.30</code>) chosen
+specifically to isolate the LAI effect cleanly, so it demonstrates
+<em>canopy masking x wavelength</em>, not the spectral response of a
+real soil. The BSM sensitivity test above is one realistic alternative;
+the MARMIT demo right below is the other, and shows a different (and in
+places stronger) spectral pattern once the soil spectrum itself has real
+physics behind it.</p>
+</div>
+<div class="section level3">
+<h3 id="from-flat-brightness-to-a-real-soil-spectrum-marmit-wet-vs--dry-across-lai">From flat brightness to a real soil spectrum: MARMIT wet vs. dry,
+across LAI<a class="anchor" aria-label="anchor" href="#from-flat-brightness-to-a-real-soil-spectrum-marmit-wet-vs--dry-across-lai"></a>
+</h3>
+<p>The BSM sensitivity test above already showed real soil parameters
+mattering; this demo goes one step further and asks a
+soil-<em>moisture</em> question directly, the same way Tutorial 16 does
+but carried through <code><a href="../reference/SPART.html">SPART()</a></code>’s full TOC output at Sentinel-2
+bands: swap <code>rsoil</code> for a measured dry-vs-wet soil pair from
+<code><a href="../reference/get.marmit.rsoil.html">ToolsRTM::get.marmit.rsoil()</a></code> (Tutorial 16), instead of the
+two flat reference levels above, and sweep the same three LAI values low
+to high.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dry_soil_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get.marmit.rsoil.html">get.marmit.rsoil</a></span><span class="op">(</span>database <span class="op">=</span> <span class="st">"Bablet_2016"</span>, id <span class="op">=</span> <span class="fl">1</span>, L <span class="op">=</span> <span class="fl">0.001</span>, eps <span class="op">=</span> <span class="fl">0.05</span>, wl.out <span class="op">=</span> <span class="fl">400</span><span class="op">:</span><span class="fl">2400</span><span class="op">)</span></span>
+<span><span class="va">wet_soil_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get.marmit.rsoil.html">get.marmit.rsoil</a></span><span class="op">(</span>database <span class="op">=</span> <span class="st">"Bablet_2016"</span>, id <span class="op">=</span> <span class="fl">1</span>, L <span class="op">=</span> <span class="fl">0.15</span>,  eps <span class="op">=</span> <span class="fl">1.0</span>,  wl.out <span class="op">=</span> <span class="fl">400</span><span class="op">:</span><span class="fl">2400</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lai_seq2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span></span>
+<span><span class="va">marmit_effect_bands</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">lai</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">row_i</span> <span class="op">&lt;-</span> <span class="va">base_row</span>; <span class="va">row_i</span><span class="op">$</span><span class="va">LAI</span> <span class="op">&lt;-</span> <span class="va">lai</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/SPART.html">SPART</a></span><span class="op">(</span>inputLUT <span class="op">=</span> <span class="va">row_i</span>, CanopyModel <span class="op">=</span> <span class="st">"fourSAIL"</span>, LeafModel <span class="op">=</span> <span class="st">"PROSPECT-PRO"</span>,</span>
+<span>                               sensor.i <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va"><a href="../reference/sensor-smac-srf.html">Sentinel2A.MSI</a></span>, rsoil <span class="op">=</span> <span class="va">dry_soil_m</span><span class="op">$</span><span class="va">rsoil.wet</span>, get.plots <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/SPART.html">SPART</a></span><span class="op">(</span>inputLUT <span class="op">=</span> <span class="va">row_i</span>, CanopyModel <span class="op">=</span> <span class="st">"fourSAIL"</span>, LeafModel <span class="op">=</span> <span class="st">"PROSPECT-PRO"</span>,</span>
+<span>                               sensor.i <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va"><a href="../reference/sensor-smac-srf.html">Sentinel2A.MSI</a></span>, rsoil <span class="op">=</span> <span class="va">wet_soil_m</span><span class="op">$</span><span class="va">rsoil.wet</span>, get.plots <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">d</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">rfl.toc.BRDF</span> <span class="op">-</span> <span class="va">w</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">rfl.toc.BRDF</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">marmit_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">lai_seq2</span>, <span class="va">marmit_effect_bands</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">marmit_mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sim</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">wave</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">marmit_mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"LAI="</span>, <span class="va">lai_seq2</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">marmit_mat</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left"></th>
+<th align="right">LAI=0.5</th>
+<th align="right">LAI=2</th>
+<th align="right">LAI=6</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">445</td>
+<td align="right">0.017</td>
+<td align="right">0.002</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">520</td>
+<td align="right">0.028</td>
+<td align="right">0.003</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">560</td>
+<td align="right">0.039</td>
+<td align="right">0.005</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">654</td>
+<td align="right">0.046</td>
+<td align="right">0.005</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">701</td>
+<td align="right">0.055</td>
+<td align="right">0.007</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">743</td>
+<td align="right">0.079</td>
+<td align="right">0.024</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="odd">
+<td align="left">779</td>
+<td align="right">0.089</td>
+<td align="right">0.032</td>
+<td align="right">0.002</td>
+</tr>
+<tr class="even">
+<td align="left">789</td>
+<td align="right">0.090</td>
+<td align="right">0.033</td>
+<td align="right">0.002</td>
+</tr>
+<tr class="odd">
+<td align="left">871</td>
+<td align="right">0.097</td>
+<td align="right">0.038</td>
+<td align="right">0.003</td>
+</tr>
+<tr class="even">
+<td align="left">942</td>
+<td align="right">0.116</td>
+<td align="right">0.045</td>
+<td align="right">0.003</td>
+</tr>
+<tr class="odd">
+<td align="left">1372</td>
+<td align="right">0.286</td>
+<td align="right">0.070</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="even">
+<td align="left">1639</td>
+<td align="right">0.295</td>
+<td align="right">0.056</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">2256</td>
+<td align="right">0.207</td>
+<td align="right">0.028</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cols_lai2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#D55E00"</span>, <span class="st">"#0072B2"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">lai_seq2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">wave</span>, <span class="va">marmit_mat</span>, type <span class="op">=</span> <span class="st">"o"</span>, pch <span class="op">=</span> <span class="fl">19</span>, lty <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="va">cols_lai2</span>,</span>
+<span>        xlab <span class="op">=</span> <span class="st">"Wavelength (nm)"</span>, ylab <span class="op">=</span> <span class="st">"Dry-minus-wet TOC reflectance (MARMIT soils)"</span>,</span>
+<span>        main <span class="op">=</span> <span class="st">"Soil-moisture contribution vs. LAI, band by band (real soil spectrum)"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">marmit_mat</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">cols_lai2</span>, lty <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">19</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
+<p><img src="t03-spart_files/figure-html/marmit-lai-plot-1.png" class="r-plt" alt="" width="768"></p>
+<p>Now soil <em>water absorption</em> physics, not just an arbitrary
+brightness offset, is doing the work: the bare dry-vs-wet soil spectra
+themselves already differ far more in the SWIR (0.47 vs 0.03 at 1639nm,
+0.51 vs 0.02 at 2256nm) than in the visible (0.08 vs 0.04 at 445nm) –
+MARMIT’s water-absorption features live in the SWIR, not the visible.
+That shows up directly in the TOC signal: at LAI=0.5 the SWIR-I bands
+(1372nm, 1639nm) carry the <em>largest</em> soil-moisture contribution
+of the whole spectrum (0.286, 0.295) – larger even than the red-edge/NIR
+peak from the flat-brightness demo above – while the visible bands stay
+comparatively small (0.017-0.055). As LAI rises to 2 the SWIR-I
+advantage narrows (0.070, 0.056, still above the visible bands) and by
+LAI=6 the whole spectrum has collapsed to near zero, same as the
+brightness demo. Two soils, two different stories: flat brightness peaks
+in the red-edge/NIR; a physically realistic moisture contrast peaks in
+the SWIR – both point to the same underlying rule, that the soil
+background’s spectral fingerprint gets progressively and unevenly erased
+as the canopy closes, but <em>which</em> bands carry that fingerprint
+depends on what is actually varying in the soil.</p>
 </div>
 </div>
 <div class="section level2">
@@ -492,7 +653,7 @@ uniformly damping it.</p>
 <p>Section 3.2’s TOA-TOC diff plot showed the atmosphere’s
 <em>total</em> effect. Which atmospheric variable drives that, and where
 in the spectrum, varies a lot:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atmos_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aot550 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.3246</span>, <span class="fl">1.0</span><span class="op">)</span>, uh2o <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1.4116</span>, <span class="fl">4.0</span><span class="op">)</span>, uo3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.3480</span>, <span class="fl">1.0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">v</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">atmos_vars</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">vals</span> <span class="op">&lt;-</span> <span class="va">atmos_vars</span><span class="op">[[</span><span class="va">v</span><span class="op">]</span><span class="op">]</span></span>
@@ -572,7 +733,7 @@ simple geometric symmetry makes <code>psi</code> irrelevant (there’s no
 “relative” direction to a sun with no azimuth of its own) – so this
 section fixes <code>tts = 30</code> instead, specifically to let
 <code>tto</code> and <code>psi</code> show a real effect:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">geom_row</span> <span class="op">&lt;-</span> <span class="va">LUT</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>; <span class="va">geom_row</span><span class="op">$</span><span class="va">tts</span> <span class="op">&lt;-</span> <span class="fl">30</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"psi sweep at tto=20 deg (NIR, band 8 = 789nm):\n"</span><span class="op">)</span></span>
@@ -614,7 +775,7 @@ a time, same NIR band, same low/mid/high bracketing used throughout this
 page – LAI and canopy/soil trait changes side by side with atmospheric
 ones, extending Tutorial 10’s spectral sensitivity analysis to the full
 TOA chain:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">factors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>LAI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span>, Cab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">40</span>, <span class="fl">75</span><span class="op">)</span>, BSMBrightness <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span><span class="op">)</span>,</span>
 <span>                aot550 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.3246</span>, <span class="fl">1.0</span><span class="op">)</span>, uh2o <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1.4116</span>, <span class="fl">4.0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">sens_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">factors</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">fac</span><span class="op">)</span> <span class="op">{</span></span>
@@ -685,7 +846,7 @@ oversight.</p>
 series builds (Tutorials 10-13) – but which reflectance domain a model
 is <em>trained</em> on matters enormously, because real satellite data
 is always TOA, never TOC:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">LUT150</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/getLUT.html">getLUT</a></span><span class="op">(</span>inputs <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va"><a href="../reference/rtm-input-specs.html">inputsSPART</a></span>, nLUT <span class="op">=</span> <span class="fl">150</span>, setseed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Fix only atmosphere/BSM-soil (a realistic single-scene assumption, same as the</span></span>
 <span><span class="co"># rest of this page) -- leaf/canopy traits vary naturally across all 150 rows,</span></span>
@@ -793,7 +954,7 @@ simulation to a realistic EO-like observation needs no separate
 convolution step – just pick <code>sensor.i</code>. Only sensors SPART
 actually supports (bundled objects in <code>ToolsRTM</code>) are listed
 here:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spart_sensors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LANDSAT4.TM"</span>, <span class="st">"LANDSAT5.TM"</span>, <span class="st">"LANDSAT7.ETM"</span>, <span class="st">"LANDSAT8.OLI"</span>,</span>
 <span>                    <span class="st">"Sentinel2A.MSI"</span>, <span class="st">"Sentinel2B.MSI"</span>, <span class="st">"Sentinel3A.OLCI"</span>,</span>
 <span>                    <span class="st">"Sentinel3B.OLCI"</span>, <span class="st">"TerraAqua.MODIS"</span><span class="op">)</span></span>
