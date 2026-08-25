@@ -42,7 +42,7 @@ The shipped defaults, unmodified, work:
 ```{r shipped-defaults}
 scope_options <- read.table(system.file("input", "setoptions.csv", package = "SCOPEinR"),
                              header = TRUE, sep = ",")
-scope_options
+knitr::kable(scope_options)
 ```
 
 ## 2. The options at a glance

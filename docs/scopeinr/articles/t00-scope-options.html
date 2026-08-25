@@ -108,43 +108,145 @@ what to do about it.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scope_options</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"input"</span>, <span class="st">"setoptions.csv"</span>, package <span class="op">=</span> <span class="st">"SCOPEinR"</span><span class="op">)</span>,</span>
 <span>                             header <span class="op">=</span> <span class="cn">TRUE</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span>
-<span><span class="va">scope_options</span></span>
-<span><span class="co">#&gt;    Order              Options Value</span></span>
-<span><span class="co">#&gt; 1      1                 lite     1</span></span>
-<span><span class="co">#&gt; 2      2    calc_fluorescence     1</span></span>
-<span><span class="co">#&gt; 3      3 calc_spectrum_planck     1</span></span>
-<span><span class="co">#&gt; 4      4  calc_xanthophyllabs     1</span></span>
-<span><span class="co">#&gt; 5      5         soilspectrum     0</span></span>
-<span><span class="co">#&gt; 6      6   Fluorescence_model     0</span></span>
-<span><span class="co">#&gt; 7      7            applTcorr     1</span></span>
-<span><span class="co">#&gt; 8      8               verify     1</span></span>
-<span><span class="co">#&gt; 9      9               mSCOPE     0</span></span>
-<span><span class="co">#&gt; 10    10           simulation     0</span></span>
-<span><span class="co">#&gt; 11    11     calc_directional     0</span></span>
-<span><span class="co">#&gt; 12    12   calc_vert_profiles     0</span></span>
-<span><span class="co">#&gt; 13    13     soil_heat_method     2</span></span>
-<span><span class="co">#&gt; 14    14         calc_rss_rbs     0</span></span>
-<span><span class="co">#&gt; 15    15         MoninObukhov     1</span></span>
-<span><span class="co">#&gt; 16    16                 LIDF     0</span></span>
-<span><span class="co">#&gt; 17    17           irradiance     0</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                            Info</span></span>
-<span><span class="co">#&gt; 1                                                                                                                                    Value 1 indicates the SCOPE will use the lite SCOPEversion</span></span>
-<span><span class="co">#&gt; 2                                                                                              Value 1 indicates that SCOPE will calculate thechlorophyll fluorescence in observation direction</span></span>
-<span><span class="co">#&gt; 3                                                                                                                                Value 1 SCOPE will calculate the spectrum of thermal radiation</span></span>
-<span><span class="co">#&gt; 4                                                                                             Value 1 indicates the SCOPE includes simulation of reflectance dependence on de-epoxydation state</span></span>
-<span><span class="co">#&gt; 5                                                                                       Value 0 use a soil reflectance file and  Value 1 SCOPE will calculate the soil spectrum using BSM model</span></span>
-<span><span class="co">#&gt; 6                                                           Value 0 empirical with sustained NPQ from Flexas data and Value 1 empirical with sigmoid for Kn and Value 2 uses Magnani 2012 model</span></span>
-<span><span class="co">#&gt; 7                                                                                       Value 1 indicates that SCOPE will correct the Vcmax and rate constants for temperature in biochemical.m</span></span>
-<span><span class="co">#&gt; 8                                                                                                                                       Value 1 indicates that SCOPE will check with field data</span></span>
-<span><span class="co">#&gt; 9                                                                                    Value 1 indicates that SCOPE wil use the mSCOPE considering vertical variations in the vegetation canopies</span></span>
-<span><span class="co">#&gt; 10                                           Value 0 the SCOPE will execute by individual runs based on LUT table and Value 1 for time series (uses text files with meteo input as time series)</span></span>
-<span><span class="co">#&gt; 11                                                                                                                                                  Value 1 calculate full BRDF for many angles</span></span>
-<span><span class="co">#&gt; 12                                                                                                                                Value 1  indicates that SCOPE will estimate vertical profiles</span></span>
-<span><span class="co">#&gt; 13 Value 0 will estimate the GAM parameters with Soil_Inertia0(lambdas) and Value 1 will estimate the GAM with Soil_Inertia1(SMC) and Value 2 will estimate  G by 0.35*Rn where always in no TS</span></span>
-<span><span class="co">#&gt; 14                                                                                                                                                   Value 0 is fixed and Value 1 is calculated</span></span>
-<span><span class="co">#&gt; 15                                                                                                                             Value 1 indicates that SCOPE wil use the MoninObukhov correction</span></span>
-<span><span class="co">#&gt; 16                                                                     Value 1 SCOPE wil estimate LIDF from angles file and Value 0 will use LIDFa and LIDFb from LUT table for estimating LIDF</span></span>
-<span><span class="co">#&gt; 17                                        Value 0 use a the irradiance file from SCOPE model Value 1 use irradiance measurements WithE and Value 2 use irradiance from MODTRAN atmospheric.file</span></span></code></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">scope_options</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="2%">
+<col width="9%">
+<col width="2%">
+<col width="85%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">Order</th>
+<th align="left">Options</th>
+<th align="right">Value</th>
+<th align="left">Info</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">lite</td>
+<td align="right">1</td>
+<td align="left">Value 1 indicates the SCOPE will use the lite
+SCOPEversion</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">calc_fluorescence</td>
+<td align="right">1</td>
+<td align="left">Value 1 indicates that SCOPE will calculate
+thechlorophyll fluorescence in observation direction</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">calc_spectrum_planck</td>
+<td align="right">1</td>
+<td align="left">Value 1 SCOPE will calculate the spectrum of thermal
+radiation</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">calc_xanthophyllabs</td>
+<td align="right">1</td>
+<td align="left">Value 1 indicates the SCOPE includes simulation of
+reflectance dependence on de-epoxydation state</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">soilspectrum</td>
+<td align="right">0</td>
+<td align="left">Value 0 use a soil reflectance file and Value 1 SCOPE
+will calculate the soil spectrum using BSM model</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">Fluorescence_model</td>
+<td align="right">0</td>
+<td align="left">Value 0 empirical with sustained NPQ from Flexas data
+and Value 1 empirical with sigmoid for Kn and Value 2 uses Magnani 2012
+model</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">applTcorr</td>
+<td align="right">1</td>
+<td align="left">Value 1 indicates that SCOPE will correct the Vcmax and
+rate constants for temperature in biochemical.m</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">verify</td>
+<td align="right">1</td>
+<td align="left">Value 1 indicates that SCOPE will check with field
+data</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">mSCOPE</td>
+<td align="right">0</td>
+<td align="left">Value 1 indicates that SCOPE wil use the mSCOPE
+considering vertical variations in the vegetation canopies</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="left">simulation</td>
+<td align="right">0</td>
+<td align="left">Value 0 the SCOPE will execute by individual runs based
+on LUT table and Value 1 for time series (uses text files with meteo
+input as time series)</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="left">calc_directional</td>
+<td align="right">0</td>
+<td align="left">Value 1 calculate full BRDF for many angles</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="left">calc_vert_profiles</td>
+<td align="right">0</td>
+<td align="left">Value 1 indicates that SCOPE will estimate vertical
+profiles</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">soil_heat_method</td>
+<td align="right">2</td>
+<td align="left">Value 0 will estimate the GAM parameters with
+Soil_Inertia0(lambdas) and Value 1 will estimate the GAM with
+Soil_Inertia1(SMC) and Value 2 will estimate G by 0.35*Rn where always
+in no TS</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="left">calc_rss_rbs</td>
+<td align="right">0</td>
+<td align="left">Value 0 is fixed and Value 1 is calculated</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
+<td align="left">MoninObukhov</td>
+<td align="right">1</td>
+<td align="left">Value 1 indicates that SCOPE wil use the MoninObukhov
+correction</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="left">LIDF</td>
+<td align="right">0</td>
+<td align="left">Value 1 SCOPE wil estimate LIDF from angles file and
+Value 0 will use LIDFa and LIDFb from LUT table for estimating LIDF</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="left">irradiance</td>
+<td align="right">0</td>
+<td align="left">Value 0 use a the irradiance file from SCOPE model
+Value 1 use irradiance measurements WithE and Value 2 use irradiance
+from MODTRAN atmospheric.file</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="the-options-at-a-glance">2. The options at a glance<a class="anchor" aria-label="anchor" href="#the-options-at-a-glance"></a>
