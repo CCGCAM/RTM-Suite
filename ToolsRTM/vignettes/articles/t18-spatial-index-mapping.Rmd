@@ -51,14 +51,31 @@ Winning index (data-driven, not assumed)
 ## 1. Simulate a 500-row LUT and invert Cab
 
 Same rigor as Tutorial 12 -- 500 simulations, Sentinel-2A convolution,
-Random Forest, held-out test set:
+Random Forest, held-out test set. Three settings are chosen to cover the
+real scene this LUT will later be applied to (Section 3): **LAI down to
+0.3** (`inputsPROSAIL`'s own default lower bound of 2 assumes a canopy
+always dense enough to be optically closed -- too narrow for a real
+forest, which includes gaps, edges and understory in the same
+500m-radius footprint), **a realistic non-zero sun zenith** (25-45°,
+matching a July midday acquisition at 52°N, rather than the package
+default `tts = 0`, i.e. sun directly overhead), and **variable soil
+brightness** (0.05-0.30, Tutorial 03's BSM range, rather than one flat
+`rsoil = 0.15`). Together these widen the simulated reflectance envelope
+enough to actually contain the real Sentinel-2 pixel values retrieved
+in Section 3 -- a hybrid-inversion model can only be trusted on inputs
+that fall inside the range it was trained on:
 
 ```{r simulate-invert, results = 'hide'}
 n_samples <- 500
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_samples, setseed = 1))
-wl <- 400:2500; rsoil <- rep(0.15, length(wl))
+wl <- 400:2500
+set.seed(3)
+LUT$LAI <- runif(n_samples, 0.3, 5)
+LUT$tts <- runif(n_samples, 25, 45)
+soil_brightness <- runif(n_samples, 0.05, 0.30)
 refl <- t(sapply(seq_len(n_samples), function(i) {
-  foursail(inputLUT = LUT[i, ], rsoil = rsoil, LeafModel = "PROSPECT-PRO")$rsot
+  rsoil_i <- rep(soil_brightness[i], length(wl))
+  foursail(inputLUT = LUT[i, ], rsoil = rsoil_i, LeafModel = "PROSPECT-PRO")$rsot
 }))
 refl_X <- as.data.frame(refl); colnames(refl_X) <- paste0("X", wl); refl_X <- cbind(id = seq_len(n_samples), refl_X)
 se2a_full <- suppressMessages(get.spectra.convolved(rfl = refl_X, sensor = "Sentinel2a", plot.spectra = FALSE))
