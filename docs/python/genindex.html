@@ -182,6 +182,19 @@
 <li class="toctree-l3"><a class="reference internal" href="toolsrtm/deep_learning.html#toolsrtm.deep_learning.get_ml_model"><code class="docutils literal notranslate"><span class="pre">get_ml_model()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/sensitivity.html">toolsrtm.sensitivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.correlated_value"><code class="docutils literal notranslate"><span class="pre">correlated_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.gauss_by_min_max"><code class="docutils literal notranslate"><span class="pre">gauss_by_min_max()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.get_distribution_lut"><code class="docutils literal notranslate"><span class="pre">get_distribution_lut()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.CorrelatedLutResult"><code class="docutils literal notranslate"><span class="pre">CorrelatedLutResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.get_cor"><code class="docutils literal notranslate"><span class="pre">get_cor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.johnson_relative_weights"><code class="docutils literal notranslate"><span class="pre">johnson_relative_weights()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult"><code class="docutils literal notranslate"><span class="pre">SobolResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.sobol_indices"><code class="docutils literal notranslate"><span class="pre">sobol_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SpectralSensitivityResult"><code class="docutils literal notranslate"><span class="pre">SpectralSensitivityResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.spectral_sensitivity"><code class="docutils literal notranslate"><span class="pre">spectral_sensitivity()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scopeinpython/index.html">scopeinpython</a><ul>
@@ -293,11 +306,18 @@
 <li class="toctree-l1"><a class="reference internal" href="verification.html">Numerical verification against R</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#alternative-leaf-models-liberty-and-fluspect-b-toolsrtm">Alternative leaf models: Liberty and Fluspect-B (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#sensor-convolution-vegetation-indices-toolsrtm">Sensor convolution + vegetation indices (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#inform-explicit-forest-canopy-model-toolsrtm">INFORM: explicit forest-canopy model (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#machine-learning-trait-inversion-toolsrtm">Machine-learning trait inversion (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#spart-full-soil-plant-atmosphere-chain-toolsrtm">SPART: full soil-plant-atmosphere chain (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#deep-learning-trait-inversion-toolsrtm-optional-dl-extra">Deep-learning trait inversion (toolsrtm, optional <code class="docutils literal notranslate"><span class="pre">dl</span></code> extra)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#marmit-soil-moisture-model-toolsrtm">MARMIT soil moisture model (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#full-scope-run-energy-balance-fluorescence-scopeinpython">Full SCOPE run: energy balance + fluorescence (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython">Real Sentinel-2 capstone: retrieving net photosynthesis (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#global-sensitivity-analysis-toolsrtm">Global sensitivity analysis (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-data-driven-spatial-index-cab-mapping-toolsrtm">Real Sentinel-2 capstone: data-driven spatial index + Cab mapping (toolsrtm)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#what-isn-t-ported-yet">What isn’t ported yet</a></li>
 </ul>
@@ -440,14 +460,14 @@
         <li><a href="scopeinpython/thermal.html#scopeinpython.thermal.HeatFluxes.Cc">(scopeinpython.thermal.HeatFluxes attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scopeinpython/ebal.html#scopeinpython.ebal.EbalCanopyParams.Cd">Cd (scopeinpython.ebal.EbalCanopyParams attribute)</a>
 
       <ul>
         <li><a href="scopeinpython/thermal.html#scopeinpython.thermal.ResistanceParams.Cd">(scopeinpython.thermal.ResistanceParams attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.BiochemResult.Ci">Ci (scopeinpython.biochemical.BiochemResult attribute)</a>
 </li>
       <li><a href="toolsrtm/satellite.html#toolsrtm.satellite.SatelliteCollection.cloud_server">cloud_server (toolsrtm.satellite.SatelliteCollection attribute)</a>
@@ -466,7 +486,13 @@
 </li>
       <li><a href="toolsrtm/canopy.html#toolsrtm.canopy.conservative_scattering">conservative_scattering() (in module toolsrtm.canopy)</a>
 </li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.correlated_value">correlated_value() (in module toolsrtm.sensitivity)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.CorrelatedLutResult">CorrelatedLutResult (class in toolsrtm.sensitivity)</a>
+</li>
       <li><a href="scopeinpython/ebal.html#scopeinpython.ebal.EbalResult.counter">counter (scopeinpython.ebal.EbalResult attribute)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.CorrelatedLutResult.covariance">covariance (toolsrtm.sensitivity.CorrelatedLutResult attribute)</a>
 </li>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.MeteoLeaf.Cs">Cs (scopeinpython.biochemical.MeteoLeaf attribute)</a>
 </li>
@@ -482,9 +508,13 @@
         <li><a href="scopeinpython/thermal.html#scopeinpython.thermal.ResistanceParams.d">(scopeinpython.thermal.ResistanceParams attribute)</a>
 </li>
       </ul></li>
+      <li><a href="toolsrtm/canopy.html#toolsrtm.canopy.dcum">dcum() (in module toolsrtm.canopy)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="toolsrtm/canopy.html#toolsrtm.canopy.dcum">dcum() (in module toolsrtm.canopy)</a>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult.difference">difference (toolsrtm.sensitivity.SobolResult attribute)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SpectralSensitivityResult.distribution">distribution (toolsrtm.sensitivity.SpectralSensitivityResult attribute)</a>
 </li>
       <li><a href="toolsrtm/canopy.html#toolsrtm.canopy.dladgen">dladgen() (in module toolsrtm.canopy)</a>
 </li>
@@ -630,6 +660,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.LeafBio.g_m">g_m (scopeinpython.biochemical.LeafBio attribute)</a>
 </li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.gauss_by_min_max">gauss_by_min_max() (in module toolsrtm.sensitivity)</a>
+</li>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.get_ball_berry">get_ball_berry() (in module scopeinpython.biochemical)</a>
 </li>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.get_biochemical">get_biochemical() (in module scopeinpython.biochemical)</a>
@@ -639,6 +671,10 @@
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.get_ci_next">get_ci_next() (in module scopeinpython.biochemical)</a>
 </li>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.get_compute_a">get_compute_a() (in module scopeinpython.biochemical)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.get_cor">get_cor() (in module toolsrtm.sensitivity)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.get_distribution_lut">get_distribution_lut() (in module toolsrtm.sensitivity)</a>
 </li>
       <li><a href="scopeinpython/utils.html#scopeinpython.utils.get_e2phot">get_e2phot() (in module scopeinpython.utils)</a>
 </li>
@@ -660,10 +696,10 @@
 </li>
       <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.get_inversion">get_inversion() (in module toolsrtm.inversion)</a>
 </li>
-      <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.get_inversion_opt">get_inversion_opt() (in module toolsrtm.inversion)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.get_inversion_opt">get_inversion_opt() (in module toolsrtm.inversion)</a>
+</li>
       <li><a href="toolsrtm/marmit.html#toolsrtm.marmit.get_marmit_rsoil">get_marmit_rsoil() (in module toolsrtm.marmit)</a>
 </li>
       <li><a href="toolsrtm/deep_learning.html#toolsrtm.deep_learning.get_ml_model">get_ml_model() (in module toolsrtm.deep_learning)</a>
@@ -740,14 +776,18 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult.i_johnson">i_johnson (toolsrtm.sensitivity.SobolResult attribute)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult.i_johnson_norm">i_johnson_norm (toolsrtm.sensitivity.SobolResult attribute)</a>
+</li>
       <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.InversionResult.importance">importance (toolsrtm.inversion.InversionResult attribute)</a>
 </li>
       <li><a href="toolsrtm/inform.html#toolsrtm.inform.inform">inform() (in module toolsrtm.inform)</a>
 </li>
-      <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.InversionOptResult">InversionOptResult (class in toolsrtm.inversion)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.InversionOptResult">InversionOptResult (class in toolsrtm.inversion)</a>
+</li>
       <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.InversionResult">InversionResult (class in toolsrtm.inversion)</a>
 </li>
       <li><a href="toolsrtm/satellite.html#toolsrtm.satellite.SatelliteCollection.items">items (toolsrtm.satellite.SatelliteCollection attribute)</a>
@@ -768,13 +808,15 @@
         <li><a href="scopeinpython/scope.html#scopeinpython.scope.ScopeResult.Ja">(scopeinpython.scope.ScopeResult attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="toolsrtm/canopy.html#toolsrtm.canopy.jfunc1">jfunc1() (in module toolsrtm.canopy)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="toolsrtm/canopy.html#toolsrtm.canopy.jfunc2">jfunc2() (in module toolsrtm.canopy)</a>
 </li>
       <li><a href="toolsrtm/canopy.html#toolsrtm.canopy.jfunc4">jfunc4() (in module toolsrtm.canopy)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.johnson_relative_weights">johnson_relative_weights() (in module toolsrtm.sensitivity)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -932,6 +974,8 @@
 </li>
       <li><a href="scopeinpython/rtmf.html#scopeinpython.rtmf.RTMfResult.LoutF">LoutF (scopeinpython.rtmf.RTMfResult attribute)</a>
 </li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.CorrelatedLutResult.lut">lut (toolsrtm.sensitivity.CorrelatedLutResult attribute)</a>
+</li>
       <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.InversionOptResult.lut_best">lut_best (toolsrtm.inversion.InversionOptResult attribute)</a>
 </li>
   </ul></td>
@@ -1048,6 +1092,8 @@
 </li>
         <li><a href="toolsrtm/satellite.html#module-toolsrtm.satellite">toolsrtm.satellite</a>
 </li>
+        <li><a href="toolsrtm/sensitivity.html#module-toolsrtm.sensitivity">toolsrtm.sensitivity</a>
+</li>
         <li><a href="toolsrtm/smac.html#module-toolsrtm.smac">toolsrtm.smac</a>
 </li>
         <li><a href="toolsrtm/spart.html#module-toolsrtm.spart">toolsrtm.spart</a>
@@ -1115,6 +1161,8 @@
       </ul></li>
       <li><a href="toolsrtm/smac.html#toolsrtm.smac.SmacSensor.p_srf">p_srf (toolsrtm.smac.SmacSensor attribute)</a>
 </li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult.parameter">parameter (toolsrtm.sensitivity.SobolResult attribute)</a>
+</li>
       <li><a href="scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.MultiLayerLeafBio.pCab">pCab (scopeinpython.fluspect_mscope.MultiLayerLeafBio attribute)</a>
 </li>
       <li><a href="scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.MultiLayerLeafBio.pCar">pCar (scopeinpython.fluspect_mscope.MultiLayerLeafBio attribute)</a>
@@ -1139,10 +1187,10 @@
 </li>
       <li><a href="scopeinpython/rtmo.html#scopeinpython.rtmo.NetRadiationLite.Pnh_Cab">Pnh_Cab (scopeinpython.rtmo.NetRadiationLite attribute)</a>
 </li>
-      <li><a href="scopeinpython/scope.html#scopeinpython.scope.ScopeResult.PNPQ">PNPQ (scopeinpython.scope.ScopeResult attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="scopeinpython/scope.html#scopeinpython.scope.ScopeResult.PNPQ">PNPQ (scopeinpython.scope.ScopeResult attribute)</a>
+</li>
       <li><a href="scopeinpython/scope.html#scopeinpython.scope.ScopeResult.Pnsha_Cab">Pnsha_Cab (scopeinpython.scope.ScopeResult attribute)</a>
 </li>
       <li><a href="scopeinpython/scope.html#scopeinpython.scope.ScopeResult.Pnsun_Cab">Pnsun_Cab (scopeinpython.scope.ScopeResult attribute)</a>
@@ -1484,8 +1532,6 @@
 </li>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.sel_root">sel_root() (in module scopeinpython.biochemical)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="toolsrtm/inversion.html#toolsrtm.inversion.CarsPlsResult.selected_variables">selected_variables (toolsrtm.inversion.CarsPlsResult attribute)</a>
 </li>
       <li><a href="toolsrtm/srf.html#toolsrtm.srf.sensor_characteristics">sensor_characteristics() (in module toolsrtm.srf)</a>
@@ -1494,11 +1540,17 @@
 </li>
       <li><a href="toolsrtm/smac.html#toolsrtm.smac.sentinel2a_msi">sentinel2a_msi() (in module toolsrtm.smac)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="toolsrtm/smac.html#toolsrtm.smac.sentinel2b_msi">sentinel2b_msi() (in module toolsrtm.smac)</a>
 </li>
       <li><a href="toolsrtm/smac.html#toolsrtm.smac.sentinel3a_olci">sentinel3a_olci() (in module toolsrtm.smac)</a>
 </li>
       <li><a href="toolsrtm/smac.html#toolsrtm.smac.sentinel3b_olci">sentinel3b_olci() (in module toolsrtm.smac)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult.si">si (toolsrtm.sensitivity.SobolResult attribute)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult.si_norm">si_norm (toolsrtm.sensitivity.SobolResult attribute)</a>
 </li>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.BiochemResult.SIF">SIF (scopeinpython.biochemical.BiochemResult attribute)</a>
 </li>
@@ -1516,6 +1568,10 @@
 </li>
       <li><a href="scopeinpython/soil.html#scopeinpython.soil.WettingParams.SMp">SMp (scopeinpython.soil.WettingParams attribute)</a>
 </li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.sobol_indices">sobol_indices() (in module toolsrtm.sensitivity)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult">SobolResult (class in toolsrtm.sensitivity)</a>
+</li>
       <li><a href="scopeinpython/soil.html#scopeinpython.soil.SoilParams">SoilParams (class in scopeinpython.soil)</a>
 </li>
       <li><a href="scopeinpython/soil.html#scopeinpython.soil.soilwat">soilwat() (in module scopeinpython.soil)</a>
@@ -1532,7 +1588,11 @@
 </li>
       <li><a href="toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_srf">spectral_convolution_srf() (in module toolsrtm.srf)</a>
 </li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.spectral_sensitivity">spectral_sensitivity() (in module toolsrtm.sensitivity)</a>
+</li>
       <li><a href="scopeinpython/spectral.html#scopeinpython.spectral.SpectralConfig">SpectralConfig (class in scopeinpython.spectral)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SpectralSensitivityResult">SpectralSensitivityResult (class in toolsrtm.sensitivity)</a>
 </li>
       <li><a href="toolsrtm/srf.html#toolsrtm.srf.srf_prisma">srf_prisma() (in module toolsrtm.srf)</a>
 </li>
@@ -1553,6 +1613,10 @@
       <li><a href="toolsrtm/deep_learning.html#toolsrtm.deep_learning.MLModelResult.stats">stats (toolsrtm.deep_learning.MLModelResult attribute)</a>
 </li>
       <li><a href="scopeinpython/thermal.html#scopeinpython.thermal.stefan_boltzmann">stefan_boltzmann() (in module scopeinpython.thermal)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SobolResult.sti">sti (toolsrtm.sensitivity.SobolResult attribute)</a>
+</li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SpectralSensitivityResult.sti_pct">sti_pct (toolsrtm.sensitivity.SpectralSensitivityResult attribute)</a>
 </li>
       <li><a href="scopeinpython/biochemical.html#scopeinpython.biochemical.LeafBio.stressfactor">stressfactor (scopeinpython.biochemical.LeafBio attribute)</a>
 </li>
@@ -1629,8 +1693,6 @@
         <li><a href="toolsrtm/inform.html#module-toolsrtm.inform">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     toolsrtm.inversion
 
@@ -1638,6 +1700,8 @@
         <li><a href="toolsrtm/inversion.html#module-toolsrtm.inversion">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     toolsrtm.leaf
 
@@ -1667,6 +1731,13 @@
 </li>
       </ul></li>
       <li>
+    toolsrtm.sensitivity
+
+      <ul>
+        <li><a href="toolsrtm/sensitivity.html#module-toolsrtm.sensitivity">module</a>
+</li>
+      </ul></li>
+      <li>
     toolsrtm.smac
 
       <ul>
@@ -1687,6 +1758,8 @@
         <li><a href="toolsrtm/srf.html#module-toolsrtm.srf">module</a>
 </li>
       </ul></li>
+      <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SpectralSensitivityResult.trait">trait (toolsrtm.sensitivity.SpectralSensitivityResult attribute)</a>
+</li>
       <li><a href="scopeinpython/fluspect.html#scopeinpython.fluspect.FluspectCxScopeResult.tran">tran (scopeinpython.fluspect.FluspectCxScopeResult attribute)</a>
 
       <ul>
@@ -1756,7 +1829,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="toolsrtm/marmit.html#toolsrtm.marmit.MarmitSoil.wavelength">wavelength (toolsrtm.marmit.MarmitSoil attribute)</a>
+
+      <ul>
+        <li><a href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.SpectralSensitivityResult.wavelength">(toolsrtm.sensitivity.SpectralSensitivityResult attribute)</a>
 </li>
+      </ul></li>
       <li><a href="toolsrtm/srf.html#toolsrtm.srf.SrfTable.weights">weights (toolsrtm.srf.SrfTable attribute)</a>
 </li>
       <li><a href="scopeinpython/soil.html#scopeinpython.soil.WettingParams">WettingParams (class in scopeinpython.soil)</a>
