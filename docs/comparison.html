@@ -8,6 +8,16 @@
   :root { --brand:#0f3d5c; --brand-light:#1a6ea8; --text-muted:#5c6b76; --border-soft:#e1e7ea; --bg-light:#f5f8fa; --radius-lg:14px; --radius-sm:10px; --card-shadow:0 1px 3px rgba(15,61,92,0.08); }
   * { box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; color: #1c2b33; background: #fff; line-height: 1.5; }
+  .navbar { position: sticky; top: 0; z-index: 999; background: var(--brand); color: #fff; }
+  .nav-container { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .nav-logo { font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+  .nav-logo span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; }
+  .nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
+  .nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
+  .nav-links a:hover, .nav-links a.active { opacity: 1; }
+  .nav-links a.active { border-bottom: 2px solid #fff; }
+  .nav-cta { border: 1px solid #fff; padding: 6px 16px; border-radius: 999px; font-weight: 600; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
   .wrap { max-width: 1020px; margin: 0 auto; padding: 40px 24px 80px; }
   a { color: var(--brand-light); }
   h1 { font-size: 28px; margin: 0 0 8px; color: var(--brand); }
@@ -36,6 +46,24 @@
 </style>
 </head>
 <body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
+    <nav class="nav-links">
+      <a href="index.html#packages">Packages</a>
+      <a href="index.html#install">Install</a>
+      <a href="index.html#docs">Documentation</a>
+      <a href="index.html#apps">Apps</a>
+      <a href="index.html#tutorials">Tutorials</a>
+      <a href="index.html#examples">Examples</a>
+      <a href="comparison.html" class="active">R vs Python</a>
+      <a href="index.html#related">R Ecosystem</a>
+      <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
+    </nav>
+  </div>
+</header>
+
 <div class="wrap">
   <a class="back" href="index.html">&larr; RTM-Suite home</a>
   <h1>Model comparison &amp; verification</h1>
