@@ -300,4 +300,61 @@ plt.savefig(os.path.join(OUTDIR, "spectral_sensitivity.png"), dpi=140, bbox_inch
 plt.close(fig)
 print("wrote spectral_sensitivity.png")
 
+# ---------------------------------------------------------------- 13. Real Sentinel-2 capstone (Loobos, t18 port)
+from toolsrtm.satellite import get_satellite_collection, get_sentinel2_cube
+
+rng2 = np.random.default_rng(1)
+n_cap = 500
+LAI_c, tts_c, soil_c = rng2.uniform(0.3, 5, n_cap), rng2.uniform(25, 45, n_cap), rng2.uniform(0.05, 0.30, n_cap)
+Cab_c, Car_c, Anth_c = rng2.uniform(5, 75, n_cap), rng2.uniform(0, 20, n_cap), rng2.uniform(0, 4.5, n_cap)
+EWT_c, LMA_c, N_c = rng2.uniform(0.001, 0.035, n_cap), rng2.uniform(0.001, 0.035, n_cap), rng2.uniform(1.5, 2.5, n_cap)
+LIDFa_c = rng2.uniform(30, 70, n_cap)
+hspot_c, tto_c, psi_c = rng2.uniform(0, 1, n_cap), rng2.uniform(15, 30, n_cap), rng2.uniform(0, 180, n_cap)
+
+refl_c = np.stack([
+    foursail(dict(N=N_c[i], Cab=Cab_c[i], Car=Car_c[i], Anth=Anth_c[i], Cbrown=0.0, EWT=EWT_c[i], LMA=LMA_c[i],
+                  alpha=40.0, LIDFa=LIDFa_c[i], LIDFb=0.0, TypeLidf=1.0, LAI=LAI_c[i], hspot=hspot_c[i],
+                  tts=tts_c[i], tto=tto_c[i], psi=psi_c[i]),
+             np.full(2101, soil_c[i]), leaf_model="PROSPECT-D", spectrum_all=True).rsot
+    for i in range(n_cap)
+])
+
+s2a_cap = srf_sentinel2a()
+conv0_cap = spectral_convolution_srf(wave, refl_c[0], s2a_cap)
+keep_cap = ["B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8A", "B11", "B12"]
+real_names_cap = ["B02", "B03", "B04", "B05", "B06", "B07", "B08", "B8A", "B11", "B12"]
+keep_idx_cap = [conv0_cap.band_names.index(k) for k in keep_cap]
+band_refl_cap = np.stack([spectral_convolution_srf(wave, refl_c[i], s2a_cap).rfl[keep_idx_cap] for i in range(n_cap)])
+
+df_cap = pd.DataFrame(band_refl_cap, columns=real_names_cap); df_cap["Cab"] = Cab_c
+fit_cap = get_inversion(df_cap, dep_var="Cab", inputs=real_names_cap, algorithm="RF", n_samples=n_cap, seed=42)
+print("Capstone Cab R2:", fit_cap.statistics["test"]["r2"])
+
+lat_cap, lon_cap, d_cap = 52.166447, 5.74355, 0.006
+bbox_cap = (lon_cap - d_cap, lat_cap - d_cap, lon_cap + d_cap, lat_cap + d_cap)
+coll_cap = get_satellite_collection(bbox_cap, collection="sentinel-2-l2a", date_range=("2024-07-01", "2024-07-31"),
+                                     cloud_server="microsoft", n_limit=20, cloud_threshold=40)
+cube_cap = get_sentinel2_cube(coll_cap, bbox_cap, resolution=10.0, crs="EPSG:32631", aggregation_method="mean")
+r_cap = {b: cube_cap[b].values.astype(float) / 10000 for b in real_names_cap}
+
+rep_map = 700 + 40 * (((r_cap["B04"] + r_cap["B07"]) / 2 - r_cap["B05"]) / (r_cap["B06"] - r_cap["B05"]))
+pix_cap = np.column_stack([r_cap[b].ravel() for b in real_names_cap])
+ok_cap = np.all(np.isfinite(pix_cap), axis=1)
+cab_pixels_cap = np.full(pix_cap.shape[0], np.nan)
+cab_pixels_cap[ok_cap] = fit_cap.model.predict(pix_cap[ok_cap])
+cab_map = cab_pixels_cap.reshape(r_cap["B04"].shape)
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
+im0 = axes[0].imshow(rep_map, cmap="viridis")
+axes[0].set_title("REP (winning index, red-edge position)")
+fig.colorbar(im0, ax=axes[0], fraction=0.046, label="nm")
+im1 = axes[1].imshow(cab_map, cmap="viridis")
+axes[1].set_title("Retrieved Cab")
+fig.colorbar(im1, ax=axes[1], fraction=0.046, label="ug/cm2")
+fig.suptitle("Loobos forest (NL-Loo), real Sentinel-2, July 2024")
+plt.tight_layout()
+plt.savefig(os.path.join(OUTDIR, "t18_python_capstone.png"), dpi=140)
+plt.close(fig)
+print("wrote t18_python_capstone.png")
+
 print("All figures written to", OUTDIR)

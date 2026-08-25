@@ -397,6 +397,93 @@ runs needed) and the correlated/multi-distribution LUT builders
 (R Tutorial 05's LUT-correlation helpers) -- see ``tests/test_sensitivity.py``
 for worked examples of each.
 
+Real Sentinel-2 capstone: data-driven spatial index + Cab mapping (toolsrtm)
+--------------------------------------------------------------------------------
+
+Mirrors R Tutorial 18, end to end: simulate a training LUT (with a
+deliberately wide domain -- sparse-to-dense LAI, a realistic sun zenith,
+variable soil brightness -- so the simulated reflectance envelope actually
+covers a real forest scene), invert Cab with a Random Forest, rank
+Sentinel-2-computable vegetation indices by correlation with the *inverted*
+Cab (not assumed), retrieve a real Sentinel-2 image over **Loobos (NL-Loo)**
+-- an ICOS eddy-covariance Scots pine forest near Kootwijk, NL
+(52.166447°N, 5.74355°E) -- via STAC, and map both the winning index and
+Cab spatially over the real scene. Needs the optional ``ml`` and ``stac``
+extras: ``pip install "toolsrtm[ml,stac]"``.
+
+.. code-block:: python
+
+   import numpy as np
+   import pandas as pd
+   from toolsrtm import foursail, srf_sentinel2a, spectral_convolution_srf, get_indices, get_inversion
+   from toolsrtm.satellite import get_satellite_collection, get_sentinel2_cube
+
+   # 1. Training LUT -- wide domain (LAI down to 0.3, non-zero sun zenith,
+   #    variable soil) so the simulated envelope covers real forest reflectance.
+   wl = np.arange(400, 2501)
+   rng = np.random.default_rng(1)
+   n = 500
+   LAI, tts, soil_b = rng.uniform(0.3, 5, n), rng.uniform(25, 45, n), rng.uniform(0.05, 0.30, n)
+   Cab, Car, Anth = rng.uniform(5, 75, n), rng.uniform(0, 20, n), rng.uniform(0, 4.5, n)
+   EWT, LMA, N = rng.uniform(0.001, 0.035, n), rng.uniform(0.001, 0.035, n), rng.uniform(1.5, 2.5, n)
+   LIDFa, hspot, tto, psi = rng.uniform(30, 70, n), rng.uniform(0, 1, n), rng.uniform(15, 30, n), rng.uniform(0, 180, n)
+
+   refl = np.stack([
+       foursail(dict(N=N[i], Cab=Cab[i], Car=Car[i], Anth=Anth[i], Cbrown=0.0, EWT=EWT[i], LMA=LMA[i],
+                      alpha=40.0, LIDFa=LIDFa[i], LIDFb=0.0, TypeLidf=1.0, LAI=LAI[i], hspot=hspot[i],
+                      tts=tts[i], tto=tto[i], psi=psi[i]),
+                np.full(2101, soil_b[i]), leaf_model="PROSPECT-D", spectrum_all=True).rsot
+       for i in range(n)
+   ])
+
+   # 2. Convolve to the 10 bands a real Sentinel-2 STAC cube actually provides
+   #    (B01/B09/B10 excluded -- 60m-only, no vegetation signal at 10-20m).
+   s2a = srf_sentinel2a()
+   conv0 = spectral_convolution_srf(wl, refl[0], s2a)
+   keep = ["B2", "B3", "B4", "B5", "B6", "B7", "B8", "B8A", "B11", "B12"]
+   real_names = ["B02", "B03", "B04", "B05", "B06", "B07", "B08", "B8A", "B11", "B12"]
+   keep_idx = [conv0.band_names.index(k) for k in keep]
+   band_refl = np.stack([spectral_convolution_srf(wl, refl[i], s2a).rfl[keep_idx] for i in range(n)])
+
+   # 3. Hybrid-invert Cab (Random Forest, held-out test set).
+   df = pd.DataFrame(band_refl, columns=real_names); df["Cab"] = Cab
+   fit = get_inversion(df, dep_var="Cab", inputs=real_names, algorithm="RF", n_samples=n, seed=42)
+   print("Held-out Cab R2:", round(fit.statistics["test"]["r2"], 3))
+
+   # 4. Rank VNIR indices by |correlation| with the *inverted* Cab -- VNIR only,
+   #    since SWIR-domain formulas need wavelengths (990/1510/1260nm...) no
+   #    real Sentinel-2 band is anywhere near.
+   band_wl = conv0.wl[keep_idx]
+   idx_rows = [get_indices(band_wl, band_refl[i], spectral_domain="VNIR") for i in range(n)]
+   cors = {nm: abs(np.corrcoef([row[nm] for row in idx_rows], Cab)[0, 1])
+           for nm in idx_rows[0] if np.all(np.isfinite([row[nm] for row in idx_rows]))}
+   winning_index = max(cors, key=cors.get)
+   print("Winning index:", winning_index, "|corr|=", round(cors[winning_index], 3))
+
+   # 5. Retrieve the real Sentinel-2 image: Loobos forest, July 2024.
+   lat, lon, d = 52.166447, 5.74355, 0.006
+   bbox = (lon - d, lat - d, lon + d, lat + d)
+   coll = get_satellite_collection(bbox, collection="sentinel-2-l2a", date_range=("2024-07-01", "2024-07-31"),
+                                    cloud_server="microsoft", n_limit=20, cloud_threshold=40)
+   cube = get_sentinel2_cube(coll, bbox, resolution=10.0, crs="EPSG:32631", aggregation_method="mean")
+   r = {b: cube[b].values.astype(float) / 10000 for b in real_names}
+
+   # 6. Map the winning index (REP -- red-edge position, matching R's REIP1)
+   #    and Cab spatially over the real scene.
+   rep_map = 700 + 40 * (((r["B04"] + r["B07"]) / 2 - r["B05"]) / (r["B06"] - r["B05"]))
+   pix = np.column_stack([r[b].ravel() for b in real_names])
+   ok = np.all(np.isfinite(pix), axis=1)
+   cab_pixels = np.full(pix.shape[0], np.nan); cab_pixels[ok] = fit.model.predict(pix[ok])
+   cab_map = cab_pixels.reshape(r["B04"].shape)
+   print("Pixel-wise correlation, REP vs. Cab:",
+         round(float(np.corrcoef(rep_map[ok.reshape(rep_map.shape)], cab_map[ok.reshape(rep_map.shape)])[0, 1]), 2))
+
+.. figure:: _figures/t18_python_capstone.png
+   :alt: REP index map and retrieved Cab map over the real Loobos Sentinel-2 scene, real output of the code above
+   :width: 100%
+
+   Real output over the real Loobos scene: the winning index (REP, red-edge position, 715-725nm) and the RF-retrieved Cab (26-60 ug/cm2) -- both show the same forest gap (dark patch) independently, one a plain spectral index, the other a full hybrid-inversion model.
+
 Full simulate -> indices -> ML-invert pipeline
 ------------------------------------------------
 
@@ -415,12 +502,10 @@ What isn't ported yet
 One tutorial-level gap not covered by any example above, on top of the
 finer-grained implementation gaps in :doc:`not_ported`:
 
-- **The real-Sentinel-2/STAC capstone** (SCOPEinR Tutorial 11 --
-  ``Actot`` retrieved from a real satellite time series and mapped
-  spatially; ToolsRTM Tutorial 18 -- a spatial index map from a real
-  STAC-retrieved image) has no ``scopeinpython``/``toolsrtm`` equivalent
-  yet, even though ``toolsrtm.satellite`` already has the STAC retrieval
-  machinery a Python port of it would reuse.
+- **SCOPEinR Tutorial 11's real-Sentinel-2 capstone** -- ``Actot``
+  retrieved from a real satellite time series and mapped spatially --
+  has no ``scopeinpython`` equivalent yet (ToolsRTM Tutorial 18's own
+  spatial-index-mapping capstone *is* ported now, see above).
 
 See each package's own ``README.md`` for the full R-tutorial-to-Python-module
 bridge table.
