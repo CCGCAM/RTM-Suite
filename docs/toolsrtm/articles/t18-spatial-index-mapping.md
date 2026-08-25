@@ -39,15 +39,32 @@ Winning index (data-driven, not assumed)
 ## 1. Simulate a 500-row LUT and invert Cab
 
 Same rigor as Tutorial 12 – 500 simulations, Sentinel-2A convolution,
-Random Forest, held-out test set:
+Random Forest, held-out test set. Three settings are chosen to cover the
+real scene this LUT will later be applied to (Section 3): **LAI down to
+0.3** (`inputsPROSAIL`’s own default lower bound of 2 assumes a canopy
+always dense enough to be optically closed – too narrow for a real
+forest, which includes gaps, edges and understory in the same
+500m-radius footprint), **a realistic non-zero sun zenith** (25-45°,
+matching a July midday acquisition at 52°N, rather than the package
+default `tts = 0`, i.e. sun directly overhead), and **variable soil
+brightness** (0.05-0.30, Tutorial 03’s BSM range, rather than one flat
+`rsoil = 0.15`). Together these widen the simulated reflectance envelope
+enough to actually contain the real Sentinel-2 pixel values retrieved in
+Section 3 – a hybrid-inversion model can only be trusted on inputs that
+fall inside the range it was trained on:
 
 ``` r
 
 n_samples <- 500
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_samples, setseed = 1))
-wl <- 400:2500; rsoil <- rep(0.15, length(wl))
+wl <- 400:2500
+set.seed(3)
+LUT$LAI <- runif(n_samples, 0.3, 5)
+LUT$tts <- runif(n_samples, 25, 45)
+soil_brightness <- runif(n_samples, 0.05, 0.30)
 refl <- t(sapply(seq_len(n_samples), function(i) {
-  foursail(inputLUT = LUT[i, ], rsoil = rsoil, LeafModel = "PROSPECT-PRO")$rsot
+  rsoil_i <- rep(soil_brightness[i], length(wl))
+  foursail(inputLUT = LUT[i, ], rsoil = rsoil_i, LeafModel = "PROSPECT-PRO")$rsot
 }))
 refl_X <- as.data.frame(refl); colnames(refl_X) <- paste0("X", wl); refl_X <- cbind(id = seq_len(n_samples), refl_X)
 se2a_full <- suppressMessages(get.spectra.convolved(rfl = refl_X, sensor = "Sentinel2a", plot.spectra = FALSE))
@@ -96,16 +113,16 @@ knitr::kable(head(cor_table, 10), row.names = FALSE, digits = 3)
 
 | index       | abs_cor_with_Cab |
 |:------------|-----------------:|
-| REIP1       |            0.823 |
-| REIP2       |            0.823 |
-| NDRE        |            0.809 |
-| GM2         |            0.792 |
-| CIre        |            0.773 |
-| TCARI_OSAVI |            0.681 |
-| TCARI       |            0.656 |
-| MCARI       |            0.611 |
-| GNDVI       |            0.606 |
-| CIg         |            0.578 |
+| REIP1       |            0.787 |
+| REIP2       |            0.787 |
+| TCARI       |            0.655 |
+| TCARI_OSAVI |            0.583 |
+| GM2         |            0.582 |
+| CIre        |            0.574 |
+| NDRE        |            0.529 |
+| MCARI       |            0.512 |
+| CIg         |            0.386 |
+| CIgreen     |            0.386 |
 
 ``` r
 
@@ -117,10 +134,16 @@ cat("Winning index (highest |correlation| with Cab, among those getSpatial_index
 
 ## 3. Retrieve a real Sentinel-2 image: NL-Loo (Loobos), Netherlands
 
-A real ICOS class-1 flux-tower forest site – Scots pine (*Pinus
-sylvestris*), Speuld/Kootwijk area, Gelderland, one of the
-longest-running eddy-covariance records in Europe (published station
-coordinates: 52.1666°N, 5.7436°E). Same STAC retrieval code already
+A real ICOS station: **Loobos (NL-Loo)**, an evergreen needleleaf forest
+(Scots pine, *Pinus sylvestris*) near Kootwijk on the Veluwe, Gelderland
+– not to be confused with Speulderbos (Tutorials 15/17, a different site
+a few km away). Planted around 1909 on sand dunes to fight erosion and
+left largely unmanaged since, it’s one of the world’s longest
+continuously running eddy-covariance flux-tower records (ICOS station
+class 2, PI Michiel van der Molen). Official station coordinates, from
+the [ICOS Carbon Portal station
+page](https://meta.icos-cp.eu/resources/stations/ES_NL-Loo):
+52.166447°N, 5.74355°E, 33 m elevation. Same STAC retrieval code already
 verified in Tutorials 15/17, a different real site:
 
 ``` r
@@ -184,7 +207,7 @@ plot(idx_map[[1]], main = paste0("Loobos forest, ", winning_index, " (data-drive
 ``` r
 
 cat(winning_index, "range over the scene:", paste(round(range(terra::values(idx_map[[1]]), na.rm = TRUE), 3), collapse = " to "), "\n")
-#> REIP1 range over the scene: -303.997 to 140.442
+#> REIP1 range over the scene: 715.713 to 726.731
 ```
 
 ## 6. Cab itself, mapped – the same per-pixel pattern as Tutorials 15/17
@@ -213,7 +236,7 @@ par(op)
 
 cat("Correlation between the mapped", winning_index, "and mapped Cab, pixel-by-pixel:",
     round(cor(as.numeric(terra::values(idx_map[[1]])), Cab_pixels, use = "complete.obs"), 2), "\n")
-#> Correlation between the mapped REIP1 and mapped Cab, pixel-by-pixel: 0.21
+#> Correlation between the mapped REIP1 and mapped Cab, pixel-by-pixel: -0.01
 ```
 
 Two independent pixel-by-pixel outputs over the same real scene – one a

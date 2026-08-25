@@ -136,7 +136,7 @@ cor_lut <- getCor(n_inputs = 2, nLUT = 300, distribution = "Normal", setseed = 1
                    MinRange = c(10, 0.5), MaxRange = c(80, 7))
 cat("Target rho: 0.7. Achieved correlation:",
     round(cor(cor_lut$LUT$Cab, cor_lut$LUT$LAI), 2), "\n")
-#> Target rho: 0.7. Achieved correlation: 0.7
+#> Target rho: 0.7. Achieved correlation: 0.68
 ```
 
 ``` r

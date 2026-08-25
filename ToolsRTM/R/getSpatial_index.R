@@ -283,11 +283,11 @@ getSpatial_index<-function(rasterFiles=NULL,Sensor='Sentinel2a',SpectraltoComput
     
     if (SpectraltoCompute == 'REIP1'){
       #Red-Edge Inflection Point 1  (abbrv. REIP1)
-      index[['REIP1']] <- 700 + 405 * ( ((r[['B04']] - r[['B07']]/2) -  r[['B05']])/ (r[['B06']] - r[['B05']]))
+      index[['REIP1']] <- 700 + 40 * ( ( ((r[['B04']] + r[['B07']])/2) -  r[['B05']])/ (r[['B06']] - r[['B05']]))
     }
-    
+
     if (SpectraltoCompute == 'REIP2'){
-      index[['REIP2']] <- 700 + 405 * ( ((r[['B04']] - r[['B07']]/2) -  r[['B05']])/ (r[['B06']] - r[['B05']]))
+      index[['REIP2']] <- 702 + 40 * ( ( ((r[['B04']] + r[['B07']])/2) -  r[['B05']])/ (r[['B06']] - r[['B05']]))
     }
     
     if (SpectraltoCompute == 'Greeness'){

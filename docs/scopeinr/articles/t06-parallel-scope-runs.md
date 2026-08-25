@@ -33,7 +33,7 @@ t_seq <- system.time({
 })
 cat("Sequential:", round(t_seq[["elapsed"]], 1), "s for", n_samples, "SCOPE runs (",
     round(1000 * t_seq[["elapsed"]] / n_samples, 0), "ms/run)\n")
-#> Sequential: 15 s for 30 SCOPE runs ( 500 ms/run)
+#> Sequential: 13.8 s for 30 SCOPE runs ( 461 ms/run)
 ```
 
 ## 2. `get.SCOPE.parallel()`
@@ -50,11 +50,11 @@ t_par <- system.time({
     get.outputs = "ALL", get.plots = FALSE, get.csv = FALSE, n.cores = vignette.cores)
 })
 #> Total simulations: 30 
-#> Total execution time: 11.88754
+#> Total execution time: 10.34906
 cat("Parallel (", vignette.cores, "cores):", round(t_par[["elapsed"]], 1), "s for", n_samples, "SCOPE runs\n")
-#> Parallel ( 3 cores): 13.2 s for 30 SCOPE runs
+#> Parallel ( 3 cores): 11.9 s for 30 SCOPE runs
 cat("Speedup:", round(t_seq[["elapsed"]] / t_par[["elapsed"]], 2), "x\n")
-#> Speedup: 1.14 x
+#> Speedup: 1.16 x
 ```
 
 ``` r

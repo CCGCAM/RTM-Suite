@@ -124,13 +124,31 @@ Winning index (data-driven, not assumed)
 <h2 id="simulate-a-500-row-lut-and-invert-cab">1. Simulate a 500-row LUT and invert Cab<a class="anchor" aria-label="anchor" href="#simulate-a-500-row-lut-and-invert-cab"></a>
 </h2>
 <p>Same rigor as Tutorial 12 – 500 simulations, Sentinel-2A convolution,
-Random Forest, held-out test set:</p>
+Random Forest, held-out test set. Three settings are chosen to cover the
+real scene this LUT will later be applied to (Section 3): <strong>LAI
+down to 0.3</strong> (<code>inputsPROSAIL</code>’s own default lower
+bound of 2 assumes a canopy always dense enough to be optically closed –
+too narrow for a real forest, which includes gaps, edges and understory
+in the same 500m-radius footprint), <strong>a realistic non-zero sun
+zenith</strong> (25-45°, matching a July midday acquisition at 52°N,
+rather than the package default <code>tts = 0</code>, i.e. sun directly
+overhead), and <strong>variable soil brightness</strong> (0.05-0.30,
+Tutorial 03’s BSM range, rather than one flat
+<code>rsoil = 0.15</code>). Together these widen the simulated
+reflectance envelope enough to actually contain the real Sentinel-2
+pixel values retrieved in Section 3 – a hybrid-inversion model can only
+be trusted on inputs that fall inside the range it was trained on:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">500</span></span>
 <span><span class="va">LUT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/getLUT.html">getLUT</a></span><span class="op">(</span>inputs <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va"><a href="../reference/rtm-input-specs.html">inputsPROSAIL</a></span>, nLUT <span class="op">=</span> <span class="va">n_samples</span>, setseed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">wl</span> <span class="op">&lt;-</span> <span class="fl">400</span><span class="op">:</span><span class="fl">2500</span>; <span class="va">rsoil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">wl</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">wl</span> <span class="op">&lt;-</span> <span class="fl">400</span><span class="op">:</span><span class="fl">2500</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">LUT</span><span class="op">$</span><span class="va">LAI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">0.3</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">LUT</span><span class="op">$</span><span class="va">tts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">25</span>, <span class="fl">45</span><span class="op">)</span></span>
+<span><span class="va">soil_brightness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">0.05</span>, <span class="fl">0.30</span><span class="op">)</span></span>
 <span><span class="va">refl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/transpose.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/foursail.html">foursail</a></span><span class="op">(</span>inputLUT <span class="op">=</span> <span class="va">LUT</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span>, rsoil <span class="op">=</span> <span class="va">rsoil</span>, LeafModel <span class="op">=</span> <span class="st">"PROSPECT-PRO"</span><span class="op">)</span><span class="op">$</span><span class="va">rsot</span></span>
+<span>  <span class="va">rsoil_i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">soil_brightness</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">wl</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/foursail.html">foursail</a></span><span class="op">(</span>inputLUT <span class="op">=</span> <span class="va">LUT</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span>, rsoil <span class="op">=</span> <span class="va">rsoil_i</span>, LeafModel <span class="op">=</span> <span class="st">"PROSPECT-PRO"</span><span class="op">)</span><span class="op">$</span><span class="va">rsot</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">refl_X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">refl</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">refl_X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="va">wl</span><span class="op">)</span>; <span class="va">refl_X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, <span class="va">refl_X</span><span class="op">)</span></span>
 <span><span class="va">se2a_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/get.spectra.convolved.html">get.spectra.convolved</a></span><span class="op">(</span>rfl <span class="op">=</span> <span class="va">refl_X</span>, sensor <span class="op">=</span> <span class="st">"Sentinel2a"</span>, plot.spectra <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
@@ -181,43 +199,43 @@ Random Forest, held-out test set:</p>
 <tbody>
 <tr class="odd">
 <td align="left">REIP1</td>
-<td align="right">0.823</td>
+<td align="right">0.787</td>
 </tr>
 <tr class="even">
 <td align="left">REIP2</td>
-<td align="right">0.823</td>
-</tr>
-<tr class="odd">
-<td align="left">NDRE</td>
-<td align="right">0.809</td>
-</tr>
-<tr class="even">
-<td align="left">GM2</td>
-<td align="right">0.792</td>
-</tr>
-<tr class="odd">
-<td align="left">CIre</td>
-<td align="right">0.773</td>
-</tr>
-<tr class="even">
-<td align="left">TCARI_OSAVI</td>
-<td align="right">0.681</td>
+<td align="right">0.787</td>
 </tr>
 <tr class="odd">
 <td align="left">TCARI</td>
-<td align="right">0.656</td>
+<td align="right">0.655</td>
+</tr>
+<tr class="even">
+<td align="left">TCARI_OSAVI</td>
+<td align="right">0.583</td>
+</tr>
+<tr class="odd">
+<td align="left">GM2</td>
+<td align="right">0.582</td>
+</tr>
+<tr class="even">
+<td align="left">CIre</td>
+<td align="right">0.574</td>
+</tr>
+<tr class="odd">
+<td align="left">NDRE</td>
+<td align="right">0.529</td>
 </tr>
 <tr class="even">
 <td align="left">MCARI</td>
-<td align="right">0.611</td>
+<td align="right">0.512</td>
 </tr>
 <tr class="odd">
-<td align="left">GNDVI</td>
-<td align="right">0.606</td>
+<td align="left">CIg</td>
+<td align="right">0.386</td>
 </tr>
 <tr class="even">
-<td align="left">CIg</td>
-<td align="right">0.578</td>
+<td align="left">CIgreen</td>
+<td align="right">0.386</td>
 </tr>
 </tbody>
 </table>
@@ -231,11 +249,17 @@ Random Forest, held-out test set:</p>
 <h2 id="retrieve-a-real-sentinel-2-image-nl-loo-loobos-netherlands">3. Retrieve a real Sentinel-2 image: NL-Loo (Loobos),
 Netherlands<a class="anchor" aria-label="anchor" href="#retrieve-a-real-sentinel-2-image-nl-loo-loobos-netherlands"></a>
 </h2>
-<p>A real ICOS class-1 flux-tower forest site – Scots pine (<em>Pinus
-sylvestris</em>), Speuld/Kootwijk area, Gelderland, one of the
-longest-running eddy-covariance records in Europe (published station
-coordinates: 52.1666°N, 5.7436°E). Same STAC retrieval code already
-verified in Tutorials 15/17, a different real site:</p>
+<p>A real ICOS station: <strong>Loobos (NL-Loo)</strong>, an evergreen
+needleleaf forest (Scots pine, <em>Pinus sylvestris</em>) near Kootwijk
+on the Veluwe, Gelderland – not to be confused with Speulderbos
+(Tutorials 15/17, a different site a few km away). Planted around 1909
+on sand dunes to fight erosion and left largely unmanaged since, it’s
+one of the world’s longest continuously running eddy-covariance
+flux-tower records (ICOS station class 2, PI Michiel van der Molen).
+Official station coordinates, from the <a href="https://meta.icos-cp.eu/resources/stations/ES_NL-Loo" class="external-link">ICOS Carbon
+Portal station page</a>: 52.166447°N, 5.74355°E, 33 m elevation. Same
+STAC retrieval code already verified in Tutorials 15/17, a different
+real site:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.7436</span>, <span class="fl">52.1666</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
@@ -290,7 +314,7 @@ placeholder doesn’t affect the result below:</p>
 <p><img src="t18-spatial-index-mapping_files/figure-html/spatial-index-map-1.png" class="r-plt" alt="" width="672"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">winning_index</span>, <span class="st">"range over the scene:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">idx_map</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">" to "</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; REIP1 range over the scene: -303.997 to 140.442</span></span></code></pre></div>
+<span><span class="co">#&gt; REIP1 range over the scene: 715.713 to 726.731</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="cab-itself-mapped-the-same-per-pixel-pattern-as-tutorials-1517">6. Cab itself, mapped – the same per-pixel pattern as Tutorials
@@ -315,7 +339,7 @@ placeholder doesn’t affect the result below:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Correlation between the mapped"</span>, <span class="va">winning_index</span>, <span class="st">"and mapped Cab, pixel-by-pixel:"</span>,</span>
 <span>    <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">idx_map</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, <span class="va">Cab_pixels</span>, use <span class="op">=</span> <span class="st">"complete.obs"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Correlation between the mapped REIP1 and mapped Cab, pixel-by-pixel: 0.21</span></span></code></pre></div>
+<span><span class="co">#&gt; Correlation between the mapped REIP1 and mapped Cab, pixel-by-pixel: -0.01</span></span></code></pre></div>
 <p>Two independent pixel-by-pixel outputs over the same real scene – one
 a plain spectral index, the other a full hybrid-inversion trait
 retrieval – their spatial agreement (or disagreement) is itself

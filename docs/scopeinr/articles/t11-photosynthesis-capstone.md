@@ -309,10 +309,18 @@ map_refl <- map_cube[[real_names]] / 10000
 # so relative brightness between bands (the actual color information) is
 # preserved instead of exaggerated.
 rgb_bands <- map_cube[[c("B04", "B03", "B02")]]
+cat("Native raster size:", terra::ncol(rgb_bands), "x", terra::nrow(rgb_bands),
+    "pixels (", terra::ncell(rgb_bands), "cells total ) -- real 20m Sentinel-2 pixels, not a display artifact.\n")
+#> Native raster size: 33 x 33 pixels ( 1089 cells total ) -- real 20m Sentinel-2 pixels, not a display artifact.
 shared_range <- stats::quantile(terra::values(rgb_bands), c(0.02, 0.98), na.rm = TRUE)
 rgb_scaled <- terra::clamp((rgb_bands - shared_range[1]) / (shared_range[2] - shared_range[1]),
                             lower = 0, upper = 1, values = TRUE)
-terra::plotRGB(rgb_scaled * 255, r = 1, g = 2, b = 3, stretch = NULL,
+# maxcell high enough that plotRGB never silently downsamples before display
+# (this scene is ~1000 cells total, far under the default 500,000 cutoff, but
+# set explicitly so this stays correct if the buffer size ever changes) --
+# and a higher dpi than knitr's ~72 default so each real 20m pixel renders as
+# a crisp block instead of a blurry antialiased smear at a larger display size.
+terra::plotRGB(rgb_scaled * 255, r = 1, g = 2, b = 3, stretch = NULL, maxcell = 1e6,
                main = paste("Speulderbos, Sentinel-2 true color --", map_date))
 ```
 

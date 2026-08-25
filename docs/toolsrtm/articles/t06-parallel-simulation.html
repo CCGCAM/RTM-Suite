@@ -145,7 +145,7 @@ ranges/distributions (Tutorial 01).</p>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Sequential:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"s for"</span>, <span class="va">n.samples</span>, <span class="st">"simulations\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sequential: 1.78 s for 300 simulations</span></span></code></pre></div>
+<span><span class="co">#&gt; Sequential: 1.47 s for 300 simulations</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="parallel-with-doparallelforeach">3. Parallel with <code>doParallel</code>/<code>foreach</code><a class="anchor" aria-label="anchor" href="#parallel-with-doparallelforeach"></a>
@@ -167,9 +167,9 @@ ranges/distributions (Tutorial 01).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Parallel ("</span>, <span class="va">no_cores</span>, <span class="st">"cores):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"s for"</span>, <span class="va">n.samples</span>, <span class="st">"simulations\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Parallel ( 10 cores): 5.03 s for 300 simulations</span></span>
+<span><span class="co">#&gt; Parallel ( 10 cores): 5.04 s for 300 simulations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Speedup:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"x\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Speedup: 0.35 x</span></span></code></pre></div>
+<span><span class="co">#&gt; Speedup: 0.29 x</span></span></code></pre></div>
 <p>Three things matter for this pattern to actually work, not just look
 parallel:</p>
 <ul>
@@ -219,7 +219,7 @@ histograms above, not noise: every curve is one specific, known
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Per-simulation cost: sequential"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1000</span> <span class="op">*</span> <span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">n.samples</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>    <span class="st">"ms, parallel"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1000</span> <span class="op">*</span> <span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">n.samples</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"ms\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Per-simulation cost: sequential 5.93 ms, parallel 16.77 ms</span></span></code></pre></div>
+<span><span class="co">#&gt; Per-simulation cost: sequential 4.9 ms, parallel 16.8 ms</span></span></code></pre></div>
 <p><code><a href="../reference/foursail.html">foursail()</a></code> itself is fast (milliseconds per call) – the
 parallel speedup above has to overcome the fixed overhead of starting a
 cluster and shipping <code>ToolsRTM</code>/data to every worker, so it

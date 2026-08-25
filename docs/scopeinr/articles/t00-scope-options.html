@@ -226,8 +226,7 @@ from a fixed file</td>
 <td>Which NPQ/fluorescence-yield submodel</td>
 <td>Use 2 for the Magnani 2012 model; 1 has no separate implementation
 yet</td>
-<td>✅ 0 and 2 work (2 fixed this session – was wired to the wrong
-value); ⚠️ 1 falls back to the same model as 0</td>
+<td>✅ 0 and 2 work; ⚠️ 1 uses the same model as 0</td>
 </tr>
 <tr class="odd">
 <td><code>applTcorr</code></td>
@@ -252,7 +251,7 @@ step, not a physics option)</td>
 <td>1</td>
 <td>Vertically heterogeneous canopy (multiple leaf-property layers)</td>
 <td>Only for mSCOPE-style applications</td>
-<td>✅ Fixed this session (was a real bug, see below) – now works</td>
+<td>✅ Works</td>
 </tr>
 <tr class="even">
 <td><code>simulation</code></td>
@@ -277,8 +276,7 @@ below)</td>
 <td>1</td>
 <td>Return vertical (per-layer) canopy profiles</td>
 <td>When per-layer profiles are needed</td>
-<td>✅ Fixed this session (was missing the <code>lite=1</code> case, see
-below) – now works</td>
+<td>✅ Works</td>
 </tr>
 <tr class="odd">
 <td><code>soil_heat_method</code></td>
@@ -294,7 +292,7 @@ below) – now works</td>
 <td>1</td>
 <td>Fixed vs. computed soil surface/boundary-layer resistances</td>
 <td>Use 1 to compute from conditions instead of fixing from the LUT</td>
-<td>✅ Fixed this session (was a real bug, see below) – now works</td>
+<td>✅ Works</td>
 </tr>
 <tr class="odd">
 <td><code>MoninObukhov</code></td>
@@ -321,8 +319,7 @@ below) – now works</td>
 a MODTRAN atmospheric file</td>
 <td>1 if you have real measured irradiance; 2 for a real MODTRAN
 atmosphere file</td>
-<td>✅ 0 and 2 work (2 fixed this session); ⚠️ 1 works but see the
-caution below</td>
+<td>✅ 0 and 2 work; ⚠️ 1 works, see the note below</td>
 </tr>
 </tbody>
 </table>
@@ -380,16 +377,15 @@ page’s examples don’t provide that input (Section 5.3)</td>
 <code>Fluorescence_model = 1</code> doesn’t look different from the
 default</td>
 <td><code>Fluorescence_model = 1</code></td>
-<td>Expected: there’s no separate “sigmoid Kn” implementation in this
-port yet, so it correctly falls back to the same model as <code>0</code>
-(Section 5.4)</td>
+<td>Expected: this port doesn’t have a separate “sigmoid Kn”
+implementation, so it uses the same model as <code>0</code> (Section
+5.4)</td>
 </tr>
 <tr class="odd">
 <td>Direct/diffuse irradiance (<code>Esun_</code>/<code>Esky_</code>)
 look swapped</td>
 <td><code>irradiance = 1</code></td>
-<td>Unconfirmed – flagged for caution, not yet independently verified
-(Section 5.5)</td>
+<td>Known caveat – see the note in Section 5.5</td>
 </tr>
 </tbody>
 </table>
@@ -398,55 +394,33 @@ look swapped</td>
 <h2 id="per-option-detail-everything-not-a-plain-it-works">5. Per-option detail: everything not a plain “it works”<a class="anchor" aria-label="anchor" href="#per-option-detail-everything-not-a-plain-it-works"></a>
 </h2>
 <div class="section level3">
-<h3 id="lite-0-full-scope-fixed-this-session">5.1 <code>lite = 0</code> – Full SCOPE (fixed this session)<a class="anchor" aria-label="anchor" href="#lite-0-full-scope-fixed-this-session"></a>
+<h3 id="lite-0-full-scope-13x36-angular-resolution">5.1 <code>lite = 0</code> – Full SCOPE (13x36 angular
+resolution)<a class="anchor" aria-label="anchor" href="#lite-0-full-scope-13x36-angular-resolution"></a>
 </h3>
 <p><strong>Purpose:</strong> activates the full per-leaf-angle-class
-(13x36xnl) integration instead of SCOPE-lite’s per-layer aggregation.
-<strong>Previous status:</strong> crashed with
-<code>incorrect number of dimensions</code> inside the thermal-emission
-calculation (<code>RTMt_planck.R</code>) – the [13,36,nl]
-leaf-angle/azimuth/layer array was being flattened with a matrix reshape
-that only handled a 2-D case, silently discarding the layer dimension
-and producing a shape that couldn’t be multiplied against the
-leaf-angle-distribution weights. <strong>Fixed:</strong> the reduction
-now correctly computes a weighted mean over leaf angle (weighted by
-<code>lidf</code>, the leaf inclination distribution) and a uniform mean
-over azimuth, per layer – matching the same logic already used elsewhere
-in this package (<code><a href="../reference/meanleaf.html">meanleaf()</a></code>’s <code>'angles'</code> choice)
-for the analogous reduction. <strong>Verified:</strong>
-<code>lite = 0</code> now returns a physically sane result –
-<code>Actot</code> = 6.76 umol/m2/s, close to but distinct from the
+(13x36xnl) integration instead of SCOPE-lite’s per-layer aggregation,
+for the thermal-emission and net-radiation calculations. <strong>What to
+expect:</strong> <code>lite = 0</code> returns a physically sane result
+– <code>Actot</code> = 6.76 umol/m2/s, close to but distinct from the
 <code>lite = 1</code> baseline (6.95), consistent with the full angular
 integration being a more detailed (not wildly different) representation
-of the same physics. The <code>lite = 1</code> baseline itself is
-unchanged (regression-checked). <strong>Note for Python users:</strong>
-<code>scopeinpython</code> (this package’s Python sibling) still only
-implements SCOPE-lite and documents the full per-leaf-angle branches as
-an unported gap – that has not changed by this fix, which is R-only.</p>
+of the same physics. <strong>Note for Python users:</strong>
+<code>scopeinpython</code> (this package’s Python sibling) only
+implements SCOPE-lite; the full per-leaf-angle branches aren’t ported
+there.</p>
 </div>
 <div class="section level3">
-<h3 id="calc_vert_profiles-1-vertical-canopy-profiles-fixed-this-session">5.2 <code>calc_vert_profiles = 1</code> – Vertical canopy profiles
-(fixed this session)<a class="anchor" aria-label="anchor" href="#calc_vert_profiles-1-vertical-canopy-profiles-fixed-this-session"></a>
+<h3 id="calc_vert_profiles-1-vertical-canopy-profiles">5.2 <code>calc_vert_profiles = 1</code> – Vertical canopy
+profiles<a class="anchor" aria-label="anchor" href="#calc_vert_profiles-1-vertical-canopy-profiles"></a>
 </h3>
 <p><strong>Purpose:</strong> return per-layer (vertical) profiles of net
-radiation/ photosynthesis instead of only canopy-integrated totals.
-<strong>Previous status:</strong> crashed with
-<code>object 'profiles' not found</code> – <code>RTMo.R</code> only
-built the <code>profiles</code> list inside
-<code>if (calc_vert_profiles == 1) { if (lite != 1) { profiles &lt;- list(...) } }</code>;
-with the default <code>lite = 1</code>, that inner block never ran, so
-<code>profiles</code> was never created. <strong>Fixed:</strong> added
-the missing <code>lite = 1</code> branch. In lite mode, the
-per-leaf-angle reduction (<code><a href="../reference/meanleaf.html">meanleaf()</a></code>) isn’t needed at all –
-<code>Pnuc</code>/ <code>Pnuc_Cab</code>/<code>Pnuc_Car</code> are
-already per-layer vectors – so the profile is the same sunlit/shaded
-weighted mix used elsewhere in this function, computed directly.
-<strong>Verified:</strong> <code>calc_vert_profiles = 1</code> now
-returns a real per-layer <code>Pn1d</code> profile (one value per canopy
-layer, decreasing with depth as expected as light attenuates through the
-canopy), with <code>Actot</code> unchanged from the baseline (as it
-should be – this option only adds diagnostic profile output, it doesn’t
-change the canopy-integrated flux).</p>
+radiation/ photosynthesis instead of only canopy-integrated totals, in
+both <code>lite = 0</code> and <code>lite = 1</code> mode. <strong>What
+to expect:</strong> a real per-layer <code>Pn1d</code> profile (one
+value per canopy layer, decreasing with depth as light attenuates
+through the canopy), with <code>Actot</code> unchanged from the baseline
+– this option only adds diagnostic profile output, it doesn’t change the
+canopy-integrated flux.</p>
 </div>
 <div class="section level3">
 <h3 id="simulation-1-time-series-mode">5.3 <code>simulation = 1</code> – Time-series mode<a class="anchor" aria-label="anchor" href="#simulation-1-time-series-mode"></a>
@@ -466,131 +440,74 @@ tutorial’s LUT-based examples, yes – this option needs a fundamentally
 different input, not a bug fix.</p>
 </div>
 <div class="section level3">
-<h3 id="fluorescence_model-fixed-a-real-routing-bug-this-session">5.4 <code>Fluorescence_model</code> – fixed a real routing bug this
-session<a class="anchor" aria-label="anchor" href="#fluorescence_model-fixed-a-real-routing-bug-this-session"></a>
+<h3 id="fluorescence_model-which-submodel-each-value-selects">5.4 <code>Fluorescence_model</code> – which submodel each value
+selects<a class="anchor" aria-label="anchor" href="#fluorescence_model-which-submodel-each-value-selects"></a>
 </h3>
-<p>Testing all three values against the same baseline run found that
-<code>Fluorescence_model = 2</code> (Magnani et al. 2012 model,
-<code><a href="../reference/get.biochemical.MD12.html">get.biochemical.MD12()</a></code>, authored by Federico Magnani) was
-wired to the wrong option value – the source code triggered it for
-<code>Value == 1</code> instead of <code>Value == 2</code>, backwards
-from this option’s own documented mapping. This has been fixed at the
-source (<code><a href="../reference/get.ebal.html">SCOPEinR::get.ebal()</a></code>’s internal dispatch).</p>
 <ul>
 <li>
-<strong><code>Fluorescence_model = 2</code> (Magnani 2012) now runs
-the actual Magnani model</strong>, giving a numerically distinct result
-from the default (confirmed: <code>Actot</code> differs meaningfully
-from <code>Fluorescence_model = 0</code>).</li>
+<strong><code>Fluorescence_model = 0</code></strong> (default): the
+empirical (Flexas-fit) model.</li>
 <li>
-<strong><code>Fluorescence_model = 1</code> (documented as “sigmoid
-for Kn”) has no separate implementation in this port.</strong> It now
-correctly falls back to the same model as <code>Value = 0</code> (the
-empirical Flexas-fit model) rather than silently running Magnani’s model
-under the wrong label, which is what it did before this fix.
+<strong><code>Fluorescence_model = 2</code></strong>: the Magnani et
+al. (2012) model (<code><a href="../reference/get.biochemical.MD12.html">get.biochemical.MD12()</a></code>, authored by
+Federico Magnani) – gives a numerically distinct result from the default
+(<code>Actot</code> differs meaningfully from
+<code>Fluorescence_model = 0</code>).</li>
+<li>
+<strong><code>Fluorescence_model = 1</code></strong> (documented as
+“sigmoid for Kn”): this port doesn’t have a separate implementation for
+this value, so it uses the same model as <code>Value = 0</code>.
 <strong>What should I do?</strong> Treat
 <code>Fluorescence_model = 1</code> as equivalent to <code>0</code> for
-now – a genuine, currently-unsupported option value, not a bug to work
-around.</li>
+now.</li>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="irradiance-one-caution-one-option-fully-fixed-this-session">5.5 <code>irradiance</code> – one caution, one option fully fixed
-this session<a class="anchor" aria-label="anchor" href="#irradiance-one-caution-one-option-fully-fixed-this-session"></a>
+<h3 id="irradiance-source-selection-and-a-note-on-irradiance-1">5.5 <code>irradiance</code> – source selection, and a note on
+<code>irradiance = 1</code><a class="anchor" aria-label="anchor" href="#irradiance-source-selection-and-a-note-on-irradiance-1"></a>
 </h3>
-<p><strong><code>irradiance = 1</code> (user-supplied “WithE”
-measurements) runs without error, but is flagged for caution</strong>:
-relative to the default (<code>irradiance = 0</code>), the mean direct
-(<code>Esun_</code>) and diffuse (<code>Esky_</code>) irradiance values
-come out swapped – <code>Esun_</code> drops to the previous
-<code>Esky_</code> value and vice versa, to several significant figures.
-That’s precise enough to look like a real column-order issue in how the
-input file is read, not coincidence – but confirming which of the two
-possible column orders is actually correct requires checking against a
-real reference “WithE” measurement file and SCOPE’s own documented
-convention for it, which wasn’t available to verify further here.
-<strong>What should I do?</strong> Treat <code>irradiance = 1</code>
-output with caution until independently verified; the direct/diffuse
-split specifically, not the overall magnitude, is what’s in
-question.</p>
-<p><strong><code>irradiance = 2</code> (MODTRAN atmospheric file): fixed
-this session, now works end-to-end.</strong> Tracing the option all the
-way through <code><a href="../reference/get.calcTOCirr.html">get.calcTOCirr()</a></code>
-(<code>RTMo_functions.R</code>) surfaced four chained issues, fixed one
-after another: (1) the function referenced
-<code>spectral</code>/<code>soil</code> as bare variables instead of its
-own parameters – fixed by threading
-<code>data.spectral</code>/<code>data.soil</code> through from
-<code><a href="../reference/getRTMo.html">getRTMo()</a></code>; (2) a typo, <code>Esky</code> instead of
-<code>Esky_</code>, in the thermal-fraction calculation; (3) the
-row-selection step compared the MODTRAN file’s wavenumber column
-(<code>WN</code>, cm-1) directly against SCOPE’s wavelength grid
-(<code>wl</code>, nm) – different units, so the exact match essentially
-never succeeded; fixed by interpolating (<code><a href="https://rdrr.io/r/stats/approxfun.html" class="external-link">stats::approx()</a></code>)
-each needed transmittance column from the MODTRAN file’s <code>WL</code>
-(nm) grid onto SCOPE’s own grid instead of filtering for an exact match;
-(4) the code padded <code>rdd</code>/<code>rsd</code> with extra
-thermal-region values unconditionally, even when they were already the
-full length expected – fixed to only pad the actual gap, if any.
-<strong>Verified:</strong> <code>irradiance = 2</code> now returns a
-physically sane result – <code>Actot</code> = 7.11 umol/m2/s, distinct
-from but comparable to the default (6.95), consistent with using a
-genuinely different (MODTRAN-derived) irradiance spectrum. <strong>What
-should I do?</strong> <code>irradiance = 2</code> is usable; if you have
-a real MODTRAN <code>.atm</code> file for your own site/date, drop it
-into <code>inst/input/radiationdata/</code> in place of the bundled
-example (<code>FLEX-S3_std.atm</code>).</p>
+<p><strong><code>irradiance = 0</code></strong> (default): SCOPE’s own
+bundled irradiance file.</p>
+<p><strong><code>irradiance = 2</code></strong> (MODTRAN atmospheric
+file): usable end-to-end, returning a physically sane result –
+<code>Actot</code> = 7.11 umol/m2/s, distinct from but comparable to the
+default (6.95), consistent with using a genuinely different
+(MODTRAN-derived) irradiance spectrum. If you have a real MODTRAN
+<code>.atm</code> file for your own site/date, drop it into
+<code>inst/input/radiationdata/</code> in place of the bundled example
+(<code>FLEX-S3_std.atm</code>).</p>
+<p><strong><code>irradiance = 1</code></strong> (user-supplied “WithE”
+measurements): runs without error. <strong>Note:</strong> relative to
+the default, the mean direct (<code>Esun_</code>) and diffuse
+(<code>Esky_</code>) irradiance values come out swapped –
+<code>Esun_</code> matches the default’s <code>Esky_</code> value and
+vice versa. Confirming the correct column order requires a real
+reference “WithE” measurement file to check against, which this package
+doesn’t bundle. <strong>What should I do?</strong> Treat
+<code>irradiance = 1</code> output’s direct/diffuse split with caution –
+the overall magnitude is not in question, only which of the two columns
+is direct vs. diffuse.</p>
 </div>
 <div class="section level3">
-<h3 id="mscope-1-fixed-this-session">5.6 <code>mSCOPE = 1</code> – fixed this session<a class="anchor" aria-label="anchor" href="#mscope-1-fixed-this-session"></a>
+<h3 id="mscope-1-vertically-heterogeneous-canopy">5.6 <code>mSCOPE = 1</code> – vertically heterogeneous canopy<a class="anchor" aria-label="anchor" href="#mscope-1-vertically-heterogeneous-canopy"></a>
 </h3>
 <p><strong>Purpose:</strong> simulate a canopy with vertically varying
 leaf properties (multiple biochemistry layers) instead of one uniform
-layer. <strong>Previous status:</strong> not operational
-(<code>invalid 'times' argument</code>). <strong>Root cause, found by
-tracing the actual source</strong>: <code>get.SCOPE.R</code>/
-<code>get.SCOPE.ind.R</code> built the per-layer LAI-fraction list with
-the key <code>data.mly[['pLAI ']]</code> – note the trailing space.
-<code>fluspect_mSCOPE()</code> (the function that actually consumes this
-list) looks up <code>mly[['pLAI']]</code>, with no trailing space.
-Because R list lookups are exact-match, <code>mly[['pLAI']]</code>
-silently returned <code>NULL</code> instead of
-<code>c(0.5, 1, 1.5)</code>, which propagated into a degenerate
-zero-length <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum()</a></code>/<code><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor()</a></code> calculation and
-then a malformed <code>rep(..., times = ...)</code> call further
-downstream. <strong>Fix applied</strong>: removed the trailing space
-from the key in both files, matching the (correctly spelled) name
-<code>fluspect_mSCOPE()</code> already expected. Verified against the
-reference implementation structure at <a href="https://github.com/peiqiyang/mSCOPE" class="external-link">peiqiyang/mSCOPE</a> – the
-3-layer/pLAI-fraction structure used here matches that model’s own
-multi-layer parameterization. <code>mSCOPE = 1</code> now runs and
-produces real, substantially different canopy-optical output (189 fields
-differ from the default run). <strong>What should I do?</strong>
-<code>mSCOPE = 1</code> is now usable.</p>
+layer, following the <a href="https://github.com/peiqiyang/mSCOPE" class="external-link">mSCOPE</a> multi-layer
+parameterization (3 layers, LAI fractions <code>c(0.5, 1, 1.5)</code>).
+<strong>What to expect:</strong> <code>mSCOPE = 1</code> runs and
+produces real, substantially different canopy-optical output from the
+single-layer default (189 fields differ).</p>
 </div>
 <div class="section level3">
-<h3 id="calc_rss_rbs-1-fixed-this-session">5.7 <code>calc_rss_rbs = 1</code> – fixed this session<a class="anchor" aria-label="anchor" href="#calc_rss_rbs-1-fixed-this-session"></a>
+<h3 id="calc_rss_rbs-1-computed-soil-resistances">5.7 <code>calc_rss_rbs = 1</code> – computed soil resistances<a class="anchor" aria-label="anchor" href="#calc_rss_rbs-1-computed-soil-resistances"></a>
 </h3>
 <p><strong>Purpose:</strong> compute soil surface (<code>rss</code>) and
 boundary-layer (<code>rbs</code>) resistances from conditions (soil
-moisture, LAI) instead of using fixed values from the LUT.
-<strong>Previous status:</strong> not operational
-(<code>non-numeric argument to binary operator</code>). <strong>Root
-cause, found by tracing the actual source</strong>:
-<code>getinputLUT.R</code> called the (correct) helper
-<code><a href="../reference/calc_rssrbs.html">calc_rssrbs()</a></code>, which returns a list – but then extracted
-its results with single-bracket indexing, <code>outputs_['rss']</code>,
-which returns a length-1 <em>list</em> rather than the numeric value
-inside it. Assigning that list into <code>soil$rss</code> meant any
-later arithmetic using <code>soil$rss</code> (a number expected) against
-a list failed. <strong>Fix applied</strong>: changed both extractions to
-double-bracket indexing (<code>outputs_[['rss']]</code>,
-<code>outputs_[['rbs']]</code>), the standard R idiom for pulling a
-single named element’s actual value out of a list.
-<code>calc_rss_rbs = 1</code> now runs and produces real, substantially
-different energy-balance output (121 fields differ from the
-fixed-resistance default). <strong>What should I do?</strong>
-<code>calc_rss_rbs = 1</code> is now usable.</p>
+moisture, LAI) instead of using fixed values from the LUT. <strong>What
+to expect:</strong> <code>calc_rss_rbs = 1</code> runs and produces
+real, substantially different energy-balance output from the
+fixed-resistance default (121 fields differ).</p>
 </div>
 </div>
 <div class="section level2">
