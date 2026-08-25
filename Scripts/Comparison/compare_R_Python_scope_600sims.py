@@ -86,13 +86,35 @@ axes[0].set_xlabel("R (SCOPEinR) mean TOC reflectance")
 axes[0].set_ylabel("Python (scopeinpython) mean TOC reflectance")
 axes[0].set_title(f"{both_ok.sum()} SCOPE simulations, mean reflectance\nR2={r2:.6f}")
 
-example_idx = np.where(both_ok)[0][0]
-axes[1].plot(wl_ok, R_ok[0], label="R (SCOPEinR)", color="black", linewidth=1.2)
-axes[1].plot(wl_ok, Py_ok[0], label="Python (scopeinpython)", color="#2E8B57", linewidth=1, linestyle="--")
+# wl_grid spans SCOPE's full radiative-transfer domain: 400-2400nm optical
+# (1nm step) *plus* 2500-50000nm thermal (coarser step) -- data.rad$refl's
+# thermal-domain entries aren't shortwave reflectance in the same physical
+# sense, so restrict the illustrative example plot to the true optical
+# range only (matching this page's own "TOC reflectance" framing/axis
+# label), or a stray near-zero thermal point at the 2400/2500nm boundary
+# reads as a fake cliff to zero. Also pick a row with a real, closed
+# vegetation canopy (not just "first valid row") -- SCOPE's random LUT
+# includes very sparse canopies (LAI down to ~0) whose TOC reflectance is
+# soil-dominated and doesn't show the chlorophyll/red-edge features a
+# reader expects from "an example SCOPE spectrum".
+optical_mask = wl_ok <= 2400
+lai_col = "LAI"
+veg_candidates = np.where(both_ok)[0]
+veg_row = None
+for idx in veg_candidates:
+    if lut.iloc[idx][lai_col] >= 2.0 and lut.iloc[idx]["Cab"] >= 30:
+        veg_row = idx
+        break
+if veg_row is None:
+    veg_row = veg_candidates[0]
+example_idx = int(np.where(np.where(both_ok)[0] == veg_row)[0][0])
+
+axes[1].plot(wl_ok[optical_mask], R_ok[example_idx][optical_mask], label="R (SCOPEinR)", color="black", linewidth=1.2)
+axes[1].plot(wl_ok[optical_mask], Py_ok[example_idx][optical_mask], label="Python (scopeinpython)", color="#2E8B57", linewidth=1, linestyle="--")
 axes[1].set_xlabel("Wavelength (nm)")
 axes[1].set_ylabel("TOC reflectance")
-axes[1].set_xlim(400, 2500)
-axes[1].set_title(f"Example simulation (row {example_idx + 1}), optical range")
+axes[1].set_xlim(400, 2400)
+axes[1].set_title(f"Example simulation (row {veg_row + 1}, LAI={lut.iloc[veg_row][lai_col]:.1f}, Cab={lut.iloc[veg_row]['Cab']:.0f}), optical range")
 axes[1].legend()
 
 plt.tight_layout()
