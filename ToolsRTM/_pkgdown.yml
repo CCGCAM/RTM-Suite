@@ -1,0 +1,57 @@
+url: ~
+template:
+  bootstrap: 5
+navbar:
+  structure:
+    left: [reference, articles]
+    right: [suite_home, scopeinr, search]
+  components:
+    suite_home:
+      text: "Suite Home"
+      href: ../index.html
+      icon: fa-house
+    scopeinr:
+      text: "SCOPEinR"
+      href: ../scopeinr/index.html
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with
+  components:
+    developed_by: >
+      Developed by Carlos Camino (WUR)
+      <a href="https://orcid.org/0000-0001-5188-4406" target="orcid.widget" aria-label="ORCID">
+      <span class="fab fa-orcid orcid" aria-hidden="true"></span></a>.
+
+articles:
+- title: Tutorials
+  navbar: Tutorials
+  contents:
+  - "t01-getting-started"
+  - "t02-leaf-to-canopy"
+  - "t03-spart"
+  - "t04-comparing-models"
+  - "t05-building-luts"
+  - "t06-parallel-simulation"
+  - "t07-sensor-convolution"
+  - "t08-hyperspectral-sensors"
+  - "t09-vegetation-indices"
+  - "t10-sensitivity"
+  - "t11-hybrid-inversion"
+  - "t12-ml-inversion-comparison"
+  - "articles/t13-deep-learning-inversion"
+  - "articles/t14-end-to-end-pipeline"
+  - "articles/t15-real-eo-application"
+  - "t16-marmit-soil-in-canopy"
+  - "articles/t17-forest-time-series"
+  - "articles/t18-spatial-index-mapping"
+  - "articles/t19-flex-esu-heterogeneity"
+- title: Reference manuals and deep dives
+  navbar: Manuals
+  contents:
+  - "ToolsRTM/ToolsRTM"
+  - "Getting-LUTs"
+  - "articles/InversionOpt"
+  - "articles/course-pipeline"
+  - "articles/model-comparison-and-sensitivity"

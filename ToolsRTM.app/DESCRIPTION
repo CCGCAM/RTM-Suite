@@ -1,0 +1,52 @@
+Package: ToolsRTM.app
+Type: Package
+Title: Interactive Shiny Applications for ToolsRTM and SCOPEinR
+Version: 0.1.0
+Authors@R: person(given = "Carlos",
+           family = "Camino",
+           role = c("aut", "cre"),
+           email = "carlos.caminogonzalez@wur.nl",
+           comment = c(ORCID = "0000-0001-5188-4406"))
+Maintainer: Carlos Camino <carlos.caminogonzalez@wur.nl>
+Description: Companion package to 'ToolsRTM' shipping get.simulator(), a
+    launcher for the suite's interactive Shiny apps (PROSAIL, PROSAIL-BRDF,
+    MARMIT, SPART, SCOPE, LUTs, RTMs, STAC, Inversion). Split out from the
+    core 'ToolsRTM' package (which stays free of Shiny/UI dependencies) so
+    users who only need the modelling functions in scripts are not forced
+    to install this package's much larger dependency set. GitLab-only:
+    not intended for CRAN submission (the interactive-app dependency set
+    and bundled MARMIT reference databases make it too heavy, and several
+    apps depend on 'SCOPEinR', itself not CRAN-bound).
+Depends: R (>= 4.3.0)
+Imports: ToolsRTM, shiny, shinythemes
+Suggests:
+    SCOPEinR,
+    shinydashboard,
+    shinybusy,
+    shinyWidgets,
+    dplyr,
+    ggplot2,
+    tidyr,
+    tidyverse,
+    reshape2,
+    DT,
+    doParallel,
+    foreach,
+    parallel,
+    caret,
+    e1071,
+    viridis,
+    tensorflow,
+    keras,
+    sf,
+    leaflet,
+    leafem,
+    fs,
+    rstac,
+    gdalcubes,
+    terra,
+    htmlwidgets
+License: GPL-3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3

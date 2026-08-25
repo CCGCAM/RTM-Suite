@@ -1,0 +1,1015 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scopeinpython.rtmo &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../toolsrtm/index.html">toolsrtm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.calctav"><code class="docutils literal notranslate"><span class="pre">calctav()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.LeafOptics"><code class="docutils literal notranslate"><span class="pre">LeafOptics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.prospect_d"><code class="docutils literal notranslate"><span class="pre">prospect_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/leaf.html#toolsrtm.leaf.prospect_pro"><code class="docutils literal notranslate"><span class="pre">prospect_pro()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.FluspectBResult"><code class="docutils literal notranslate"><span class="pre">FluspectBResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.FluspectCxResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.fluspect_b"><code class="docutils literal notranslate"><span class="pre">fluspect_b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/fluspect.html#toolsrtm.fluspect.fluspect_cx"><code class="docutils literal notranslate"><span class="pre">fluspect_cx()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/liberty.html#toolsrtm.liberty.LibertyResult"><code class="docutils literal notranslate"><span class="pre">LibertyResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/liberty.html#toolsrtm.liberty.liberty"><code class="docutils literal notranslate"><span class="pre">liberty()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/canopy.html">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.volscatt"><code class="docutils literal notranslate"><span class="pre">volscatt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.campbell"><code class="docutils literal notranslate"><span class="pre">campbell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.dladgen"><code class="docutils literal notranslate"><span class="pre">dladgen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.dcum"><code class="docutils literal notranslate"><span class="pre">dcum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc1"><code class="docutils literal notranslate"><span class="pre">jfunc1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc2"><code class="docutils literal notranslate"><span class="pre">jfunc2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.jfunc4"><code class="docutils literal notranslate"><span class="pre">jfunc4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.non_conservative_scattering"><code class="docutils literal notranslate"><span class="pre">non_conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.conservative_scattering"><code class="docutils literal notranslate"><span class="pre">conservative_scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.scattering"><code class="docutils literal notranslate"><span class="pre">scattering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.LeafAngleDistribution"><code class="docutils literal notranslate"><span class="pre">LeafAngleDistribution</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.FourSAILResult"><code class="docutils literal notranslate"><span class="pre">FourSAILResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail_core"><code class="docutils literal notranslate"><span class="pre">foursail_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail"><code class="docutils literal notranslate"><span class="pre">foursail()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.FourSAIL2Result"><code class="docutils literal notranslate"><span class="pre">FourSAIL2Result</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail2_core"><code class="docutils literal notranslate"><span class="pre">foursail2_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/canopy.html#toolsrtm.canopy.foursail2"><code class="docutils literal notranslate"><span class="pre">foursail2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.compute_brf"><code class="docutils literal notranslate"><span class="pre">compute_brf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_inform"><code class="docutils literal notranslate"><span class="pre">foursail_inform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_inf"><code class="docutils literal notranslate"><span class="pre">foursail_inf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_t_s"><code class="docutils literal notranslate"><span class="pre">foursail_t_s()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.foursail_t_o"><code class="docutils literal notranslate"><span class="pre">foursail_t_o()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inform.html#toolsrtm.inform.inform"><code class="docutils literal notranslate"><span class="pre">inform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.spart_toc"><code class="docutils literal notranslate"><span class="pre">spart_toc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.SpartToaResult"><code class="docutils literal notranslate"><span class="pre">SpartToaResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/spart.html#toolsrtm.spart.spart_toa"><code class="docutils literal notranslate"><span class="pre">spart_toa()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/smac.html">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SmacSensor"><code class="docutils literal notranslate"><span class="pre">SmacSensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SENSORS"><code class="docutils literal notranslate"><span class="pre">SENSORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.get_sensor"><code class="docutils literal notranslate"><span class="pre">get_sensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel2a_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2a_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel2b_msi"><code class="docutils literal notranslate"><span class="pre">sentinel2b_msi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel3a_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3a_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.sentinel3b_olci"><code class="docutils literal notranslate"><span class="pre">sentinel3b_olci()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat4_tm"><code class="docutils literal notranslate"><span class="pre">landsat4_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat5_tm"><code class="docutils literal notranslate"><span class="pre">landsat5_tm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat7_etm"><code class="docutils literal notranslate"><span class="pre">landsat7_etm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.landsat8_oli"><code class="docutils literal notranslate"><span class="pre">landsat8_oli()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.terra_aqua_modis"><code class="docutils literal notranslate"><span class="pre">terra_aqua_modis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.SmacAtmosphere"><code class="docutils literal notranslate"><span class="pre">SmacAtmosphere</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.get_smac"><code class="docutils literal notranslate"><span class="pre">get_smac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/smac.html#toolsrtm.smac.spectral_convolution"><code class="docutils literal notranslate"><span class="pre">spectral_convolution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.SrfTable"><code class="docutils literal notranslate"><span class="pre">SrfTable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.SrfConvolutionResult"><code class="docutils literal notranslate"><span class="pre">SrfConvolutionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_prisma"><code class="docutils literal notranslate"><span class="pre">srf_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.fwhm_prisma"><code class="docutils literal notranslate"><span class="pre">fwhm_prisma()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_sentinel2a"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.srf_sentinel2b"><code class="docutils literal notranslate"><span class="pre">srf_sentinel2b()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_srf"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_srf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.enmap_characteristics"><code class="docutils literal notranslate"><span class="pre">enmap_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.sensor_characteristics"><code class="docutils literal notranslate"><span class="pre">sensor_characteristics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_gaussian"><code class="docutils literal notranslate"><span class="pre">spectral_convolution_gaussian()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/indices.html#toolsrtm.indices.get_indices"><code class="docutils literal notranslate"><span class="pre">get_indices()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.MarmitSoil"><code class="docutils literal notranslate"><span class="pre">MarmitSoil</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.marmit1"><code class="docutils literal notranslate"><span class="pre">marmit1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.marmit2"><code class="docutils literal notranslate"><span class="pre">marmit2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.sigmoid_soil"><code class="docutils literal notranslate"><span class="pre">sigmoid_soil()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/marmit.html#toolsrtm.marmit.get_marmit_rsoil"><code class="docutils literal notranslate"><span class="pre">get_marmit_rsoil()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.COLLECTION_ASSETS"><code class="docutils literal notranslate"><span class="pre">COLLECTION_ASSETS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.SatelliteCollection"><code class="docutils literal notranslate"><span class="pre">SatelliteCollection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.get_satellite_collection"><code class="docutils literal notranslate"><span class="pre">get_satellite_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/satellite.html#toolsrtm.satellite.get_sentinel2_cube"><code class="docutils literal notranslate"><span class="pre">get_sentinel2_cube()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.CarsPlsResult"><code class="docutils literal notranslate"><span class="pre">CarsPlsResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.carspls"><code class="docutils literal notranslate"><span class="pre">carspls()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_vif"><code class="docutils literal notranslate"><span class="pre">get_vif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.InversionOptResult"><code class="docutils literal notranslate"><span class="pre">InversionOptResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_inversion_opt"><code class="docutils literal notranslate"><span class="pre">get_inversion_opt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.ALGORITHMS"><code class="docutils literal notranslate"><span class="pre">ALGORITHMS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.InversionResult"><code class="docutils literal notranslate"><span class="pre">InversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.get_inversion"><code class="docutils literal notranslate"><span class="pre">get_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.HybridInversionResult"><code class="docutils literal notranslate"><span class="pre">HybridInversionResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.hybrid_inversion"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/inversion.html#toolsrtm.inversion.hybrid_inversion_ensemble"><code class="docutils literal notranslate"><span class="pre">hybrid_inversion_ensemble()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../toolsrtm/deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/deep_learning.html#toolsrtm.deep_learning.MLModelResult"><code class="docutils literal notranslate"><span class="pre">MLModelResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../toolsrtm/deep_learning.html#toolsrtm.deep_learning.get_ml_model"><code class="docutils literal notranslate"><span class="pre">get_ml_model()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.SoilParams"><code class="docutils literal notranslate"><span class="pre">SoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.WettingParams"><code class="docutils literal notranslate"><span class="pre">WettingParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.get_bsm"><code class="docutils literal notranslate"><span class="pre">get_bsm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/soil.html#scopeinpython.soil.soilwat"><code class="docutils literal notranslate"><span class="pre">soilwat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/spectral.html#scopeinpython.spectral.SpectralConfig"><code class="docutils literal notranslate"><span class="pre">SpectralConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/spectral.html#scopeinpython.spectral.get_spectra_scope"><code class="docutils literal notranslate"><span class="pre">get_spectra_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_volscatt_scope"><code class="docutils literal notranslate"><span class="pre">get_volscatt_scope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_pso"><code class="docutils literal notranslate"><span class="pre">get_pso()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_reflectances"><code class="docutils literal notranslate"><span class="pre">get_reflectances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_fluxprofile"><code class="docutils literal notranslate"><span class="pre">get_fluxprofile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.CanopyStructure"><code class="docutils literal notranslate"><span class="pre">CanopyStructure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult"><code class="docutils literal notranslate"><span class="pre">RTMoResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.run_rtmo"><code class="docutils literal notranslate"><span class="pre">run_rtmo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.NetRadiationLite"><code class="docutils literal notranslate"><span class="pre">NetRadiationLite</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.net_radiation_lite"><code class="docutils literal notranslate"><span class="pre">net_radiation_lite()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.LeafBio"><code class="docutils literal notranslate"><span class="pre">LeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.MeteoLeaf"><code class="docutils literal notranslate"><span class="pre">MeteoLeaf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.BiochemResult"><code class="docutils literal notranslate"><span class="pre">BiochemResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.sel_root"><code class="docutils literal notranslate"><span class="pre">sel_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_gs_fun"><code class="docutils literal notranslate"><span class="pre">get_gs_fun()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ball_berry"><code class="docutils literal notranslate"><span class="pre">get_ball_berry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_temperature_function_c3"><code class="docutils literal notranslate"><span class="pre">get_temperature_function_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_high_temp_inhibtion_c3"><code class="docutils literal notranslate"><span class="pre">get_high_temp_inhibtion_c3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_fluorescence_model"><code class="docutils literal notranslate"><span class="pre">get_fluorescence_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_ci_next"><code class="docutils literal notranslate"><span class="pre">get_ci_next()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_compute_a"><code class="docutils literal notranslate"><span class="pre">get_compute_a()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/biochemical.html#scopeinpython.biochemical.get_biochemical"><code class="docutils literal notranslate"><span class="pre">get_biochemical()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect.html#scopeinpython.fluspect.FluspectCxScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectCxScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect.html#scopeinpython.fluspect.get_fluspect_cx_scope"><code class="docutils literal notranslate"><span class="pre">get_fluspect_cx_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.MultiLayerLeafBio"><code class="docutils literal notranslate"><span class="pre">MultiLayerLeafBio</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.FluspectMScopeResult"><code class="docutils literal notranslate"><span class="pre">FluspectMScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/fluspect_mscope.html#scopeinpython.fluspect_mscope.fluspect_mscope"><code class="docutils literal notranslate"><span class="pre">fluspect_mscope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmf.html#scopeinpython.rtmf.RTMfResult"><code class="docutils literal notranslate"><span class="pre">RTMfResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmf.html#scopeinpython.rtmf.rtmf"><code class="docutils literal notranslate"><span class="pre">rtmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmz.html#scopeinpython.rtmz.RTMzResult"><code class="docutils literal notranslate"><span class="pre">RTMzResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmz.html#scopeinpython.rtmz.rtmz"><code class="docutils literal notranslate"><span class="pre">rtmz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.stefan_boltzmann"><code class="docutils literal notranslate"><span class="pre">stefan_boltzmann()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.monin_obukhov"><code class="docutils literal notranslate"><span class="pre">monin_obukhov()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.psim"><code class="docutils literal notranslate"><span class="pre">psim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.psih"><code class="docutils literal notranslate"><span class="pre">psih()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.phstar"><code class="docutils literal notranslate"><span class="pre">phstar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.ResistanceParams"><code class="docutils literal notranslate"><span class="pre">ResistanceParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.Resistances"><code class="docutils literal notranslate"><span class="pre">Resistances</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.get_resistances"><code class="docutils literal notranslate"><span class="pre">get_resistances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.HeatFluxes"><code class="docutils literal notranslate"><span class="pre">HeatFluxes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/thermal.html#scopeinpython.thermal.get_heatfluxes"><code class="docutils literal notranslate"><span class="pre">get_heatfluxes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.RTMtSbResult"><code class="docutils literal notranslate"><span class="pre">RTMtSbResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/rtmt_sb.html#scopeinpython.rtmt_sb.rtmt_sb"><code class="docutils literal notranslate"><span class="pre">rtmt_sb()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalMeteo"><code class="docutils literal notranslate"><span class="pre">EbalMeteo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalCanopyParams"><code class="docutils literal notranslate"><span class="pre">EbalCanopyParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalSoilParams"><code class="docutils literal notranslate"><span class="pre">EbalSoilParams</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.EbalResult"><code class="docutils literal notranslate"><span class="pre">EbalResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.aggregator_ebal"><code class="docutils literal notranslate"><span class="pre">aggregator_ebal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/ebal.html#scopeinpython.ebal.ebal"><code class="docutils literal notranslate"><span class="pre">ebal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.TDP_DEFAULT"><code class="docutils literal notranslate"><span class="pre">TDP_DEFAULT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.get_zo_and_d"><code class="docutils literal notranslate"><span class="pre">get_zo_and_d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.ScopeOptions"><code class="docutils literal notranslate"><span class="pre">ScopeOptions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.ScopeResult"><code class="docutils literal notranslate"><span class="pre">ScopeResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/scope.html#scopeinpython.scope.get_scope"><code class="docutils literal notranslate"><span class="pre">get_scope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.sint"><code class="docutils literal notranslate"><span class="pre">sint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_ephoton"><code class="docutils literal notranslate"><span class="pre">get_ephoton()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_e2phot"><code class="docutils literal notranslate"><span class="pre">get_e2phot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.get_planck"><code class="docutils literal notranslate"><span class="pre">get_planck()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../scopeinpython/utils.html#scopeinpython.utils.satvap"><code class="docutils literal notranslate"><span class="pre">satvap()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">scopeinpython.rtmo</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scopeinpython.rtmo</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;RTMo: optical top-of-canopy bidirectional reflectance pipeline.</span>
+
+<span class="sd">Direct, function-by-function port of the *optical BRDF* portion of</span>
+<span class="sd">``SCOPEinR/R/RTMo.R`` and its helpers in ``SCOPEinR/R/RTMo_functions.R``</span>
+<span class="sd">(``get.volscatt.scope``, ``get.Pso``, ``get.reflectances``,</span>
+<span class="sd">``get.fluxprofile``). Ported outputs: the four-stream TOC reflectance</span>
+<span class="sd">factors (rdd, rsd, rdo, rso), the apparent TOC reflectance (refl), the</span>
+<span class="sd">TOC radiance in viewing direction (``Lo_``), the outgoing top-of-canopy flux</span>
+<span class="sd">(``Eout_``/Eouto/Eoutt/Lot), and the gap probabilities (Ps, Po, Pso, k, K).</span>
+
+<span class="sd">Also includes :func:`net_radiation_lite`, a **partial** port of RTMo.R&#39;s</span>
+<span class="sd">section 4 (PAR / net-radiation absorption breakdown) -- specifically just</span>
+<span class="sd">``Rnuc``/``Rnhc``/``Rnus``/``Rnhs``/``Pnu_Cab``/``Pnh_Cab``, the six</span>
+<span class="sd">quantities :mod:`scopeinpython.ebal` actually consumes; the &quot;lite&quot;</span>
+<span class="sd">(scalar-per-layer, not full ``(13,36,nl)`` per-leaf-angle) branch only,</span>
+<span class="sd">matching every reference case in this port.</span>
+
+<span class="sd">The direct-beam term (``Rndir``/``Pndir_Cab``/etc) decays with canopy</span>
+<span class="sd">depth using the full per-layer vectors (``Asun`` etc.), the same as the</span>
+<span class="sd">diffuse term.</span>
+
+<span class="sd">NOT ported (out of scope for this port, see python/README.md):</span>
+<span class="sd">  - Everything else in RTMo.R&#39;s section 4 (``Rnuc_Car``/``Pnuc_Car``/</span>
+<span class="sd">    ``Rnuc_PAR``/``Rnhc_PAR``, top-of-canopy incident PAR ``P``/``EPAR``,</span>
+<span class="sd">    the full ``(13,36,nl)`` per-leaf-angle branch) -- not consumed by</span>
+<span class="sd">    :mod:`scopeinpython.ebal`, so out of scope for now;</span>
+<span class="sd">  - the MODTRAN-atmospheric-file branch of ``get.calcTOCirr`` (only the</span>
+<span class="sd">    &quot;precomputed ``Esun_``/``Esky_``&quot; branch, i.e. the default SCOPE example</span>
+<span class="sd">    irradiance, is ported);</span>
+<span class="sd">  - mSCOPE per-layer leaf property variation (a single leaf-optics</span>
+<span class="sd">    spectrum is broadcast to all ``nl`` canopy layers, as in the R</span>
+<span class="sd">    example script here, i.e. mly$nly == 1).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">quad</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">._data</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">_constants</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.spectral</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpectralConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_e2phot</span><span class="p">,</span> <span class="n">sint</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;get_volscatt_scope&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_pso&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_reflectances&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_fluxprofile&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CanopyStructure&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RTMoResult&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run_rtmo&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NetRadiationLite&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;net_radiation_lite&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Geometry / gap-probability helpers</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="get_volscatt_scope">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_volscatt_scope">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_volscatt_scope</span><span class="p">(</span><span class="n">tts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">tto</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">psi</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ttli</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Volume scattering phase functions and interception coefficients,</span>
+<span class="sd">    vectorised over the leaf inclination classes ``ttli``.</span>
+
+<span class="sd">    Direct port of ``SCOPEinR::get.volscatt.scope`` (distinct from</span>
+<span class="sd">    ``toolsrtm.canopy.volscatt``, the scalar-``ttl`` variant used by</span>
+<span class="sd">    fourSAIL; SCOPE&#39;s RTMo uses this vectorised formulation instead).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict with keys chi_s, chi_o, frho, ftau (arrays, same length as ttli).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">deg2rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+    <span class="n">ttli</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ttli</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">nli</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ttli</span><span class="p">)</span>
+
+    <span class="n">psi_rad</span> <span class="o">=</span> <span class="n">psi</span> <span class="o">*</span> <span class="n">deg2rad</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nli</span><span class="p">)</span>
+    <span class="n">cos_psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">psi</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+
+    <span class="n">cos_ttli</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ttli</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">sin_ttli</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ttli</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+
+    <span class="n">cos_tts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tts</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">sin_tts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">tts</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">cos_tto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tto</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">sin_tto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">tto</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+
+    <span class="n">Cs</span> <span class="o">=</span> <span class="n">cos_ttli</span> <span class="o">*</span> <span class="n">cos_tts</span>
+    <span class="n">Ss</span> <span class="o">=</span> <span class="n">sin_ttli</span> <span class="o">*</span> <span class="n">sin_tts</span>
+    <span class="n">Co</span> <span class="o">=</span> <span class="n">cos_ttli</span> <span class="o">*</span> <span class="n">cos_tto</span>
+    <span class="n">So</span> <span class="o">=</span> <span class="n">sin_ttli</span> <span class="o">*</span> <span class="n">sin_tto</span>
+
+    <span class="n">As</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">Ss</span><span class="p">,</span> <span class="n">Cs</span><span class="p">)</span>
+    <span class="n">Ao</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">So</span><span class="p">,</span> <span class="n">Co</span><span class="p">)</span>
+
+    <span class="n">bts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="o">-</span><span class="n">Cs</span> <span class="o">/</span> <span class="n">As</span><span class="p">)</span>
+    <span class="n">bto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="o">-</span><span class="n">Co</span> <span class="o">/</span> <span class="n">Ao</span><span class="p">)</span>
+
+    <span class="n">chi_o</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">((</span><span class="n">bto</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Co</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">bto</span><span class="p">)</span> <span class="o">*</span> <span class="n">So</span><span class="p">)</span>
+    <span class="n">chi_s</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">((</span><span class="n">bts</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Cs</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">bts</span><span class="p">)</span> <span class="o">*</span> <span class="n">Ss</span><span class="p">)</span>
+
+    <span class="n">delta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">bts</span> <span class="o">-</span> <span class="n">bto</span><span class="p">)</span>
+    <span class="n">delta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">bts</span> <span class="o">+</span> <span class="n">bto</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+    <span class="n">Tot</span> <span class="o">=</span> <span class="n">psi_rad</span> <span class="o">+</span> <span class="n">delta1</span> <span class="o">+</span> <span class="n">delta2</span>
+
+    <span class="n">bt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">psi_rad</span><span class="p">,</span> <span class="n">delta1</span><span class="p">)</span>
+    <span class="n">bt3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">psi_rad</span><span class="p">,</span> <span class="n">delta2</span><span class="p">)</span>
+    <span class="n">bt2</span> <span class="o">=</span> <span class="n">Tot</span> <span class="o">-</span> <span class="n">bt1</span> <span class="o">-</span> <span class="n">bt3</span>
+
+    <span class="n">T1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Cs</span> <span class="o">*</span> <span class="n">Co</span> <span class="o">+</span> <span class="n">Ss</span> <span class="o">*</span> <span class="n">So</span> <span class="o">*</span> <span class="n">cos_psi</span>
+    <span class="n">T2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">bt2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">As</span> <span class="o">*</span> <span class="n">Ao</span> <span class="o">+</span> <span class="n">Ss</span> <span class="o">*</span> <span class="n">So</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">bt1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">bt3</span><span class="p">))</span>
+
+    <span class="n">Jmin</span> <span class="o">=</span> <span class="n">bt2</span> <span class="o">*</span> <span class="n">T1</span> <span class="o">-</span> <span class="n">T2</span>
+    <span class="n">Jplus</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">bt2</span><span class="p">)</span> <span class="o">*</span> <span class="n">T1</span> <span class="o">+</span> <span class="n">T2</span>
+
+    <span class="n">frho</span> <span class="o">=</span> <span class="n">Jplus</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ftau</span> <span class="o">=</span> <span class="o">-</span><span class="n">Jmin</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">frho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">frho</span><span class="p">)</span>
+    <span class="n">ftau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ftau</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;chi_s&quot;</span><span class="p">:</span> <span class="n">chi_s</span><span class="p">,</span> <span class="s2">&quot;chi_o&quot;</span><span class="p">:</span> <span class="n">chi_o</span><span class="p">,</span> <span class="s2">&quot;frho&quot;</span><span class="p">:</span> <span class="n">frho</span><span class="p">,</span> <span class="s2">&quot;ftau&quot;</span><span class="p">:</span> <span class="n">ftau</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="get_pso">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_pso">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_pso</span><span class="p">(</span><span class="n">K</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">LAI</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dso</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">xl</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bi-directional gap probability at normalized canopy depth ``xl``.</span>
+
+<span class="sd">    Direct port of ``SCOPEinR::get.Pso``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dso</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">alf</span> <span class="o">=</span> <span class="p">(</span><span class="n">dso</span> <span class="o">/</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="n">K</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">K</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">LAI</span> <span class="o">*</span> <span class="n">xl</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">LAI</span> <span class="o">/</span> <span class="n">alf</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">xl</span> <span class="o">*</span> <span class="n">alf</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">K</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">LAI</span> <span class="o">*</span> <span class="n">xl</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">LAI</span> <span class="o">*</span> <span class="n">xl</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_reflectances">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_reflectances">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_reflectances</span><span class="p">(</span><span class="n">tau_ss</span><span class="p">,</span> <span class="n">tau_sd</span><span class="p">,</span> <span class="n">tau_dd</span><span class="p">,</span> <span class="n">rho_dd</span><span class="p">,</span> <span class="n">rho_sd</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">nl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nwl</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Propagate thin-layer reflectance/transmittance down through ``nl``</span>
+<span class="sd">    canopy layers to the soil and back, producing the directional-</span>
+<span class="sd">    hemispherical (R_sd) and hemispherical-hemispherical (R_dd) reflectance</span>
+<span class="sd">    at the top of each layer (and the soil, layer index nl).</span>
+
+<span class="sd">    Direct port of ``SCOPEinR::get.reflectances``. All spectral inputs are</span>
+<span class="sd">    (nl, nwl) arrays except ``rsoil`` (nwl,); ``tau_ss`` may be (nl, nwl)</span>
+<span class="sd">    or a scalar/((nl,) broadcastable) as in the R caller (constant per</span>
+<span class="sd">    layer for a homogeneous canopy).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict with R_sd, R_dd (nl+1, nwl), Xss (nl,), Xsd, Xdd (nl, nwl).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tau_ss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tau_ss</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">nwl</span><span class="p">))</span>
+    <span class="n">tau_sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tau_sd</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">tau_dd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tau_dd</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">rho_dd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rho_dd</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">rho_sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rho_sd</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">rsoil</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rsoil</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">R_sd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nl</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nwl</span><span class="p">))</span>
+    <span class="n">R_dd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nl</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nwl</span><span class="p">))</span>
+    <span class="n">Xsd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nl</span><span class="p">,</span> <span class="n">nwl</span><span class="p">))</span>
+    <span class="n">Xdd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nl</span><span class="p">,</span> <span class="n">nwl</span><span class="p">))</span>
+    <span class="n">Xss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+
+    <span class="n">R_sd</span><span class="p">[</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rsoil</span>
+    <span class="n">R_dd</span><span class="p">[</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rsoil</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nl</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">Xss</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tau_ss</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">dnorm</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">rho_dd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">R_dd</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">Xsd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tau_sd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">tau_ss</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">R_sd</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rho_dd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:])</span> <span class="o">/</span> <span class="n">dnorm</span>
+        <span class="n">Xdd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">tau_dd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">dnorm</span>
+        <span class="n">R_sd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rho_sd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">tau_dd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="p">(</span><span class="n">R_sd</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Xss</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">R_dd</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Xsd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">R_dd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rho_dd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">tau_dd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">R_dd</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Xdd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;R_sd&quot;</span><span class="p">:</span> <span class="n">R_sd</span><span class="p">,</span> <span class="s2">&quot;R_dd&quot;</span><span class="p">:</span> <span class="n">R_dd</span><span class="p">,</span> <span class="s2">&quot;Xss&quot;</span><span class="p">:</span> <span class="n">Xss</span><span class="p">,</span> <span class="s2">&quot;Xsd&quot;</span><span class="p">:</span> <span class="n">Xsd</span><span class="p">,</span> <span class="s2">&quot;Xdd&quot;</span><span class="p">:</span> <span class="n">Xdd</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="get_fluxprofile">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.get_fluxprofile">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_fluxprofile</span><span class="p">(</span><span class="n">Esun_</span><span class="p">,</span> <span class="n">Esky_</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">Xss</span><span class="p">,</span> <span class="n">Xsd</span><span class="p">,</span> <span class="n">Xdd</span><span class="p">,</span> <span class="n">R_sd</span><span class="p">,</span> <span class="n">R_dd</span><span class="p">,</span> <span class="n">nl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nwl</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rs_thermal</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.06</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Propagate top-of-canopy direct/diffuse irradiance down through the</span>
+<span class="sd">    canopy (and back up) to the vertical flux profile.</span>
+
+<span class="sd">    Direct port of ``SCOPEinR::get.fluxprofile`` (the ``nwl==2162``/no</span>
+<span class="sd">    spectral-padding path; the R function&#39;s dim==2001 branch is dead code</span>
+<span class="sd">    in the standard pipeline used here, since leaf/soil optics are already</span>
+<span class="sd">    built at full ``nwl`` width before this is called -- see</span>
+<span class="sd">    :func:`run_rtmo`).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict with ``Es_``, ``Emin_``, ``Eplu_`` ((nl+1, nwl) arrays).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Es_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nl</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nwl</span><span class="p">),</span> <span class="n">rs_thermal</span><span class="p">)</span>
+    <span class="n">Emin_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nl</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nwl</span><span class="p">),</span> <span class="n">rs_thermal</span><span class="p">)</span>
+    <span class="n">Eplu_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nl</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nwl</span><span class="p">),</span> <span class="n">rs_thermal</span><span class="p">)</span>
+
+    <span class="n">Es_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Esun_</span>
+    <span class="n">Emin_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Esky_</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
+        <span class="n">Es_</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Xss</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">Es_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">Emin_</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Xsd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Es_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">Xdd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Emin_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">Eplu_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">R_sd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Es_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">R_dd</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Emin_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="n">Eplu_</span><span class="p">[</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">rsoil</span> <span class="o">*</span> <span class="p">(</span><span class="n">Es_</span><span class="p">[</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">Emin_</span><span class="p">[</span><span class="n">nl</span><span class="p">,</span> <span class="p">:])</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Es_&quot;</span><span class="p">:</span> <span class="n">Es_</span><span class="p">,</span> <span class="s2">&quot;Emin_&quot;</span><span class="p">:</span> <span class="n">Emin_</span><span class="p">,</span> <span class="s2">&quot;Eplu_&quot;</span><span class="p">:</span> <span class="n">Eplu_</span><span class="p">}</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Canopy structure + main pipeline</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="CanopyStructure">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.CanopyStructure">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CanopyStructure</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Canopy structural inputs for RTMo (subset of ``data.canopy`` in R</span>
+<span class="sd">    needed by the optical BRDF pipeline).&quot;&quot;&quot;</span>
+
+    <span class="n">LAI</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">lidf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># length 13, leaf inclination distribution (see toolsrtm.canopy.dladgen/campbell)</span>
+    <span class="n">hot</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># hotspot parameter = leafwidth / hc</span>
+    <span class="n">nlayers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># if None, computed as max(2, ceil(10*LAI))</span>
+    <span class="n">litab</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 13 standard leaf angle classes (deg); default SCOPE grid if None</span>
+    <span class="n">lazitab</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 36 leaf azimuth classes (deg); default SCOPE grid if None</span>
+    <span class="n">xl</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># nlayers+1 normalized depths [0, -1/nl, ..., -1]; computed if None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlayers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nlayers</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">LAI</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">litab</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">litab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">81</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazitab</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lazitab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">356</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlayers</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">nl</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nl</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">x</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="RTMoResult">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.RTMoResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RTMoResult</span><span class="p">:</span>
+    <span class="n">rdd</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># TOC bi-hemispherical reflectance</span>
+    <span class="n">rsd</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># TOC directional-hemispherical reflectance (solar incidence)</span>
+    <span class="n">rdo</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># TOC hemispherical-directional reflectance (viewing dir)</span>
+    <span class="n">rso</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># TOC bi-directional reflectance factor</span>
+    <span class="n">refl</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># TOC apparent reflectance</span>
+    <span class="n">Lo_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># TOC radiance in viewing direction (mW m-2 um-1 sr-1)</span>
+    <span class="n">Eout_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># TOC outgoing (upward) flux spectrum (mW m-2 um-1)</span>
+    <span class="n">Eouto</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># TOC outgoing flux, optical range, spectrally integrated (W m-2)</span>
+    <span class="n">Eoutt</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># TOC outgoing flux, thermal range, spectrally integrated (W m-2)</span>
+    <span class="n">Lot</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># TOC radiance, thermal range, spectrally integrated</span>
+    <span class="n">Esun_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">Esky_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># extinction coefficient, solar direction</span>
+    <span class="n">K</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># extinction coefficient, viewing direction</span>
+    <span class="n">Ps</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># gap probability, solar direction (length nl+1)</span>
+    <span class="n">Po</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># gap probability, viewing direction (length nl+1)</span>
+    <span class="n">Pso</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># bi-directional gap probability (length nl+1)</span>
+    <span class="c1"># Internal per-layer radiative quantities, exposed for RTMf (fluorescence</span>
+    <span class="c1"># RTM, fluspect_mscope.py&#39;s sibling module) -- not part of R&#39;s getRTMo</span>
+    <span class="c1"># *return* value either, but computed as intermediates inside it and</span>
+    <span class="c1"># needed unchanged by get.RTMf, so kept here rather than recomputed.</span>
+    <span class="n">Emin_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># downward diffuse flux per layer boundary, (nl+1, nwl)</span>
+    <span class="n">Eplu_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># upward diffuse flux per layer boundary, (nl+1, nwl)</span>
+    <span class="n">Emins_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># Emin_&#39;s sun-only component (Esky_=0), (nl+1, nwl)</span>
+    <span class="n">Emind_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># Emin_&#39;s sky-only component (Esun_=0), (nl+1, nwl)</span>
+    <span class="n">Eplus_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># Eplu_&#39;s sun-only component, (nl+1, nwl)</span>
+    <span class="n">Eplud_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># Eplu_&#39;s sky-only component, (nl+1, nwl)</span>
+    <span class="n">rho_dd</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># thin-layer diffuse-diffuse reflectance, (nl, nwl)</span>
+    <span class="n">R_dd</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># cumulative diffuse-diffuse reflectance, (nl+1, nwl)</span>
+    <span class="n">Xdd</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># diffuse-diffuse transmittance factor, (nl, nwl)</span>
+    <span class="n">tau_dd</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># thin-layer diffuse-diffuse transmittance, (nl, nwl)</span>
+    <span class="n">vb</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># directional backscatter coefficient, (nl, nwl)</span>
+    <span class="n">vf</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># directional forward-scatter coefficient, (nl, nwl)</span>
+    <span class="n">Xsd</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># direct-to-diffuse transmittance factor, (nl, nwl)</span>
+    <span class="n">Xss</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># direct-to-direct transmittance factor, (nl,)</span>
+    <span class="n">R_sd</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># cumulative directional-hemispherical reflectance, (nl+1, nwl)</span></div>
+
+
+
+<div class="viewcode-block" id="run_rtmo">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.run_rtmo">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_rtmo</span><span class="p">(</span>
+    <span class="n">spectral</span><span class="p">:</span> <span class="n">SpectralConfig</span><span class="p">,</span>
+    <span class="n">leaf_refl</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">leaf_tran</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">rho_thermal</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">tau_thermal</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">rsoil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">canopy</span><span class="p">:</span> <span class="n">CanopyStructure</span><span class="p">,</span>
+    <span class="n">tts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">tto</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">psi</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">Esun_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">Esky_</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RTMoResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Top-of-canopy optical BRDF: leaf optics + soil + canopy structure +</span>
+<span class="sd">    geometry -&gt; rdd/rsd/rdo/rso/refl (plus ``Lo_``, ``Eout_`` and gap probabilities).</span>
+
+<span class="sd">    Direct port of the optical-BRDF portion of ``SCOPEinR:::getRTMo``</span>
+<span class="sd">    (sections 0-3.3 and the outgoing-radiance block of section 5; the</span>
+<span class="sd">    thermal energy balance and PAR/net-radiation breakdown, sections 4 and</span>
+<span class="sd">    the vertical-profile block of section 5, are NOT ported -- see module</span>
+<span class="sd">    docstring).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spectral : SpectralConfig</span>
+<span class="sd">        From :func:`scopeinpython.spectral.get_spectra_scope`.</span>
+<span class="sd">    leaf_refl, leaf_tran : array_like, shape (nl, 2001) or (2001,)</span>
+<span class="sd">        Leaf hemispherical reflectance/transmittance, 400-2400 nm (e.g.</span>
+<span class="sd">        from ``toolsrtm.prospect_d``/``prospect_pro``, sliced to</span>
+<span class="sd">        ``[:2001]``). A 1-D array is broadcast to every canopy layer</span>
+<span class="sd">        (equivalent to mSCOPE with a single layer, ``mly$nly == 1``).</span>
+<span class="sd">    rho_thermal, tau_thermal : float</span>
+<span class="sd">        Leaf reflectance/transmittance in the thermal region (SCOPE</span>
+<span class="sd">        default 0.01), extended across the 161 thermal bands.</span>
+<span class="sd">    rsoil : array_like, shape (2001,)</span>
+<span class="sd">        Soil reflectance, 400-2400 nm (e.g. from</span>
+<span class="sd">        :func:`scopeinpython.soil.get_bsm`).</span>
+<span class="sd">    canopy : CanopyStructure</span>
+<span class="sd">    tts, tto, psi : float</span>
+<span class="sd">        Solar zenith, viewing zenith, relative azimuth (degrees).</span>
+<span class="sd">    ``Esun_``, ``Esky_`` : array_like, shape (nwl,)</span>
+<span class="sd">        Top-of-canopy direct solar / diffuse sky irradiance, on the</span>
+<span class="sd">        ``spectral.wlS`` grid. This port only supports the &quot;precomputed</span>
+<span class="sd">        irradiance&quot; mode of ``get.calcTOCirr`` (i.e. ``atmo`` already</span>
+<span class="sd">        containing ``Esun_``/``Esky_``, as in the default SCOPEinR example</span>
+<span class="sd">        data ``SCOPEinR::Esun_``/``SCOPEinR::Esky_``); the MODTRAN-atmospheric-</span>
+<span class="sd">        file branch is not ported.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    RTMoResult</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wl</span> <span class="o">=</span> <span class="n">spectral</span><span class="o">.</span><span class="n">wlS</span>
+    <span class="n">nwl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">wl</span><span class="p">)</span>
+    <span class="n">n_thermal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spectral</span><span class="o">.</span><span class="n">wlT</span><span class="p">)</span>  <span class="c1"># 161</span>
+
+    <span class="n">nl</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">nlayers</span>
+    <span class="n">litab</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">litab</span>
+    <span class="n">lazitab</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">lazitab</span>
+    <span class="n">LAI</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">LAI</span>
+    <span class="n">lidf</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">lidf</span>
+    <span class="n">xl</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">xl</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">nl</span>
+    <span class="n">hot</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">hot</span>
+
+    <span class="c1"># ---- leaf optics: broadcast to nl layers and extend into the thermal region ----</span>
+    <span class="n">leaf_refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">leaf_refl</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">leaf_tran</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">leaf_tran</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leaf_refl</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">leaf_refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">leaf_refl</span><span class="p">,</span> <span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">leaf_refl</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">leaf_tran</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">leaf_tran</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">leaf_tran</span><span class="p">,</span> <span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">leaf_tran</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">leaf_refl</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nl</span><span class="p">,</span> <span class="n">n_thermal</span><span class="p">),</span> <span class="n">rho_thermal</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">leaf_tran</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nl</span><span class="p">,</span> <span class="n">n_thermal</span><span class="p">),</span> <span class="n">tau_thermal</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">rsoil_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rsoil</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_thermal</span><span class="p">,</span> <span class="n">rho_thermal</span><span class="p">)])</span>
+
+    <span class="c1"># ---- 1.1 geometric quantities ----</span>
+    <span class="n">deg2rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+    <span class="n">cos_tts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tts</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">tan_tts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tts</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">cos_tto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tto</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">tan_tto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">tto</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">psi_</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">psi</span> <span class="o">-</span> <span class="mi">360</span> <span class="o">*</span> <span class="nb">round</span><span class="p">(</span><span class="n">psi</span> <span class="o">/</span> <span class="mi">360</span><span class="p">))</span>
+    <span class="n">dso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tan_tts</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">tan_tto</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">tan_tts</span> <span class="o">*</span> <span class="n">tan_tto</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">psi_</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">))</span>
+
+    <span class="c1"># ---- 1.2 extinction &amp; scattering geometric factors ----</span>
+    <span class="n">vg</span> <span class="o">=</span> <span class="n">get_volscatt_scope</span><span class="p">(</span><span class="n">tts</span><span class="p">,</span> <span class="n">tto</span><span class="p">,</span> <span class="n">psi_</span><span class="p">,</span> <span class="n">litab</span><span class="p">)</span>
+    <span class="n">chi_s</span><span class="p">,</span> <span class="n">chi_o</span><span class="p">,</span> <span class="n">frho</span><span class="p">,</span> <span class="n">ftau</span> <span class="o">=</span> <span class="n">vg</span><span class="p">[</span><span class="s2">&quot;chi_s&quot;</span><span class="p">],</span> <span class="n">vg</span><span class="p">[</span><span class="s2">&quot;chi_o&quot;</span><span class="p">],</span> <span class="n">vg</span><span class="p">[</span><span class="s2">&quot;frho&quot;</span><span class="p">],</span> <span class="n">vg</span><span class="p">[</span><span class="s2">&quot;ftau&quot;</span><span class="p">]</span>
+
+    <span class="n">cos_ttli</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">litab</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+
+    <span class="n">ksli</span> <span class="o">=</span> <span class="n">chi_s</span> <span class="o">/</span> <span class="n">cos_tts</span>
+    <span class="n">koli</span> <span class="o">=</span> <span class="n">chi_o</span> <span class="o">/</span> <span class="n">cos_tto</span>
+    <span class="n">sobli</span> <span class="o">=</span> <span class="n">frho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="n">cos_tts</span> <span class="o">*</span> <span class="n">cos_tto</span><span class="p">)</span>
+    <span class="n">sofli</span> <span class="o">=</span> <span class="n">ftau</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="n">cos_tts</span> <span class="o">*</span> <span class="n">cos_tto</span><span class="p">)</span>
+    <span class="n">bfli</span> <span class="o">=</span> <span class="n">cos_ttli</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ksli</span> <span class="o">*</span> <span class="n">lidf</span><span class="p">))</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">koli</span> <span class="o">*</span> <span class="n">lidf</span><span class="p">))</span>
+    <span class="n">bf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bfli</span> <span class="o">*</span> <span class="n">lidf</span><span class="p">))</span>
+    <span class="n">sob</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sobli</span> <span class="o">*</span> <span class="n">lidf</span><span class="p">))</span>
+    <span class="n">sof</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sofli</span> <span class="o">*</span> <span class="n">lidf</span><span class="p">))</span>
+
+    <span class="c1"># ---- 1.3 diffuse/direct scattering weights ----</span>
+    <span class="n">sdb</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="n">bf</span><span class="p">)</span>
+    <span class="n">sdf</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">bf</span><span class="p">)</span>
+    <span class="n">ddb</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">bf</span><span class="p">)</span>
+    <span class="n">ddf</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">bf</span><span class="p">)</span>
+    <span class="n">dob</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">K</span> <span class="o">+</span> <span class="n">bf</span><span class="p">)</span>
+    <span class="n">dof</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">K</span> <span class="o">-</span> <span class="n">bf</span><span class="p">)</span>
+
+    <span class="c1"># ---- 2.1 thin-layer reflectance/transmittance factors ----</span>
+    <span class="n">sigb</span> <span class="o">=</span> <span class="n">ddb</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">ddf</span> <span class="o">*</span> <span class="n">tau</span>
+    <span class="n">sigf</span> <span class="o">=</span> <span class="n">ddf</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">ddb</span> <span class="o">*</span> <span class="n">tau</span>
+    <span class="n">sb</span> <span class="o">=</span> <span class="n">sdb</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">sdf</span> <span class="o">*</span> <span class="n">tau</span>
+    <span class="n">sf</span> <span class="o">=</span> <span class="n">sdf</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">sdb</span> <span class="o">*</span> <span class="n">tau</span>
+    <span class="n">vb</span> <span class="o">=</span> <span class="n">dob</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">tau</span>
+    <span class="n">vf</span> <span class="o">=</span> <span class="n">dof</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">dob</span> <span class="o">*</span> <span class="n">tau</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">sob</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">+</span> <span class="n">sof</span> <span class="o">*</span> <span class="n">tau</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">sigf</span>
+
+    <span class="c1"># ---- 3. flux calculation ----</span>
+    <span class="n">iLAI</span> <span class="o">=</span> <span class="n">LAI</span> <span class="o">/</span> <span class="n">nl</span>
+    <span class="n">tau_ss</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="n">iLAI</span>  <span class="c1"># scalar, identical for all layers/wavelengths (thin-layer approx)</span>
+    <span class="n">tau_dd</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">a</span> <span class="o">*</span> <span class="n">iLAI</span>
+    <span class="n">tau_sd</span> <span class="o">=</span> <span class="n">sf</span> <span class="o">*</span> <span class="n">iLAI</span>
+    <span class="n">rho_sd</span> <span class="o">=</span> <span class="n">sb</span> <span class="o">*</span> <span class="n">iLAI</span>
+    <span class="n">rho_dd</span> <span class="o">=</span> <span class="n">sigb</span> <span class="o">*</span> <span class="n">iLAI</span>
+
+    <span class="n">refl_layers</span> <span class="o">=</span> <span class="n">get_reflectances</span><span class="p">(</span><span class="n">tau_ss</span><span class="p">,</span> <span class="n">tau_sd</span><span class="p">,</span> <span class="n">tau_dd</span><span class="p">,</span> <span class="n">rho_dd</span><span class="p">,</span> <span class="n">rho_sd</span><span class="p">,</span> <span class="n">rsoil_full</span><span class="p">,</span> <span class="n">nl</span><span class="p">,</span> <span class="n">nwl</span><span class="p">)</span>
+    <span class="n">R_sd</span><span class="p">,</span> <span class="n">R_dd</span> <span class="o">=</span> <span class="n">refl_layers</span><span class="p">[</span><span class="s2">&quot;R_sd&quot;</span><span class="p">],</span> <span class="n">refl_layers</span><span class="p">[</span><span class="s2">&quot;R_dd&quot;</span><span class="p">]</span>
+    <span class="n">Xss</span><span class="p">,</span> <span class="n">Xsd</span><span class="p">,</span> <span class="n">Xdd</span> <span class="o">=</span> <span class="n">refl_layers</span><span class="p">[</span><span class="s2">&quot;Xss&quot;</span><span class="p">],</span> <span class="n">refl_layers</span><span class="p">[</span><span class="s2">&quot;Xsd&quot;</span><span class="p">],</span> <span class="n">refl_layers</span><span class="p">[</span><span class="s2">&quot;Xdd&quot;</span><span class="p">]</span>
+
+    <span class="n">rdd</span> <span class="o">=</span> <span class="n">R_dd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">rsd</span> <span class="o">=</span> <span class="n">R_sd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="n">Esun_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Esun_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">Esky_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Esky_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">Eflux1</span> <span class="o">=</span> <span class="n">get_fluxprofile</span><span class="p">(</span><span class="n">Esun_</span><span class="p">,</span> <span class="mi">0</span> <span class="o">*</span> <span class="n">Esky_</span><span class="p">,</span> <span class="n">rsoil_full</span><span class="p">,</span> <span class="n">Xss</span><span class="p">,</span> <span class="n">Xsd</span><span class="p">,</span> <span class="n">Xdd</span><span class="p">,</span> <span class="n">R_sd</span><span class="p">,</span> <span class="n">R_dd</span><span class="p">,</span> <span class="n">nl</span><span class="p">,</span> <span class="n">nwl</span><span class="p">,</span> <span class="n">rs_thermal</span><span class="o">=</span><span class="mf">0.06</span><span class="p">)</span>
+    <span class="n">Emins_</span><span class="p">,</span> <span class="n">Eplus_</span> <span class="o">=</span> <span class="n">Eflux1</span><span class="p">[</span><span class="s2">&quot;Emin_&quot;</span><span class="p">],</span> <span class="n">Eflux1</span><span class="p">[</span><span class="s2">&quot;Eplu_&quot;</span><span class="p">]</span>
+
+    <span class="n">Eflux2</span> <span class="o">=</span> <span class="n">get_fluxprofile</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">Esun_</span><span class="p">,</span> <span class="n">Esky_</span><span class="p">,</span> <span class="n">rsoil_full</span><span class="p">,</span> <span class="n">Xss</span><span class="p">,</span> <span class="n">Xsd</span><span class="p">,</span> <span class="n">Xdd</span><span class="p">,</span> <span class="n">R_sd</span><span class="p">,</span> <span class="n">R_dd</span><span class="p">,</span> <span class="n">nl</span><span class="p">,</span> <span class="n">nwl</span><span class="p">,</span> <span class="n">rs_thermal</span><span class="o">=</span><span class="mf">0.06</span><span class="p">)</span>
+    <span class="n">Emind_</span><span class="p">,</span> <span class="n">Eplud_</span> <span class="o">=</span> <span class="n">Eflux2</span><span class="p">[</span><span class="s2">&quot;Emin_&quot;</span><span class="p">],</span> <span class="n">Eflux2</span><span class="p">[</span><span class="s2">&quot;Eplu_&quot;</span><span class="p">]</span>
+
+    <span class="n">Emin_</span> <span class="o">=</span> <span class="n">Emins_</span> <span class="o">+</span> <span class="n">Emind_</span>
+    <span class="n">Eplu_</span> <span class="o">=</span> <span class="n">Eplus_</span> <span class="o">+</span> <span class="n">Eplud_</span>
+
+    <span class="c1"># ---- 1.5 gap probabilities Ps, Po, Pso ----</span>
+    <span class="n">Ps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">xl</span> <span class="o">*</span> <span class="n">LAI</span><span class="p">)</span>
+    <span class="n">Po</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">xl</span> <span class="o">*</span> <span class="n">LAI</span><span class="p">)</span>
+    <span class="n">Ps</span><span class="p">[:</span><span class="n">nl</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ps</span><span class="p">[:</span><span class="n">nl</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="n">LAI</span> <span class="o">*</span> <span class="n">dx</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">LAI</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+    <span class="n">Po</span><span class="p">[:</span><span class="n">nl</span><span class="p">]</span> <span class="o">=</span> <span class="n">Po</span><span class="p">[:</span><span class="n">nl</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">K</span> <span class="o">*</span> <span class="n">LAI</span> <span class="o">*</span> <span class="n">dx</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">LAI</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+
+    <span class="n">q</span> <span class="o">=</span> <span class="n">hot</span>
+    <span class="n">Pso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xl</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xl</span><span class="p">)):</span>
+        <span class="n">val</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">get_pso</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">LAI</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">dso</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xl</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">dx</span><span class="p">,</span> <span class="n">xl</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">Pso</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span> <span class="o">/</span> <span class="n">dx</span>
+
+    <span class="n">both</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">Po</span><span class="p">,</span> <span class="n">Ps</span><span class="p">)</span>
+    <span class="n">Pso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Pso</span> <span class="o">&gt;</span> <span class="n">Po</span><span class="p">,</span> <span class="n">both</span><span class="p">,</span> <span class="n">Pso</span><span class="p">)</span>
+    <span class="n">Pso</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Pso</span> <span class="o">&gt;</span> <span class="n">Ps</span><span class="p">,</span> <span class="n">both</span><span class="p">,</span> <span class="n">Pso</span><span class="p">)</span>
+
+    <span class="c1"># ---- 3.3 outgoing fluxes (viewing direction) ----</span>
+    <span class="n">vb_rs_thermal</span><span class="p">,</span> <span class="n">vf_rs_thermal</span><span class="p">,</span> <span class="n">w_rs_thermal</span> <span class="o">=</span> <span class="n">vb</span><span class="p">,</span> <span class="n">vf</span><span class="p">,</span> <span class="n">w</span>
+    <span class="n">rsoil_thermal</span> <span class="o">=</span> <span class="n">rsoil_full</span>
+
+    <span class="n">vb_Po_Emin_</span> <span class="o">=</span> <span class="n">vb_rs_thermal</span> <span class="o">*</span> <span class="n">Po</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">Emind_</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">vf_Po_Eplud_</span> <span class="o">=</span> <span class="n">vf_rs_thermal</span> <span class="o">*</span> <span class="n">Po</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">Eplud_</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">piLocd_</span> <span class="o">=</span> <span class="p">(</span><span class="n">vb_Po_Emin_</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">vf_Po_Eplud_</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">*</span> <span class="n">iLAI</span>
+
+    <span class="n">Emin_Po</span> <span class="o">=</span> <span class="n">Emind_</span><span class="p">[</span><span class="n">nl</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Po</span><span class="p">[</span><span class="n">nl</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># NB: R uses index `nl` (1-based) == Python nl-1, see get.fluxprofile note</span>
+    <span class="n">piLosd_</span> <span class="o">=</span> <span class="n">rsoil_thermal</span> <span class="o">*</span> <span class="n">Emin_Po</span>
+
+    <span class="n">vb_Po_Emins_</span> <span class="o">=</span> <span class="n">vb_rs_thermal</span> <span class="o">*</span> <span class="n">Po</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">Emins_</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">vf_Po_Eplus_</span> <span class="o">=</span> <span class="n">vf_rs_thermal</span> <span class="o">*</span> <span class="n">Po</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">Eplus_</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">w_Po_Esun</span> <span class="o">=</span> <span class="p">(</span><span class="n">w_rs_thermal</span> <span class="o">*</span> <span class="n">Pso</span><span class="p">[:</span><span class="n">nl</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">Esun_</span>
+    <span class="n">piLocu_</span> <span class="o">=</span> <span class="p">(</span><span class="n">vb_Po_Emins_</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">vf_Po_Eplus_</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_Po_Esun</span><span class="p">)</span> <span class="o">*</span> <span class="n">iLAI</span>
+
+    <span class="n">Emins_Po_Esun_</span> <span class="o">=</span> <span class="n">Emins_</span><span class="p">[</span><span class="n">nl</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">Po</span><span class="p">[</span><span class="n">nl</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">Esun_</span> <span class="o">*</span> <span class="n">Pso</span><span class="p">[</span><span class="n">nl</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">piLosu_</span> <span class="o">=</span> <span class="n">rsoil_thermal</span> <span class="o">*</span> <span class="n">Emins_Po_Esun_</span>
+
+    <span class="n">piLod_</span> <span class="o">=</span> <span class="n">piLocd_</span> <span class="o">+</span> <span class="n">piLosd_</span>
+    <span class="n">piLou_</span> <span class="o">=</span> <span class="n">piLocu_</span> <span class="o">+</span> <span class="n">piLosu_</span>
+    <span class="n">piLoc_</span> <span class="o">=</span> <span class="n">piLocu_</span> <span class="o">+</span> <span class="n">piLocd_</span>
+    <span class="n">piLos_</span> <span class="o">=</span> <span class="n">piLosu_</span> <span class="o">+</span> <span class="n">piLosd_</span>
+    <span class="n">piLo_</span> <span class="o">=</span> <span class="n">piLoc_</span> <span class="o">+</span> <span class="n">piLos_</span>
+    <span class="n">Lo_</span> <span class="o">=</span> <span class="n">piLo_</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+    <span class="c1"># Esun_/Esky_ are genuinely near-zero at a handful of water-vapor/O2</span>
+    <span class="c1"># absorption wavelengths -- rso/rdo/refl are expected to come back</span>
+    <span class="c1"># NaN/Inf there (refl is masked back to a finite fallback via rso just</span>
+    <span class="c1"># below); suppress the resulting divide warning rather than let NumPy</span>
+    <span class="c1"># print it (with this file&#39;s own absolute path) on every call.</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
+        <span class="n">rso</span> <span class="o">=</span> <span class="n">piLou_</span> <span class="o">/</span> <span class="n">Esun_</span>
+        <span class="n">rdo</span> <span class="o">=</span> <span class="n">piLod_</span> <span class="o">/</span> <span class="n">Esky_</span>
+        <span class="n">refl</span> <span class="o">=</span> <span class="n">piLo_</span> <span class="o">/</span> <span class="p">(</span><span class="n">Esky_</span> <span class="o">+</span> <span class="n">Esun_</span><span class="p">)</span>
+    <span class="n">refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Esky_</span> <span class="o">&lt;</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">rso</span><span class="p">,</span> <span class="n">refl</span><span class="p">)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">Esky_</span> <span class="o">&lt;</span> <span class="mf">2e-4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Esky_</span><span class="p">)</span>
+    <span class="n">refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">rso</span><span class="p">,</span> <span class="n">refl</span><span class="p">)</span>
+
+    <span class="c1"># ---- section 5: TOC outgoing spectrally-integrated quantities ----</span>
+    <span class="n">Eout_</span> <span class="o">=</span> <span class="n">Eplu_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">Eouto</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">sint</span><span class="p">(</span><span class="n">Eout_</span><span class="p">[</span><span class="n">spectral</span><span class="o">.</span><span class="n">IwlP</span><span class="p">],</span> <span class="n">spectral</span><span class="o">.</span><span class="n">wlP</span><span class="p">)</span>
+    <span class="n">Eoutt</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">sint</span><span class="p">(</span><span class="n">Eout_</span><span class="p">[</span><span class="n">spectral</span><span class="o">.</span><span class="n">IwlT</span><span class="p">],</span> <span class="n">spectral</span><span class="o">.</span><span class="n">wlT</span><span class="p">)</span>
+    <span class="n">Lot</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">sint</span><span class="p">(</span><span class="n">Lo_</span><span class="p">[</span><span class="n">spectral</span><span class="o">.</span><span class="n">IwlT</span><span class="p">],</span> <span class="n">spectral</span><span class="o">.</span><span class="n">wlT</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">RTMoResult</span><span class="p">(</span>
+        <span class="n">rdd</span><span class="o">=</span><span class="n">rdd</span><span class="p">,</span> <span class="n">rsd</span><span class="o">=</span><span class="n">rsd</span><span class="p">,</span> <span class="n">rdo</span><span class="o">=</span><span class="n">rdo</span><span class="p">,</span> <span class="n">rso</span><span class="o">=</span><span class="n">rso</span><span class="p">,</span> <span class="n">refl</span><span class="o">=</span><span class="n">refl</span><span class="p">,</span> <span class="n">Lo_</span><span class="o">=</span><span class="n">Lo_</span><span class="p">,</span>
+        <span class="n">Eout_</span><span class="o">=</span><span class="n">Eout_</span><span class="p">,</span> <span class="n">Eouto</span><span class="o">=</span><span class="n">Eouto</span><span class="p">,</span> <span class="n">Eoutt</span><span class="o">=</span><span class="n">Eoutt</span><span class="p">,</span> <span class="n">Lot</span><span class="o">=</span><span class="n">Lot</span><span class="p">,</span>
+        <span class="n">Esun_</span><span class="o">=</span><span class="n">Esun_</span><span class="p">,</span> <span class="n">Esky_</span><span class="o">=</span><span class="n">Esky_</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> <span class="n">Ps</span><span class="o">=</span><span class="n">Ps</span><span class="p">,</span> <span class="n">Po</span><span class="o">=</span><span class="n">Po</span><span class="p">,</span> <span class="n">Pso</span><span class="o">=</span><span class="n">Pso</span><span class="p">,</span>
+        <span class="n">Emin_</span><span class="o">=</span><span class="n">Emin_</span><span class="p">,</span> <span class="n">Eplu_</span><span class="o">=</span><span class="n">Eplu_</span><span class="p">,</span> <span class="n">rho_dd</span><span class="o">=</span><span class="n">rho_dd</span><span class="p">,</span> <span class="n">R_dd</span><span class="o">=</span><span class="n">R_dd</span><span class="p">,</span> <span class="n">Xdd</span><span class="o">=</span><span class="n">Xdd</span><span class="p">,</span> <span class="n">vb</span><span class="o">=</span><span class="n">vb</span><span class="p">,</span> <span class="n">vf</span><span class="o">=</span><span class="n">vf</span><span class="p">,</span> <span class="n">tau_dd</span><span class="o">=</span><span class="n">tau_dd</span><span class="p">,</span>
+        <span class="n">Emins_</span><span class="o">=</span><span class="n">Emins_</span><span class="p">,</span> <span class="n">Emind_</span><span class="o">=</span><span class="n">Emind_</span><span class="p">,</span> <span class="n">Eplus_</span><span class="o">=</span><span class="n">Eplus_</span><span class="p">,</span> <span class="n">Eplud_</span><span class="o">=</span><span class="n">Eplud_</span><span class="p">,</span>
+        <span class="n">Xsd</span><span class="o">=</span><span class="n">Xsd</span><span class="p">,</span> <span class="n">Xss</span><span class="o">=</span><span class="n">Xss</span><span class="p">,</span> <span class="n">R_sd</span><span class="o">=</span><span class="n">R_sd</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Section 4 (partial): PAR / net-radiation absorption breakdown</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="NetRadiationLite">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.NetRadiationLite">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NetRadiationLite</span><span class="p">:</span>
+    <span class="n">Rnuc</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># net radiation, sunlit leaves, per layer (W/m2), (nl,)</span>
+    <span class="n">Rnhc</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># net radiation, shaded leaves, per layer (W/m2), (nl,)</span>
+    <span class="n">Rnus</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># net radiation, sunlit soil (W/m2)</span>
+    <span class="n">Rnhs</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># net radiation, shaded soil (W/m2)</span>
+    <span class="n">Pnu_Cab</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># net PAR absorbed by Cab, sunlit leaves, per layer (umol m-2 s-1), (nl,)</span>
+    <span class="n">Pnh_Cab</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>  <span class="c1"># net PAR absorbed by Cab, shaded leaves, per layer (umol m-2 s-1), (nl,)</span></div>
+
+
+
+<div class="viewcode-block" id="net_radiation_lite">
+<a class="viewcode-back" href="../../scopeinpython/rtmo.html#scopeinpython.rtmo.net_radiation_lite">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">net_radiation_lite</span><span class="p">(</span>
+    <span class="n">spectral</span><span class="p">:</span> <span class="n">SpectralConfig</span><span class="p">,</span>
+    <span class="n">rtmo</span><span class="p">:</span> <span class="n">RTMoResult</span><span class="p">,</span>
+    <span class="n">canopy</span><span class="p">:</span> <span class="n">CanopyStructure</span><span class="p">,</span>
+    <span class="n">tts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">lazitab</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">leaf_refl</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">leaf_tran</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">rho_thermal</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">tau_thermal</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">rsoil</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">kChlrel</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NetRadiationLite</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Direct, partial port of RTMo.R&#39;s section 4 (&quot;lite&quot; branch only,</span>
+<span class="sd">    see module docstring). Computes just the 6 quantities</span>
+<span class="sd">    :mod:`scopeinpython.ebal` needs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rtmo : RTMoResult</span>
+<span class="sd">        From :func:`run_rtmo`, called with the same ``canopy``/``tts``/</span>
+<span class="sd">        ``leaf_refl``/``leaf_tran``/``rho_thermal``/``tau_thermal``/</span>
+<span class="sd">        ``rsoil`` as here (``tto``/``psi``/``Esky_`` aren&#39;t needed here).</span>
+<span class="sd">    lazitab : array_like, shape (36,)</span>
+<span class="sd">        Leaf azimuth classes, degrees (same grid as ``canopy.lidf``&#39;s</span>
+<span class="sd">        13 inclination classes pair with).</span>
+<span class="sd">    kChlrel : array_like, shape (nl, 2001) or (2001,)</span>
+<span class="sd">        Relative contribution of chlorophyll to leaf absorption, 400-2400nm</span>
+<span class="sd">        (from a Fluspect leaf model&#39;s ``kChlrel`` output; a 1-D array</span>
+<span class="sd">        broadcasts to every layer; pass zeros for a plain PROSPECT leaf</span>
+<span class="sd">        model, matching R&#39;s ``data.leafopt$kChlrel`` for that case).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">const</span> <span class="o">=</span> <span class="n">_constants</span><span class="p">()</span>
+    <span class="n">nl</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">nlayers</span>
+    <span class="n">litab</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">litab</span>
+    <span class="n">lidf</span> <span class="o">=</span> <span class="n">canopy</span><span class="o">.</span><span class="n">lidf</span>
+    <span class="n">lazitab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">lazitab</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">wl</span> <span class="o">=</span> <span class="n">spectral</span><span class="o">.</span><span class="n">wlS</span>
+    <span class="n">n_thermal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spectral</span><span class="o">.</span><span class="n">wlT</span><span class="p">)</span>
+    <span class="n">Ipar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spectral</span><span class="o">.</span><span class="n">wlPAR</span><span class="p">))</span>
+    <span class="n">wlP</span> <span class="o">=</span> <span class="n">spectral</span><span class="o">.</span><span class="n">wlP</span>
+    <span class="n">IwlP</span> <span class="o">=</span> <span class="n">spectral</span><span class="o">.</span><span class="n">IwlP</span>
+
+    <span class="n">leaf_refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">leaf_refl</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">leaf_tran</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">leaf_tran</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leaf_refl</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">leaf_refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">leaf_refl</span><span class="p">,</span> <span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">leaf_refl</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">leaf_tran</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">leaf_tran</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">leaf_tran</span><span class="p">,</span> <span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">leaf_tran</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">leaf_refl</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nl</span><span class="p">,</span> <span class="n">n_thermal</span><span class="p">),</span> <span class="n">rho_thermal</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">leaf_tran</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">nl</span><span class="p">,</span> <span class="n">n_thermal</span><span class="p">),</span> <span class="n">tau_thermal</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">epsc</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span> <span class="o">-</span> <span class="n">tau</span>  <span class="c1"># (nl, nwl)</span>
+
+    <span class="n">rsoil_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rsoil</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n_thermal</span><span class="p">,</span> <span class="n">rho_thermal</span><span class="p">)])</span>
+    <span class="n">epss</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">rsoil_full</span>  <span class="c1"># (nwl,)</span>
+
+    <span class="n">kChlrel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">kChlrel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">kChlrel</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">kChlrel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">kChlrel</span><span class="p">,</span> <span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">kChlrel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">Esun_</span> <span class="o">=</span> <span class="n">rtmo</span><span class="o">.</span><span class="n">Esun_</span>
+    <span class="n">Emin_</span> <span class="o">=</span> <span class="n">rtmo</span><span class="o">.</span><span class="n">Emin_</span>
+    <span class="n">Eplu_</span> <span class="o">=</span> <span class="n">rtmo</span><span class="o">.</span><span class="n">Eplu_</span>
+
+    <span class="n">Asun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+    <span class="n">Pnsun_Cab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
+        <span class="n">Asun</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">sint</span><span class="p">(</span><span class="n">Esun_</span> <span class="o">*</span> <span class="n">epsc</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:],</span> <span class="n">wl</span><span class="p">)</span>
+        <span class="n">Pnsun_Cab</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">sint</span><span class="p">(</span>
+            <span class="n">get_e2phot</span><span class="p">(</span><span class="n">wlP</span> <span class="o">*</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="n">kChlrel</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">IwlP</span><span class="p">]</span> <span class="o">*</span> <span class="n">Esun_</span><span class="p">[</span><span class="n">IwlP</span><span class="p">]</span> <span class="o">*</span> <span class="n">epsc</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">IwlP</span><span class="p">],</span> <span class="n">const</span><span class="p">),</span> <span class="n">wlP</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># 4.3 direct-beam contribution (fixed: per-layer, not a stray scalar)</span>
+    <span class="n">deg2rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+    <span class="n">cos_tts</span><span class="p">,</span> <span class="n">sin_tts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tts</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">tts</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">cos_ttli</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">litab</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">sin_ttli</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">litab</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">cos_phils</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lazitab</span> <span class="o">*</span> <span class="n">deg2rad</span><span class="p">)</span>
+    <span class="n">cds</span> <span class="o">=</span> <span class="n">cos_ttli</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos_tts</span> <span class="o">+</span> <span class="n">sin_ttli</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">sin_tts</span> <span class="o">*</span> <span class="n">cos_phils</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">absfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cds</span> <span class="o">/</span> <span class="n">cos_tts</span><span class="p">)</span>
+    <span class="n">fs_</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lidf</span> <span class="o">*</span> <span class="n">absfs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+
+    <span class="n">Rndir</span> <span class="o">=</span> <span class="n">fs_</span> <span class="o">*</span> <span class="n">Asun</span>
+    <span class="n">Pndir_Cab</span> <span class="o">=</span> <span class="n">fs_</span> <span class="o">*</span> <span class="n">Pnsun_Cab</span>
+
+    <span class="c1"># 4.4 diffuse contribution</span>
+    <span class="n">Rndif</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+    <span class="n">Pndif_Cab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
+        <span class="n">E_j</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">Emin_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">Emin_</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">Eplu_</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">Eplu_</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">Rndif_row</span> <span class="o">=</span> <span class="n">E_j</span> <span class="o">*</span> <span class="n">epsc</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">Rndif</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">sint</span><span class="p">(</span><span class="n">Rndif_row</span><span class="p">,</span> <span class="n">wl</span><span class="p">)</span>
+        <span class="n">Pndif_Cab_row</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">get_e2phot</span><span class="p">(</span><span class="n">wlP</span> <span class="o">*</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="n">kChlrel</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">IwlP</span><span class="p">]</span> <span class="o">*</span> <span class="n">Rndif_row</span><span class="p">[</span><span class="n">IwlP</span><span class="p">],</span> <span class="n">const</span><span class="p">)</span>
+        <span class="n">Pndif_Cab</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sint</span><span class="p">(</span><span class="n">Pndif_Cab_row</span><span class="p">,</span> <span class="n">wlP</span><span class="p">)</span>
+
+    <span class="n">Rnhc</span> <span class="o">=</span> <span class="n">Rndif</span>
+    <span class="n">Pnhc_Cab</span> <span class="o">=</span> <span class="n">Pndif_Cab</span>
+    <span class="n">Rnuc</span> <span class="o">=</span> <span class="n">Rndir</span> <span class="o">+</span> <span class="n">Rndif</span>
+    <span class="n">Pnuc_Cab</span> <span class="o">=</span> <span class="n">Pndir_Cab</span> <span class="o">+</span> <span class="n">Pndif_Cab</span>
+
+    <span class="n">Rndirsoil</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">sint</span><span class="p">(</span><span class="n">Esun_</span> <span class="o">*</span> <span class="n">epss</span><span class="p">,</span> <span class="n">wl</span><span class="p">)</span>
+    <span class="n">Rndifsoil</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">sint</span><span class="p">(</span><span class="n">Emin_</span><span class="p">[</span><span class="n">nl</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">epss</span><span class="p">,</span> <span class="n">wl</span><span class="p">)</span>
+    <span class="n">Rnus</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">Rndifsoil</span> <span class="o">+</span> <span class="n">Rndirsoil</span><span class="p">)</span>
+    <span class="n">Rnhs</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">Rndifsoil</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">NetRadiationLite</span><span class="p">(</span>
+        <span class="n">Rnuc</span><span class="o">=</span><span class="n">Rnuc</span><span class="p">,</span> <span class="n">Rnhc</span><span class="o">=</span><span class="n">Rnhc</span><span class="p">,</span> <span class="n">Rnus</span><span class="o">=</span><span class="n">Rnus</span><span class="p">,</span> <span class="n">Rnhs</span><span class="o">=</span><span class="n">Rnhs</span><span class="p">,</span>
+        <span class="n">Pnu_Cab</span><span class="o">=</span><span class="mf">1e6</span> <span class="o">*</span> <span class="n">Pnuc_Cab</span><span class="p">,</span> <span class="n">Pnh_Cab</span><span class="o">=</span><span class="mf">1e6</span> <span class="o">*</span> <span class="n">Pnhc_Cab</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

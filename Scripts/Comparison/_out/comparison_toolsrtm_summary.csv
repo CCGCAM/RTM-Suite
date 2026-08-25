@@ -1,0 +1,6 @@
+metric,value
+n_simulations,600.0
+rmse,8.108656318986471e-16
+max_abs_diff,1.199040866595169e-14
+bias,1.7529336826856627e-16
+r2,1.0

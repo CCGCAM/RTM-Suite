@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R vs Python cross-language verification — RTM-Suite</title>
+<style>
+  :root { --brand:#0f3d5c; --brand-light:#1a6ea8; --text-muted:#5c6b76; --border-soft:#e1e7ea; --bg-light:#f5f8fa; --radius-lg:14px; --radius-sm:10px; --card-shadow:0 1px 3px rgba(15,61,92,0.08); }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; color: #1c2b33; background: #fff; line-height: 1.5; }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 40px 24px 80px; }
+  a { color: var(--brand-light); }
+  h1 { font-size: 28px; margin: 0 0 8px; color: var(--brand); }
+  .subtitle { color: var(--text-muted); font-size: 15px; max-width: 760px; margin-bottom: 22px; }
+  h2 { font-size: 21px; color: var(--brand); margin: 46px 0 6px; scroll-margin-top: 20px; }
+  h2 .kicker { display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-light); margin-bottom: 3px; }
+  h3 { font-size: 15.5px; color: var(--brand); margin: 22px 0 6px; }
+  .desc { color: var(--text-muted); font-size: 14px; max-width: 760px; margin-bottom: 18px; }
+  .card { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); padding: 22px; margin-bottom: 10px; }
+  .card img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border-soft); }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+  td:first-child { color: var(--text-muted); }
+  code { background: var(--bg-light); padding: 1px 5px; border-radius: 4px; font-size: 0.92em; }
+  .back { display: inline-block; margin-bottom: 24px; font-size: 13px; }
+  .r2-badge { display: inline-block; background: #e8f5e9; color: #1b5e20; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; }
+  .real-badge { display: inline-block; background: #fff3e0; color: #8a4b00; padding: 2px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+  .toc a { display: inline-block; background: var(--bg-light); border: 1px solid var(--border-soft); border-radius: 999px; padding: 6px 14px; font-size: 13px; color: var(--brand); text-decoration: none; }
+  .toc a:hover { border-color: var(--brand-light); }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 18px 0 8px; }
+  .stat-card { background: var(--bg-light); border-radius: var(--radius-sm); padding: 14px 16px; }
+  .stat-card .n { font-size: 22px; font-weight: 700; color: var(--brand); }
+  .stat-card .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">&larr; RTM-Suite home</a>
+  <h1>Model comparison &amp; verification</h1>
+  <p class="subtitle">RTM-Suite ships every model twice — once in R, once in Python. This page runs <strong>independent simulations from shared, randomly-sampled Look-Up Tables</strong> through both language implementations and compares them directly, plus one section that validates a model against <strong>real measured data</strong> rather than the other language. Coverage spans leaf optics, canopy radiative transfer, soil (dry-soil mixing <em>and</em> wet-soil MARMIT), the full soil-plant-atmosphere chain (SPART), and the full coupled SCOPE 2.1 model — the same robustness checks any user could re-run themselves, with the scripts linked in each section.</p>
+
+  <div class="toc">
+    <a href="#leaf-canopy">Leaf &times; canopy models</a>
+    <a href="#soil-atmosphere">Soil &amp; atmosphere (SPART, MARMIT)</a>
+    <a href="#scope">Full SCOPE 2.1</a>
+    <a href="#real-data">Validation vs. real measured data</a>
+    <a href="#deep-dive">600-simulation deep dive</a>
+    <a href="#reproduce">Reproduce this yourself</a>
+  </div>
+
+  <div class="summary-grid">
+    <div class="stat-card"><div class="n">15 / 15</div><div class="lbl">leaf &times; canopy combinations, R&sup2;=1.0</div></div>
+    <div class="stat-card"><div class="n">3 / 3</div><div class="lbl">soil/atmosphere models (SPART, MARMIT-1, MARMIT-2), R&sup2;=1.0</div></div>
+    <div class="stat-card"><div class="n">1 / 1</div><div class="lbl">full SCOPE 2.1 pipeline, R&sup2;=1.0</div></div>
+    <div class="stat-card"><div class="n">R&sup2;=0.99</div><div class="lbl">PROSPECT-D vs. 308 real measured leaves</div></div>
+  </div>
+
+  <h2 id="leaf-canopy"><span class="kicker">R vs Python</span>Leaf &times; canopy models — all 15 combinations</h2>
+  <p class="desc">Every leaf model (PROSPECT-D, PROSPECT-PRO, Liberty, Fluspect-B, Fluspect-B-Cx) run through every canopy model (fourSAIL, foursail2, INFORM) — 15 combinations, 100 simulations each from an independent randomly-sampled LUT per combination, full reflectance spectrum compared wavelength-by-wavelength. Liberty combinations show a small fraction of rows excluded on one side (89&ndash;93/100 valid) where an extreme random parameter draw pushed the iterative Liberty solver out of its valid domain in one language before the other &mdash; every row that <em>did</em> converge on both sides agrees to Liberty's own precision (RMSE &asymp; 10<sup>-12</sup>, vs &asymp;10<sup>-16</sup> for the other four leaf models).</p>
+  <div class="card">
+    <img src="assets/comparison_allmodels_r2_heatmap.png" alt="Heatmap of R^2 between R and Python across all 5 leaf models x 3 canopy models, all cells 1.000000">
+  </div>
+  <div class="card">
+    <img src="assets/comparison_allmodels_spectra_grid.png" alt="15-panel grid of simulated reflectance spectra, R (black) vs Python (red dashed) fully overlapping, one panel per leaf x canopy model combination">
+    <table>
+      <tr><th>Canopy model</th><th>Leaf model</th><th>Valid sims</th><th>RMSE</th><th>R&sup2;</th></tr>
+      <tr><td>fourSAIL</td><td>PROSPECT-D</td><td>100/100</td><td>8.2 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>fourSAIL</td><td>PROSPECT-PRO</td><td>100/100</td><td>5.4 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>fourSAIL</td><td>Liberty</td><td>89/100</td><td>4.0 &times; 10<sup>-12</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>fourSAIL</td><td>Fluspect-B</td><td>100/100</td><td>4.2 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>fourSAIL</td><td>Fluspect-B-Cx</td><td>100/100</td><td>5.4 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>foursail2</td><td>PROSPECT-D</td><td>100/100</td><td>4.3 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>foursail2</td><td>PROSPECT-PRO</td><td>100/100</td><td>2.9 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>foursail2</td><td>Liberty</td><td>93/100</td><td>5.3 &times; 10<sup>-12</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>foursail2</td><td>Fluspect-B</td><td>100/100</td><td>3.3 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>foursail2</td><td>Fluspect-B-Cx</td><td>100/100</td><td>3.2 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>INFORM</td><td>PROSPECT-D</td><td>100/100</td><td>6.0 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>INFORM</td><td>PROSPECT-PRO</td><td>100/100</td><td>3.3 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>INFORM</td><td>Liberty</td><td>92/100</td><td>4.9 &times; 10<sup>-12</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>INFORM</td><td>Fluspect-B</td><td>100/100</td><td>3.6 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>INFORM</td><td>Fluspect-B-Cx</td><td>100/100</td><td>3.6 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+    </table>
+  </div>
+
+  <h2 id="soil-atmosphere"><span class="kicker">R vs Python</span>Soil &amp; atmosphere — SPART, MARMIT-1, MARMIT-2</h2>
+  <p class="desc">Beyond leaf/canopy optics: the full soil-plant-atmosphere chain (SPART, TOC and TOA reflectance for a real sensor) and wet-soil reflectance (MARMIT, both published versions).</p>
+
+  <h3>SPART — soil-plant-atmosphere, Sentinel-2A bands</h3>
+  <p class="desc">100 simulations, one shared LUT (<code>getLUT(inputsSPART)</code>, seed 21), fixed realistic sea-level clear-sky atmosphere (matching the tutorial's own choice to avoid <code>getLUT()</code>'s known unphysical-atmosphere edge case at its widest default ranges). Both TOC canopy-BRDF reflectance and TOA (after SMAC atmospheric correction) compared, all 13 Sentinel-2A bands.</p>
+  <div class="card">
+    <img src="assets/comparison_spart.png" alt="SPART TOC and TOA scatter plots (R vs Python, all on the 1:1 line) plus an example Sentinel-2A band spectrum overlay">
+    <table>
+      <tr><th>Product</th><th>Valid sims</th><th>RMSE</th><th>R&sup2;</th></tr>
+      <tr><td>TOC (canopy BRDF)</td><td>100/100</td><td>4.2 &times; 10<sup>-16</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>TOA (post SMAC atmospheric correction)</td><td>100/100</td><td>6.4 &times; 10<sup>-15</sup></td><td class="r2-badge">1.00000000</td></tr>
+    </table>
+  </div>
+
+  <h3>MARMIT — wet-soil reflectance, both model versions</h3>
+  <p class="desc">60 random draws (soil ID 1&ndash;17 from the bundled Bablet_2016 database, water-layer thickness <code>L</code> 0.01&ndash;0.15&nbsp;cm, wet-surface fraction <code>eps</code> 0.1&ndash;0.9), run through <strong>both</strong> MARMIT-1 (Bablet et al. 2018, the simpler original model) and MARMIT-2 (adds soil-particle refractive-index/size effects) in both languages.</p>
+  <div class="card">
+    <img src="assets/comparison_marmit.png" alt="MARMIT-1 and MARMIT-2 example wet-soil spectra, R vs Python fully overlapping">
+    <table>
+      <tr><th>Version</th><th>Valid sims</th><th>RMSE</th><th>Max abs diff</th><th>R&sup2;</th></tr>
+      <tr><td>MARMIT-1</td><td>60/60</td><td>3.5 &times; 10<sup>-10</sup></td><td>1.7 &times; 10<sup>-8</sup></td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>MARMIT-2</td><td>60/60</td><td>1.8 &times; 10<sup>-8</sup></td><td>1.7 &times; 10<sup>-7</sup></td><td class="r2-badge">1.00000000</td></tr>
+    </table>
+  </div>
+
+  <h2 id="scope"><span class="kicker">R vs Python</span>Full SCOPE 2.1</h2>
+  <p class="desc">600 SCOPE simulations, one shared LUT (<code>getLUT.SCOPE()</code>, seed 7), default options — the full coupled soil/canopy/photosynthesis/energy-balance/fluorescence pipeline, not just radiative transfer. Top-of-canopy reflectance compared across 2,053 of 2,162 spectral-domain wavelengths (the remaining ~109 are a structural, non-contiguous gap matching atmospheric water-vapor absorption windows around 1400/1900/2500&nbsp;nm — excluded from both sides rather than dropping otherwise-valid simulations).</p>
+  <div class="card">
+    <img src="assets/comparison_scope_R_vs_Python_600sims.png" alt="Scatter plot of R vs Python mean TOC reflectance across 600 SCOPE simulations, and an example spectrum overlay">
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Simulations compared</td><td>600 / 600</td></tr>
+      <tr><td>Wavelengths compared</td><td>2,053 / 2,162</td></tr>
+      <tr><td>RMSE</td><td>2.5 &times; 10<sup>-16</sup></td></tr>
+      <tr><td>Max absolute difference</td><td>4.4 &times; 10<sup>-15</sup></td></tr>
+      <tr><td>Bias (mean Python &minus; R)</td><td>7.4 &times; 10<sup>-18</sup></td></tr>
+      <tr><td>R&sup2; (Python predicting R)</td><td><span class="r2-badge">1.00000000</span></td></tr>
+    </table>
+  </div>
+
+  <h2 id="real-data"><span class="kicker"><span class="real-badge">Real data</span> not R vs Python</span>PROSPECT-D vs. 308 real measured leaves (Angers database)</h2>
+  <p class="desc">Everything above checks that R and Python agree with <em>each other</em> — strong evidence the Python port is faithful, but not by itself evidence that either implementation matches reality. This section instead validates PROSPECT-D against the bundled <strong>Angers leaf-optics database</strong> (308 real leaves with lab-measured chlorophyll a+b, carotenoids, anthocyanin, equivalent water thickness and leaf mass per area, paired with lab-measured reflectance and transmittance spectra) &mdash; the same kind of dataset PROSPECT itself was calibrated and validated against in the original literature. Measured biochemical traits go in as-is; the mesophyll structure parameter <code>N</code> (not independently measurable) is fit per leaf over a 1.0&ndash;3.0 grid, the standard PROSPECT calibration procedure.</p>
+  <div class="card">
+    <img src="assets/validation_prospectD_angers_examples.png" alt="Four example leaves spanning a wide chlorophyll range: measured (black) vs PROSPECT-D simulated (red) reflectance and 1-transmittance, closely overlapping">
+  </div>
+  <div class="card">
+    <img src="assets/validation_prospectD_angers_r2hist.png" alt="Histogram of R^2 between simulated and measured spectra across all 308 real leaves, heavily concentrated near 1.0">
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Leaves validated</td><td>308 / 308</td></tr>
+      <tr><td>Best-fit N (mesophyll structure)</td><td>median 1.475, range 1.0&ndash;2.7 &mdash; matches published typical values</td></tr>
+      <tr><td>RMSE (R + T combined, 0&ndash;1 units)</td><td>median 0.0147, 95th pct 0.0277</td></tr>
+      <tr><td>R&sup2; (simulated vs. measured)</td><td>median <span class="r2-badge">0.9912</span>, mean 0.9875, worst leaf 0.9082</td></tr>
+    </table>
+  </div>
+  <p class="desc" style="margin-top: 10px;">Liberty, Fluspect and INFORM don't have an equivalent bundled field/lab dataset in this repo, so this real-data check currently covers PROSPECT-D only (the leaf model both the Angers database and the wider PROSPECT literature target directly).</p>
+
+  <h2 id="deep-dive"><span class="kicker">R vs Python</span>PROSPECT-D + fourSAIL, 600-simulation deep dive</h2>
+  <p class="desc">A larger single-combination run for extra statistical depth on the most commonly used pairing: 600 simulations, one shared LUT (<code>getLUT()</code>, seed 42), full 400&ndash;2500&nbsp;nm reflectance spectrum compared wavelength-by-wavelength.</p>
+  <div class="card">
+    <img src="assets/comparison_toolsrtm_R_vs_Python_600sims.png" alt="Scatter plot of R vs Python mean reflectance across 600 simulations, and an example spectrum overlay, for ToolsRTM/toolsrtm">
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Simulations compared</td><td>600 / 600</td></tr>
+      <tr><td>RMSE (all wavelengths &times; all sims)</td><td>8.1 &times; 10<sup>-16</sup></td></tr>
+      <tr><td>Max absolute difference</td><td>1.2 &times; 10<sup>-14</sup></td></tr>
+      <tr><td>Bias (mean Python &minus; R)</td><td>1.8 &times; 10<sup>-16</sup></td></tr>
+      <tr><td>R&sup2; (Python predicting R)</td><td><span class="r2-badge">1.00000000</span></td></tr>
+    </table>
+  </div>
+
+  <h2 id="reproduce">Reproduce this yourself</h2>
+  <p class="desc">Each comparison is two scripts under <a href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/Comparison" target="_blank"><code>Scripts/Comparison/</code></a>: an R script builds the shared LUT and the R-side reference output, and a companion Python script reads that same LUT, runs the Python port, and produces the figure + error stats above.</p>
+  <div class="card" style="padding: 16px 22px;">
+    <code># Leaf x canopy models, all 15 combinations</code><br>
+    <code>Rscript Scripts/Comparison/compare_R_Python_allmodels_600sims.R</code><br>
+    <code>python Scripts/Comparison/compare_R_Python_allmodels_600sims.py</code><br><br>
+    <code># SPART + MARMIT (both versions)</code><br>
+    <code>Rscript Scripts/Comparison/compare_R_Python_spart_marmit.R</code><br>
+    <code>python Scripts/Comparison/compare_R_Python_spart_marmit.py</code><br><br>
+    <code># Full SCOPE 2.1</code><br>
+    <code>Rscript Scripts/Comparison/compare_R_Python_scope_600sims.R</code><br>
+    <code>python Scripts/Comparison/compare_R_Python_scope_600sims.py</code><br><br>
+    <code># PROSPECT-D + fourSAIL, 600-sim deep dive</code><br>
+    <code>Rscript Scripts/Comparison/compare_R_Python_toolsrtm_600sims.R</code><br>
+    <code>python Scripts/Comparison/compare_R_Python_toolsrtm_600sims.py</code><br><br>
+    <code># PROSPECT-D vs. real measured leaves (Angers database, R only -- no Python port of this validation)</code><br>
+    <code>Rscript Scripts/Comparison/validate_prospectD_vs_angers.R</code>
+  </div>
+
+  <p style="margin-top: 40px; font-size: 12.5px; color: var(--text-muted);">This is a large-sample statistical comparison, complementary to the existing <a href="python/verification.html">per-function precision verification</a> (single test cases, checked to floating-point precision, 50 automated tests).</p>
+</div>
+</body>
+</html>

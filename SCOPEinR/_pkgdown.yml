@@ -1,0 +1,51 @@
+url: ~
+template:
+  bootstrap: 5
+navbar:
+  structure:
+    left: [reference, articles]
+    right: [suite_home, toolsrtm, search]
+  components:
+    suite_home:
+      text: "Suite Home"
+      href: ../index.html
+      icon: fa-house
+    toolsrtm:
+      text: "ToolsRTM"
+      href: ../toolsrtm/index.html
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with
+  components:
+    developed_by: >
+      Developed by Carlos Camino (WUR)
+      <a href="https://orcid.org/0000-0001-5188-4406" target="orcid.widget" aria-label="ORCID">
+      <span class="fab fa-orcid orcid" aria-hidden="true"></span></a>.
+
+articles:
+- title: Tutorials
+  navbar: Tutorials
+  contents:
+  - "t00-scope-options"
+  - "t01-getting-started"
+  - "t02-soil-canopy-brdf"
+  - "t03-energy-balance"
+  - "t04-fluorescence"
+  - "t05-building-scope-luts"
+  - "t06-parallel-scope-runs"
+  - "t07-sensitivity"
+  - "t08-hybrid-inversion"
+  - "t09-sif-photosynthesis"
+  - "t10-end-to-end-pipeline"
+  - "articles/t11-photosynthesis-capstone"
+- title: Reference manuals and deep dives
+  navbar: Manuals
+  contents:
+  - "articles/SCOPEinR"
+  - "articles/getting-luts-scope"
+  - "articles/scope-pipeline"
+  - "articles/sensitivity-scope"
+  - "articles/inversion-scope"
+  - "articles/sif-photosynthesis-proxy"

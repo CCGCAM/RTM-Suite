@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "toolsrtm"
+version = "0.1.0"
+description = "Python port of the core of the R ToolsRTM package: PROSPECT-D, PROSPECT-PRO leaf models and the fourSAIL canopy model."
+readme = "README.md"
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=1.22",
+    "scipy>=1.8",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0", "pandas>=1.4"]
+ml = ["pandas>=1.4", "scikit-learn>=1.2", "xgboost>=1.7"]
+dl = ["pandas>=1.4", "scikit-learn>=1.2", "tensorflow>=2.10"]
+stac = ["pandas>=1.4", "pystac-client>=0.7", "planetary-computer>=1.0", "odc-stac>=0.3", "rioxarray>=0.15", "rasterio>=1.3"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+toolsrtm = ["data/*.csv", "data/marmit/*.csv"]

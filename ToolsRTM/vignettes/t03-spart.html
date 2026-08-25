@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>03. SPART: Soil-Plant-Atmosphere Radiative Transfer</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">03. SPART: Soil-Plant-Atmosphere Radiative
+Transfer</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
+<p>Tutorials 01-02 stopped at top-of-canopy (TOC) reflectance – what a
+sensor would see immediately above the canopy, with no atmosphere in the
+way. <code>SPART()</code> goes one step further: soil, canopy, AND
+atmosphere, together, giving top-of-atmosphere (TOA) reflectance – what
+a real satellite actually measures. It deserves its own page rather than
+a paragraph inside a leaf/canopy comparison, because it represents a
+more complete modelling chain, not just another canopy option. This page
+stays focused on that unique chain (soil -&gt; canopy -&gt; atmosphere
+-&gt; TOA) – soil-moisture spectroscopy in depth is Tutorial 16’s job,
+not this one’s.</p>
+<pre class="text"><code>                 Atmosphere
+                     |
+              Incoming radiation
+                     |
+Soil ---------&gt; Vegetation canopy
+                     |
+              Canopy reflectance
+                     |
+                 Atmosphere
+                     |
+           Top-of-atmosphere signal</code></pre>
+<p>SPART couples three sub-models: <strong>BSM</strong>
+(Brightness-Shape-Moisture) for soil, <strong>fourSAIL</strong> for the
+vegetation canopy, and <strong>SMAC</strong> for atmospheric effects –
+the same three-model architecture SPART’s own reference implementation
+(Yang et al. 2020) uses.</p>
+<div id="configure-spart" class="section level2">
+<h2>3.1 Configure SPART</h2>
+<p>Inputs fall into five physical domains. <code>inputsSPART</code> (a
+<code>getLUT()</code>-ready table, same pattern as
+<code>inputsPROSAIL</code>) already groups them:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Domain</th>
+<th>Example columns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Leaf</td>
+<td><code>Cab</code>, <code>Car</code>, <code>Anth</code>,
+<code>LMA</code>, <code>EWT</code>, <code>N</code>, …</td>
+<td>Same as PROSPECT/fourSAIL (Tutorial 02)</td>
+</tr>
+<tr class="even">
+<td>Canopy structure</td>
+<td><code>LAI</code>,
+<code>LIDFa</code>/<code>LIDFb</code>/<code>TypeLidf</code>,
+<code>hspot</code></td>
+<td>Same as fourSAIL</td>
+</tr>
+<tr class="odd">
+<td>Soil (BSM)</td>
+<td><code>BSMBrightness</code>, <code>BSMlat</code>,
+<code>BSMlon</code>, <code>SMp</code></td>
+<td>See Section 3.3 – these are BSM’s real parameters</td>
+</tr>
+<tr class="even">
+<td>Geometry</td>
+<td><code>tts</code>, <code>tto</code>, <code>psi</code></td>
+<td>Sun zenith, view zenith, relative azimuth</td>
+</tr>
+<tr class="odd">
+<td>Atmosphere</td>
+<td><code>Pa</code>, <code>aot550</code>, <code>uo3</code>,
+<code>uh2o</code>, <code>alt_m</code>, <code>Pa0</code></td>
+<td>Air pressure, aerosol optical thickness, ozone, water vapour,
+altitude</td>
+</tr>
+</tbody>
+</table>
+<p>Full argument documentation lives at <code>?SPART</code> – this page
+focuses on how the pieces fit together, not an exhaustive parameter
+list.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>LUT <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> ToolsRTM<span class="sc">::</span>inputsSPART, <span class="at">nLUT =</span> <span class="dv">5</span>, <span class="at">setseed =</span> <span class="dv">1</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># inputsSPART only ships PROSPECT-PRO/-D columns -- add what other leaf</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># models need too (same requirement as foursail()/SPART() itself).</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>LUT<span class="sc">$</span>Cs <span class="ot">&lt;-</span> <span class="dv">0</span>; LUT<span class="sc">$</span>fqe <span class="ot">&lt;-</span> <span class="fl">0.01</span>; LUT<span class="sc">$</span>Cx <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>LUT<span class="sc">$</span>cell.d <span class="ot">&lt;-</span> <span class="dv">40</span>; LUT<span class="sc">$</span>inter.c <span class="ot">&lt;-</span> <span class="fl">0.045</span>; LUT<span class="sc">$</span>baseline.abs <span class="ot">&lt;-</span> <span class="fl">0.0006</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>LUT<span class="sc">$</span>leaf.thick <span class="ot">&lt;-</span> <span class="fl">1.6</span>; LUT<span class="sc">$</span>albino.abs <span class="ot">&lt;-</span> <span class="dv">0</span>; LUT<span class="sc">$</span>lign.cell <span class="ot">&lt;-</span> <span class="dv">2</span>; LUT<span class="sc">$</span>Nitrogen <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co"># A realistic, sea-level, clear-sky atmosphere for the worked example below</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co"># (getLUT()&#39;s own default sampling range for the atmosphere columns is wide</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># enough to occasionally draw physically implausible combinations -- see</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co"># the note at the end of Section 3.2).</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>LUT<span class="sc">$</span>Pa <span class="ot">&lt;-</span> <span class="dv">1000</span>; LUT<span class="sc">$</span>aot550 <span class="ot">&lt;-</span> <span class="fl">0.3246</span>; LUT<span class="sc">$</span>uo3 <span class="ot">&lt;-</span> <span class="fl">0.3480</span>; LUT<span class="sc">$</span>uh2o <span class="ot">&lt;-</span> <span class="fl">1.4116</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>LUT<span class="sc">$</span>alt_m <span class="ot">&lt;-</span> <span class="dv">0</span>; LUT<span class="sc">$</span>Pa0 <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co"># BSM soil, at its own shipped defaults (Section 3.3 varies these on purpose)</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>LUT<span class="sc">$</span>BSMBrightness <span class="ot">&lt;-</span> <span class="fl">0.5</span>; LUT<span class="sc">$</span>BSMlat <span class="ot">&lt;-</span> <span class="dv">25</span>; LUT<span class="sc">$</span>BSMlon <span class="ot">&lt;-</span> <span class="dv">45</span>; LUT<span class="sc">$</span>SMp <span class="ot">&lt;-</span> <span class="dv">15</span></span></code></pre></div>
+</div>
+<div id="run-a-baseline-simulation" class="section level2">
+<h2>3.2 Run a baseline simulation</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> LUT[<span class="dv">1</span>, ], <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                               <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                               <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>Sentinel2A.MSI,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                               <span class="at">rsoil =</span> <span class="cn">NULL</span>, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">names</span>(sim<span class="sc">$</span>output)  <span class="co"># wave, rad.toa, rfl.toa, rfl.toc, rfl.toc.BRDF -- already at Sentinel-2A&#39;s own bands</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;wave&quot;         &quot;rad.toa&quot;      &quot;rfl.toa&quot;      &quot;rfl.toc&quot;      &quot;rfl.toc.BRDF&quot;</span></span></code></pre></div>
+<p>Unlike <code>foursail()</code>, SPART returns output already
+convolved to the chosen sensor’s bands (<code>sensor.i</code>) – there
+is no separate “simulate native, then convolve” step (Tutorial 07 covers
+convolution for <code>foursail()</code>/<code>inform()</code> output,
+which stays at 1nm resolution).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">plot</span>(sim<span class="sc">$</span>output<span class="sc">$</span>wave, sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#0072B2&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF, sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toa)),</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Wavelength (nm)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Reflectance&quot;</span>, <span class="at">main =</span> <span class="st">&quot;SPART: TOC vs. TOA (Sentinel-2A bands)&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">lines</span>(sim<span class="sc">$</span>output<span class="sc">$</span>wave, sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toa, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#D55E00&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;TOC (canopy)&quot;</span>, <span class="st">&quot;TOA (satellite)&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>), <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">lty =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>diff_atm <span class="ot">&lt;-</span> sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toa <span class="sc">-</span> sim<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">plot</span>(sim<span class="sc">$</span>output<span class="sc">$</span>wave, diff_atm, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#CC79A7&quot;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Wavelength (nm)&quot;</span>, <span class="at">ylab =</span> <span class="fu">expression</span>(Delta<span class="sc">*</span>R[atm] <span class="sc">==</span> R[TOA] <span class="sc">-</span> R[TOC]),</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Atmospheric contribution: TOA minus TOC&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;grey50&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>The dip near 942nm and the near-total collapse near 1372nm are real
+atmospheric water-vapour absorption bands – present in the TOA curve but
+absent from TOC, exactly what real atmospheric correction has to deal
+with; the diff plot above makes this quantitative: the atmosphere
+<em>adds</em> reflectance in the visible (positive <span class="math inline">\(\Delta R_{atm}\)</span>, mostly Rayleigh/ aerosol
+path radiance) and <em>removes</em> it in the water-vapour/near-infrared
+bands (negative <span class="math inline">\(\Delta R_{atm}\)</span>,
+absorption), rather than shifting the whole spectrum uniformly.
+<strong>A note on <code>getLUT()</code>’s atmosphere sampling</strong>:
+at the wide default ranges <code>inputsSPART</code> samples from, some
+random rows combine a high <code>aot550</code> (aerosol loading) with a
+high <code>alt_m</code> (altitude) – a combination SMAC’s atmospheric
+correction doesn’t handle gracefully, producing negative (physically
+meaningless) TOA reflectance. Always sanity-check
+<code>range(sim$output$rfl.toa)</code> after a random draw; the fixed,
+realistic sea-level clear-sky atmosphere set in Section 3.1 above avoids
+this for the rest of this page.</p>
+</div>
+<div id="soil-contribution" class="section level2">
+<h2>3.3 Soil contribution</h2>
+<p>Physically, a sparse canopy should let more soil show through than a
+dense one. <strong>A real implementation gap, found and fixed while
+building this page</strong>:
+<code>inputsSPART</code>/<code>?SPART</code> used to document a
+<code>psoil</code> column, but <code>SPART()</code>’s BSM soil path
+(triggered whenever <code>rsoil = NULL</code>) never read it – and it
+couldn’t have, because <code>psoil</code> isn’t actually a BSM parameter
+at all. <code>psoil</code> is a PROSAIL/4SAIL
+soil-brightness-<em>mixing</em> parameter (interpolating between a fixed
+dry and a fixed wet reference spectrum); BSM (Brightness-Shape-Moisture)
+is a different, more mechanistic soil model with its own four real
+parameters – <code>BSMBrightness</code>, <code>BSMlat</code>,
+<code>BSMlon</code> (spectral shape), and <code>SMp</code> (soil
+moisture volume %). <code>SPART()</code> used to hardcode all four
+internally
+(<code>BSMBrightness = 0.5, BSMlat = 25, BSMlon = 45, SMp = 15</code>)
+regardless of what was in the LUT. Both are now fixed:
+<code>SPART()</code> reads these four columns from <code>inputLUT</code>
+when present (falling back to the same defaults otherwise, so old code
+is unaffected), and <code>inputsSPART</code> now ships all four as real,
+sampleable parameters.</p>
+<div id="a-sensitivity-test-showing-each-bsm-parameters-real-effect" class="section level3">
+<h3>A sensitivity test showing each BSM parameter’s real effect</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>run1 <span class="ot">&lt;-</span> <span class="cf">function</span>(row) <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> row, <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                                              <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>Sentinel2A.MSI, <span class="at">rsoil =</span> <span class="cn">NULL</span>, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>base_row <span class="ot">&lt;-</span> LUT[<span class="dv">1</span>, ]; base_row<span class="sc">$</span>LAI <span class="ot">&lt;-</span> <span class="dv">1</span>  <span class="co"># sparse-ish canopy so soil shows through</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>bsm_params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">BSMBrightness =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>), <span class="at">BSMlat =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">40</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>                    <span class="at">BSMlon =</span> <span class="fu">c</span>(<span class="dv">45</span>, <span class="dv">45</span>, <span class="dv">65</span>), <span class="at">SMp =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">55</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;NIR band (789nm) TOC reflectance as each BSM parameter varies (others at their default):</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; NIR band (789nm) TOC reflectance as each BSM parameter varies (others at their default):</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="fu">names</span>(bsm_params)) {</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  vals <span class="ot">&lt;-</span> bsm_params[[p]]</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  outs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(vals, <span class="cf">function</span>(v) { r <span class="ot">&lt;-</span> base_row; r[[p]] <span class="ot">&lt;-</span> v; <span class="fu">run1</span>(r)<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF[<span class="dv">8</span>] })</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">&quot;  %-14s %s -&gt; %s</span><span class="sc">\n</span><span class="st">&quot;</span>, p, <span class="fu">paste</span>(vals, <span class="at">collapse =</span> <span class="st">&quot; / &quot;</span>), <span class="fu">paste</span>(<span class="fu">round</span>(outs, <span class="dv">4</span>), <span class="at">collapse =</span> <span class="st">&quot; / &quot;</span>)))</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>}</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;   BSMBrightness  0.2 / 0.5 / 0.8 -&gt; 0.2487 / 0.353 / 0.476</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;   BSMlat         20 / 25 / 40 -&gt; 0.3268 / 0.353 / 0.4277</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;   BSMlon         45 / 45 / 65 -&gt; 0.353 / 0.353 / 0.3671</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt;   SMp            5 / 15 / 55 -&gt; 0.3039 / 0.353 / 0.2529</span></span></code></pre></div>
+<p>Each of the four now has a real, verifiable effect – brighter soil
+(<code>BSMBrightness</code>) and drier soil (lower <code>SMp</code>)
+both raise reflectance, as expected;
+<code>BSMlat</code>/<code>BSMlon</code> reshape the soil spectrum’s
+spectral <em>shape</em> rather than its overall level, so their effect
+at a single band is smaller but still real.</p>
+</div>
+<div id="flat-spectra-as-a-controlled-diagnostic-bsm-as-the-realistic-soil-demo" class="section level3">
+<h3>Flat spectra as a controlled diagnostic, BSM as the realistic soil
+demo</h3>
+<p>Two flat, arbitrary reflectance spectra are still useful for
+isolating <em>just</em> the LAI effect (no confound from a soil
+spectrum’s own spectral shape) – but they’re a diagnostic, not the main
+soil story. The BSM sensitivity above is the realistic one;
+<code>ToolsRTM::get.marmit.rsoil()</code> (Tutorial 16) is the realistic
+one for <em>moisture</em>-driven soil spectra specifically.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>soil_dark   <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.08</span>, <span class="dv">2001</span>)  <span class="co"># dark/wet-looking soil (diagnostic only)</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>soil_bright <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.30</span>, <span class="dv">2001</span>)  <span class="co"># bright/dry-looking soil (diagnostic only)</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>lai_seq <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>)  <span class="co"># 0.01 stands in for LAI=0 -- foursail&#39;s</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                                          <span class="co"># internal spline needs at least one point</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>soil_effect_bands <span class="ot">&lt;-</span> <span class="cf">function</span>(lai) {</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  row_i <span class="ot">&lt;-</span> base_row; row_i<span class="sc">$</span>LAI <span class="ot">&lt;-</span> lai</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> row_i, <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>                               <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>Sentinel2A.MSI, <span class="at">rsoil =</span> soil_dark, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> row_i, <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>                               <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>Sentinel2A.MSI, <span class="at">rsoil =</span> soil_bright, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  b<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF <span class="sc">-</span> d<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>}</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>soil_mat <span class="ot">&lt;-</span> <span class="fu">sapply</span>(lai_seq, soil_effect_bands)  <span class="co"># bands x LAI</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="fu">rownames</span>(soil_mat) <span class="ot">&lt;-</span> sim<span class="sc">$</span>output<span class="sc">$</span>wave</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="fu">colnames</span>(soil_mat) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;LAI=&quot;</span>, lai_seq)</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">round</span>(soil_mat, <span class="dv">3</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">LAI=0.01</th>
+<th align="right">LAI=0.5</th>
+<th align="right">LAI=1</th>
+<th align="right">LAI=2</th>
+<th align="right">LAI=3</th>
+<th align="right">LAI=4</th>
+<th align="right">LAI=6</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">445</td>
+<td align="right">0.217</td>
+<td align="right">0.103</td>
+<td align="right">0.048</td>
+<td align="right">0.011</td>
+<td align="right">0.002</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">520</td>
+<td align="right">0.217</td>
+<td align="right">0.107</td>
+<td align="right">0.052</td>
+<td align="right">0.012</td>
+<td align="right">0.003</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">560</td>
+<td align="right">0.217</td>
+<td align="right">0.110</td>
+<td align="right">0.055</td>
+<td align="right">0.014</td>
+<td align="right">0.003</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">654</td>
+<td align="right">0.217</td>
+<td align="right">0.107</td>
+<td align="right">0.052</td>
+<td align="right">0.012</td>
+<td align="right">0.003</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">701</td>
+<td align="right">0.217</td>
+<td align="right">0.114</td>
+<td align="right">0.059</td>
+<td align="right">0.015</td>
+<td align="right">0.004</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">743</td>
+<td align="right">0.218</td>
+<td align="right">0.150</td>
+<td align="right">0.101</td>
+<td align="right">0.044</td>
+<td align="right">0.019</td>
+<td align="right">0.008</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="odd">
+<td align="left">779</td>
+<td align="right">0.219</td>
+<td align="right">0.157</td>
+<td align="right">0.112</td>
+<td align="right">0.057</td>
+<td align="right">0.028</td>
+<td align="right">0.014</td>
+<td align="right">0.003</td>
+</tr>
+<tr class="even">
+<td align="left">789</td>
+<td align="right">0.219</td>
+<td align="right">0.158</td>
+<td align="right">0.113</td>
+<td align="right">0.058</td>
+<td align="right">0.029</td>
+<td align="right">0.014</td>
+<td align="right">0.003</td>
+</tr>
+<tr class="odd">
+<td align="left">871</td>
+<td align="right">0.219</td>
+<td align="right">0.160</td>
+<td align="right">0.116</td>
+<td align="right">0.061</td>
+<td align="right">0.032</td>
+<td align="right">0.017</td>
+<td align="right">0.004</td>
+</tr>
+<tr class="even">
+<td align="left">942</td>
+<td align="right">0.219</td>
+<td align="right">0.160</td>
+<td align="right">0.116</td>
+<td align="right">0.061</td>
+<td align="right">0.032</td>
+<td align="right">0.016</td>
+<td align="right">0.004</td>
+</tr>
+<tr class="odd">
+<td align="left">1372</td>
+<td align="right">0.218</td>
+<td align="right">0.142</td>
+<td align="right">0.090</td>
+<td align="right">0.034</td>
+<td align="right">0.012</td>
+<td align="right">0.004</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">1639</td>
+<td align="right">0.218</td>
+<td align="right">0.131</td>
+<td align="right">0.076</td>
+<td align="right">0.025</td>
+<td align="right">0.008</td>
+<td align="right">0.002</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">2256</td>
+<td align="right">0.217</td>
+<td align="right">0.114</td>
+<td align="right">0.058</td>
+<td align="right">0.015</td>
+<td align="right">0.004</td>
+<td align="right">0.001</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">matplot</span>(sim<span class="sc">$</span>output<span class="sc">$</span>wave, soil_mat, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#0072B2&quot;</span>))(<span class="fu">length</span>(lai_seq)),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;Wavelength (nm)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Bright-minus-dark TOC reflectance&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">&quot;Soil brightness contribution vs. LAI, band by band&quot;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">colnames</span>(soil_mat), <span class="at">col =</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#0072B2&quot;</span>))(<span class="fu">length</span>(lai_seq)),</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>       <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">0.7</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAwAAAAGwCAMAAAApCvLgAAAA+VBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrYAcrIjbpQ6AAA6ADo6AGY6OgA6Ojo6OmY6OpA6ZpA6ZrY6kLY6kNtHa3ZmAABmADpmAGZmOgBmOjpmZjpmZmZmkJBmkLZmkNtmtrZmtttmtv9qaFmOZDuQOgCQOjqQOmaQZgCQZjqQkDqQkGaQkLaQkNuQtpCQttuQtv+Q29uQ2/+xYR22ZgC2Zjq2ZpC2kDq2kGa2tma225C227a229u22/+2/7a2/9u2///VXgDbkDrbkGbbtmbbtpDb25Db27bb29vb/7bb/9vb////tmb/25D/27b/29v//7b//9v///+x6CuvAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nO2diXbkNnaGqXZrSpLtGS8lOZ7NsZY4jhM7kehsY0+6OeM4sUqdKr7/w4QAN5AEQBAESID3/87pFotEgbeA+xMrgSQHgDDJ2gYAsCYQACANBABIAwEA0kAAgDQQACANBABIAwEA0kAAgDQQACANBABIAwEA0kAAgDQQACANBABIAwEA0kAAgDQQACANBABIAwEA0kAAgDQQACANBABIAwEA0kAAgDQQACANBABIAwEA0kAAgDQQACANBABIAwEA0kQmgNO/f5gkZx//2D/9kJw/8//Kz2ny6o0sSOdMlpw9tpf/tf8FZ4hRl1ZIzGuDDg2dTOeX5fkhqe7Xj1ppx4A2pO47NvGtTVwCKHKQc3Y7OD9PAO8+95Yhnaj1AuBB3QsgLVLstr27eAECiEsAWVIhSz69AGSRtW7iMUMkUavu5sqKrgCON0WC7dgRBDAkLgGkydmXxYPyoXqi/fTbJHnvj8/SEuBPxTVeVSq84dvPk1c/lFdP3yfJ60ee/sWFf+GfymdkcUo4U4Y8+4RH+Je23vWXfhXsr8WJ977MO+bIo26tEM0rXaFw0n0V9L+qnyGNrf51zHsOPBUGBuV9ARySs9+V35AIoLEj/+nz4u6/eezf7/T9VfL6u44Aqu8Use3yxg7b+NYmNgHwdHu5KtylKQ+KPB0KoC0oylDnvzxUAVkN6sNSAE2gxkurGtZj9dwscq2JQYhMyL3qTl1zciGiTtSVFaJ5KgHIY+NUHpeyiwOD8rwvgCLcf5cJNhRA++1Dew/xfnWlUxBA8zkrT6aya8bxrU1cAiiS8uyPP1QfChmUHrCXCeD8x/yvvOTP+PH/lFeLbNk9n9Iq/9gF/v0qE4vj18KZH0ulFc65e2aRdQ5Livg+fX53w74tmNOP6E3PCtE8QQDlcRlEFRujfPTyrwwMqpJJEAALVyWNRAC1HcWlXz1XTxbxfmWCfd8RQP2dIvQtj383I761iUsA1fPj9XcsG9P2ATQUAPeAqqbDn5di8/N4014QXK86U+TarjrNH3LF59eV6ITD+kb8ex//0DFHjKgTdWNFa55CAKrYOFl5tohkYFB1XRDAgX3I6sdvTwCtHQU/sy62XS6xvkyw/ndKIbY1IKv41iYuAZRV7oTXTOrcZHmr6AXK2rzvFhJp40HVA6z20uZMkV11uV2qrm5r1Icc4ZaiOcqou96dlVUkmQCUsXHYo/ckVOlag0o6AkirAmWvbATz4Kevy9+76yRDXc8fNIIrw7iCmzht4lub2ARQ5OLP31wl5TO6aYMNBdB3nzLz6++MC6CqwvKK67vPy6N/zsXDPM+b/MzzjjnjAmjNKy+XDtoKQBlbc9uqHdQzqEQUQKPkuqkkhEs7j5Dk9T/+fNNz2E6CDZKWCbEqKq3jW5uoBFBlulDtyT2WAMJYw7tvPixdqHPosAToC0BfArBH7z/UTt4xqL7cCqDpOS5+j6YEKA049h22k2CDpGVClHQmT4pvbaISQJGGZ18U6ffTVVt7VrQBqn6Sxs+lbQCNAER345z+vskz4bD83uE33/XbACMC6Jt3SLRtgL4A+GO99WXBII7glE2vSyK4X41gx6Gup+9zifWdNkBrOwv5oRClTXxrE5UAhMfZbqwX6FXbCyS4XrcXqM2XrOqvE3Pq7Mv83U3xJd7Tw+oancPyRsWJT9iNi9zu9tvIo24FIJhXfIGNbOzbx+qgF6gvgLwe3BUMEn5+m0z7uulcXJU+J161PTrnz8yM7hO7k2CDpC2FuBetmhzf2sQlgG4vsuk4gOB63XGATr4kfLSqOVONA7AT3yeyw86ddh1zlFG3AmjMa+ro+yqobBxgIIBmek9rkFwAWd1Hk0mbSo0dTcr2HLZjaz9p+bcET7aJb23iEkB+4r1Ada8HHyz9Ih8dCX7Mmzo664L+6MdBzYIPEP/Yyal3X1/Vg5r8pr/pH5bwkeAvuuYoo27rN+2I6UvRjP34T7wpyYP+II4ED2KraD80BkkF8OlD7WnskfyLJplYr83r77J+wuSnf7tK3vtSNhLMOCRiTdEmvrWJTACOELruCJLuxsMYIgwCRAoxARQF8CedMSWCvFw589mi8RHKk9wWYgKou/fFuTLEOH39haOYeDNpPx4uaIgJIH/32yvZGzXAAtYr/enaRsyFmgAA6AABANJAAIA0EAAgDQQASAMBANJAAIA0EAAgDQQASAMBANJAAIA0EAAgDQQASAMBANJAAIA0EAAgDQQASAMBANJAAIA0EAAgDQQASAMBANJAAIA0EAAgDQQASAMBANJAAIA0jgWQABAEawnAbXQgYILOawgA+CbovIYAgG+CzmsIAPgm6LyGAIBvgs5rGwEc2aa46bwtb4JOFOCUoPPaQgCHs8fs/Pl4M0sB6yXK27dvxWPxoy7o+Om1CMycIRsTwOlhn2dsc/JZ2/7NSpSJWd4JLrr827daBSiu6UWzON7McRbtxgRwvLnlAjj4EIAy0QfPbV3k3cud4KLLv32rVYDiml40i+PNHHfRbkwAdQmQztpCWn5fZaJLntvquLuX2+BvgblHTw2vYWMCqNoA2bydv6X3VSZ6e8EgW4Vzw1DiF0bcQnHNoWe4YKI50yUzn1Efe/moepbynpXmU7O7fHVw/BuDOocirlS1U71lL9DsHaR1AtCRS7NcE7ofXPzwtndNZo7x6bXwZI4+aSYh5rU0ytpNXz7+6k376fjZ48sHb9qD402v0n19fW0a12Gnkk9Q4wDKRO9eGMmZfiy94INL6AVSReu+DSCPtHbT9Da7FVz4o+fT3z02B6ev/tx14etrmQLkceXK8iMoAZi1AUazvB9LYA4bC86SLVEU0U2Ayk0LF2VHLx/9lc3SvC2e2oUb5/zxzQ8qF76WMRJXnquq7DYCYM3fQ+JlIEyZ6JNyAx4fFKYlQLbnji5UW6QCqNGWAL24GKlUARYCKLt/jjc7TejTQznZWtlVGnTPAHCKYRuANy2T8+f6qd2rAg0rMZo2QD8udiWTPrLtxgEYunGArC4flAUFBEAHw14g9qDPC09XNYKn9AL142pKk+nGDQKycQCGZiS4DsJCKUYLIAA6jAvgqnhK/+or7k+HXbcblHn9pG5QeVxpongUW1SByubEy5W6EVAXErm6nIAA6BB0Xts0grnIdOMAKAGAQNB57acbtOlzQhsAhJ3XnsYBylY4a4c7iQ7ETNB5bSGA0S5Op/cF0RN0XtuMA8zy/Kn3BdETdF7bjAMYjAFnzegDeoHII+b109PTMMDYbNBUXt24vLw0jks1DjZjIExHdvZYDRVDAEDI66cnmQJGZoOW48EDLi9lCpDHpe62txkI082BqILs+f+aFychADokleP3aQKMzQb9oONDlzJG4ipE9DtnA2GH0Vdh6kIiPX+GAIBpCaCcDfreVSJ56GpLgP5s0GzvsAqUjPUCNQNh6Q4CAKZtANVs0Pz/ipqE5KGrawP04ir+OhOACbXbF2LpCmD6orwgegwnwylngzIU7msaF+uUkY/JehoIq4eCTw8oAcgzdzYouyArASbElTvsBWrqQBgIA0bMng2qnMppHpdLAbCm7a64kftVIcAmCTqv7QbCDqyD02hdIDSCQdB5bTcQxupmvd5ZX/cF0RN0Xtu9EVa0TyAAYEjQeW3zRlhRq0n3hlWg2fcF0RN0Xlsti7IbdvD3wKoQoMGwGzQfTGAzegnYLK4skQ0mmxg3OWB5O6wKAWrEvL6/vx8GUExgG6yF2OPi4sI0Ljao9uBoVQhW/2dolkXBO8FAQMjr+3uZAuQT2AZrIfa4uJApQB6XeiDZXgCaZVGwKgQQSCrH79MEUC1nKK8CXcgYiSv9g3Q+XT5dAGk7m0c9OIcSAAiYlgCD5Qz1bQBtCdCLi61m6GphrLoE0IFVIUCLYRtguJzhSCNY0wbox8Wc39XSiEZgVQjQYDkZbk4vkM+lEb2uDg02iO1kODsByOPKHC6NaLI69ITowNYJOq/tX4r3sksk2CBB57XdXCDGivsEg6gIOq9t5gKNrg7t8r4geoLOa5tG8Ojq0C7vC6In6Lz21A26dHQgYCwnw7EJlbM6WoyAAIBvxLy+u7sbBpBPYMt2uWICmy/jTAMeb5Lz5xTjAMAMIa/v7mQKUO7ta74aigvjTAMezh6z82ejNXId3BdET1I5fp8mgGoynNVI2HTjJgZk3aCZZtVPx/cF0WNaAgwnwxlMO3NonGFANhDGBICBMGCGYRtgMBnu5f3HZY0zC1iXACneCQZGWE6Gm7fqginWbYBsdI1oN/cF0WM5GS7Vv3TiCMteIAyEAWOCzmuMAwDfBJ3XEADwTdB5DQEA3wSd1xMF0GwPg+XRgSlB5zVKAOCboPN6cglw62Z4LuhEAU4JOq8nC2APAYBpBJ3XU6tAGdoAYCJJ0Bj/ivoAJQDYEGgEA9J4eSGmfFfgkMS+P4B0V2flaRAjXl6I4df4srjCOtGW912RpyepqytOgyjx8kIME0Dl+sGvDq125qcnqasrToM48fJCDBNAtY9w2PsDKJ35aZTljQU+8PJCTCwlgOjNQ/fWlwDQwTbw8kJMOWNol9fN4Tn39ciYJ5u0AaCDyPH1QkwRpgihXkQ9LAGoAxieRoEQK5THATzUY6CD2LBfHXqh+3rE32MbOogGu16gBe/rDeafnp0UOggfm0bwrFlwU+/riwXdEjoIGJsSoJpGpxsHaCfbBTcO8FQ++le5MXQQHH4awaeHsVJiNQGs7oXQQVB46gU6PYys7L6WAIJxP3SchoGvbtCDfJxs+nsIjgnO7YIziBjUxgFC9bdQ7do81AQQ+GRm6GBpyAkgitdZoIPFmCyAsnlrvEmq6q2BFQWw2p0nAx34Z6oAjjfl/Ob6r/f7uiZCd4IOPDJVAM1bALHuERavH6k6TqGNOUwUgDATTvWqi+P7OmYDvtLTAUqHWUxfGrE+oZ0SxDY51k6XgADm8tRhbWuiZfrSiPUJ3S6RWf0ijPKNGAjAERDAPCa3AZopDpp3gg0qSisJYHuO8oSSYBZTBVAt9iAcSDCoKEEAruj6PYQwkcnjAFWlJtPt34cSYEmk7g4hGGLzSmS95IOaZsmIwNoA9PwBQhjB01SI+pUYZTsBAlgWCEEBqblAyH4IoY9tFWjeRAgIYG0ghIrJAsgMGsEu7+sSZPcAjRBoyGOqAA71inC6blCX93UIhfy0ZSgEIgXE5LlAJgNhLu/rEALZOZtGCFSqSJ7mArm7r0O2n5vuIDO2TEgAW89KtzTuv/F5FoSqQJvMP39IXH6LUiDUCN5Qri2Czs+3UyzQ6QaNPadCJXIt0BkIizJ74iJGLZCZChFPlmyCaLQAAQDPhC0F+27Qhe7riiBTnxghFgtUBBBOigNGMFqAAMDKrKsFCACEwwpamCyA0c2PHN/XDfD/2FhKCkRKALtUvL+/d2wHmI7fYoGGAKz9X6oA6GItPGiBggAsk+v+Xq4AlS7AkrjSAgEB2CbSfZfeaYcGgnmYaEF5bfsjwSNJI/FlreP3T4OQUElB7QK0BaB/uGtqQBBB6HSKBY0PkBZA76EuKwpU3+odgYDRVpA8CcDv/gBT6vRG/j/t9t0vQAXh41QAx38q/56+Wmt/gCmt2qdcrReHdRmoIGxctgGqPTIOmpFgv6tDT+j80odyXZdHwyBcXPYCsaf68Ua3PrSH/QGEH2AsgNEwXtqyUEFU2LQBDmMTgdyXAI3LPw2Qh84Nhn/v/Y3pQgWxYNUIVtbsa1zvD9B1967fD4VgWER4d1CoIALseoEOyciAsOP9AXouLfXuRgih+H91G6ggaMKfDq2v7ajDjwRb1CmhgmAJbCCs67itI0/q+TQRwAruCBWEiM26QPOWxNLdV+3xk8e+9EFWc0SoIDBsxgFcTAiV3ndqbUeF9vvMAVd2QaggHGzGAUYr/wYtBZ0ATE2yIhjnw7BZENiUAOON4NPDmEjWEkBo8zjDsoYg3ibD6TcSHm0D+CI0AXACNIkMvnqBFCMFbdVI/jXf/h+mADih2rVxLARQ14FiWhalJWw/C9u6LWIhgPT8OdtFuEFGRfgeBhUsiN106MP5s3Kam+P7OicS14IKlsFuHODlgzf83ziZo+nQzojKqaAC79iNBB8/ezQUwOz7uiY+f4IKfGLRBmAP9XQfaxUoUlcKtvMqdmy6QdMd6wma1QkEAVgBFTgnylUhZrAB9+mrAJqYgx8B+F0VYg5b8ZVWBSgVZuHlhRi/q0LMYlOu0q7rsqmftSiWq0IIW8ZL8LAqhCO25ygQwDxsukHLeW6aXqBwS4DtOcr9PcqBOdi/EKN7LcD1qhDO2KCLiJ4PGUzG/pXIVDcO4HhVCFds0jcGLg8ZTMCqDcAe75mmDeDyvk6h5BWoFRlh0w3KH++zxoEhgMWADPQEtiyKX+j6AWSgwk4A85dGgQBWALWiIRAAPSADAUoCQJ6LQAYcCIA25GUAAQBF44CGMCj1AlHIz1l0ZECkaLBaFmWfZ3MHAlYQAIHcdAKt2UV2y6K8XO3Ye2FL3Ncd289Ml1CRgN1kODYbYnyNXCf3dcfWs9ItjftvvDSwE0BaOL9qwRPH93XGNvPPH0Of36QUbKpAu+PN+fPxJrIq0JZybRE0jr4hKditDXr2OLr8s6v7OiP+vAqR6NvLZLpBI82fiIhTChAAcE5MUvCzQ4zD+7oigrzYIOFLwboEmNcLurgAgs0AKoTaWLCvAsU1EBZWqtMmKCnYCyCugbAQ0hr0CUAK9gKIaiAM/h84q0nBWgBxDYRBANGwcGPBvhcoqtmgEECMLCEFIuMAdil4d3c34TTwhz8peBEAe2OALaAVzP4A1v4vc3XFabAIrqVgIYDRzS9KAfBlcYV1oi3v6wDLxLq7k7q64jRYGjeNBZvZoKPdP0wAlesHsDq0bRLdaXFuJrBnXArKSzaN4NEX4lmQaiPt9fcHGEkZ9TNeXwJABEGikILaBeyXR9cQVAmgE0DPkWUfFV/SBQAhIEpB4wP2G2RoKHtKd7mmuAhCAGPVGqNeIKggdLT1I+vl0Ufgb82o98eYJ4ApdXoj/59jTBvV7FiAJ5wKYP3p0BNatTzcSAXImetCBcHisg3ghhnRmXd9jQTy0piFCoLEYS+QEc43yhZ+wHjv73314B+L1FtnDkQQDX4E4Hyj7MbhJW37gRRMi4g7r5MaUBREwUQBHG/2Bm0A59ukdl1d0c1r0OfVYQnvhApCx9NcIMcbZfd8eqT6YyaA5fwSKggYLwKwLwFU1Rnjdm9uWgIs7ZFQQZjYLYw11g2q3Cg7aZB+T/Tc+8EHU1MDKwDEm0IFoWEzEmzwKozdRtmax/0E/zcKvKIbQgUh4WUukO19J9V0ZrG6A0IFgWBTAszdHkl530UEwBwvENeDCtbHog3w8v6jefyqtSPG2wCeCM7pgjOIFjYCuPI3F2gZ/w/P4YI0igRepkO7vK9jAhUAJ1zLNkxQjeAFCFkAnMDN2xyeGsHOJ8M5IwoHi8LIbeCnEex8MpxDonEtqGAJvLwQ43wynEMicymIwDNxTIZzSITuhKLAI3YCGGkHBFwCROtIUIEfvAhAPRlu+n0dE7cPQQXO8SMAy8lw/tmC9/RVAE3MwZMA3N3XLZtxlVYFKBVmQUsAEx3l+vrajx2OaNd1gQJssegG/eyR/41rj7CSaX5yfS1XQFC6gALmYS+AqPYIq5jkJtfXcgWodLEOtf+jLLBjqgDS9qXGWbWgVQRgUQC09E47N84WSZsYQjDHvgRY6L4ukTmFxJe1jt8/vT4KZ0eRYESESyNaM3QF/cNdUwMKUAdKoAQdXrZIcnlfhww8oPdQlxUFkmiCrhDpgBIkeNkiyeV93aHx/2kRKWtN9rYtC5TQ4mWLJJf3dYczASiJqTjgaIVAQyB03ghTtgCce2x0OpAWCUSKCDrvBKsF4OmG8elAVAKVSpLVqhAOioAABHC9zJhujDoY2ylzQ0xeHr0dCIurF0jm/0sSmww6rn83YF3jHEJmHKCfZev4YkTFgd7Ph5KIVBNUBBCG/zd3j0EHU306Tk3MeCk+MdkudfZ9HdHmBXO8QHwvCh3MIQJJWJQA5WuOh+R2zojAwgLo+H9oLrd5HQgEV0zYd4Nm58+qN95d3tcNTSpPcrbLy0tfBkkgJIMO62rCfiDs8OrNjHdilhSAmKJTBHB5KVeAV11QKg6ULCgJ+6URWQkQhQA6CTjBvy4v5QpQ6cIp0EGXucWEMvycNsCcMeFZApj063vJ1fErhYsL11p6523sng50oGaKJtRXbbpBeT9Q8fCfMy10jgCm6b+bNtf5wP87ziw4vNzxh4pYAOjADJUkNPqIZRxAMH+8BBwGrk90fGjo7F2v1tSA2PnlxSCXAZShYbSAiEQAov2jRV59SfjTFgACow6sbAMPzi8phl5xgLJhnOUFYLs/gMJKSXXvTna+G3gYaddRbH125AsLieG6g8cbbQFnbYDjzd5geXTr/QGkdg4e+OpfM1LeufH/KfgXA1RghLK64KUEsF0dunXdnicrH+n6WHr06j+5vhfIOX7EIPr+9QB399kqXrZIst0fQP341tT4FdEMT1feULrfkn04EhyKQevocxRBQz9eXomcXwLILo2aqA/c+v/CfZhjzBXDJEc1LySIlCA2A2Hj3f+2+wNMetBPI1j/77B816pKElTqUF72CLPfH8C3/08TwMXFhR9rjDAVg3OtDCWx4aZFJOMAXSZmAQtuI4CLC7kCVtCFRgyeSgutq49LJDTNKC2IRQDiDxhN0O5lIXg95ltfulD5eHtxeFX3nSXoisFbfcmx21poxvXdpVcmCyBjdZ907HUw24EwlZniDxhNne7lNnjpJgP/l3nzxZDeJfXtl+RSgsO4XUVliTPNaC5OFQCbAZ2yqr12cRTbgTCVmdfXRW7wKzwE/6D82W3g6oeXH+vsbJ2349xDb5c7vhx1Uvhm6PUyUVioI+jOAiUqYTQu0WeiAHgH58sV82rN62C23aDX14UvDR/ezP7iwmXl6tWH7hc7P7YOXIqAf2zyUvDXMRfW1ID657Xq8CsS/vPMQ5vK47JMNvf2roHEZWomT4W4rVcH1fSG2g6EXXNHkTzYL/mFS8kHCb3r3Y+TfHOKLsbxJBKX4hLFUCbbAjiyXfu71C7jRQC2JUDfC7qZUWdH54OE3vU20oGjWbqdv6e5hUjslWNkifN4h/iTVt8lZHf3IgD1QFi7rpzsaybZPwPhFp0bmiZBIHhOpQ0jS00/ArAcCFPa2bmg+TWy67KPasOjYyw1Qot3FZYXgGF0fZRmTvLh3vXhx2mmBo4vP92Q/+t+TGCL4yrTfJIP965vKCNl+Pp5m0o25Y/xPRKsWjlljT3CABgQy1QIALwAAQDSQACANIGtCgHAsvgRgO1kOAAWZrVVIQAIAh8CMJgMN4EoCosojISVM3BcAni682pEYSSsnMHENsDYqhC+7rwWURgJK2cwzarRyXDe7rwSURgJK2ewnlVhpkePKIyElTOAALREYSSsnAEEoCUKI2HlDCAALVEYCStnAAFoicJIWDmDMK0CYCEgAEAaCACQBgIApIEAAGkgAEAaCACQBgIApIEAAGkgAEAaCACQBgIApIEAAGkWFUD5RuUuZy8VJ2ePuXgQCi8f8PUuhgYGZWlpZdDpyRdR46+OB52Wiwrg5f3H8uBQ/Hz2rz0IheMNX/BlaGBQllZWhpyep4fCjIypM+y0XFQA9WpC5foq6a49CIVDuezj0MCgLK2sDDo9y/12s1dvAk/LRQWQVb+5SZzmYEkrNBySPXeqoYEhWVpbGX56sud82Gm5rADSX5fVwrLoLjKxOVjSCj2lAAYGBmZpaUj46ZnKkjAoK5cUwPGGrSeU7qv6X/F/c7CgFSPwfBkaGJil3Mrw05MtoBZ4Wi7fDVrkXZhJURKRAJrDYK2s28ABp+XyAihqgGEWhiUxVYE44aZnuYBm4Gm5ggDel7SLFrdCSQSN4LwrgFDTs9pNIvC0XFIA5Q8/yHrGwuEQQTdoR6ahpme9knLgablsLxD7zUWjLcwhkZJDDANhdS9QwOn5clUvIB52Wi5bBUqTpHwuZPVYeBbOoHhJVbkYGhiUpZWVAadnVq4jzowJOi0xGQ6QBgIApIEAAGkgAEAaCACQBgIApIEAAGkgAEAaCACQBgIApIEAAGkgAEAaCACQBgIApIEAAGkgAEAaCACQBgIApIEAAGkgAEAaCACQBgIApIEAAGkgAEAaCACQBgIApIEAAGkgAF+kbPuWao3w04N6KeTjza0mlsNtL8DpQR78+NmjhZEAAvBFuf59+numg+PNXhlOKwB2sRsgU0npwAUHJgIB+IKv3n/87Fu2HUqzoa+EaQJQh1YVDUALBOAL/tQ/nP/C/JKXBuVa5tWuFnwXab7FI3fp5vhvb8oFz4vAZ9+cfXuVJOf/e/OHq2oV9HJd9DrUyxX7u3+prmYoAiyAALzBtq8oKizsT/0vO3ssmwNFA6E45rtIMAG0x0wYxb+08PNDcvZYlgDVyTrS+sTLFZdRETRrd/YD04AAvFFUylm1pPrDG6ns8Z/xZ/i+bBYUD/TCx4XjfbnrHS8m0loA+3o7pPK4DbWvdmLhV6sgYBIQgDeKij/zeraJXdUEOLC6CvPpZq/QwmmLz+IxrxM1+zQ1bYCq7t8eF/+1bl+2NzQtbaACAvBG8dxnPTPVH1bNf/WfzFGLWkxRAzqUWwglXADCMXftTCWAytMhAGdAAP5I97zPMt2xP62jHl79uSwEylBNCZC3ro0SYDEgAH8cfsV7Jg+vP7+td6BPuKP+njcDqho7bwO0x61rs3buUAB7pQDQBrABAvDHy6953Z931nD3PN7wceE0YQUD79ep2rniMffvthdo3xFA1QskFQB6gWyAAPxxeuA989UfvjVoyrfJbbY2TeqiQDzm/+IhwDAAAACOSURBVKXF5/8ozqRsHEAQwEEI1RMAxgFsgADCpdoMuIN6JFg/pwgogABCRNOoxVwgt0AAQcI7RqVPdMwGdQsEAEgDAQDSQACANBAAIA0EAEgDAQDSQACANBAAIA0EAEgDAQDSQACANBAAIA0EAEgDAQDSQACANBAAIA0EAEgDAQDSQACANBAAIA0EAEjz/+gTLDyEB5qEAAAAAElFTkSuQmCC" /><!-- --></p>
+<p>Band-by-band, not just averaged: soil brightness matters most in the
+visible and NIR (bands 1-9, up to ~871nm) at low LAI, and the whole
+curve collapses toward zero as LAI rises from 0.01 to 6 – the canopy
+closing progressively removes the soil’s spectral signature rather than
+uniformly damping it.</p>
+</div>
+</div>
+<div id="atmospheric-contribution-independently-by-driver" class="section level2">
+<h2>3.4 Atmospheric contribution, independently by driver</h2>
+<p>Section 3.2’s TOA-TOC diff plot showed the atmosphere’s
+<em>total</em> effect. Which atmospheric variable drives that, and where
+in the spectrum, varies a lot:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>atmos_vars <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">aot550 =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.3246</span>, <span class="fl">1.0</span>), <span class="at">uh2o =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">1.4116</span>, <span class="fl">4.0</span>), <span class="at">uo3 =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3480</span>, <span class="fl">1.0</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">names</span>(atmos_vars)) {</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  vals <span class="ot">&lt;-</span> atmos_vars[[v]]</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  toa <span class="ot">&lt;-</span> <span class="fu">sapply</span>(vals, <span class="cf">function</span>(x) { r <span class="ot">&lt;-</span> LUT[<span class="dv">1</span>, ]; r[[v]] <span class="ot">&lt;-</span> x; <span class="fu">run1</span>(r)<span class="sc">$</span>output<span class="sc">$</span>rfl.toa })</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">rownames</span>(toa) <span class="ot">&lt;-</span> sim<span class="sc">$</span>output<span class="sc">$</span>wave</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">colnames</span>(toa) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(v, <span class="st">&quot;=&quot;</span>, vals)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, v, <span class="st">&quot;-- TOA reflectance by band:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">round</span>(toa, <span class="dv">3</span>))</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt;  aot550 -- TOA reflectance by band:</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt;      aot550=0.05 aot550=0.3246 aot550=1</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; 445        0.108         0.118    0.145</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; 520        0.085         0.093    0.122</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 560        0.068         0.074    0.100</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 654        0.036         0.043    0.071</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 701        0.059         0.063    0.083</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 743        0.282         0.268    0.243</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; 779        0.379         0.358    0.315</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 789        0.367         0.348    0.304</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; 871        0.416         0.393    0.342</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; 942        0.129         0.122    0.106</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; 1372       0.002         0.002    0.001</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; 1639       0.102         0.099    0.095</span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; 2256       0.016         0.017    0.019</span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt;  uh2o -- TOA reflectance by band:</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&gt;      uh2o=0.5 uh2o=1.4116 uh2o=4</span></span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&gt; 445     0.118       0.118  0.118</span></span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&gt; 520     0.093       0.093  0.093</span></span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a><span class="co">#&gt; 560     0.074       0.074  0.074</span></span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a><span class="co">#&gt; 654     0.043       0.043  0.042</span></span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a><span class="co">#&gt; 701     0.064       0.063  0.060</span></span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a><span class="co">#&gt; 743     0.273       0.268  0.258</span></span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="co">#&gt; 779     0.360       0.358  0.354</span></span>
+<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a><span class="co">#&gt; 789     0.356       0.348  0.332</span></span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="co">#&gt; 871     0.394       0.393  0.393</span></span>
+<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a><span class="co">#&gt; 942     0.191       0.122  0.059</span></span>
+<span id="cb10-39"><a href="#cb10-39" tabindex="-1"></a><span class="co">#&gt; 1372    0.008       0.002  0.000</span></span>
+<span id="cb10-40"><a href="#cb10-40" tabindex="-1"></a><span class="co">#&gt; 1639    0.099       0.099  0.099</span></span>
+<span id="cb10-41"><a href="#cb10-41" tabindex="-1"></a><span class="co">#&gt; 2256    0.017       0.017  0.016</span></span>
+<span id="cb10-42"><a href="#cb10-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-43"><a href="#cb10-43" tabindex="-1"></a><span class="co">#&gt;  uo3 -- TOA reflectance by band:</span></span>
+<span id="cb10-44"><a href="#cb10-44" tabindex="-1"></a><span class="co">#&gt;      uo3=0.1 uo3=0.348 uo3=1</span></span>
+<span id="cb10-45"><a href="#cb10-45" tabindex="-1"></a><span class="co">#&gt; 445    0.118     0.118 0.117</span></span>
+<span id="cb10-46"><a href="#cb10-46" tabindex="-1"></a><span class="co">#&gt; 520    0.095     0.093 0.090</span></span>
+<span id="cb10-47"><a href="#cb10-47" tabindex="-1"></a><span class="co">#&gt; 560    0.078     0.074 0.064</span></span>
+<span id="cb10-48"><a href="#cb10-48" tabindex="-1"></a><span class="co">#&gt; 654    0.044     0.043 0.040</span></span>
+<span id="cb10-49"><a href="#cb10-49" tabindex="-1"></a><span class="co">#&gt; 701    0.063     0.063 0.061</span></span>
+<span id="cb10-50"><a href="#cb10-50" tabindex="-1"></a><span class="co">#&gt; 743    0.269     0.268 0.264</span></span>
+<span id="cb10-51"><a href="#cb10-51" tabindex="-1"></a><span class="co">#&gt; 779    0.358     0.358 0.358</span></span>
+<span id="cb10-52"><a href="#cb10-52" tabindex="-1"></a><span class="co">#&gt; 789    0.348     0.348 0.348</span></span>
+<span id="cb10-53"><a href="#cb10-53" tabindex="-1"></a><span class="co">#&gt; 871    0.393     0.393 0.393</span></span>
+<span id="cb10-54"><a href="#cb10-54" tabindex="-1"></a><span class="co">#&gt; 942    0.122     0.122 0.122</span></span>
+<span id="cb10-55"><a href="#cb10-55" tabindex="-1"></a><span class="co">#&gt; 1372   0.002     0.002 0.002</span></span>
+<span id="cb10-56"><a href="#cb10-56" tabindex="-1"></a><span class="co">#&gt; 1639   0.099     0.099 0.099</span></span>
+<span id="cb10-57"><a href="#cb10-57" tabindex="-1"></a><span class="co">#&gt; 2256   0.017     0.017 0.017</span></span></code></pre></div>
+<p><code>aot550</code> (aerosol loading) shifts mainly the visible bands
+(445-654nm, rising with more aerosol – more path radiance/scattering);
+<code>uh2o</code> (water vapour) is almost invisible outside the two
+water-absorption bands (942nm, 1372nm) where it dominates completely;
+<code>uo3</code> (ozone)’s effect is small and concentrated around 560nm
+(the Chappuis band). Different gases, different spectral fingerprints –
+a single “atmosphere on/off” comparison (Section 3.2) can’t show this,
+only a per-driver sweep can.</p>
+</div>
+<div id="geometry" class="section level2">
+<h2>3.5 Geometry</h2>
+<p><code>tts</code> (sun zenith), <code>tto</code> (view zenith), and
+<code>psi</code> (relative azimuth) all feed into fourSAIL’s BRDF term
+inside SPART, the same way they do in <code>Compute_BRF()</code>
+(Tutorial 01) – this is what makes reflectance direction-dependent
+rather than a single fixed number per surface. <code>inputsSPART</code>
+fixes <code>tts = 0</code> by default (sun straight overhead), which by
+simple geometric symmetry makes <code>psi</code> irrelevant (there’s no
+“relative” direction to a sun with no azimuth of its own) – so this
+section fixes <code>tts = 30</code> instead, specifically to let
+<code>tto</code> and <code>psi</code> show a real effect:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>geom_row <span class="ot">&lt;-</span> LUT[<span class="dv">1</span>, ]; geom_row<span class="sc">$</span>tts <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;psi sweep at tto=20 deg (NIR, band 8 = 789nm):</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; psi sweep at tto=20 deg (NIR, band 8 = 789nm):</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">90</span>, <span class="dv">180</span>)) {</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  r <span class="ot">&lt;-</span> geom_row; r<span class="sc">$</span>tto <span class="ot">&lt;-</span> <span class="dv">20</span>; r<span class="sc">$</span>psi <span class="ot">&lt;-</span> v</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;  psi=&quot;</span>, v, <span class="st">&quot;-&gt;&quot;</span>, <span class="fu">round</span>(<span class="fu">run1</span>(r)<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF[<span class="dv">8</span>], <span class="dv">4</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>}</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt;   psi= 0 -&gt; 0.395</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt;   psi= 90 -&gt; 0.3851</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt;   psi= 180 -&gt; 0.3769</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;tto sweep at psi=0 (principal plane, toward the hotspot; NIR, band 8):</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; tto sweep at psi=0 (principal plane, toward the hotspot; NIR, band 8):</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">15</span>, <span class="dv">30</span>)) {</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>  r <span class="ot">&lt;-</span> geom_row; r<span class="sc">$</span>tto <span class="ot">&lt;-</span> v; r<span class="sc">$</span>psi <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;  tto=&quot;</span>, v, <span class="st">&quot;-&gt;&quot;</span>, <span class="fu">round</span>(<span class="fu">run1</span>(r)<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF[<span class="dv">8</span>], <span class="dv">4</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>}</span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt;   tto= 0 -&gt; 0.3845</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt;   tto= 15 -&gt; 0.3921</span></span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt;   tto= 30 -&gt; 0.4012</span></span></code></pre></div>
+<p>Both are real BRDF effects: moving <code>psi</code> away from 0 deg
+(away from the sun’s own azimuth, i.e. away from the backscatter/hotspot
+direction) <em>lowers</em> NIR reflectance here; increasing
+<code>tto</code> toward <code>tts</code> (staying in the backscatter
+direction, <code>psi=0</code>) <em>raises</em> it, approaching the
+hotspot. <strong>This specific direction (higher <code>tto</code> -&gt;
+higher reflectance) is a property of this geometry
+configuration</strong> (backscatter side, <code>psi=0</code>, this
+LAI/LIDF), not a general rule – on the forward-scatter side
+(<code>psi</code> near 180) the same <code>tto</code> increase can lower
+reflectance instead. A Lambertian (direction-independent) assumption
+would miss all of this.</p>
+</div>
+<div id="a-small-multi-factor-sensitivity-comparison" class="section level2">
+<h2>3.6 A small multi-factor sensitivity comparison</h2>
+<p>Which of these actually moves the TOA signal the most? One factor at
+a time, same NIR band, same low/mid/high bracketing used throughout this
+page – LAI and canopy/soil trait changes side by side with atmospheric
+ones, extending Tutorial 10’s spectral sensitivity analysis to the full
+TOA chain:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>factors <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">LAI =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">3</span>, <span class="dv">6</span>), <span class="at">Cab =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dv">75</span>), <span class="at">BSMBrightness =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>),</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                <span class="at">aot550 =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.3246</span>, <span class="fl">1.0</span>), <span class="at">uh2o =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">1.4116</span>, <span class="fl">4.0</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>sens_tbl <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">names</span>(factors), <span class="cf">function</span>(fac) {</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  vals <span class="ot">&lt;-</span> factors[[fac]]</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  outs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(vals, <span class="cf">function</span>(v) { r <span class="ot">&lt;-</span> LUT[<span class="dv">1</span>, ]; r[[fac]] <span class="ot">&lt;-</span> v; <span class="fu">run1</span>(r)<span class="sc">$</span>output<span class="sc">$</span>rfl.toa[<span class="dv">8</span>] })</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">factor =</span> fac, <span class="at">low =</span> outs[<span class="dv">1</span>], <span class="at">mid =</span> outs[<span class="dv">2</span>], <span class="at">high =</span> outs[<span class="dv">3</span>], <span class="at">range =</span> <span class="fu">max</span>(outs) <span class="sc">-</span> <span class="fu">min</span>(outs))</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>}))</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(sens_tbl[<span class="fu">order</span>(<span class="sc">-</span>sens_tbl<span class="sc">$</span>range), ], <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">digits =</span> <span class="dv">4</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">factor</th>
+<th align="right">low</th>
+<th align="right">mid</th>
+<th align="right">high</th>
+<th align="right">range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">aot550</td>
+<td align="right">0.3674</td>
+<td align="right">0.3477</td>
+<td align="right">0.3040</td>
+<td align="right">0.0633</td>
+</tr>
+<tr class="even">
+<td align="left">LAI</td>
+<td align="right">0.3106</td>
+<td align="right">0.3406</td>
+<td align="right">0.3516</td>
+<td align="right">0.0410</td>
+</tr>
+<tr class="odd">
+<td align="left">uh2o</td>
+<td align="right">0.3563</td>
+<td align="right">0.3477</td>
+<td align="right">0.3323</td>
+<td align="right">0.0240</td>
+</tr>
+<tr class="even">
+<td align="left">BSMBrightness</td>
+<td align="right">0.3387</td>
+<td align="right">0.3477</td>
+<td align="right">0.3592</td>
+<td align="right">0.0205</td>
+</tr>
+<tr class="odd">
+<td align="left">Cab</td>
+<td align="right">0.3477</td>
+<td align="right">0.3477</td>
+<td align="right">0.3477</td>
+<td align="right">0.0000</td>
+</tr>
+</tbody>
+</table>
+<p>LAI dominates NIR TOA sensitivity here, but <code>aot550</code>
+(aerosol) is not far behind – comparable to, or larger than, moderate
+soil-brightness or water-vapour changes. <strong><code>Cab</code> shows
+essentially zero NIR sensitivity</strong>, which is exactly right
+physically: chlorophyll absorbs strongly in the visible, not the NIR,
+where structure (LAI, LIDF) dominates instead – useful confirmation that
+the model’s spectral behaviour matches known leaf/canopy optics, not an
+oversight.</p>
+</div>
+<div id="why-the-toctoa-distinction-matters-for-inversion" class="section level2">
+<h2>3.7 Why the TOC/TOA distinction matters for inversion</h2>
+<p>SPART slots into the same hybrid-inversion framework the rest of this
+series builds (Tutorials 10-13) – but which reflectance domain a model
+is <em>trained</em> on matters enormously, because real satellite data
+is always TOA, never TOC:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>LUT150 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> ToolsRTM<span class="sc">::</span>inputsSPART, <span class="at">nLUT =</span> <span class="dv">150</span>, <span class="at">setseed =</span> <span class="dv">1</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co"># Fix only atmosphere/BSM-soil (a realistic single-scene assumption, same as the</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co"># rest of this page) -- leaf/canopy traits vary naturally across all 150 rows,</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co"># same as a real inversion LUT (Tutorials 11-12). Fixing every non-Cab column</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co"># (an earlier version of this chunk did) leaves only one varying predictor</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># against 13 highly collinear bands -- a degenerate, overfit regression, not a</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># realistic inversion.</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="cf">for</span> (col <span class="cf">in</span> <span class="fu">c</span>(<span class="st">&quot;Pa&quot;</span>, <span class="st">&quot;aot550&quot;</span>, <span class="st">&quot;uo3&quot;</span>, <span class="st">&quot;uh2o&quot;</span>, <span class="st">&quot;alt_m&quot;</span>, <span class="st">&quot;Pa0&quot;</span>, <span class="st">&quot;BSMBrightness&quot;</span>, <span class="st">&quot;BSMlat&quot;</span>, <span class="st">&quot;BSMlon&quot;</span>, <span class="st">&quot;SMp&quot;</span>)) {</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  LUT150[[col]] <span class="ot">&lt;-</span> LUT[[col]][<span class="dv">1</span>]</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>}</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>sims <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(LUT150)), <span class="cf">function</span>(i) <span class="fu">run1</span>(LUT150[i, ]))</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>toc_mat <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(sims, <span class="cf">function</span>(s) s<span class="sc">$</span>output<span class="sc">$</span>rfl.toc.BRDF))</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>toa_mat <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(sims, <span class="cf">function</span>(s) s<span class="sc">$</span>output<span class="sc">$</span>rfl.toa))</span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="fu">colnames</span>(toc_mat) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(toa_mat) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;B&quot;</span>, <span class="fu">seq_len</span>(<span class="fu">ncol</span>(toc_mat)))</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(LUT150)), <span class="at">size =</span> <span class="fu">round</span>(<span class="fl">0.7</span> <span class="sc">*</span> <span class="fu">nrow</span>(LUT150)))</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>test_idx <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(LUT150)), train_idx)</span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>cab <span class="ot">&lt;-</span> LUT150<span class="sc">$</span>Cab</span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a>fit_toc <span class="ot">&lt;-</span> <span class="fu">lm</span>(cab[train_idx] <span class="sc">~</span> ., <span class="at">data =</span> <span class="fu">as.data.frame</span>(toc_mat[train_idx, ]))</span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>fit_toa <span class="ot">&lt;-</span> <span class="fu">lm</span>(cab[train_idx] <span class="sc">~</span> ., <span class="at">data =</span> <span class="fu">as.data.frame</span>(toa_mat[train_idx, ]))</span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="cf">function</span>(y, p) <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((y <span class="sc">-</span> p)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((y <span class="sc">-</span> <span class="fu">mean</span>(y))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="cf">function</span>(y, p) <span class="fu">sqrt</span>(<span class="fu">mean</span>((y <span class="sc">-</span> p)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a>truth <span class="ot">&lt;-</span> cab[test_idx]</span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a>pred_ideal <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_toc, <span class="at">newdata =</span> <span class="fu">as.data.frame</span>(toc_mat[test_idx, ]))     <span class="co"># TOC model, TOC data</span></span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a>pred_correct <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_toa, <span class="at">newdata =</span> <span class="fu">as.data.frame</span>(toa_mat[test_idx, ]))   <span class="co"># TOA model, TOA data</span></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a>pred_domaingap <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_toc, <span class="at">newdata =</span> <span class="fu">as.data.frame</span>(toa_mat[test_idx, ])) <span class="co"># TOC model misapplied to TOA data</span></span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a></span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a>  <span class="at">scenario =</span> <span class="fu">c</span>(<span class="st">&quot;TOC-trained model on TOC data (best case, no atmosphere)&quot;</span>,</span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a>               <span class="st">&quot;TOA-trained model on TOA data (correct real-world approach)&quot;</span>,</span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a>               <span class="st">&quot;TOC-trained model applied to TOA data (the domain-gap mistake)&quot;</span>),</span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a>  <span class="at">R2 =</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">r2</span>(truth, pred_ideal), <span class="fu">r2</span>(truth, pred_correct), <span class="fu">r2</span>(truth, pred_domaingap)), <span class="dv">3</span>),</span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a>  <span class="at">RMSE =</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">rmse</span>(truth, pred_ideal), <span class="fu">rmse</span>(truth, pred_correct), <span class="fu">rmse</span>(truth, pred_domaingap)), <span class="dv">2</span>)</span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a>) <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<colgroup>
+<col width="82%" />
+<col width="9%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">scenario</th>
+<th align="right">R2</th>
+<th align="right">RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">TOC-trained model on TOC data (best case, no
+atmosphere)</td>
+<td align="right">0.862</td>
+<td align="right">6.36</td>
+</tr>
+<tr class="even">
+<td align="left">TOA-trained model on TOA data (correct real-world
+approach)</td>
+<td align="right">0.867</td>
+<td align="right">6.25</td>
+</tr>
+<tr class="odd">
+<td align="left">TOC-trained model applied to TOA data (the domain-gap
+mistake)</td>
+<td align="right">-2.391</td>
+<td align="right">31.55</td>
+</tr>
+</tbody>
+</table>
+<p>That’s not a small effect: a Cab-inversion model trained on TOC
+reflectance and (incorrectly) applied to TOA reflectance from a real
+satellite collapses to a <em>negative</em> R² – worse than just
+predicting the mean every time – while a model trained on TOA
+reflectance in the first place performs about as well as the
+no-atmosphere ideal. This is the concrete, load-bearing reason
+<code>SPART()</code> exists in this package: any LUT built with plain
+<code>foursail()</code>/<code>inform()</code> for training an inversion
+model that will later see real satellite reflectance needs either an
+atmospheric-correction step on the real data, or – what
+<code>SPART()</code> provides directly – a LUT simulated all the way to
+TOA in the first place. Not developed further here (train/test mechanics
+are Tutorial 11’s job) – this section exists to make the <em>reason</em>
+concrete before that tutorial’s own worked example.</p>
+<pre class="text"><code>Parameter LUT
+     |
+     v
+SPART simulations (already at sensor bands, TOC or TOA)
+     |
+     v
+Synthetic EO training dataset -- must match what you&#39;ll invert later
+     |
+     v
+ML inversion
+     |
+     v
+Vegetation traits</code></pre>
+</div>
+<div id="spart-and-satellite-observations" class="section level2">
+<h2>3.8 SPART and satellite observations</h2>
+<p>Because SPART already outputs at a chosen sensor’s bands, moving from
+simulation to a realistic EO-like observation needs no separate
+convolution step – just pick <code>sensor.i</code>. Only sensors SPART
+actually supports (bundled objects in <code>ToolsRTM</code>) are listed
+here:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>spart_sensors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;LANDSAT4.TM&quot;</span>, <span class="st">&quot;LANDSAT5.TM&quot;</span>, <span class="st">&quot;LANDSAT7.ETM&quot;</span>, <span class="st">&quot;LANDSAT8.OLI&quot;</span>,</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>                    <span class="st">&quot;Sentinel2A.MSI&quot;</span>, <span class="st">&quot;Sentinel2B.MSI&quot;</span>, <span class="st">&quot;Sentinel3A.OLCI&quot;</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>                    <span class="st">&quot;Sentinel3B.OLCI&quot;</span>, <span class="st">&quot;TerraAqua.MODIS&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>s_modis <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">SPART</span>(<span class="at">inputLUT =</span> LUT[<span class="dv">1</span>, ], <span class="at">CanopyModel =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>                                   <span class="at">sensor.i =</span> ToolsRTM<span class="sc">::</span>TerraAqua.MODIS, <span class="at">rsoil =</span> <span class="cn">NULL</span>, <span class="at">get.plots =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Sentinel-2A bands:&quot;</span>, <span class="fu">length</span>(sim<span class="sc">$</span>output<span class="sc">$</span>wave), <span class="st">&quot; -- MODIS bands:&quot;</span>, <span class="fu">length</span>(s_modis<span class="sc">$</span>output<span class="sc">$</span>wave), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; Sentinel-2A bands: 13  -- MODIS bands: 20</span></span></code></pre></div>
+</div>
+<div id="take-home-message" class="section level2">
+<h2>Take-home message</h2>
+<p>Use plain
+<code>foursail()</code>/<code>foursail2()</code>/<code>inform()</code>
+(Tutorials 01-02, 04) when the question is about the canopy or leaf
+itself and TOC reflectance is enough – it’s simpler, faster, and every
+model in this package other than SPART works that way. Reach for
+<code>SPART()</code> specifically when the question involves what a
+satellite actually measures at TOA (atmospheric correction studies,
+comparing simulations directly against uncorrected satellite products,
+or – as Section 3.7 showed concretely – training an inversion model that
+will later see real, uncorrected satellite data) – the extra
+atmosphere/soil-BSM machinery is not needed otherwise.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

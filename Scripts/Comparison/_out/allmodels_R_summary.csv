@@ -1,0 +1,16 @@
+"canopy_model","leaf_model","slug","n_valid","domain_pts"
+"fourSAIL","PROSPECT-D","fourSAIL_PROSPECTD",100,2101
+"fourSAIL","PROSPECT-PRO","fourSAIL_PROSPECTPRO",100,2101
+"fourSAIL","Liberty","fourSAIL_Liberty",89,2101
+"fourSAIL","Fluspect-B","fourSAIL_FluspectB",100,2001
+"fourSAIL","Fluspect-B-Cx","fourSAIL_FluspectBCx",100,2001
+"foursail2","PROSPECT-D","foursail2_PROSPECTD",100,2101
+"foursail2","PROSPECT-PRO","foursail2_PROSPECTPRO",100,2101
+"foursail2","Liberty","foursail2_Liberty",93,2101
+"foursail2","Fluspect-B","foursail2_FluspectB",100,2001
+"foursail2","Fluspect-B-Cx","foursail2_FluspectBCx",100,2001
+"INFORM","PROSPECT-D","INFORM_PROSPECTD",100,2101
+"INFORM","PROSPECT-PRO","INFORM_PROSPECTPRO",100,2101
+"INFORM","Liberty","INFORM_Liberty",92,2101
+"INFORM","Fluspect-B","INFORM_FluspectB",100,2001
+"INFORM","Fluspect-B-Cx","INFORM_FluspectBCx",100,2001

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scopeinpython"
+version = "0.1.0"
+description = "SCOPEinPython: Python port of the R SCOPEinR package (BSM soil model, RTMo optical/BRDF radiative transfer, leaf biochemistry, and the SCOPE fluorescence/thermal RTM chain)."
+readme = "README.md"
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=1.22",
+    "scipy>=1.8",
+    "toolsrtm>=0.1.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0", "pandas>=1.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+scopeinpython = ["data/*.csv"]

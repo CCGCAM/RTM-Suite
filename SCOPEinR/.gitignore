@@ -1,0 +1,26 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+._*
+## remove mac files
+.DS_Store
+._*
+# exclude everything in folders
+Archive.zip
+*.zip
+*.nc
+*.RDataTmp*
+examples/SCOPE_v2.1/*
+SCOPE_v2.1/*
+examples/SPART_v1.21/*
+examples/mSCOPE/*
+outs/*
+input/._setoptions.csv
+examples/Vcmax/*
+examples/*
+docs/*
+vignettes/*.html
+vignettes/*.R
+vignettes/*_cache/
+vignettes/*_files/

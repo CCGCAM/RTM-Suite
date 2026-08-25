@@ -1,0 +1,29 @@
+pandoc: '3.10'
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  articles/course-pipeline: course-pipeline.html
+  Getting-LUTs: Getting-LUTs.html
+  articles/InversionOpt: InversionOpt.html
+  articles/model-comparison-and-sensitivity: model-comparison-and-sensitivity.html
+  t01-getting-started: t01-getting-started.html
+  t02-leaf-to-canopy: t02-leaf-to-canopy.html
+  t03-spart: t03-spart.html
+  t04-comparing-models: t04-comparing-models.html
+  t05-building-luts: t05-building-luts.html
+  t06-parallel-simulation: t06-parallel-simulation.html
+  t07-sensor-convolution: t07-sensor-convolution.html
+  t08-hyperspectral-sensors: t08-hyperspectral-sensors.html
+  t09-vegetation-indices: t09-vegetation-indices.html
+  t10-sensitivity: t10-sensitivity.html
+  t11-hybrid-inversion: t11-hybrid-inversion.html
+  t12-ml-inversion-comparison: t12-ml-inversion-comparison.html
+  articles/t13-deep-learning-inversion: t13-deep-learning-inversion.html
+  articles/t14-end-to-end-pipeline: t14-end-to-end-pipeline.html
+  articles/t15-real-eo-application: t15-real-eo-application.html
+  t16-marmit-soil-in-canopy: t16-marmit-soil-in-canopy.html
+  articles/t17-forest-time-series: t17-forest-time-series.html
+  articles/t18-spatial-index-mapping: t18-spatial-index-mapping.html
+  articles/t19-flex-esu-heterogeneity: t19-flex-esu-heterogeneity.html
+  ToolsRTM/ToolsRTM: ToolsRTM/ToolsRTM.html
+last_built: 2026-08-24T21:27Z

@@ -1,0 +1,77 @@
+﻿variable,lower,upper,units,Distribution,Mean_D,Std_D,Dependecies,include,default
+N,1.5,4.5,ug cm-2,Uniform,,,No,1,1.5
+Cab,5,90,ug cm-2,Gaussian,50,20,No,1,40
+Car,0,25,ug cm-2,Uniform,,,Yes,1,10
+Anth,0,7,,Uniform,,,No,1,0
+LMA,0,0.2,g cm-2,Uniform,0.015,0.001,No,1,0.012
+EWT,0,0.2,cm,Uniform,0.015,0.001,No,1,0.009
+alpha,0,60,,Uniform,,,No,1,40
+Cbrown,0,1,,Uniform,,,No,0,0
+Cs,0,1,,Uniform,,,No,0,0
+Prot,0,0,g cm-2,Uniform,,,No,0,0
+CBC,0,0,g cm-2,Uniform,,,No,0,0
+Cx,0,1,,Uniform,,,No,0,0.1
+rho_thermal,0,0,,Fixed,,,No,1,0.01
+tau_thermal,0,0,,Fixed,,,No,1,0.01
+Vcmax25,0.75,250,umol m.2 s.1,Uniform,,,No,1,70
+BallBerrySlope,1,20,,Uniform,,,No,1,8
+BallBerry0,0.01,0.05,,Fixed,,,No,1,0.01
+Type,0,0,C3-C4,Fixed,,,No,1,3
+kV,0,0,,Fixed,,,No,1,0.64
+Rdparam,0,0,,Fixed,,,No,1,0.015
+Kn0,0,0,,Fixed,,,No,1,2.48
+Knalpha,0,0,,Fixed,,,No,1,2.83
+Knbeta,0,0,,Fixed,,,No,1,0.114
+Tyear,0,0,,Fixed,,,No,1,15
+beta,0,0,,Fixed,,,No,1,0.51
+kNPQs,0,0,,Fixed,,,No,1,0
+qLs,0,0,,Fixed,,,No,1,1
+stressfactor,0,0,,Fixed,,,No,1,1
+fqe,0,0,,Fixed,,,No,1,0.01
+spectrum,0,0,,Fixed,,,No,1,1
+rss,0,0,,Fixed,,,No,1,500
+rs_thermal,0,0,,Fixed,,,No,1,0.06
+cs,0,0,,Fixed,,,No,1,1180
+rhos,0,0,,Fixed,,,No,1,1800
+lambdas,0,0,,Fixed,,,No,1,1.55
+SMC,0,0,,Fixed,,,No,1,25
+BSMBrightness,0,0,,Fixed,,,No,1,0.5
+BSMlat,0,0,,Fixed,,,No,1,25
+BSMlon,0,0,,Fixed,,,No,1,45
+LAI,0.1,7,m2 m.2,Uniform,,,No,1,3
+hc,0.5,5,m,Uniform,,,No,1,2
+LIDFa,-1,1,,Uniform,,,No,1,-0.35
+LIDFb,-1,1,,Uniform,,,No,1,-0.15
+TypeLidf,0,1,,Fixed,,,No,1,1
+leafwidth,0.1,0.4,m,Fixed,,,No,1,0.1
+hspot,0,0,,Uniform,,,No,1,0.1
+Cv,0.2,5,,Fixed,,,No,1,1
+crowndiameter,0.5,5,,Fixed,,,No,1,1
+zo,0,0,,Fixed,,,No,1,0.25
+d,0,0,,Fixed,,,No,1,1.34
+Cd,0,0,,Fixed,,,No,1,0.3
+rb,0,0,,Fixed,,,No,1,10
+CR,0,0,,Fixed,,,No,1,0.35
+CD1,0,0,,Fixed,,,No,1,20.6
+Psicor,0,0,,Fixed,,,No,1,0.2
+CSSOIL,0,0,,Fixed,,,No,1,0.01
+rbs,0,0,,Fixed,,,No,1,10
+rwc,0,0,,Fixed,,,No,1,0
+z,0,0,,Fixed,,,No,1,5
+Rin,0,0,,Fixed,,,No,1,600
+Rli,0,0,,Fixed,,,No,1,300
+Ta,0,0,,Fixed,,,No,1,20
+p,0,0,,Fixed,,,No,1,970
+ea,0,0,,Fixed,,,No,1,15
+RH,0,1,hPa,Uniform,,,No,1,0.64
+u,0,0,,Fixed,,,No,1,2
+Ca,0,0,,Fixed,,,No,1,410
+Oa,0,0,,Fixed,,,No,1,209
+startDate,0,0,,Fixed,,,No,1,20060618
+endDate,0,0,,Fixed,,,No,1,20300101
+LAT,0,0,,Fixed,,,No,1,51.55
+LON,0,0,,Fixed,,,No,1,5.55
+timezn,0,0,,Fixed,,,No,1,1
+tts,0,15,deg,Uniform,,,No,1,30
+tto,15,30,deg,Uniform,,,No,1,0
+psi,0,180,deg,Uniform,,,No,0,0

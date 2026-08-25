@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Does SIF add information about photosynthesis beyond greenness?</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Does SIF add information about
+photosynthesis beyond greenness?</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(SCOPEinR)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code></pre></div>
+<p>A real, active remote-sensing research question: satellites now
+measure solar-induced chlorophyll fluorescence (SIF) alongside ordinary
+reflectance, and a large literature (Guanter et al. 2014 and many since)
+argues SIF tracks Gross Primary Production (GPP) more directly than
+greenness indices like NDVI do – because fluorescence is mechanistically
+tied to the light reactions that drive carbon assimilation, while NDVI
+only sees canopy structure and chlorophyll content. Testing this against
+<em>real</em> satellite data needs independent GPP measurements
+(eddy-covariance towers, themselves derived quantities with their own
+footprint/partitioning uncertainty) and is confounded by atmosphere,
+geometry, and canopy structure all at once.</p>
+<p><code>Actot</code> is not a GPP observation – it is SCOPE’s own
+simulated, canopy-integrated photosynthetic assimilation rate, the
+model’s internal analog of gross carbon uptake, conceptually related to
+GPP but not interchangeable with a tower-measured value. What SCOPE
+<em>does</em> offer is exact internal consistency: it simulates
+<code>Actot</code> and <code>EoutF</code> (canopy-integrated SIF) from
+the <em>same</em> underlying biochemistry and radiative transfer, for
+LUT rows where every trait is known exactly. So rather than testing the
+SIF-GPP literature’s claim directly, this page asks a narrower,
+answerable version of it: <strong>in SCOPE-simulated data, does SIF
+explain <code>Actot</code> better than a reflectance-only greenness
+index – and does adding SIF on top of greenness improve on greenness
+alone?</strong></p>
+<div id="simulate-a-300-row-lut" class="section level2">
+<h2>1. Simulate a 300-row LUT</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>path_input <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;input&quot;</span>, <span class="at">package =</span> <span class="st">&quot;SCOPEinR&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>scope_options <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="fu">file.path</span>(path_input, <span class="st">&quot;setoptions.csv&quot;</span>), <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>inputLUT <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="fu">file.path</span>(path_input, <span class="st">&quot;inputs_SCOPE.csv&quot;</span>), <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>LUT <span class="ot">&lt;-</span> <span class="fu">getLUT.SCOPE</span>(<span class="at">inputLUT =</span> inputLUT, <span class="at">nLUT =</span> n_samples)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>db_sims <span class="ot">&lt;-</span> <span class="fu">get.SCOPE</span>(<span class="at">LUT =</span> LUT, <span class="at">n.LUT =</span> n_samples, <span class="at">options.SCOPE =</span> scope_options,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>                      <span class="at">optipar =</span> SCOPEinR<span class="sc">::</span>optipar2021.Pro.CX, <span class="at">leaf.model =</span> <span class="st">&quot;fluspect-CX&quot;</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>                      <span class="at">canopy.model =</span> <span class="st">&quot;fourSAIL&quot;</span>, <span class="at">get.outputs =</span> <span class="st">&quot;ALL&quot;</span>, <span class="at">get.plots =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+<div id="two-predictors-a-greenness-index-and-sif" class="section level2">
+<h2>2. Two predictors: a greenness index, and SIF</h2>
+<p>The greenness index is a simple NDVI-like ratio computed directly
+from <code>reflapp</code> (no sensor convolution needed for this
+comparison) – red (670nm) vs. NIR (800nm) reflectance, the same contrast
+NDVI itself uses:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>wl_optical <span class="ot">&lt;-</span> <span class="dv">400</span><span class="sc">:</span><span class="dv">2400</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(wl_optical)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>i670 <span class="ot">&lt;-</span> <span class="fu">which</span>(wl_optical <span class="sc">==</span> <span class="dv">670</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>i800 <span class="ot">&lt;-</span> <span class="fu">which</span>(wl_optical <span class="sc">==</span> <span class="dv">800</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>get_finite <span class="ot">&lt;-</span> <span class="cf">function</span>(rfl_i) {</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  bad <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.finite</span>(rfl_i)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">any</span>(bad)) rfl_i[bad] <span class="ot">&lt;-</span> <span class="fu">approx</span>(wl_optical[<span class="sc">!</span>bad], rfl_i[<span class="sc">!</span>bad], <span class="at">xout =</span> wl_optical[bad])<span class="sc">$</span>y</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  rfl_i</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>}</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="at">Actot =</span> <span class="fu">sapply</span>(db_sims, <span class="cf">function</span>(r) r<span class="sc">$</span>data.fluxes<span class="sc">$</span>Actot),</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="at">EoutF =</span> <span class="fu">sapply</span>(db_sims, <span class="cf">function</span>(r) r<span class="sc">$</span>data.rad<span class="sc">$</span>EoutF),</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="at">NDVI  =</span> <span class="fu">sapply</span>(db_sims, <span class="cf">function</span>(r) {</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    rfl_i <span class="ot">&lt;-</span> <span class="fu">get_finite</span>(r<span class="sc">$</span>data.rad<span class="sc">$</span>reflapp[<span class="dv">1</span><span class="sc">:</span>n])</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    (rfl_i[i800] <span class="sc">-</span> rfl_i[i670]) <span class="sc">/</span> (rfl_i[i800] <span class="sc">+</span> rfl_i[i670])</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>  })</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>NDVI, df<span class="sc">$</span>Actot, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#2E8B57&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;NDVI-like index&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Actot&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">plot</span>(df<span class="sc">$</span>EoutF, df<span class="sc">$</span>Actot, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#B2182B&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;EoutF (SIF)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Actot&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">par</span>(op)</span></code></pre></div>
+</div>
+<div id="three-models-greenness-alone-sif-alone-both-together" class="section level2">
+<h2>3. Three models: greenness alone, SIF alone, both together</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n_samples), <span class="at">size =</span> <span class="fu">round</span>(<span class="fl">0.7</span> <span class="sc">*</span> n_samples))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>test_idx  <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n_samples), train_idx)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>r2_f <span class="ot">&lt;-</span> <span class="cf">function</span>(obs, pred) <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((obs <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((obs <span class="sc">-</span> <span class="fu">mean</span>(obs))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>fit_eval <span class="ot">&lt;-</span> <span class="cf">function</span>(formula) {</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(formula, <span class="at">data =</span> df[train_idx, ], <span class="at">ntree =</span> <span class="dv">300</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf, df[test_idx, ])</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">r2_f</span>(df<span class="sc">$</span>Actot[test_idx], pred)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>}</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>r2_ndvi     <span class="ot">&lt;-</span> <span class="fu">fit_eval</span>(Actot <span class="sc">~</span> NDVI)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>r2_sif      <span class="ot">&lt;-</span> <span class="fu">fit_eval</span>(Actot <span class="sc">~</span> EoutF)</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>r2_combined <span class="ot">&lt;-</span> <span class="fu">fit_eval</span>(Actot <span class="sc">~</span> NDVI <span class="sc">+</span> EoutF)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  <span class="at">model =</span> <span class="fu">c</span>(<span class="st">&quot;NDVI-like index only&quot;</span>, <span class="st">&quot;SIF (EoutF) only&quot;</span>, <span class="st">&quot;NDVI + SIF combined&quot;</span>),</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  <span class="at">R2 =</span> <span class="fu">c</span>(r2_ndvi, r2_sif, r2_combined)</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>)</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(results, <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="right">R2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">NDVI-like index only</td>
+<td align="right">-0.154</td>
+</tr>
+<tr class="even">
+<td align="left">SIF (EoutF) only</td>
+<td align="right">-0.165</td>
+</tr>
+<tr class="odd">
+<td align="left">NDVI + SIF combined</td>
+<td align="right">0.098</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">barplot</span>(results<span class="sc">$</span>R2, <span class="at">names.arg =</span> <span class="fu">c</span>(<span class="st">&quot;NDVI</span><span class="sc">\n</span><span class="st">only&quot;</span>, <span class="st">&quot;SIF</span><span class="sc">\n</span><span class="st">only&quot;</span>, <span class="st">&quot;NDVI+SIF</span><span class="sc">\n</span><span class="st">combined&quot;</span>),</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#2E8B57&quot;</span>, <span class="st">&quot;#B2182B&quot;</span>, <span class="st">&quot;#2166AC&quot;</span>), <span class="at">ylab =</span> <span class="st">&quot;R2 (Actot, held-out test set)&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">&quot;Does SIF add information about photosynthesis?&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>The individual-predictor models are both weak on the held-out test
+set – R² below zero for NDVI alone and for SIF alone, meaning neither
+beats simply predicting the mean <code>Actot</code> every time. That is
+itself a real, useful negative result: across a LUT where <em>every</em>
+trait varies at once (leaf biochemistry, LAI, geometry – not just the
+one driving <code>Actot</code> most directly, <code>Vcmax25</code>), one
+predictor alone is swamped by nuisance variation, the same confounding
+effect the <code>inversion-scope</code> article found for single-trait
+retrieval from this kind of full-range LUT. Combining NDVI and SIF
+(<code>R² &gt; 0</code> for the first time) is the actual result worth
+taking away: even a weak, individually-unreliable SIF signal adds
+<em>some</em> real information on top of NDVI that NDVI alone doesn’t
+carry – consistent with the literature’s claim in direction, even though
+the absolute retrieval skill here is modest. A larger LUT, or one that
+isolates <code>Vcmax25</code> from the other nuisance traits (as
+<code>How-in-Python-SCOPEinR.ipynb</code>’s small perturbation-only LUT
+does), would be expected to show the effect more clearly than this
+deliberately full-range, information-poor setup.</p>
+</div>
+<div id="where-the-sif-signal-actually-comes-from" class="section level2">
+<h2>4. Where the SIF signal actually comes from</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>cor_ndvi_actot  <span class="ot">&lt;-</span> <span class="fu">cor</span>(df<span class="sc">$</span>NDVI, df<span class="sc">$</span>Actot)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>cor_sif_actot   <span class="ot">&lt;-</span> <span class="fu">cor</span>(df<span class="sc">$</span>EoutF, df<span class="sc">$</span>Actot)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>cor_ndvi_vcmax  <span class="ot">&lt;-</span> <span class="fu">cor</span>(df<span class="sc">$</span>NDVI, LUT<span class="sc">$</span>Vcmax25)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>cor_sif_vcmax   <span class="ot">&lt;-</span> <span class="fu">cor</span>(df<span class="sc">$</span>EoutF, LUT<span class="sc">$</span>Vcmax25)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Correlation with Actot   -- NDVI:&quot;</span>, <span class="fu">round</span>(cor_ndvi_actot, <span class="dv">2</span>), <span class="st">&quot; SIF:&quot;</span>, <span class="fu">round</span>(cor_sif_actot, <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; Correlation with Actot   -- NDVI: 0.46  SIF: 0.4</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Correlation with Vcmax25 -- NDVI:&quot;</span>, <span class="fu">round</span>(cor_ndvi_vcmax, <span class="dv">2</span>), <span class="st">&quot; SIF:&quot;</span>, <span class="fu">round</span>(cor_sif_vcmax, <span class="dv">2</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; Correlation with Vcmax25 -- NDVI: 0.02  SIF: 0.14</span></span></code></pre></div>
+<p>NDVI (structure/pigments) and SIF (photochemistry) are picking up
+different, complementary parts of what actually controls
+<code>Actot</code> – which is exactly why combining them (Section 3) is
+expected to outperform either one alone, and why the real satellite SIF
+literature treats it as a genuinely different signal from greenness
+rather than a noisier version of the same thing.</p>
+</div>
+<div id="related-pages" class="section level2">
+<h2>Related pages</h2>
+<ul>
+<li><code>sensitivity-scope</code>: establishes that
+<code>Vcmax25</code> has essentially no direct radiative-transfer
+signature – the premise this page tests the consequence of.</li>
+<li><code>inversion-scope</code>: retrieves individual traits
+(<code>Cab</code>, <code>LAI</code>, <code>Vcmax25</code>) from
+reflectance alone; this page asks a related but different question – not
+“can I retrieve trait X”, but “does adding SIF as a predictor help
+retrieve a <em>flux</em> (<code>Actot</code>) that reflectance alone
+struggles with”.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

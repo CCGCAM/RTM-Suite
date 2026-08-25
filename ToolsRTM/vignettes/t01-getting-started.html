@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>01. Getting Started with ToolsRTM</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">01. Getting Started with ToolsRTM</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
+<p>The goal of this page is the smallest possible example: produce one
+vegetation reflectance spectrum with the minimum configuration required.
+Everything else in this tutorial series (LUT inversion, parallel
+simulation, machine learning) builds on the four-step chain below.</p>
+<pre class="text"><code>Vegetation parameters
+        |
+        v
+     PROSPECT
+        |
+        v
+Leaf reflectance / transmittance
+        |
+        v
+     fourSAIL
+        |
+        v
+  Canopy reflectance</code></pre>
+<div id="leaf-traits-and-canopy-structure-one-row-of-parameters" class="section level2">
+<h2>1. Leaf traits and canopy structure: one row of parameters</h2>
+<p>A simulation always starts from one row of trait values – a
+<code>data.frame</code> with one column per parameter the leaf and
+canopy model need. Here, <code>PROSPECT-D</code> needs the leaf
+biochemistry (<code>N</code>, <code>Cab</code>, <code>Car</code>,
+<code>Anth</code>, <code>Cbrown</code>, <code>EWT</code>,
+<code>LMA</code>); <code>fourSAIL</code> needs the canopy structure
+(<code>LAI</code>,
+<code>LIDFa</code>/<code>LIDFb</code>/<code>TypeLidf</code>,
+<code>hspot</code>) and the sun-view geometry
+(<code>tts</code>/<code>tto</code>/<code>psi</code>):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>row <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="co"># Canopy structure and geometry (fourSAIL)</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">LAI =</span> <span class="dv">3</span>, <span class="at">hspot =</span> <span class="fl">0.01</span>, <span class="at">LIDFa =</span> <span class="sc">-</span><span class="fl">0.35</span>, <span class="at">LIDFb =</span> <span class="sc">-</span><span class="fl">0.15</span>, <span class="at">TypeLidf =</span> <span class="dv">1</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">tts =</span> <span class="dv">30</span>, <span class="at">tto =</span> <span class="dv">0</span>, <span class="at">psi =</span> <span class="dv">0</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="co"># Leaf biochemistry (PROSPECT-D)</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">N =</span> <span class="fl">1.5</span>, <span class="at">Cab =</span> <span class="dv">40</span>, <span class="at">Car =</span> <span class="dv">8</span>, <span class="at">Anth =</span> <span class="dv">2</span>, <span class="at">Cbrown =</span> <span class="dv">0</span>, <span class="at">EWT =</span> <span class="fl">0.009</span>, <span class="at">LMA =</span> <span class="fl">0.009</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="dv">40</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>)</span></code></pre></div>
+<p>A soil spectrum is also required – <code>foursail()</code> mixes leaf
+optics with whatever shows through the canopy gaps. A 50/50 blend of the
+package’s own bundled dry/wet reference soil spectra is a reasonable,
+physically-motivated default (Tutorial 05 covers building LUTs properly;
+Tutorial 10’s sibling article on soil/MARMIT integration covers a
+moisture-realistic alternative):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>rsoil <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> dataSpec_PDB[, <span class="dv">11</span>] <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> dataSpec_PDB[, <span class="dv">12</span>]  <span class="co"># dry/wet soil blend</span></span></code></pre></div>
+</div>
+<div id="prospect-leaf-reflectance-and-transmittance" class="section level2">
+<h2>2. PROSPECT: leaf reflectance and transmittance</h2>
+<p><code>foursail()</code> runs PROSPECT internally (via its
+<code>LeafModel</code> argument) and returns the canopy-level outputs
+directly – there’s no need to call the leaf model on its own for this
+minimal example. <code>LeafModel = &quot;PROSPECT-D&quot;</code> selects the leaf
+model; Tutorial 02 shows every leaf model available and how to call
+PROSPECT on its own when only leaf-level output is needed.</p>
+</div>
+<div id="foursail-canopy-reflectance" class="section level2">
+<h2>3. fourSAIL: canopy reflectance</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>sail <span class="ot">&lt;-</span> <span class="fu">foursail</span>(<span class="at">inputLUT =</span> row, <span class="at">rsoil =</span> rsoil, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-D&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">names</span>(sail)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;rdot&quot; &quot;rsot&quot; &quot;rddt&quot; &quot;rsdt&quot;</span></span></code></pre></div>
+<p><code>sail$rdot</code> (hemispherical-directional reflectance factor)
+and <code>sail$rsot</code> (bi-directional reflectance factor) are
+fourSAIL’s two raw outputs. <code>Compute_BRF()</code> blends them using
+the sun/view geometry into the single top-of-canopy (TOC) reflectance
+spectrum a sensor actually observes:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>reflectance <span class="ot">&lt;-</span> <span class="fu">Compute_BRF</span>(<span class="at">rdot =</span> sail<span class="sc">$</span>rdot, <span class="at">rsot =</span> sail<span class="sc">$</span>rsot,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                            <span class="at">tts =</span> row<span class="sc">$</span>tts, <span class="at">data.light =</span> dataSpec_PDB)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">length</span>(reflectance)  <span class="co"># one value per nm, 400-2500nm</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [1] 2101</span></span></code></pre></div>
+</div>
+<div id="plot-the-result" class="section level2">
+<h2>4. Plot the result</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">plot</span>(dataSpec_PDB[, <span class="dv">1</span>], reflectance, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;#2E8B57&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Wavelength (nm)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Reflectance&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;One simulation: fourSAIL + PROSPECT-D&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>The familiar vegetation signature is already visible: low reflectance
+in the visible (400-700nm, chlorophyll absorption), a sharp rise at the
+red edge (~700-750nm), a high NIR plateau (leaf/canopy structural
+scattering), and two water-absorption dips in the SWIR (~1450nm,
+~1950nm).</p>
+</div>
+<div id="whats-next" class="section level2">
+<h2>What’s next</h2>
+<p>This page deliberately stopped at one simulation. The rest of this
+series builds outward from here:</p>
+<ul>
+<li><strong>Tutorial 02</strong> – every leaf model (PROSPECT-D/-PRO,
+Fluspect, Liberty) and every canopy model (fourSAIL, fourSAIL2, INFORM),
+and how trait changes propagate from leaf to canopy.</li>
+<li><strong>Tutorial 03</strong> – SPART, when a single TOC simulation
+like this one isn’t enough and you need the full soil-plant-atmosphere
+chain to top-of-atmosphere.</li>
+<li><strong>Tutorial 05</strong> – building a LUT (many rows of trait
+values at once) instead of one hand-written row.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

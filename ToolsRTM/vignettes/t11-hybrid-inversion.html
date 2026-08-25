@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>11. From Physics to Vegetation Traits: Hybrid Inversion</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">11. From Physics to Vegetation Traits:
+Hybrid Inversion</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ToolsRTM)</span></code></pre></div>
+<p>Every tutorial so far ran the forward model: traits in, spectrum out.
+<strong>Inversion</strong> goes the other way – given ONLY the
+sensor-band reflectance a satellite or field spectrometer would measure,
+retrieve a biophysical trait (chlorophyll content, <code>Cab</code>,
+throughout this page) without knowing the ground truth. This is the
+<strong>hybrid</strong> approach: instead of solving the radiative
+transfer equations analytically (rarely possible) or field- calibrating
+an empirical index-to-trait relationship (needs field data per
+site/crop), simulate a LUT with the physics you already have, and learn
+the reflectance-to-trait relationship from the simulation itself.</p>
+<pre class="text"><code>Parameter LUT
+     |
+     v
+RTM simulations (Tutorials 01-06)
+     |
+     v
+Sensor convolution (Tutorial 07)
+     |
+     v
+Synthetic training dataset (reflectance, trait) pairs
+     |
+     v
+Inversion method
+     |
+     v
+Vegetation traits</code></pre>
+<p>Three inversion methods share this exact framework, differing only in
+the last step:</p>
+<ul>
+<li><strong><code>get.inversionOpt()</code></strong> (this page): no
+model is fit at all. It ranks every spectrum in a reference LUT by how
+closely it matches an observed spectrum under a chosen merit function,
+then averages the trait values of the closest matches. Pure library
+search.</li>
+<li><strong><code>get.inversion()</code></strong> (Tutorial 12): fits a
+statistical/ML model (Random Forest, PLSR, SVM, … 12 algorithms via
+<code>caret</code>) on a training LUT, then predicts on new
+spectra.</li>
+<li><strong><code>getMLmodel()</code></strong> (Tutorial 13): fits a
+deep-learning model on the same kind of data.</li>
+</ul>
+<div id="simulate-a-lut-and-convolve-to-sentinel-2a" class="section level2">
+<h2>1. Simulate a LUT and convolve to Sentinel-2A</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">150</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>LUT <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> ToolsRTM<span class="sc">::</span>inputsPROSAIL, <span class="at">nLUT =</span> n_samples, <span class="at">setseed =</span> <span class="dv">1</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>wl <span class="ot">&lt;-</span> <span class="dv">400</span><span class="sc">:</span><span class="dv">2500</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>rsoil <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.15</span>, <span class="fu">length</span>(wl))</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>refl <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(n_samples), <span class="cf">function</span>(i) {</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="fu">foursail</span>(<span class="at">inputLUT =</span> LUT[i, ], <span class="at">rsoil =</span> rsoil, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>)<span class="sc">$</span>rsot</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>}))</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>refl_X <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(refl); <span class="fu">colnames</span>(refl_X) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, wl); refl_X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">id =</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(refl_X)), refl_X)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>se2a <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">get.spectra.convolved</span>(<span class="at">rfl =</span> refl_X, <span class="at">sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>, <span class="at">plot.spectra =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Spectral resampling function to SENTINEL2A is being processed ...&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   8%  |                                                                              |===========                                                           |  15%  |                                                                              |================                                                      |  23%  |                                                                              |======================                                                |  31%  |                                                                              |===========================                                           |  38%  |                                                                              |================================                                      |  46%  |                                                                              |======================================                                |  54%  |                                                                              |===========================================                           |  62%  |                                                                              |================================================                      |  69%  |                                                                              |======================================================                |  77%  |                                                                              |===========================================================           |  85%  |                                                                              |=================================================================     |  92%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>wl_bands <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">names</span>(se2a)[<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>band_names <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;B&quot;</span>, <span class="fu">seq_along</span>(wl_bands))</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="fu">names</span>(se2a) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>, band_names)</span></code></pre></div>
+<p>150 simulated spectra, convolved to Sentinel-2A’s 13 real bands –
+this is what every inversion method below actually sees, not the native
+1nm spectrum.</p>
+</div>
+<div id="a-traintest-split-shared-by-every-method" class="section level2">
+<h2>2. A train/test split, shared by every method</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n_samples), <span class="at">size =</span> <span class="fu">round</span>(<span class="fl">0.7</span> <span class="sc">*</span> n_samples))</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>test_idx  <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n_samples), train_idx)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>LUT_train <span class="ot">&lt;-</span> LUT[train_idx, ]; LUT_test <span class="ot">&lt;-</span> LUT[test_idx, ]</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>se2a_mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(se2a[, band_names])</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>se2a_train_mat <span class="ot">&lt;-</span> se2a_mat[train_idx, ]; se2a_test_mat <span class="ot">&lt;-</span> se2a_mat[test_idx, ]</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>r2_f   <span class="ot">&lt;-</span> <span class="cf">function</span>(obs, pred) <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>((obs <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((obs <span class="sc">-</span> <span class="fu">mean</span>(obs))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>rmse_f <span class="ot">&lt;-</span> <span class="cf">function</span>(obs, pred) <span class="fu">sqrt</span>(<span class="fu">mean</span>((obs <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Train:&quot;</span>, <span class="fu">length</span>(train_idx), <span class="st">&quot;spectra. Test (held out):&quot;</span>, <span class="fu">length</span>(test_idx), <span class="st">&quot;spectra.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; Train: 105 spectra. Test (held out): 45 spectra.</span></span></code></pre></div>
+</div>
+<div id="get.inversionopt-lut-merit-function-matching" class="section level2">
+<h2>3. <code>get.inversionOpt()</code>: LUT merit-function matching</h2>
+<p><code>method</code> picks how “closeness” between two spectra is
+measured. <code>nOpt</code> controls how many of the closest training
+spectra get averaged together for the final trait estimate:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>opt_rmse <span class="ot">&lt;-</span> <span class="fu">get.inversionOpt</span>(<span class="at">rfl.sensor =</span> se2a_test_mat, <span class="at">rfl.rtm =</span> se2a_train_mat,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                              <span class="at">LUT =</span> LUT_train, <span class="at">wave =</span> wl_bands, <span class="at">method =</span> <span class="st">&quot;merit-RMSE&quot;</span>, <span class="at">nOpt =</span> <span class="dv">5</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>opt_fge  <span class="ot">&lt;-</span> <span class="fu">get.inversionOpt</span>(<span class="at">rfl.sensor =</span> se2a_test_mat, <span class="at">rfl.rtm =</span> se2a_train_mat,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                              <span class="at">LUT =</span> LUT_train, <span class="at">wave =</span> wl_bands, <span class="at">method =</span> <span class="st">&quot;merit-FGE&quot;</span>, <span class="at">nOpt =</span> <span class="dv">5</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>opt_dwt  <span class="ot">&lt;-</span> <span class="fu">get.inversionOpt</span>(<span class="at">rfl.sensor =</span> se2a_test_mat, <span class="at">rfl.rtm =</span> se2a_train_mat,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                              <span class="at">LUT =</span> LUT_train, <span class="at">wave =</span> wl_bands, <span class="at">method =</span> <span class="st">&quot;merit-DWT&quot;</span>, <span class="at">nOpt =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p>Each call returns a 2-element list: <code>[[1]]</code>
+(<code>rfl.b</code>) is the matched reflectance itself,
+<code>[[2]]</code> (<code>LUT.best</code>) is the corresponding trait
+table:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>opt_metrics <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;merit-RMSE&quot;</span>, <span class="st">&quot;merit-FGE&quot;</span>, <span class="st">&quot;merit-DWT&quot;</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">R2   =</span> <span class="fu">c</span>(<span class="fu">r2_f</span>(LUT_test<span class="sc">$</span>Cab, opt_rmse[[<span class="dv">2</span>]]<span class="sc">$</span>Cab), <span class="fu">r2_f</span>(LUT_test<span class="sc">$</span>Cab, opt_fge[[<span class="dv">2</span>]]<span class="sc">$</span>Cab), <span class="fu">r2_f</span>(LUT_test<span class="sc">$</span>Cab, opt_dwt[[<span class="dv">2</span>]]<span class="sc">$</span>Cab)),</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">RMSE =</span> <span class="fu">c</span>(<span class="fu">rmse_f</span>(LUT_test<span class="sc">$</span>Cab, opt_rmse[[<span class="dv">2</span>]]<span class="sc">$</span>Cab), <span class="fu">rmse_f</span>(LUT_test<span class="sc">$</span>Cab, opt_fge[[<span class="dv">2</span>]]<span class="sc">$</span>Cab), <span class="fu">rmse_f</span>(LUT_test<span class="sc">$</span>Cab, opt_dwt[[<span class="dv">2</span>]]<span class="sc">$</span>Cab))</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(opt_metrics, <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">method</th>
+<th align="right">R2</th>
+<th align="right">RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">merit-RMSE</td>
+<td align="right">0.287</td>
+<td align="right">14.472</td>
+</tr>
+<tr class="even">
+<td align="left">merit-FGE</td>
+<td align="right">0.590</td>
+<td align="right">10.977</td>
+</tr>
+<tr class="odd">
+<td align="left">merit-DWT</td>
+<td align="right">0.251</td>
+<td align="right">14.832</td>
+</tr>
+</tbody>
+</table>
+<p><code>merit-RMSE</code>/<code>merit-FGE</code> compare raw band
+reflectance; <code>merit-DWT</code> compares each spectrum’s discrete
+wavelet transform coefficients instead (sensitive to overall spectral
+shape rather than each band’s exact value). <code>merit-NRMSE</code>,
+<code>merit-MAE</code>, <code>merit-NMB</code>, and
+<code>merit-1stD</code> (first-derivative matching) are the remaining
+built-in options; <code>custom_stat</code> accepts your own
+<code>function(sim, obs)</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">plot</span>(LUT_test<span class="sc">$</span>Cab, opt_rmse[[<span class="dv">2</span>]]<span class="sc">$</span>Cab, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">&quot;#2166AC&quot;</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Observed Cab&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Predicted Cab (merit-RMSE, nOpt=5)&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;LUT merit-function matching&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;grey40&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="why-this-method-and-when" class="section level2">
+<h2>Why this method, and when</h2>
+<p><code>get.inversionOpt()</code> needs no training step – a quick,
+physically- grounded retrieval with no ML infrastructure. Its
+limitation: accuracy is capped by how well the reference LUT covers the
+true trait space, and it re-searches the whole reference LUT for every
+new observation (no learned model to reuse). Tutorial 12 builds actual
+fitted models instead, trading that simplicity for better accuracy at
+scale.</p>
+</div>
+<div id="is-150-samples-actually-enough" class="section level2">
+<h2>4. Is 150 samples actually enough?</h2>
+<p><strong>No – and the numbers above prove it, not just assert
+it.</strong> A LUT-search method’s accuracy is capped by how densely its
+reference LUT covers the trait space; PROSAIL-hybrid-inversion
+literature typically recommends LUT sizes in the thousands (often tens
+of thousands for operational retrieval) for reliable coverage of even a
+handful of free parameters. 150 rows – 105 of them used as the search
+reference after the train/test split – is far below that. To make the
+effect concrete rather than just cite a number, here is
+<code>get.inversionOpt()</code> run at ~5% of a modest 2000-sample
+recommended minimum (100 rows) against the full 2000:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>run_experiment <span class="ot">&lt;-</span> <span class="cf">function</span>(n_samples, <span class="at">seed =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  LUT_n <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">getLUT</span>(<span class="at">inputs =</span> ToolsRTM<span class="sc">::</span>inputsPROSAIL, <span class="at">nLUT =</span> n_samples, <span class="at">setseed =</span> seed))</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  refl_n <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="fu">seq_len</span>(n_samples), <span class="cf">function</span>(i) {</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    <span class="fu">foursail</span>(<span class="at">inputLUT =</span> LUT_n[i, ], <span class="at">rsoil =</span> rsoil, <span class="at">LeafModel =</span> <span class="st">&quot;PROSPECT-PRO&quot;</span>)<span class="sc">$</span>rsot</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  }))</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  refl_X_n <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(refl_n); <span class="fu">colnames</span>(refl_X_n) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, wl)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  refl_X_n <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">id =</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(refl_X_n)), refl_X_n)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  se2a_n <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">get.spectra.convolved</span>(<span class="at">rfl =</span> refl_X_n, <span class="at">sensor =</span> <span class="st">&quot;Sentinel2a&quot;</span>, <span class="at">plot.spectra =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="fu">names</span>(se2a_n) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>, band_names)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="fu">set.seed</span>(seed)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  train_idx_n <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(n_samples), <span class="at">size =</span> <span class="fu">round</span>(<span class="fl">0.7</span> <span class="sc">*</span> n_samples))</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  test_idx_n  <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n_samples), train_idx_n)</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  se2a_n_mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(se2a_n[, band_names])</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  opt_n <span class="ot">&lt;-</span> <span class="fu">get.inversionOpt</span>(<span class="at">rfl.sensor =</span> se2a_n_mat[test_idx_n, ], <span class="at">rfl.rtm =</span> se2a_n_mat[train_idx_n, ],</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>                             <span class="at">LUT =</span> LUT_n[train_idx_n, ], <span class="at">wave =</span> wl_bands, <span class="at">method =</span> <span class="st">&quot;merit-RMSE&quot;</span>, <span class="at">nOpt =</span> <span class="dv">5</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">n =</span> n_samples, <span class="at">n_train =</span> <span class="fu">length</span>(train_idx_n),</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>             <span class="at">R2 =</span> <span class="fu">r2_f</span>(LUT_n[test_idx_n, ]<span class="sc">$</span>Cab, opt_n[[<span class="dv">2</span>]]<span class="sc">$</span>Cab),</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>             <span class="at">RMSE =</span> <span class="fu">rmse_f</span>(LUT_n[test_idx_n, ]<span class="sc">$</span>Cab, opt_n[[<span class="dv">2</span>]]<span class="sc">$</span>Cab))</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>}</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>sample_size_results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">run_experiment</span>(<span class="dv">100</span>), <span class="fu">run_experiment</span>(<span class="dv">2000</span>))</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Spectral resampling function to SENTINEL2A is being processed ...&quot;</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   8%  |                                                                              |===========                                                           |  15%  |                                                                              |================                                                      |  23%  |                                                                              |======================                                                |  31%  |                                                                              |===========================                                           |  38%  |                                                                              |================================                                      |  46%  |                                                                              |======================================                                |  54%  |                                                                              |===========================================                           |  62%  |                                                                              |================================================                      |  69%  |                                                                              |======================================================                |  77%  |                                                                              |===========================================================           |  85%  |                                                                              |=================================================================     |  92%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==                                                                    |   3%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  13%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |=====================                                                 |  30%  |                                                                              |=======================                                               |  33%  |                                                                              |==========================                                            |  37%  |                                                                              |============================                                          |  40%  |                                                                              |==============================                                        |  43%  |                                                                              |=================================                                     |  47%  |                                                                              |===================================                                   |  50%  |                                                                              |=====================================                                 |  53%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  60%  |                                                                              |============================================                          |  63%  |                                                                              |===============================================                       |  67%  |                                                                              |=================================================                     |  70%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |=============================================================         |  87%  |                                                                              |===============================================================       |  90%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  97%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Spectral resampling function to SENTINEL2A is being processed ...&quot;</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   8%  |                                                                              |===========                                                           |  15%  |                                                                              |================                                                      |  23%  |                                                                              |======================                                                |  31%  |                                                                              |===========================                                           |  38%  |                                                                              |================================                                      |  46%  |                                                                              |======================================                                |  54%  |                                                                              |===========================================                           |  62%  |                                                                              |================================================                      |  69%  |                                                                              |======================================================                |  77%  |                                                                              |===========================================================           |  85%  |                                                                              |=================================================================     |  92%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |                                                                      |   1%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |==                                                                    |   4%  |                                                                              |===                                                                   |   4%  |                                                                              |===                                                                   |   5%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |=======                                                               |  11%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |=========                                                             |  14%  |                                                                              |==========                                                            |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |===========                                                           |  15%  |                                                                              |===========                                                           |  16%  |                                                                              |============                                                          |  16%  |                                                                              |============                                                          |  17%  |                                                                              |============                                                          |  18%  |                                                                              |=============                                                         |  18%  |                                                                              |=============                                                         |  19%  |                                                                              |==============                                                        |  19%  |                                                                              |==============                                                        |  20%  |                                                                              |==============                                                        |  21%  |                                                                              |===============                                                       |  21%  |                                                                              |===============                                                       |  22%  |                                                                              |================                                                      |  22%  |                                                                              |================                                                      |  23%  |                                                                              |================                                                      |  24%  |                                                                              |=================                                                     |  24%  |                                                                              |=================                                                     |  25%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  26%  |                                                                              |===================                                                   |  27%  |                                                                              |===================                                                   |  28%  |                                                                              |====================                                                  |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  29%  |                                                                              |=====================                                                 |  30%  |                                                                              |=====================                                                 |  31%  |                                                                              |======================                                                |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |=======================                                               |  34%  |                                                                              |========================                                              |  34%  |                                                                              |========================                                              |  35%  |                                                                              |=========================                                             |  35%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  36%  |                                                                              |==========================                                            |  37%  |                                                                              |==========================                                            |  38%  |                                                                              |===========================                                           |  38%  |                                                                              |===========================                                           |  39%  |                                                                              |============================                                          |  39%  |                                                                              |============================                                          |  40%  |                                                                              |============================                                          |  41%  |                                                                              |=============================                                         |  41%  |                                                                              |=============================                                         |  42%  |                                                                              |==============================                                        |  42%  |                                                                              |==============================                                        |  43%  |                                                                              |==============================                                        |  44%  |                                                                              |===============================                                       |  44%  |                                                                              |===============================                                       |  45%  |                                                                              |================================                                      |  45%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |=================================                                     |  48%  |                                                                              |==================================                                    |  48%  |                                                                              |==================================                                    |  49%  |                                                                              |===================================                                   |  49%  |                                                                              |===================================                                   |  50%  |                                                                              |===================================                                   |  51%  |                                                                              |====================================                                  |  51%  |                                                                              |====================================                                  |  52%  |                                                                              |=====================================                                 |  52%  |                                                                              |=====================================                                 |  53%  |                                                                              |=====================================                                 |  54%  |                                                                              |======================================                                |  54%  |                                                                              |======================================                                |  55%  |                                                                              |=======================================                               |  55%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  56%  |                                                                              |========================================                              |  57%  |                                                                              |========================================                              |  58%  |                                                                              |=========================================                             |  58%  |                                                                              |=========================================                             |  59%  |                                                                              |==========================================                            |  59%  |                                                                              |==========================================                            |  60%  |                                                                              |==========================================                            |  61%  |                                                                              |===========================================                           |  61%  |                                                                              |===========================================                           |  62%  |                                                                              |============================================                          |  62%  |                                                                              |============================================                          |  63%  |                                                                              |============================================                          |  64%  |                                                                              |=============================================                         |  64%  |                                                                              |=============================================                         |  65%  |                                                                              |==============================================                        |  65%  |                                                                              |==============================================                        |  66%  |                                                                              |===============================================                       |  66%  |                                                                              |===============================================                       |  67%  |                                                                              |===============================================                       |  68%  |                                                                              |================================================                      |  68%  |                                                                              |================================================                      |  69%  |                                                                              |=================================================                     |  69%  |                                                                              |=================================================                     |  70%  |                                                                              |=================================================                     |  71%  |                                                                              |==================================================                    |  71%  |                                                                              |==================================================                    |  72%  |                                                                              |===================================================                   |  72%  |                                                                              |===================================================                   |  73%  |                                                                              |===================================================                   |  74%  |                                                                              |====================================================                  |  74%  |                                                                              |====================================================                  |  75%  |                                                                              |=====================================================                 |  75%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  76%  |                                                                              |======================================================                |  77%  |                                                                              |======================================================                |  78%  |                                                                              |=======================================================               |  78%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  79%  |                                                                              |========================================================              |  80%  |                                                                              |========================================================              |  81%  |                                                                              |=========================================================             |  81%  |                                                                              |=========================================================             |  82%  |                                                                              |==========================================================            |  82%  |                                                                              |==========================================================            |  83%  |                                                                              |==========================================================            |  84%  |                                                                              |===========================================================           |  84%  |                                                                              |===========================================================           |  85%  |                                                                              |============================================================          |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  86%  |                                                                              |=============================================================         |  87%  |                                                                              |=============================================================         |  88%  |                                                                              |==============================================================        |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |===============================================================       |  91%  |                                                                              |================================================================      |  91%  |                                                                              |================================================================      |  92%  |                                                                              |=================================================================     |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |=================================================================     |  94%  |                                                                              |==================================================================    |  94%  |                                                                              |==================================================================    |  95%  |                                                                              |===================================================================   |  95%  |                                                                              |===================================================================   |  96%  |                                                                              |====================================================================  |  96%  |                                                                              |====================================================================  |  97%  |                                                                              |====================================================================  |  98%  |                                                                              |===================================================================== |  98%  |                                                                              |===================================================================== |  99%  |                                                                              |======================================================================|  99%  |                                                                              |======================================================================| 100%</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(sample_size_results, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">n</th>
+<th align="right">n_train</th>
+<th align="right">R2</th>
+<th align="right">RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">70</td>
+<td align="right">-0.080</td>
+<td align="right">15.183</td>
+</tr>
+<tr class="even">
+<td align="right">2000</td>
+<td align="right">1400</td>
+<td align="right">0.648</td>
+<td align="right">9.465</td>
+</tr>
+</tbody>
+</table>
+<p>At 100 samples (~5% of a 2000-sample recommended minimum), R² is
+effectively zero or negative – the method has no real skill, matching
+random guessing. At 2000, real, usable skill emerges. <strong>The
+150-sample LUT used throughout Sections 1-3 above is a deliberately
+small demonstration size, chosen to keep this page’s build time
+reasonable – not a size to copy for real trait retrieval.</strong> For
+actual applications, build a LUT of at least a few thousand rows
+(Tutorial 06 covers parallelizing exactly that).</p>
+</div>
+<div id="whats-next" class="section level2">
+<h2>What’s next</h2>
+<ul>
+<li><strong>Tutorial 12</strong> – <code>get.inversion()</code>: 12 ML
+algorithms, compared on this same LUT.</li>
+<li><strong>Tutorial 13</strong> – <code>getMLmodel()</code>: deep
+learning on the same data.</li>
+<li><strong>Tutorial 14</strong> – the full pipeline end-to-end, LUT to
+trait maps.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+metric,value
+n_simulations,600.0
+n_wavelengths_compared,2053.0
+rmse,2.4506980521484567e-16
+max_abs_diff,4.440892098500626e-15
+bias,7.414840349944336e-18
+r2,1.0

@@ -1,0 +1,23 @@
+pandoc: '3.10'
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  articles/getting-luts-scope: getting-luts-scope.html
+  articles/inversion-scope: inversion-scope.html
+  articles/scope-pipeline: scope-pipeline.html
+  articles/SCOPEinR: SCOPEinR.html
+  articles/sensitivity-scope: sensitivity-scope.html
+  articles/sif-photosynthesis-proxy: sif-photosynthesis-proxy.html
+  t00-scope-options: t00-scope-options.html
+  t01-getting-started: t01-getting-started.html
+  t02-soil-canopy-brdf: t02-soil-canopy-brdf.html
+  t03-energy-balance: t03-energy-balance.html
+  t04-fluorescence: t04-fluorescence.html
+  t05-building-scope-luts: t05-building-scope-luts.html
+  t06-parallel-scope-runs: t06-parallel-scope-runs.html
+  t07-sensitivity: t07-sensitivity.html
+  t08-hybrid-inversion: t08-hybrid-inversion.html
+  t09-sif-photosynthesis: t09-sif-photosynthesis.html
+  t10-end-to-end-pipeline: t10-end-to-end-pipeline.html
+  articles/t11-photosynthesis-capstone: t11-photosynthesis-capstone.html
+last_built: 2026-08-24T12:52Z

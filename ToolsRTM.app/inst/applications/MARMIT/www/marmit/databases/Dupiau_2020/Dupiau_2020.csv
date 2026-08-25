@@ -1,0 +1,73 @@
+﻿ID,Name,Origin,Refl_file,Specular,m_w,m_d,m_sh,SMCg,Clay,Fine_silt,Coarse_silt,Silt,Fine_sand,Coarse_sand,Sand,Fine_dirt,Gravels,Rocks,OM,CaCO3,Fe,Clay_minerals,Quartz,Feldspars,Calcite,Dolomite,Goethite,Hematite,L,eps,d,K,a,psi,Slope,Intercept
+1,petri1,724-Lebna 57,dup20_001.csv,0,82.44,59.65,19.71,57.06,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0410,0.43,0.0000,62.77,5.03,196.84,1.0656,0.0214
+1,petri1,724-Lebna 58,dup20_002.csv,0,79.32,59.65,19.71,49.25,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0356,0.41,0.0000,62.77,5.03,196.84,1.0656,0.0214
+1,petri1,724-Lebna 59,dup20_003.csv,0,77.65,59.65,19.71,45.07,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0340,0.40,0.0000,62.77,5.03,196.84,1.0656,0.0214
+1,petri1,724-Lebna 60,dup20_004.csv,0,75.76,59.65,19.71,40.34,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0308,0.38,0.0000,62.77,5.03,196.84,1.0656,0.0214
+1,petri1,724-Lebna 61,dup20_005.csv,0,74.11,59.65,19.71,36.20,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0284,0.35,0.0000,62.77,5.03,196.84,1.0656,0.0214
+1,petri1,724-Lebna 62,dup20_006.csv,0,72.27,59.65,19.71,31.60,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0251,0.33,0.0000,62.77,5.03,196.84,1.0656,0.0214
+1,petri1,724-Lebna 63,dup20_007.csv,0,70.57,59.65,19.71,27.34,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0177,0.34,0.0000,62.77,5.03,196.84,1.0656,0.0214
+1,petri1,724-Lebna 64,dup20_008.csv,0,65.42,59.65,19.71,14.45,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0075,0.33,0.0345,62.77,5.03,196.84,1.0656,0.0214
+1,petri1,724-Lebna 65,dup20_009.csv,0,59.65,59.65,19.71,0.00,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,62.77,5.03,196.84,1.0656,0.0214
+2,petri2,Atacama,dup20_010.csv,0,82.19,73.79,19.71,15.53,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0156,0.61,0.0174,15.88,8.72,2460.46,1.0870,0.0043
+2,petri2,Atacama,dup20_011.csv,0,81.18,73.79,19.71,13.66,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0017,0.75,0.0000,15.88,8.72,2460.46,1.0870,0.0043
+2,petri2,Atacama,dup20_012.csv,0,79.75,73.79,19.71,11.02,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0015,0.69,0.0000,15.88,8.72,2460.46,1.0870,0.0043
+2,petri2,Atacama,dup20_013.csv,0,78.23,73.79,19.71,8.21,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0021,0.47,0.1188,15.88,8.72,2460.46,1.0870,0.0043
+2,petri2,Atacama,dup20_014.csv,0,77.02,73.79,19.71,5.97,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0035,0.29,0.2156,15.88,8.72,2460.46,1.0870,0.0043
+2,petri2,Atacama,dup20_015.csv,0,75.94,73.79,19.71,3.98,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0005,0.36,0.0000,15.88,8.72,2460.46,1.0870,0.0043
+2,petri2,Atacama,dup20_016.csv,0,75.11,73.79,19.71,2.44,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0004,0.22,0.0000,15.88,8.72,2460.46,1.0870,0.0043
+2,petri2,Atacama,dup20_017.csv,0,74.03,73.79,19.71,0.44,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0004,0.03,0.0000,15.88,8.72,2460.46,1.0870,0.0043
+2,petri2,Atacama,dup20_018.csv,0,73.79,73.79,19.71,0.00,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,69.4,10.5,6.1,12.4,0,0,1.6,0.0000,0.00,0.0000,15.88,8.72,2460.46,1.0870,0.0043
+3,petri3,Tunisia Maouna,dup20_019.csv,0,82.53,69.42,19.71,26.37,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0538,0.54,0.0113,24.83,7.23,321.87,1.0758,0.0244
+3,petri3,Tunisia Maouna,dup20_020.csv,0,79.22,69.42,19.71,19.71,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0281,0.45,0.0311,24.83,7.23,321.87,1.0758,0.0244
+3,petri3,Tunisia Maouna,dup20_021.csv,0,77.12,69.42,19.71,15.49,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0172,0.42,0.0301,24.83,7.23,321.87,1.0758,0.0244
+3,petri3,Tunisia Maouna,dup20_022.csv,0,74.83,69.42,19.71,10.88,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0121,0.40,0.0281,24.83,7.23,321.87,1.0758,0.0244
+3,petri3,Tunisia Maouna,dup20_023.csv,0,72.73,69.42,19.71,6.66,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0072,0.35,0.0147,24.83,7.23,321.87,1.0758,0.0244
+3,petri3,Tunisia Maouna,dup20_024.csv,0,71.27,69.42,19.71,3.72,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0091,0.03,0.0000,24.83,7.23,321.87,1.0758,0.0244
+3,petri3,Tunisia Maouna,dup20_025.csv,0,70.6,69.42,19.71,2.37,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0066,0.03,0.0000,24.83,7.23,321.87,1.0758,0.0244
+3,petri3,Tunisia Maouna,dup20_026.csv,0,69.6,69.42,19.71,0.36,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0126,0.01,0.0000,24.83,7.23,321.87,1.0758,0.0244
+3,petri3,Tunisia Maouna,dup20_027.csv,0,69.42,69.42,19.71,0.00,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,49.2,18.4,4.6,23.3,2.2,1.1,1.2,0.0000,0.00,0.0000,24.83,7.23,321.87,1.0758,0.0244
+4,petri4,Arizona Sonoran desert,dup20_028.csv,0,84.41,71.35,19.71,25.29,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0409,0.54,0.0465,25.18,5.32,700.22,1.0816,0.0089
+4,petri4,Arizona Sonoran desert,dup20_029.csv,0,81.02,71.35,19.71,18.73,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0041,0.91,0.0896,25.18,5.32,700.22,1.0816,0.0089
+4,petri4,Arizona Sonoran desert,dup20_030.csv,0,79.37,71.35,19.71,15.53,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0023,1.00,0.0553,25.18,5.32,700.22,1.0816,0.0089
+4,petri4,Arizona Sonoran desert,dup20_031.csv,0,77.46,71.35,19.71,11.83,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0016,0.97,0.0180,25.18,5.32,700.22,1.0816,0.0089
+4,petri4,Arizona Sonoran desert,dup20_032.csv,0,75.77,71.35,19.71,8.56,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0064,0.41,0.1294,25.18,5.32,700.22,1.0816,0.0089
+4,petri4,Arizona Sonoran desert,dup20_033.csv,0,74.34,71.35,19.71,5.79,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0061,0.06,0.0000,25.18,5.32,700.22,1.0816,0.0089
+4,petri4,Arizona Sonoran desert,dup20_034.csv,0,73.59,71.35,19.71,4.34,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0041,0.05,0.0635,25.18,5.32,700.22,1.0816,0.0089
+4,petri4,Arizona Sonoran desert,dup20_035.csv,0,72.08,71.35,19.71,1.41,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0089,0.02,0.0000,25.18,5.32,700.22,1.0816,0.0089
+4,petri4,Arizona Sonoran desert,dup20_036.csv,0,71.35,71.35,19.71,0.00,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,63.1,18.9,10.1,6.4,0,0,1.5,0.0000,0.00,0.0000,25.18,5.32,700.22,1.0816,0.0089
+5,petri5,St-Julien,dup20_037.csv,0,81.07,63.44,19.71,40.32,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0402,0.58,0.0043,41.96,8.03,225.28,0.9538,0.0757
+5,petri5,St-Julien,dup20_038.csv,0,78.35,63.44,19.71,34.10,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0308,0.50,0.0107,41.96,8.03,225.28,0.9538,0.0757
+5,petri5,St-Julien,dup20_039.csv,0,76.96,63.44,19.71,30.92,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0281,0.49,0.0106,41.96,8.03,225.28,0.9538,0.0757
+5,petri5,St-Julien,dup20_040.csv,0,75.18,63.44,19.71,26.85,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0253,0.48,0.0128,41.96,8.03,225.28,0.9538,0.0757
+5,petri5,St-Julien,dup20_041.csv,0,73.7,63.44,19.71,23.46,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0214,0.48,0.0120,41.96,8.03,225.28,0.9538,0.0757
+5,petri5,St-Julien,dup20_042.csv,0,72.11,63.44,19.71,19.83,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0184,0.47,0.0152,41.96,8.03,225.28,0.9538,0.0757
+5,petri5,St-Julien,dup20_043.csv,0,70.56,63.44,19.71,16.28,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0154,0.44,0.0183,41.96,8.03,225.28,0.9538,0.0757
+5,petri5,St-Julien,dup20_044.csv,0,65.58,63.44,19.71,4.89,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0122,0.10,0.0000,41.96,8.03,225.28,0.9538,0.0757
+5,petri5,St-Julien,dup20_045.csv,0,63.44,63.44,19.71,0.00,135,441,49,490,63,312,375,964,0,36.1,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,41.96,8.03,225.28,0.9538,0.0757
+6,petri6,Sable blanc,dup20_046.csv,0,92.12,80.46,19.71,19.19,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.1059,0.66,0.0019,21.11,29.31,94.54,1.0219,0.0283
+6,petri6,Sable blanc,dup20_047.csv,0,89.44,80.46,19.71,14.78,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0952,0.49,0.0046,21.11,29.31,94.54,1.0219,0.0283
+6,petri6,Sable blanc,dup20_048.csv,0,87.86,80.46,19.71,12.18,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0859,0.46,0.0049,21.11,29.31,94.54,1.0219,0.0283
+6,petri6,Sable blanc,dup20_049.csv,0,86.04,80.46,19.71,9.19,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0688,0.44,0.0047,21.11,29.31,94.54,1.0219,0.0283
+6,petri6,Sable blanc,dup20_050.csv,0,84.39,80.46,19.71,6.47,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0455,0.41,0.0040,21.11,29.31,94.54,1.0219,0.0283
+6,petri6,Sable blanc,dup20_051.csv,0,82.7,80.46,19.71,3.69,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0265,0.37,0.0028,21.11,29.31,94.54,1.0219,0.0283
+6,petri6,Sable blanc,dup20_052.csv,0,81.31,80.46,19.71,1.40,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0164,0.03,0.0000,21.11,29.31,94.54,1.0219,0.0283
+6,petri6,Sable blanc,dup20_053.csv,0,80.47,80.46,19.71,0.02,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0078,0.01,0.0000,21.11,29.31,94.54,1.0219,0.0283
+6,petri6,Sable blanc,dup20_054.csv,0,80.46,80.46,19.71,0.00,0,nan,nan,0,nan,nan,1000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,21.11,29.31,94.54,1.0219,0.0283
+7,petri7,Chine Ulan Buh,dup20_055.csv,0,87.54,75.54,19.71,21.49,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0422,0.62,0.0257,21.53,17.69,1058.60,1.0977,0.0030
+7,petri7,Chine Ulan Buh,dup20_056.csv,0,84,75.54,19.71,15.15,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0035,1.00,0.0291,21.53,17.69,1058.60,1.0977,0.0030
+7,petri7,Chine Ulan Buh,dup20_057.csv,0,82.15,75.54,19.71,11.84,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0026,0.96,0.0000,21.53,17.69,1058.60,1.0977,0.0030
+7,petri7,Chine Ulan Buh,dup20_058.csv,0,80.03,75.54,19.71,8.04,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0026,0.78,0.0000,21.53,17.69,1058.60,1.0977,0.0030
+7,petri7,Chine Ulan Buh,dup20_059.csv,0,78.12,75.54,19.71,4.62,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0063,0.36,0.0727,21.53,17.69,1058.60,1.0977,0.0030
+7,petri7,Chine Ulan Buh,dup20_060.csv,0,76.94,75.54,19.71,2.51,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0068,0.03,0.0000,21.53,17.69,1058.60,1.0977,0.0030
+7,petri7,Chine Ulan Buh,dup20_061.csv,0,76.45,75.54,19.71,1.63,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0048,0.03,0.0000,21.53,17.69,1058.60,1.0977,0.0030
+7,petri7,Chine Ulan Buh,dup20_062.csv,0,75.71,75.54,19.71,0.30,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0092,0.01,0.0000,21.53,17.69,1058.60,1.0977,0.0030
+7,petri7,Chine Ulan Buh,dup20_063.csv,0,75.54,75.54,19.71,0.00,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,45.5,27,7.9,18.7,0,0,0.9,0.0000,0.00,0.0000,21.53,17.69,1058.60,1.0977,0.0030
+8,petri8,Lebna 57,dup20_064.csv,0,70.25,49.59,19.61,68.91,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0491,0.45,0.0000,75.80,5.37,159.23,1.0146,0.0282
+8,petri8,Lebna 57,dup20_065.csv,0,67.4,49.59,19.61,59.41,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0420,0.42,0.0000,75.80,5.37,159.23,1.0146,0.0282
+8,petri8,Lebna 57,dup20_066.csv,0,66.06,49.59,19.61,54.94,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0407,0.41,0.0000,75.80,5.37,159.23,1.0146,0.0282
+8,petri8,Lebna 57,dup20_067.csv,0,64.5,49.59,19.61,49.73,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0393,0.40,0.0000,75.80,5.37,159.23,1.0146,0.0282
+8,petri8,Lebna 57,dup20_068.csv,0,63.02,49.59,19.61,44.80,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0352,0.39,0.0000,75.80,5.37,159.23,1.0146,0.0282
+8,petri8,Lebna 57,dup20_069.csv,0,61.54,49.59,19.61,39.86,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0310,0.37,0.0000,75.80,5.37,159.23,1.0146,0.0282
+8,petri8,Lebna 57,dup20_070.csv,0,60.09,49.59,19.61,35.02,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0274,0.34,0.0000,75.80,5.37,159.23,1.0146,0.0282
+8,petri8,Lebna 57,dup20_071.csv,0,55.95,49.59,19.61,21.21,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0122,0.33,0.0000,75.80,5.37,159.23,1.0146,0.0282
+8,petri8,Lebna 57,dup20_072.csv,0,49.59,49.59,19.61,0.00,738,nan,nan,194,nan,nan,68,nan,nan,nan,14.4,117,1.35,nan,nan,nan,nan,nan,nan,nan,0.0000,0.00,0.0000,75.80,5.37,159.23,1.0146,0.0282
