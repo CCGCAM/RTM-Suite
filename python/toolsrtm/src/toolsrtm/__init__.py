@@ -82,6 +82,18 @@ from .inversion import (
     hybrid_inversion,
     hybrid_inversion_ensemble,
 )
+from .sensitivity import (
+    CorrelatedLutResult,
+    SobolResult,
+    SpectralSensitivityResult,
+    correlated_value,
+    gauss_by_min_max,
+    get_cor,
+    get_distribution_lut,
+    johnson_relative_weights,
+    sobol_indices,
+    spectral_sensitivity,
+)
 
 __version__ = "0.1.0"
 
@@ -169,4 +181,14 @@ __all__ = [
     "get_vif",
     "hybrid_inversion",
     "hybrid_inversion_ensemble",
+    "CorrelatedLutResult",
+    "SobolResult",
+    "SpectralSensitivityResult",
+    "correlated_value",
+    "gauss_by_min_max",
+    "get_cor",
+    "get_distribution_lut",
+    "johnson_relative_weights",
+    "sobol_indices",
+    "spectral_sensitivity",
 ]

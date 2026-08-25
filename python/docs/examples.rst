@@ -362,6 +362,41 @@ R vignettes use (``SCOPEinR/inst/input/LUT_input.csv``).
 
    Real output of the single ``get_scope()`` call above: TOC reflectance (left; the dashed gaps are the water-vapor-absorption wavelengths SCOPE itself leaves undefined) and the emitted SIF spectrum (right).
 
+Global sensitivity analysis (toolsrtm)
+------------------------------------------
+
+Mirrors R Tutorial 10: run ``foursail`` hundreds of times while varying leaf
+and canopy traits, then compute the Johnson relative-importance index at
+every wavelength -- how much each trait relatively explains reflectance
+variance there. Produces the classic PROSAIL "stacked contribution vs
+wavelength" figure (leaf structure, pigment, water, dry matter, leaf angle,
+LAI, soil, stacked to 100% at every wavelength).
+
+.. code-block:: python
+
+   from toolsrtm.sensitivity import spectral_sensitivity
+
+   result = spectral_sensitivity(n_samples=500, distribution="Uniform",
+                                  traits=("N", "Cab", "EWT", "LMA", "LIDFa", "LAI"),
+                                  wl_step=5, seed=11)
+   # long-format arrays: wavelength, trait, sti_pct (sums to 100 per wavelength)
+   at_700nm = result.sti_pct[result.wavelength == 700]
+   print(dict(zip(result.trait[result.wavelength == 700], at_700nm.round(1))))
+
+.. figure:: _figures/spectral_sensitivity.png
+   :alt: Stacked area chart of Johnson relative-importance index per trait across wavelength, real output of the code above
+   :width: 100%
+
+   Real output: chlorophyll (Cab) dominates the visible, water (EWT) and dry matter (LMA) dominate the SWIR, leaf structure (N) and soil brightness matter most in the NIR plateau -- the textbook PROSAIL sensitivity pattern, recovered numerically rather than assumed.
+
+``toolsrtm.sensitivity`` also has :func:`~toolsrtm.sensitivity.sobol_indices`
+(direct data -> Johnson-index + simplified Sobol-like Si/STi, no extra model
+runs needed) and the correlated/multi-distribution LUT builders
+:func:`~toolsrtm.sensitivity.get_distribution_lut` /
+:func:`~toolsrtm.sensitivity.get_cor` / :func:`~toolsrtm.sensitivity.correlated_value`
+(R Tutorial 05's LUT-correlation helpers) -- see ``tests/test_sensitivity.py``
+for worked examples of each.
+
 Full simulate -> indices -> ML-invert pipeline
 ------------------------------------------------
 
@@ -377,13 +412,9 @@ See ``Scripts/Python/README.md`` for how to run it.
 What isn't ported yet
 ----------------------
 
-Two tutorial-level gaps not covered by any example above, on top of the
+One tutorial-level gap not covered by any example above, on top of the
 finer-grained implementation gaps in :doc:`not_ported`:
 
-- **Sobol/Johnson sensitivity analysis** (``toolsrtm``, R Tutorial 10's
-  ``get.sobol.indices()``/``get.spectral.sensitivity()``) and **LUT
-  correlation-distribution helpers** (``get_distributionLUT()``/``getCor()``,
-  R Tutorial 05) have no Python module yet.
 - **The real-Sentinel-2/STAC capstone** (SCOPEinR Tutorial 11 --
   ``Actot`` retrieved from a real satellite time series and mapped
   spatially; ToolsRTM Tutorial 18 -- a spatial index map from a real

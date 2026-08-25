@@ -274,4 +274,30 @@ plt.savefig(os.path.join(OUTDIR, "deep_learning_inversion.png"), dpi=140)
 plt.close(fig)
 print("wrote deep_learning_inversion.png")
 
+# ---------------------------------------------------------------- 12. Global sensitivity analysis (Johnson index)
+from toolsrtm.sensitivity import spectral_sensitivity
+
+sens = spectral_sensitivity(n_samples=500, distribution="Uniform",
+                             traits=("N", "Cab", "EWT", "LMA", "LIDFa", "LAI"), wl_step=5, seed=11)
+trait_order = ["N", "Cab", "EWT", "LMA", "LIDFa", "LAI", "SoilCoef"]
+trait_colors = {"N": "#999999", "Cab": "#2E8B57", "EWT": "#2166AC", "LMA": "#8B5A2B",
+                "LIDFa": "#B2182B", "LAI": "#6A3D9A", "SoilCoef": "#E69F00"}
+wl_unique = np.unique(sens.wavelength)
+stack = np.zeros((len(trait_order), len(wl_unique)))
+for ti, t in enumerate(trait_order):
+    mask = sens.trait == t
+    order = np.argsort(sens.wavelength[mask])
+    stack[ti, :] = sens.sti_pct[mask][order]
+
+fig, ax = plt.subplots(figsize=(9, 4.5))
+ax.stackplot(wl_unique, stack, labels=trait_order, colors=[trait_colors[t] for t in trait_order])
+ax.set_xlabel("Wavelength (nm)"); ax.set_ylabel("Relative contribution (%)")
+ax.set_title("Global sensitivity analysis (Johnson index) -- foursail() + PROSPECT-D, 500 simulations")
+ax.set_xlim(400, 2500); ax.set_ylim(0, 100)
+ax.legend(loc="upper center", ncol=7, fontsize=7, bbox_to_anchor=(0.5, -0.15))
+plt.tight_layout()
+plt.savefig(os.path.join(OUTDIR, "spectral_sensitivity.png"), dpi=140, bbox_inches="tight")
+plt.close(fig)
+print("wrote spectral_sensitivity.png")
+
 print("All figures written to", OUTDIR)
