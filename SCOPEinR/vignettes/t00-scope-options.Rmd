@@ -62,18 +62,18 @@ Check the "Alternatives" column below before assuming a value's meaning.
 | `calc_spectrum_planck` | 1 | 0 | Full per-wavelength Planck thermal spectrum vs. simplified thermal | Usually keep default | ✅ Both work |
 | `calc_xanthophyllabs` | 1 | 0 | Include xanthophyll/PRI reflectance effects | Disable (0) if not needed, small speedup | ✅ Both work |
 | `soilspectrum` | 0 | 1 | Soil reflectance from a file vs. computed by BSM | Use 1 to simulate soil physically (brightness/moisture) rather than from a fixed file | ✅ Both work |
-| `Fluorescence_model` | 0 | 1, 2 | Which NPQ/fluorescence-yield submodel | Use 2 for the Magnani 2012 model; 1 has no separate implementation yet | ✅ 0 and 2 work (2 fixed this session -- was wired to the wrong value); ⚠️ 1 falls back to the same model as 0 |
+| `Fluorescence_model` | 0 | 1, 2 | Which NPQ/fluorescence-yield submodel | Use 2 for the Magnani 2012 model; 1 has no separate implementation yet | ✅ 0 and 2 work; ⚠️ 1 uses the same model as 0 |
 | `applTcorr` | 1 | 0 | Temperature-correct Vcmax/biochemical rate constants | Normally keep on | ✅ Both work |
 | `verify` | 1 | 0 | Whether SCOPE checks output against field data | Application-dependent | ✅ No effect on the simulation itself (by design -- a validation step, not a physics option) |
-| `mSCOPE` | 0 | 1 | Vertically heterogeneous canopy (multiple leaf-property layers) | Only for mSCOPE-style applications | ✅ Fixed this session (was a real bug, see below) -- now works |
+| `mSCOPE` | 0 | 1 | Vertically heterogeneous canopy (multiple leaf-property layers) | Only for mSCOPE-style applications | ✅ Works |
 | `simulation` | 0 | 1 | One run per LUT row vs. time-series mode | Only if you have meteo time-series input files, not a LUT | ❌ Needs a different input format this page doesn't provide (see below) |
 | `calc_directional` | 0 | 1 | Full BRDF over many view angles | Use 1 for directional/BRDF studies | ✅ Both work |
-| `calc_vert_profiles` | 0 | 1 | Return vertical (per-layer) canopy profiles | When per-layer profiles are needed | ✅ Fixed this session (was missing the `lite=1` case, see below) -- now works |
+| `calc_vert_profiles` | 0 | 1 | Return vertical (per-layer) canopy profiles | When per-layer profiles are needed | ✅ Works |
 | `soil_heat_method` | 2 | 0, 1 | How soil heat flux (G) is estimated | Application-dependent | ✅ All three work |
-| `calc_rss_rbs` | 0 | 1 | Fixed vs. computed soil surface/boundary-layer resistances | Use 1 to compute from conditions instead of fixing from the LUT | ✅ Fixed this session (was a real bug, see below) -- now works |
+| `calc_rss_rbs` | 0 | 1 | Fixed vs. computed soil surface/boundary-layer resistances | Use 1 to compute from conditions instead of fixing from the LUT | ✅ Works |
 | `MoninObukhov` | 1 | 0 | Atmospheric-stability correction | Application-dependent | ✅ Both work |
 | `LIDF` | 0 | 1 | Leaf angle distribution from LUT (`LIDFa`/`LIDFb`) vs. an external angles file | Use 1 only if you have a real angles file | ✅ Both run and produce different output |
-| `irradiance` | 0 | 1, 2 | Irradiance source: SCOPE's own file, user measurements ("WithE"), or a MODTRAN atmospheric file | 1 if you have real measured irradiance; 2 for a real MODTRAN atmosphere file | ✅ 0 and 2 work (2 fixed this session); ⚠️ 1 works but see the caution below |
+| `irradiance` | 0 | 1, 2 | Irradiance source: SCOPE's own file, user measurements ("WithE"), or a MODTRAN atmospheric file | 1 if you have real measured irradiance; 2 for a real MODTRAN atmosphere file | ✅ 0 and 2 work; ⚠️ 1 works, see the note below |
 
 ## 3. What can I change for my application?
 
@@ -92,54 +92,34 @@ Check the "Alternatives" column below before assuming a value's meaning.
 | Error you see | Likely cause | What to do |
 |---|---|---|
 | `non-numeric matrix extent` | `simulation = 1` | Needs time-series meteo input files, not a single LUT row -- this page's examples don't provide that input (Section 5.3) |
-| `Fluorescence_model = 1` doesn't look different from the default | `Fluorescence_model = 1` | Expected: there's no separate "sigmoid Kn" implementation in this port yet, so it correctly falls back to the same model as `0` (Section 5.4) |
-| Direct/diffuse irradiance (`Esun_`/`Esky_`) look swapped | `irradiance = 1` | Unconfirmed -- flagged for caution, not yet independently verified (Section 5.5) |
+| `Fluorescence_model = 1` doesn't look different from the default | `Fluorescence_model = 1` | Expected: this port doesn't have a separate "sigmoid Kn" implementation, so it uses the same model as `0` (Section 5.4) |
+| Direct/diffuse irradiance (`Esun_`/`Esky_`) look swapped | `irradiance = 1` | Known caveat -- see the note in Section 5.5 |
 
 ## 5. Per-option detail: everything not a plain "it works"
 
-### 5.1 `lite = 0` -- Full SCOPE (fixed this session)
+### 5.1 `lite = 0` -- Full SCOPE (13x36 angular resolution)
 
 **Purpose:** activates the full per-leaf-angle-class (13x36xnl) integration
-instead of SCOPE-lite's per-layer aggregation.
-**Previous status:** crashed with `incorrect number of dimensions`
-inside the thermal-emission calculation (`RTMt_planck.R`) -- the
-[13,36,nl] leaf-angle/azimuth/layer array was being flattened with a
-matrix reshape that only handled a 2-D case, silently discarding the
-layer dimension and producing a shape that couldn't be multiplied
-against the leaf-angle-distribution weights.
-**Fixed:** the reduction now correctly computes a weighted mean over
-leaf angle (weighted by `lidf`, the leaf inclination distribution) and
-a uniform mean over azimuth, per layer -- matching the same logic
-already used elsewhere in this package (`meanleaf()`'s `'angles'`
-choice) for the analogous reduction.
-**Verified:** `lite = 0` now returns a physically sane result --
+instead of SCOPE-lite's per-layer aggregation, for the thermal-emission
+and net-radiation calculations.
+**What to expect:** `lite = 0` returns a physically sane result --
 `Actot` = 6.76 umol/m2/s, close to but distinct from the `lite = 1`
 baseline (6.95), consistent with the full angular integration being a
-more detailed (not wildly different) representation of the same
-physics. The `lite = 1` baseline itself is unchanged (regression-checked).
+more detailed (not wildly different) representation of the same physics.
 **Note for Python users:** `scopeinpython` (this package's Python
-sibling) still only implements SCOPE-lite and documents the full
-per-leaf-angle branches as an unported gap -- that has not changed by
-this fix, which is R-only.
+sibling) only implements SCOPE-lite; the full per-leaf-angle branches
+aren't ported there.
 
-### 5.2 `calc_vert_profiles = 1` -- Vertical canopy profiles (fixed this session)
+### 5.2 `calc_vert_profiles = 1` -- Vertical canopy profiles
 
 **Purpose:** return per-layer (vertical) profiles of net radiation/
-photosynthesis instead of only canopy-integrated totals.
-**Previous status:** crashed with `object 'profiles' not found` --
-`RTMo.R` only built the `profiles` list inside `if (calc_vert_profiles
-== 1) { if (lite != 1) { profiles <- list(...) } }`; with the default
-`lite = 1`, that inner block never ran, so `profiles` was never created.
-**Fixed:** added the missing `lite = 1` branch. In lite mode, the
-per-leaf-angle reduction (`meanleaf()`) isn't needed at all -- `Pnuc`/
-`Pnuc_Cab`/`Pnuc_Car` are already per-layer vectors -- so the profile is
-the same sunlit/shaded weighted mix used elsewhere in this function,
-computed directly.
-**Verified:** `calc_vert_profiles = 1` now returns a real per-layer
-`Pn1d` profile (one value per canopy layer, decreasing with depth as
-expected as light attenuates through the canopy), with `Actot`
-unchanged from the baseline (as it should be -- this option only adds
-diagnostic profile output, it doesn't change the canopy-integrated flux).
+photosynthesis instead of only canopy-integrated totals, in both
+`lite = 0` and `lite = 1` mode.
+**What to expect:** a real per-layer `Pn1d` profile (one value per
+canopy layer, decreasing with depth as light attenuates through the
+canopy), with `Actot` unchanged from the baseline -- this option only
+adds diagnostic profile output, it doesn't change the canopy-integrated
+flux.
 
 ### 5.3 `simulation = 1` -- Time-series mode
 
@@ -156,112 +136,58 @@ time-series meteo files formatted for that mode.
 **Is my input wrong?** For this tutorial's LUT-based examples, yes --
 this option needs a fundamentally different input, not a bug fix.
 
-### 5.4 `Fluorescence_model` -- fixed a real routing bug this session
+### 5.4 `Fluorescence_model` -- which submodel each value selects
 
-Testing all three values against the same baseline run found that
-`Fluorescence_model = 2` (Magnani et al. 2012 model, `get.biochemical.MD12()`,
-authored by Federico Magnani) was wired to the wrong option value --
-the source code triggered it for `Value == 1` instead of `Value == 2`,
-backwards from this option's own documented mapping. This has been
-fixed at the source (`SCOPEinR::get.ebal()`'s internal dispatch).
+- **`Fluorescence_model = 0`** (default): the empirical (Flexas-fit) model.
+- **`Fluorescence_model = 2`**: the Magnani et al. (2012) model
+  (`get.biochemical.MD12()`, authored by Federico Magnani) -- gives a
+  numerically distinct result from the default (`Actot` differs
+  meaningfully from `Fluorescence_model = 0`).
+- **`Fluorescence_model = 1`** (documented as "sigmoid for Kn"): this
+  port doesn't have a separate implementation for this value, so it
+  uses the same model as `Value = 0`. **What should I do?** Treat
+  `Fluorescence_model = 1` as equivalent to `0` for now.
 
-- **`Fluorescence_model = 2` (Magnani 2012) now runs the actual Magnani
-  model**, giving a numerically distinct result from the default
-  (confirmed: `Actot` differs meaningfully from `Fluorescence_model = 0`).
-- **`Fluorescence_model = 1` (documented as "sigmoid for Kn") has no
-  separate implementation in this port.** It now correctly falls back
-  to the same model as `Value = 0` (the empirical Flexas-fit model)
-  rather than silently running Magnani's model under the wrong label,
-  which is what it did before this fix. **What should I do?** Treat
-  `Fluorescence_model = 1` as equivalent to `0` for now -- a genuine,
-  currently-unsupported option value, not a bug to work around.
+### 5.5 `irradiance` -- source selection, and a note on `irradiance = 1`
 
-### 5.5 `irradiance` -- one caution, one option fully fixed this session
+**`irradiance = 0`** (default): SCOPE's own bundled irradiance file.
 
-**`irradiance = 1` (user-supplied "WithE" measurements) runs without
-error, but is flagged for caution**: relative to the default
-(`irradiance = 0`), the mean direct (`Esun_`) and diffuse (`Esky_`)
-irradiance values come out swapped -- `Esun_` drops to the previous
-`Esky_` value and vice versa, to several significant figures. That's
-precise enough to look like a real column-order issue in how the input
-file is read, not coincidence -- but confirming which of the two
-possible column orders is actually correct requires checking against a
-real reference "WithE" measurement file and SCOPE's own documented
-convention for it, which wasn't available to verify further here.
-**What should I do?** Treat `irradiance = 1` output with caution until
-independently verified; the direct/diffuse split specifically, not the
-overall magnitude, is what's in question.
-
-**`irradiance = 2` (MODTRAN atmospheric file): fixed this session,
-now works end-to-end.** Tracing the option all the way through
-`get.calcTOCirr()` (`RTMo_functions.R`) surfaced four chained issues,
-fixed one after another: (1) the function referenced `spectral`/`soil`
-as bare variables instead of its own parameters -- fixed by threading
-`data.spectral`/`data.soil` through from `getRTMo()`; (2) a typo,
-`Esky` instead of `Esky_`, in the thermal-fraction calculation; (3) the
-row-selection step compared the MODTRAN file's wavenumber column
-(`WN`, cm-1) directly against SCOPE's wavelength grid (`wl`, nm) --
-different units, so the exact match essentially never succeeded; fixed
-by interpolating (`stats::approx()`) each needed transmittance column
-from the MODTRAN file's `WL` (nm) grid onto SCOPE's own grid instead of
-filtering for an exact match; (4) the code padded `rdd`/`rsd` with
-extra thermal-region values unconditionally, even when they were
-already the full length expected -- fixed to only pad the actual gap,
-if any.
-**Verified:** `irradiance = 2` now returns a physically sane result --
-`Actot` = 7.11 umol/m2/s, distinct from but comparable to the default
-(6.95), consistent with using a genuinely different (MODTRAN-derived)
-irradiance spectrum.
-**What should I do?** `irradiance = 2` is usable; if you have a real
-MODTRAN `.atm` file for your own site/date, drop it into
-`inst/input/radiationdata/` in place of the bundled example
+**`irradiance = 2`** (MODTRAN atmospheric file): usable end-to-end,
+returning a physically sane result -- `Actot` = 7.11 umol/m2/s,
+distinct from but comparable to the default (6.95), consistent with
+using a genuinely different (MODTRAN-derived) irradiance spectrum. If
+you have a real MODTRAN `.atm` file for your own site/date, drop it
+into `inst/input/radiationdata/` in place of the bundled example
 (`FLEX-S3_std.atm`).
 
-### 5.6 `mSCOPE = 1` -- fixed this session
+**`irradiance = 1`** (user-supplied "WithE" measurements): runs
+without error. **Note:** relative to the default, the mean direct
+(`Esun_`) and diffuse (`Esky_`) irradiance values come out swapped --
+`Esun_` matches the default's `Esky_` value and vice versa. Confirming
+the correct column order requires a real reference "WithE" measurement
+file to check against, which this package doesn't bundle. **What
+should I do?** Treat `irradiance = 1` output's direct/diffuse split
+with caution -- the overall magnitude is not in question, only which
+of the two columns is direct vs. diffuse.
+
+### 5.6 `mSCOPE = 1` -- vertically heterogeneous canopy
 
 **Purpose:** simulate a canopy with vertically varying leaf properties
-(multiple biochemistry layers) instead of one uniform layer.
-**Previous status:** not operational (`invalid 'times' argument`).
-**Root cause, found by tracing the actual source**: `get.SCOPE.R`/
-`get.SCOPE.ind.R` built the per-layer LAI-fraction list with the key
-`data.mly[['pLAI ']]` -- note the trailing space. `fluspect_mSCOPE()`
-(the function that actually consumes this list) looks up
-`mly[['pLAI']]`, with no trailing space. Because R list lookups are
-exact-match, `mly[['pLAI']]` silently returned `NULL` instead of
-`c(0.5, 1, 1.5)`, which propagated into a degenerate zero-length
-`cumsum()`/`floor()` calculation and then a malformed `rep(..., times =
-...)` call further downstream.
-**Fix applied**: removed the trailing space from the key in both files,
-matching the (correctly spelled) name `fluspect_mSCOPE()` already
-expected. Verified against the reference implementation structure at
-[peiqiyang/mSCOPE](https://github.com/peiqiyang/mSCOPE) -- the
-3-layer/pLAI-fraction structure used here matches that model's own
-multi-layer parameterization. `mSCOPE = 1` now runs and produces real,
-substantially different canopy-optical output (189 fields differ from
-the default run).
-**What should I do?** `mSCOPE = 1` is now usable.
+(multiple biochemistry layers) instead of one uniform layer, following
+the [mSCOPE](https://github.com/peiqiyang/mSCOPE) multi-layer
+parameterization (3 layers, LAI fractions `c(0.5, 1, 1.5)`).
+**What to expect:** `mSCOPE = 1` runs and produces real, substantially
+different canopy-optical output from the single-layer default (189
+fields differ).
 
-### 5.7 `calc_rss_rbs = 1` -- fixed this session
+### 5.7 `calc_rss_rbs = 1` -- computed soil resistances
 
 **Purpose:** compute soil surface (`rss`) and boundary-layer (`rbs`)
-resistances from conditions (soil moisture, LAI) instead of using fixed
-values from the LUT.
-**Previous status:** not operational (`non-numeric argument to binary
-operator`).
-**Root cause, found by tracing the actual source**: `getinputLUT.R`
-called the (correct) helper `calc_rssrbs()`, which returns a list --
-but then extracted its results with single-bracket indexing,
-`outputs_['rss']`, which returns a length-1 *list* rather than the
-numeric value inside it. Assigning that list into `soil$rss` meant any
-later arithmetic using `soil$rss` (a number expected) against a list
-failed.
-**Fix applied**: changed both extractions to double-bracket indexing
-(`outputs_[['rss']]`, `outputs_[['rbs']]`), the standard R idiom for
-pulling a single named element's actual value out of a list.
-`calc_rss_rbs = 1` now runs and produces real, substantially different
-energy-balance output (121 fields differ from the fixed-resistance
-default).
-**What should I do?** `calc_rss_rbs = 1` is now usable.
+resistances from conditions (soil moisture, LAI) instead of using
+fixed values from the LUT.
+**What to expect:** `calc_rss_rbs = 1` runs and produces real,
+substantially different energy-balance output from the
+fixed-resistance default (121 fields differ).
 
 ## What's next
 
