@@ -213,8 +213,8 @@ if (dl_result$ok) {
       " RMSE=", round(rmse_f(obs_test, pred_test_dl), 2),
       " bias=", round(bias_f(obs_test, pred_test_dl), 2), "\n")
 }
-#> 19/19 - 0s - 32ms/epoch - 2ms/step
-#> Dense DL, independent test set: R2= -0.155  RMSE= 16.98  bias= -5.87
+#> 19/19 - 0s - 182ms/epoch - 10ms/step
+#> Dense DL, independent test set: R2= 0.08  RMSE= 15.15  bias= 1.3
 ```
 
 ``` r
@@ -238,10 +238,10 @@ if (dl_result$ok) {
 
 ![](t13-deep-learning-inversion_files/figure-html/rf-comparison-1.png)
 
-| method                                     |     R2 |  RMSE |
-|:-------------------------------------------|-------:|------:|
-| Dense DL (getMLmodel)                      | -0.155 | 16.98 |
-| Random Forest (get.inversion, Tutorial 12) |  0.868 |  5.75 |
+| method                                     |    R2 |  RMSE |
+|:-------------------------------------------|------:|------:|
+| Dense DL (getMLmodel)                      | 0.080 | 15.15 |
+| Random Forest (get.inversion, Tutorial 12) | 0.868 |  5.75 |
 
 ``` r
 
@@ -313,8 +313,8 @@ if (cnn_result$ok) {
   cat("CNN (PRISMA, ", length(prisma_bands), "bands), independent test set: R2=",
       round(r2_f(obs_test_h, pred_test_cnn), 3), " RMSE=", round(rmse_f(obs_test_h, pred_test_cnn), 2), "\n")
 }
-#> 13/13 - 0s - 45ms/epoch - 3ms/step
-#> CNN (PRISMA,  234 bands), independent test set: R2= -0.37  RMSE= 19.45
+#> 13/13 - 0s - 227ms/epoch - 17ms/step
+#> CNN (PRISMA,  234 bands), independent test set: R2= -0.354  RMSE= 19.34
 ```
 
 The dense-vs-1D-CNN architectural difference itself: `"Hidden-layers"`

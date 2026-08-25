@@ -42,6 +42,11 @@ automatically, same defensive pattern used throughout this package).
 
 ```{r indices-native}
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 20, setseed = 1))
+# inputsPROSAIL's own LMA row is held fixed at 0 by design (getLUT() samples
+# Prot/CBC instead, PROSPECT-PRO's dry-matter inputs) -- LeafModel="PROSPECT-D"
+# below needs LMA directly, so sample it from a typical real-leaf range.
+set.seed(2)
+LUT$LMA <- runif(20, 0.005, 0.02)
 rsoil <- rep(0.15, 2101)
 refl <- t(sapply(seq_len(20), function(i) {
   foursail(inputLUT = LUT[i, ], rsoil = rsoil, LeafModel = "PROSPECT-D")$rsot

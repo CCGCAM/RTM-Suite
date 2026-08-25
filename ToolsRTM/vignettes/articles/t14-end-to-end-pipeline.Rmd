@@ -57,6 +57,11 @@ script per model:
 ```{r pipeline-function}
 run_pipeline <- function(canopy.model, leaf.model = "PROSPECT-D", n.samples = 500, seed = 1) {
   LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n.samples, setseed = seed))
+  # inputsPROSAIL's own LMA row is held fixed at 0 by design (getLUT() samples
+  # Prot/CBC instead, PROSPECT-PRO's dry-matter inputs) -- the default
+  # leaf.model="PROSPECT-D" needs LMA directly, so sample it here from a
+  # typical real-leaf range; ignored (harmless) for other leaf models.
+  LUT$LMA <- stats::runif(n.samples, 0.005, 0.02)
   LUT$Cs <- 0; LUT$fqe <- 0.01; LUT$Cx <- 0
   LUT$cell.d <- 40; LUT$inter.c <- 0.045; LUT$baseline.abs <- 0.0006
   LUT$leaf.thick <- 1.6; LUT$albino.abs <- 0; LUT$lign.cell <- 2; LUT$Nitrogen <- 1
@@ -107,6 +112,10 @@ bands:
 
 ```{r inform-forward-sensitivity, fig.width=9}
 base_row <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 1, setseed = 1))
+# inputsPROSAIL's own LMA row is held fixed at 0 by design -- both models
+# below use LeafModel="PROSPECT-D", which needs LMA directly, so sample it
+# from a typical real-leaf range instead.
+base_row$LMA <- 0.009
 base_row$Cs <- 0; base_row$fqe <- 0.01; base_row$Cx <- 0
 base_row$cell.d <- 40; base_row$inter.c <- 0.045; base_row$baseline.abs <- 0.0006
 base_row$leaf.thick <- 1.6; base_row$albino.abs <- 0; base_row$lign.cell <- 2; base_row$Nitrogen <- 1
@@ -171,6 +180,11 @@ inversion setup as Section 2 above:
 n.samples <- 300
 run_case <- function(vary_geom = FALSE, vary_extra = FALSE, seed = 1) {
   LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n.samples, setseed = seed))
+  # inputsPROSAIL's own LMA row is held fixed at 0 by design (getLUT() samples
+  # Prot/CBC instead, PROSPECT-PRO's dry-matter inputs) -- the default
+  # leaf.model="PROSPECT-D" needs LMA directly, so sample it here from a
+  # typical real-leaf range; ignored (harmless) for other leaf models.
+  LUT$LMA <- stats::runif(n.samples, 0.005, 0.02)
   LUT$Cs <- 0; LUT$fqe <- 0.01; LUT$Cx <- 0
   LUT$cell.d <- 40; LUT$inter.c <- 0.045; LUT$baseline.abs <- 0.0006
   LUT$leaf.thick <- 1.6; LUT$albino.abs <- 0; LUT$lign.cell <- 2; LUT$Nitrogen <- 1

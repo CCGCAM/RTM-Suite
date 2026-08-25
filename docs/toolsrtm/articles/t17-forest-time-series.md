@@ -97,6 +97,10 @@ names(fits_sail) <- c("Cab", "LAI", "EWT")
 
 n_inform <- 800
 LUT_i <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_inform, setseed = 2))
+# inputsPROSAIL's own LMA row is held fixed at 0 by design (getLUT() samples
+# Prot/CBC instead, PROSPECT-PRO's dry-matter inputs) -- LeafModel="PROSPECT-D"
+# below needs LMA directly, so sample it from a typical real-leaf range.
+LUT_i$LMA <- runif(n_inform, 0.005, 0.02)
 LUT_i$Cs <- 0; LUT_i$fqe <- 0.01; LUT_i$Cx <- 0
 LUT_i$cell.d <- 40; LUT_i$inter.c <- 0.045; LUT_i$baseline.abs <- 0.0006
 LUT_i$leaf.thick <- 1.6; LUT_i$albino.abs <- 0; LUT_i$lign.cell <- 2; LUT_i$Nitrogen <- 1
@@ -215,13 +219,13 @@ print(ts_df[, c("date", "n_forest_px", "NDVI", "Cab_fourSAIL", "Cab_INFORM", "pc
 #>         date n_forest_px      NDVI Cab_fourSAIL Cab_INFORM pct_out_of_domain
 #> 1 2024-03-01          NA        NA           NA         NA                NA
 #> 2 2024-04-01          NA        NA           NA         NA                NA
-#> 3 2024-05-01         643 0.5798801     7.385914   19.34793               100
-#> 4 2024-06-01         799 0.5785292     7.418708   24.26679               100
-#> 5 2024-07-01         744 0.5647600     7.425733   30.80665               100
-#> 6 2024-08-01         651 0.5525782     7.441732   36.49746               100
-#> 7 2024-09-01         532 0.5404645     7.333646   34.63588               100
-#> 8 2024-10-01         163 0.5161124     7.254965   30.06180               100
-#> 9 2024-11-01          11 0.5107764     7.446501   34.16156               100
+#> 3 2024-05-01         643 0.5798801     7.385914   19.18096               100
+#> 4 2024-06-01         799 0.5785292     7.418708   20.59480               100
+#> 5 2024-07-01         744 0.5647600     7.425733   27.99392               100
+#> 6 2024-08-01         651 0.5525782     7.441732   33.27579               100
+#> 7 2024-09-01         532 0.5404645     7.333646   29.94036               100
+#> 8 2024-10-01         163 0.5161124     7.254965   28.30161               100
+#> 9 2024-11-01          11 0.5107764     7.446501   32.24756               100
 #>      ok
 #> 1 FALSE
 #> 2 FALSE

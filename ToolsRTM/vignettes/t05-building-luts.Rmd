@@ -35,6 +35,12 @@ against simplicity differently:
 
 ```{r getlut}
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 200, setseed = 1234))
+# inputsPROSAIL's own LMA row is held fixed at 0 by design -- getLUT()
+# samples Prot/CBC instead (the dry-matter inputs PROSPECT-PRO uses). This
+# page later simulates with LeafModel="PROSPECT-D" (Section 4), which needs
+# LMA directly, so sample it from a typical real-leaf range (0.005-0.02 g/cm2).
+set.seed(1235)
+LUT$LMA <- runif(200, 0.005, 0.02)
 dim(LUT)
 knitr::kable(head(LUT, 5))
 ```

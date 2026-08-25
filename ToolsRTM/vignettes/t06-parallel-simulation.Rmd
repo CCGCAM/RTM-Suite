@@ -38,6 +38,12 @@ tutorial -- inversion (traits recovered *from* spectra) is Tutorials
 ```{r lut}
 n.samples <- 300
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n.samples, setseed = 1234))
+# inputsPROSAIL's own LMA row is held fixed at 0 by design -- getLUT()
+# samples Prot/CBC instead (the dry-matter inputs PROSPECT-PRO uses). This
+# page simulates with LeafModel="PROSPECT-D" below, which needs LMA
+# directly, so sample it from a typical real-leaf range (0.005-0.02 g/cm2).
+set.seed(1235)
+LUT$LMA <- runif(n.samples, 0.005, 0.02)
 rsoil <- rep(0.15, 2101)
 ```
 

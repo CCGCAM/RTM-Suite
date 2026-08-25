@@ -20,7 +20,16 @@ wl_2001 <- 400:2400
 ## the package's own parameter-definition table (same source used by the
 ## single-combination comparison and by the tutorials).
 build_base_lut <- function(seed) {
-  as.data.frame(ToolsRTM::getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_samples, setseed = seed))
+  LUT <- as.data.frame(ToolsRTM::getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_samples, setseed = seed))
+  # inputsPROSAIL's own LMA row is held fixed at 0 by design -- getLUT()
+  # samples Prot/CBC instead (the two components PROSPECT-PRO decomposes
+  # dry matter into) so one shared LUT covers both leaf models.
+  # PROSPECT-D/Fluspect-B/-B-Cx need LMA directly (no Prot/CBC substitute),
+  # so sample it here from a typical real-leaf range (0.005-0.02 g/cm2);
+  # PROSPECT-PRO/Liberty ignore this column.
+  set.seed(seed + 5)
+  LUT$LMA <- runif(n_samples, 0.005, 0.02)
+  LUT
 }
 
 ## Extra per-model columns not covered by inputsPROSAIL, jittered around the

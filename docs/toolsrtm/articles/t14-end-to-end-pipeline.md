@@ -47,6 +47,11 @@ separate script per model:
 
 run_pipeline <- function(canopy.model, leaf.model = "PROSPECT-D", n.samples = 500, seed = 1) {
   LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n.samples, setseed = seed))
+  # inputsPROSAIL's own LMA row is held fixed at 0 by design (getLUT() samples
+  # Prot/CBC instead, PROSPECT-PRO's dry-matter inputs) -- the default
+  # leaf.model="PROSPECT-D" needs LMA directly, so sample it here from a
+  # typical real-leaf range; ignored (harmless) for other leaf models.
+  LUT$LMA <- stats::runif(n.samples, 0.005, 0.02)
   LUT$Cs <- 0; LUT$fqe <- 0.01; LUT$Cx <- 0
   LUT$cell.d <- 40; LUT$inter.c <- 0.045; LUT$baseline.abs <- 0.0006
   LUT$leaf.thick <- 1.6; LUT$albino.abs <- 0; LUT$lign.cell <- 2; LUT$Nitrogen <- 1
@@ -98,6 +103,10 @@ bands:
 ``` r
 
 base_row <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 1, setseed = 1))
+# inputsPROSAIL's own LMA row is held fixed at 0 by design -- both models
+# below use LeafModel="PROSPECT-D", which needs LMA directly, so sample it
+# from a typical real-leaf range instead.
+base_row$LMA <- 0.009
 base_row$Cs <- 0; base_row$fqe <- 0.01; base_row$Cx <- 0
 base_row$cell.d <- 40; base_row$inter.c <- 0.045; base_row$baseline.abs <- 0.0006
 base_row$leaf.thick <- 1.6; base_row$albino.abs <- 0; base_row$lign.cell <- 2; base_row$Nitrogen <- 1
@@ -140,12 +149,12 @@ cat("INFORM range (max-min) across LAI 0.5-7:\n")
 #> INFORM range (max-min) across LAI 0.5-7:
 print(round(apply(sens_inform, 1, function(x) max(x) - min(x)), 4))
 #>     red rededge     nir    swir 
-#>  0.0009  0.0006  0.0449  0.0342
+#>  0.0009  0.0007  0.0052  0.0018
 cat("fourSAIL range (max-min) across LAI 0.5-7:\n")
 #> fourSAIL range (max-min) across LAI 0.5-7:
 print(round(apply(sens_foursail, 1, function(x) max(x) - min(x)), 4))
 #>     red rededge     nir    swir 
-#>  0.0830  0.0365  0.3548  0.2813
+#>  0.0830  0.0400  0.1999  0.1048
 ```
 
 That’s the real, verified starting point: **under this fixed-geometry
@@ -176,6 +185,11 @@ as Section 2 above:
 n.samples <- 300
 run_case <- function(vary_geom = FALSE, vary_extra = FALSE, seed = 1) {
   LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n.samples, setseed = seed))
+  # inputsPROSAIL's own LMA row is held fixed at 0 by design (getLUT() samples
+  # Prot/CBC instead, PROSPECT-PRO's dry-matter inputs) -- the default
+  # leaf.model="PROSPECT-D" needs LMA directly, so sample it here from a
+  # typical real-leaf range; ignored (harmless) for other leaf models.
+  LUT$LMA <- stats::runif(n.samples, 0.005, 0.02)
   LUT$Cs <- 0; LUT$fqe <- 0.01; LUT$Cx <- 0
   LUT$cell.d <- 40; LUT$inter.c <- 0.045; LUT$baseline.abs <- 0.0006
   LUT$leaf.thick <- 1.6; LUT$albino.abs <- 0; LUT$lign.cell <- 2; LUT$Nitrogen <- 1
@@ -237,9 +251,9 @@ data.frame(
 
 | case                          | LAI_R2 |
 |:------------------------------|-------:|
-| A: LAI varies, geometry fixed |  0.154 |
-| B: LAI + crown geometry vary  | -0.045 |
-| C: B + understory/leaf vary   |  0.034 |
+| A: LAI varies, geometry fixed | -0.052 |
+| B: LAI + crown geometry vary  | -0.153 |
+| C: B + understory/leaf vary   | -0.131 |
 
 The answer is unambiguous: **letting crown geometry vary makes LAI
 retrieval *worse*, not better** (R² drops from A to B), and adding
@@ -295,9 +309,9 @@ knitr::kable(results, digits = 3)
 
 | canopy_model | LAI_R2 |
 |:-------------|-------:|
-| fourSAIL     |  0.829 |
-| foursail2    |  0.845 |
-| INFORM       |  0.177 |
+| fourSAIL     |  0.809 |
+| foursail2    |  0.821 |
+| INFORM       | -0.082 |
 
 ``` r
 

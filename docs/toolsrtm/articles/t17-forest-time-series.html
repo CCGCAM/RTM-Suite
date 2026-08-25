@@ -179,6 +179,10 @@ canopy model produced it:</p>
 <span></span>
 <span><span class="va">n_inform</span> <span class="op">&lt;-</span> <span class="fl">800</span></span>
 <span><span class="va">LUT_i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/getLUT.html">getLUT</a></span><span class="op">(</span>inputs <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va"><a href="../reference/rtm-input-specs.html">inputsPROSAIL</a></span>, nLUT <span class="op">=</span> <span class="va">n_inform</span>, setseed <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># inputsPROSAIL's own LMA row is held fixed at 0 by design (getLUT() samples</span></span>
+<span><span class="co"># Prot/CBC instead, PROSPECT-PRO's dry-matter inputs) -- LeafModel="PROSPECT-D"</span></span>
+<span><span class="co"># below needs LMA directly, so sample it from a typical real-leaf range.</span></span>
+<span><span class="va">LUT_i</span><span class="op">$</span><span class="va">LMA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n_inform</span>, <span class="fl">0.005</span>, <span class="fl">0.02</span><span class="op">)</span></span>
 <span><span class="va">LUT_i</span><span class="op">$</span><span class="va">Cs</span> <span class="op">&lt;-</span> <span class="fl">0</span>; <span class="va">LUT_i</span><span class="op">$</span><span class="va">fqe</span> <span class="op">&lt;-</span> <span class="fl">0.01</span>; <span class="va">LUT_i</span><span class="op">$</span><span class="va">Cx</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
 <span><span class="va">LUT_i</span><span class="op">$</span><span class="va">cell.d</span> <span class="op">&lt;-</span> <span class="fl">40</span>; <span class="va">LUT_i</span><span class="op">$</span><span class="va">inter.c</span> <span class="op">&lt;-</span> <span class="fl">0.045</span>; <span class="va">LUT_i</span><span class="op">$</span><span class="va">baseline.abs</span> <span class="op">&lt;-</span> <span class="fl">0.0006</span></span>
 <span><span class="va">LUT_i</span><span class="op">$</span><span class="va">leaf.thick</span> <span class="op">&lt;-</span> <span class="fl">1.6</span>; <span class="va">LUT_i</span><span class="op">$</span><span class="va">albino.abs</span> <span class="op">&lt;-</span> <span class="fl">0</span>; <span class="va">LUT_i</span><span class="op">$</span><span class="va">lign.cell</span> <span class="op">&lt;-</span> <span class="fl">2</span>; <span class="va">LUT_i</span><span class="op">$</span><span class="va">Nitrogen</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -289,13 +293,13 @@ single scene-wide mean:</p>
 <span><span class="co">#&gt;         date n_forest_px      NDVI Cab_fourSAIL Cab_INFORM pct_out_of_domain</span></span>
 <span><span class="co">#&gt; 1 2024-03-01          NA        NA           NA         NA                NA</span></span>
 <span><span class="co">#&gt; 2 2024-04-01          NA        NA           NA         NA                NA</span></span>
-<span><span class="co">#&gt; 3 2024-05-01         643 0.5798801     7.385914   19.34793               100</span></span>
-<span><span class="co">#&gt; 4 2024-06-01         799 0.5785292     7.418708   24.26679               100</span></span>
-<span><span class="co">#&gt; 5 2024-07-01         744 0.5647600     7.425733   30.80665               100</span></span>
-<span><span class="co">#&gt; 6 2024-08-01         651 0.5525782     7.441732   36.49746               100</span></span>
-<span><span class="co">#&gt; 7 2024-09-01         532 0.5404645     7.333646   34.63588               100</span></span>
-<span><span class="co">#&gt; 8 2024-10-01         163 0.5161124     7.254965   30.06180               100</span></span>
-<span><span class="co">#&gt; 9 2024-11-01          11 0.5107764     7.446501   34.16156               100</span></span>
+<span><span class="co">#&gt; 3 2024-05-01         643 0.5798801     7.385914   19.18096               100</span></span>
+<span><span class="co">#&gt; 4 2024-06-01         799 0.5785292     7.418708   20.59480               100</span></span>
+<span><span class="co">#&gt; 5 2024-07-01         744 0.5647600     7.425733   27.99392               100</span></span>
+<span><span class="co">#&gt; 6 2024-08-01         651 0.5525782     7.441732   33.27579               100</span></span>
+<span><span class="co">#&gt; 7 2024-09-01         532 0.5404645     7.333646   29.94036               100</span></span>
+<span><span class="co">#&gt; 8 2024-10-01         163 0.5161124     7.254965   28.30161               100</span></span>
+<span><span class="co">#&gt; 9 2024-11-01          11 0.5107764     7.446501   32.24756               100</span></span>
 <span><span class="co">#&gt;      ok</span></span>
 <span><span class="co">#&gt; 1 FALSE</span></span>
 <span><span class="co">#&gt; 2 FALSE</span></span>

@@ -14,6 +14,14 @@ suppressMessages(devtools::load_all(file.path(root, "ToolsRTM"), quiet = TRUE))
 n_samples <- 600
 set.seed(42)
 LUT <- as.data.frame(ToolsRTM::getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_samples, setseed = 42))
+# inputsPROSAIL's own LMA row is held fixed at 0 (use.default=0) by design:
+# LMA is PROSPECT-D's own dry-matter input, but getLUT() instead samples the
+# two components PROSPECT-PRO decomposes it into (Prot, CBC) so both leaf
+# models can share one LUT. This script uses PROSPECT-D specifically, which
+# needs LMA directly (no Prot/CBC substitute) -- sample it from a typical
+# real-leaf range (0.005-0.02 g/cm2) instead of leaving it at 0.
+set.seed(43)
+LUT$LMA <- runif(n_samples, 0.005, 0.02)
 write.csv(LUT, file.path(outdir, "shared_LUT_600.csv"), row.names = FALSE)
 
 rsoil <- rep(0.15, 2101)

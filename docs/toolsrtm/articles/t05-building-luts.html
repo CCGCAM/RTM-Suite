@@ -146,28 +146,34 @@ LUT</td>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">LUT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/getLUT.html">getLUT</a></span><span class="op">(</span>inputs <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va"><a href="../reference/rtm-input-specs.html">inputsPROSAIL</a></span>, nLUT <span class="op">=</span> <span class="fl">200</span>, setseed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># inputsPROSAIL's own LMA row is held fixed at 0 by design -- getLUT()</span></span>
+<span><span class="co"># samples Prot/CBC instead (the dry-matter inputs PROSPECT-PRO uses). This</span></span>
+<span><span class="co"># page later simulates with LeafModel="PROSPECT-D" (Section 4), which needs</span></span>
+<span><span class="co"># LMA directly, so sample it from a typical real-leaf range (0.005-0.02 g/cm2).</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1235</span><span class="op">)</span></span>
+<span><span class="va">LUT</span><span class="op">$</span><span class="va">LMA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">0.005</span>, <span class="fl">0.02</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">LUT</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 200  18</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">LUT</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
+<col width="5%">
 <col width="6%">
 <col width="6%">
 <col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="5%">
+<col width="3%">
+<col width="5%">
+<col width="3%">
+<col width="5%">
+<col width="5%">
+<col width="3%">
 <col width="2%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="4%">
-<col width="6%">
-<col width="4%">
-<col width="6%">
-<col width="6%">
-<col width="4%">
-<col width="2%">
-<col width="6%">
+<col width="5%">
 <col width="2%">
 </colgroup>
 <thead><tr class="header">
@@ -195,7 +201,7 @@ LUT</td>
 <td align="right">45.38614</td>
 <td align="right">8.897541</td>
 <td align="right">1.3267458</td>
-<td align="right">0</td>
+<td align="right">0.0086389</td>
 <td align="right">0.0266275</td>
 <td align="right">0.7631390</td>
 <td align="right">0.0012601</td>
@@ -215,7 +221,7 @@ LUT</td>
 <td align="right">46.17216</td>
 <td align="right">8.070285</td>
 <td align="right">2.1069005</td>
-<td align="right">0</td>
+<td align="right">0.0127303</td>
 <td align="right">0.0242104</td>
 <td align="right">0.8591507</td>
 <td align="right">0.0223563</td>
@@ -235,7 +241,7 @@ LUT</td>
 <td align="right">58.27738</td>
 <td align="right">11.439456</td>
 <td align="right">0.6314292</td>
-<td align="right">0</td>
+<td align="right">0.0064913</td>
 <td align="right">0.0041352</td>
 <td align="right">0.4081567</td>
 <td align="right">0.0245266</td>
@@ -255,7 +261,7 @@ LUT</td>
 <td align="right">60.95048</td>
 <td align="right">12.496161</td>
 <td align="right">4.2965531</td>
-<td align="right">0</td>
+<td align="right">0.0185230</td>
 <td align="right">0.0016152</td>
 <td align="right">0.5681268</td>
 <td align="right">0.0051936</td>
@@ -275,7 +281,7 @@ LUT</td>
 <td align="right">37.17616</td>
 <td align="right">6.656451</td>
 <td align="right">2.2166784</td>
-<td align="right">0</td>
+<td align="right">0.0175835</td>
 <td align="right">0.0085231</td>
 <td align="right">0.1100567</td>
 <td align="right">0.0060146</td>
@@ -380,7 +386,7 @@ strength<a class="anchor" aria-label="anchor" href="#getcor-correlate-any-two-tr
 <span>                   MinRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0.5</span><span class="op">)</span>, MaxRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Target rho: 0.7. Achieved correlation:"</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">cor_lut</span><span class="op">$</span><span class="va">LUT</span><span class="op">$</span><span class="va">Cab</span>, <span class="va">cor_lut</span><span class="op">$</span><span class="va">LUT</span><span class="op">$</span><span class="va">LAI</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Target rho: 0.7. Achieved correlation: 0.68</span></span></code></pre></div>
+<span><span class="co">#&gt; Target rho: 0.7. Achieved correlation: 0.69</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cor_lut</span><span class="op">$</span><span class="va">LUT</span><span class="op">$</span><span class="va">Cab</span>, <span class="va">cor_lut</span><span class="op">$</span><span class="va">LUT</span><span class="op">$</span><span class="va">LAI</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#2E8B57"</span>, cex <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"Cab"</span>, ylab <span class="op">=</span> <span class="st">"LAI"</span>, main <span class="op">=</span> <span class="st">"getCor(): Cab~LAI at rho=0.7"</span><span class="op">)</span></span></code></pre></div>

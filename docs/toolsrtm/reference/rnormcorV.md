@@ -42,9 +42,9 @@ Jared E. Knowles
 x <- rnorm(1000, 1, 1)
 y <- rnormcorV(x, 0.2)
 cor(x,y) # very close to 0.2
-#> [1] 0.177226
+#> [1] 0.2074629
 mean(y) # close to 0
-#> [1] 0.2263712
+#> [1] 0.1927601
 sd(y)   # close to 1
-#> [1] 0.9956081
+#> [1] 1.010334
 ```

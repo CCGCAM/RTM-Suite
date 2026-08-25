@@ -111,6 +111,11 @@ ranges <- list(Cab = c(5, 90), Car = c(0.5, 25), LAI = c(0.5, 7), EWT = c(0.001,
 
 LUT_sobol <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = nrow(mat01), setseed = 1234))
 for (p in params) LUT_sobol[[p]] <- ranges[[p]][1] + mat01[, p] * diff(ranges[[p]])
+# inputsPROSAIL's own LMA row is held fixed at 0 by design (getLUT() samples
+# Prot/CBC instead, PROSPECT-PRO's dry-matter inputs) -- LeafModel="PROSPECT-D"
+# below needs LMA directly, so sample it from a typical real-leaf range.
+set.seed(1235)
+LUT_sobol$LMA <- runif(nrow(LUT_sobol), 0.005, 0.02)
 
 rsoil <- rep(0.15, 2101)
 refl <- t(sapply(seq_len(nrow(LUT_sobol)), function(i) {

@@ -28,6 +28,12 @@ LUTs built the same way as here.
 
 n.samples <- 300
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n.samples, setseed = 1234))
+# inputsPROSAIL's own LMA row is held fixed at 0 by design -- getLUT()
+# samples Prot/CBC instead (the dry-matter inputs PROSPECT-PRO uses). This
+# page simulates with LeafModel="PROSPECT-D" below, which needs LMA
+# directly, so sample it from a typical real-leaf range (0.005-0.02 g/cm2).
+set.seed(1235)
+LUT$LMA <- runif(n.samples, 0.005, 0.02)
 rsoil <- rep(0.15, 2101)
 ```
 
@@ -66,7 +72,7 @@ t_seq <- system.time({
   })
 })
 cat("Sequential:", round(t_seq[["elapsed"]], 2), "s for", n.samples, "simulations\n")
-#> Sequential: 1.47 s for 300 simulations
+#> Sequential: 8.5 s for 300 simulations
 ```
 
 ## 3. Parallel with `doParallel`/`foreach`
@@ -89,9 +95,9 @@ t_par <- system.time({
 stopCluster(cl)
 
 cat("Parallel (", no_cores, "cores):", round(t_par[["elapsed"]], 2), "s for", n.samples, "simulations\n")
-#> Parallel ( 10 cores): 5.04 s for 300 simulations
+#> Parallel ( 10 cores): 5.14 s for 300 simulations
 cat("Speedup:", round(t_seq[["elapsed"]] / t_par[["elapsed"]], 2), "x\n")
-#> Speedup: 0.29 x
+#> Speedup: 1.65 x
 ```
 
 Three things matter for this pattern to actually work, not just look
@@ -146,7 +152,7 @@ histograms above, not noise: every curve is one specific, known
 
 cat("Per-simulation cost: sequential", round(1000 * t_seq[["elapsed"]] / n.samples, 2),
     "ms, parallel", round(1000 * t_par[["elapsed"]] / n.samples, 2), "ms\n")
-#> Per-simulation cost: sequential 4.9 ms, parallel 16.8 ms
+#> Per-simulation cost: sequential 28.33 ms, parallel 17.13 ms
 ```
 
 [`foursail()`](../reference/foursail.md) itself is fast (milliseconds

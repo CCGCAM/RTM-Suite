@@ -115,6 +115,12 @@ Tutorials 11-13’s subject, using LUTs built the same way as here.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n.samples</span> <span class="op">&lt;-</span> <span class="fl">300</span></span>
 <span><span class="va">LUT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="../reference/getLUT.html">getLUT</a></span><span class="op">(</span>inputs <span class="op">=</span> <span class="fu">ToolsRTM</span><span class="fu">::</span><span class="va"><a href="../reference/rtm-input-specs.html">inputsPROSAIL</a></span>, nLUT <span class="op">=</span> <span class="va">n.samples</span>, setseed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># inputsPROSAIL's own LMA row is held fixed at 0 by design -- getLUT()</span></span>
+<span><span class="co"># samples Prot/CBC instead (the dry-matter inputs PROSPECT-PRO uses). This</span></span>
+<span><span class="co"># page simulates with LeafModel="PROSPECT-D" below, which needs LMA</span></span>
+<span><span class="co"># directly, so sample it from a typical real-leaf range (0.005-0.02 g/cm2).</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1235</span><span class="op">)</span></span>
+<span><span class="va">LUT</span><span class="op">$</span><span class="va">LMA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n.samples</span>, <span class="fl">0.005</span>, <span class="fl">0.02</span><span class="op">)</span></span>
 <span><span class="va">rsoil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="fl">2101</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="whats-actually-varying-across-these-300-rows">What’s actually varying across these 300 rows<a class="anchor" aria-label="anchor" href="#whats-actually-varying-across-these-300-rows"></a>
@@ -145,7 +151,7 @@ ranges/distributions (Tutorial 01).</p>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Sequential:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"s for"</span>, <span class="va">n.samples</span>, <span class="st">"simulations\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sequential: 1.47 s for 300 simulations</span></span></code></pre></div>
+<span><span class="co">#&gt; Sequential: 8.5 s for 300 simulations</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="parallel-with-doparallelforeach">3. Parallel with <code>doParallel</code>/<code>foreach</code><a class="anchor" aria-label="anchor" href="#parallel-with-doparallelforeach"></a>
@@ -167,9 +173,9 @@ ranges/distributions (Tutorial 01).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Parallel ("</span>, <span class="va">no_cores</span>, <span class="st">"cores):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"s for"</span>, <span class="va">n.samples</span>, <span class="st">"simulations\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Parallel ( 10 cores): 5.04 s for 300 simulations</span></span>
+<span><span class="co">#&gt; Parallel ( 10 cores): 5.14 s for 300 simulations</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Speedup:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"x\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Speedup: 0.29 x</span></span></code></pre></div>
+<span><span class="co">#&gt; Speedup: 1.65 x</span></span></code></pre></div>
 <p>Three things matter for this pattern to actually work, not just look
 parallel:</p>
 <ul>
@@ -219,7 +225,7 @@ histograms above, not noise: every curve is one specific, known
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Per-simulation cost: sequential"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1000</span> <span class="op">*</span> <span class="va">t_seq</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">n.samples</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>    <span class="st">"ms, parallel"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">1000</span> <span class="op">*</span> <span class="va">t_par</span><span class="op">[[</span><span class="st">"elapsed"</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">n.samples</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"ms\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Per-simulation cost: sequential 4.9 ms, parallel 16.8 ms</span></span></code></pre></div>
+<span><span class="co">#&gt; Per-simulation cost: sequential 28.33 ms, parallel 17.13 ms</span></span></code></pre></div>
 <p><code><a href="../reference/foursail.html">foursail()</a></code> itself is fast (milliseconds per call) – the
 parallel speedup above has to overcome the fixed overhead of starting a
 cluster and shipping <code>ToolsRTM</code>/data to every worker, so it
