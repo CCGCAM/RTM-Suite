@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tutorials overview — RTM-Suite</title>
+<style>
+  :root { --brand:#0f3d5c; --brand-light:#1a6ea8; --text-muted:#5c6b76; --border-soft:#e1e7ea; --bg-light:#f5f8fa; --radius-lg:14px; --radius-sm:10px; --card-shadow:0 1px 3px rgba(15,61,92,0.08); }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; color: #1c2b33; background: #fff; line-height: 1.5; }
+  .navbar { position: sticky; top: 0; z-index: 999; background: var(--brand); color: #fff; }
+  .nav-container { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .nav-logo { font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+  .nav-logo span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; }
+  .nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
+  .nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
+  .nav-links a:hover, .nav-links a.active { opacity: 1; }
+  .nav-links a.active { border-bottom: 2px solid #fff; }
+  .nav-cta { border: 1px solid #fff; padding: 6px 16px; border-radius: 999px; font-weight: 600; }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 80px; }
+  a { color: var(--brand-light); }
+  h1 { font-size: 28px; margin: 0 0 8px; color: var(--brand); }
+  .subtitle { color: var(--text-muted); font-size: 15px; max-width: 780px; margin-bottom: 22px; }
+  h2 { font-size: 21px; color: var(--brand); margin: 46px 0 6px; scroll-margin-top: 76px; }
+  h2 .kicker { display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-light); margin-bottom: 3px; }
+  .desc { color: var(--text-muted); font-size: 14px; max-width: 780px; margin-bottom: 18px; }
+  .card { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); padding: 14px; margin-bottom: 10px; }
+  .card img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  .card .cap { font-size: 12px; color: var(--text-muted); padding: 8px 4px 2px; }
+  .shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 4px; font-size: 13.5px; }
+  th, td { text-align: left; padding: 7px 12px; border-bottom: 1px solid var(--border-soft); }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+  td:first-child { color: var(--text-muted); width: 34px; }
+  td a.py-link { font-size: 12px; color: var(--text-muted); margin-left: 8px; white-space: nowrap; }
+  .back { display: inline-block; margin-bottom: 24px; font-size: 13px; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+  .toc a { display: inline-block; background: var(--bg-light); border: 1px solid var(--border-soft); border-radius: 999px; padding: 6px 14px; font-size: 13px; color: var(--brand); text-decoration: none; }
+  .toc a:hover { border-color: var(--brand-light); }
+  .print-hint { font-size: 12px; color: var(--text-muted); margin: 4px 0 0; }
+  @media print {
+    .navbar, .back, .toc, .print-hint { display: none; }
+    .wrap { padding: 0; max-width: none; }
+    h2 { break-before: page; }
+    .card { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
+    <nav class="nav-links">
+      <a href="index.html#packages">Packages</a>
+      <a href="index.html#install">Install</a>
+      <a href="index.html#docs">Documentation</a>
+      <a href="index.html#apps">Apps</a>
+      <a href="index.html#tutorials">Tutorials</a>
+      <a href="index.html#examples">Examples</a>
+      <a href="comparison.html">R vs Python</a>
+      <a href="index.html#related">R Ecosystem</a>
+      <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <a class="back" href="index.html#tutorials">&larr; RTM-Suite tutorials</a>
+  <h1>Tutorials overview</h1>
+  <p class="subtitle">From a first simulation to a full course manual: sensor convolution, sensitivity analysis, and trait inversion, in R and Python. Every tutorial linked below is verified by actually running it end-to-end — not just written. This page groups all 31 tutorials by what they're <em>about</em>, with a real generated figure from each area, as a five-minute visual map before you dive into any one of them.</p>
+  <p class="print-hint">Tip: use your browser's Print &rarr; Save as PDF to keep an offline copy of this page.</p>
+
+  <div class="toc">
+    <a href="#toolsrtm-models">ToolsRTM models</a>
+    <a href="#scope">SCOPE, in R and Python</a>
+    <a href="#ml">ML inversion</a>
+    <a href="#deep-learning">Deep learning</a>
+    <a href="#sensitivity">Sensitivity analysis</a>
+  </div>
+
+  <h2 id="toolsrtm-models"><span class="kicker">ToolsRTM</span>Leaf, canopy, soil, atmosphere models</h2>
+  <p class="desc">Five leaf models (PROSPECT-D, PROSPECT-PRO, Fluspect-B, Fluspect-B-Cx, Liberty) &times; three canopy models (fourSAIL, foursail2, INFORM) &times; two soil models (BSM, MARMIT) &times; SPART for the full soil&ndash;canopy&ndash;atmosphere chain to top-of-atmosphere. All 15 leaf&times;canopy combinations agree with their Python port to R&sup2;=1.0 (see <a href="comparison.html#leaf-canopy">R vs Python</a>).</p>
+  <div class="shot-grid">
+    <div class="card"><img src="assets/comparison_allmodels_spectra_grid.png" alt="Reflectance spectra for all 15 leaf x canopy model combinations"><div class="cap">All 15 leaf &times; canopy combinations, one example spectrum each (Tutorial 04)</div></div>
+    <div class="card"><img src="assets/comparison_spart.png" alt="SPART soil-plant-atmosphere top-of-atmosphere reflectance"><div class="cap">SPART: top-of-canopy vs. top-of-atmosphere reflectance (Tutorial 03)</div></div>
+    <div class="card"><img src="assets/comparison_marmit.png" alt="MARMIT soil moisture reflectance sweep"><div class="cap">MARMIT: soil reflectance across a moisture gradient (Tutorial 16)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Tutorial</th><th></th></tr>
+    <tr><td>01</td><td><a href="toolsrtm/articles/t01-getting-started.html">Getting Started with ToolsRTM</a></td><td></td></tr>
+    <tr><td>02</td><td><a href="toolsrtm/articles/t02-leaf-to-canopy.html">From Leaf to Canopy Reflectance</a></td><td></td></tr>
+    <tr><td>03</td><td><a href="toolsrtm/articles/t03-spart.html">SPART: Soil-Plant-Atmosphere Radiative Transfer</a></td><td></td></tr>
+    <tr><td>04</td><td><a href="toolsrtm/articles/t04-comparing-models.html">Comparing Radiative Transfer Models</a></td><td></td></tr>
+    <tr><td>05</td><td><a href="toolsrtm/articles/t05-building-luts.html">Building Look-Up Tables</a></td><td></td></tr>
+    <tr><td>06</td><td><a href="toolsrtm/articles/t06-parallel-simulation.html">Large-Scale and Parallel RTM Simulation</a></td><td></td></tr>
+    <tr><td>07</td><td><a href="toolsrtm/articles/t07-sensor-convolution.html">Sensor Convolution</a></td><td></td></tr>
+    <tr><td>08</td><td><a href="toolsrtm/articles/t08-hyperspectral-sensors.html">Hyperspectral and VNIR Sensor Convolution</a></td><td></td></tr>
+    <tr><td>09</td><td><a href="toolsrtm/articles/t09-vegetation-indices.html">Vegetation Indices and Spectral Features</a></td><td></td></tr>
+    <tr><td>16</td><td><a href="toolsrtm/articles/t16-marmit-soil-in-canopy.html">MARMIT + fourSAIL + SPART: Realistic Soil Moisture</a></td><td></td></tr>
+    <tr><td>17</td><td><a href="toolsrtm/articles/t17-forest-time-series.html">Monitoring a Forest Site Through Time</a></td><td></td></tr>
+    <tr><td>19</td><td><a href="toolsrtm/articles/t19-flex-esu-heterogeneity.html">FLEX Cal/Val: ESU Heterogeneity Mapping</a></td><td><a class="py-link" href="python/examples.html">Python examples &rarr;</a></td></tr>
+  </table>
+
+  <h2 id="scope"><span class="kicker">SCOPEinR / scopeinpython</span>SCOPE, in R and Python</h2>
+  <p class="desc">The full coupled model: radiative transfer + energy balance + photosynthesis + chlorophyll fluorescence, in one simulation. Ported line-for-line to Python (<code>scopeinpython</code>) and cross-checked against the R original.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="Tutorials/images/scope_reflectance_fluorescence.png" alt="SCOPE TOC reflectance components and fluorescence spectrum"><div class="cap">TOC reflectance components and the fluorescence spectrum (How-in-R/Python — SCOPEinR)</div></div>
+    <div class="card"><img src="assets/scope_fluorescence.png" alt="SCOPE fluorescence emission spectrum"><div class="cap">SIF emission spectrum, PSI/PSII contributions (Tutorial 04)</div></div>
+    <div class="card"><img src="assets/comparison_scope_R_vs_Python_600sims.png" alt="R vs Python SCOPE 2.1 agreement across 600 simulations"><div class="cap">Full SCOPE 2.1: R vs. Python agreement, 600 simulations (R vs Python)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Tutorial</th><th></th></tr>
+    <tr><td>00</td><td><a href="scopeinr/articles/t00-scope-options.html">SCOPE's Options Table</a></td><td></td></tr>
+    <tr><td>01</td><td><a href="scopeinr/articles/t01-getting-started.html">Getting Started with SCOPEinR</a></td><td><a class="py-link" href="Tutorials/How-in-R-SCOPEinR.html">How-in-R/Python &rarr;</a></td></tr>
+    <tr><td>02</td><td><a href="scopeinr/articles/t02-soil-canopy-brdf.html">Soil, Canopy BRDF, and the SCOPE Input Structure</a></td><td></td></tr>
+    <tr><td>03</td><td><a href="scopeinr/articles/t03-energy-balance.html">Energy Balance Basics</a></td><td></td></tr>
+    <tr><td>04</td><td><a href="scopeinr/articles/t04-fluorescence.html">Fluorescence (SIF)</a></td><td></td></tr>
+    <tr><td>05</td><td><a href="scopeinr/articles/t05-building-scope-luts.html">Building SCOPE LUTs</a></td><td></td></tr>
+    <tr><td>06</td><td><a href="scopeinr/articles/t06-parallel-scope-runs.html">Large-Scale and Parallel SCOPE Runs</a></td><td></td></tr>
+    <tr><td>10</td><td><a href="scopeinr/articles/t10-end-to-end-pipeline.html">End-to-End SCOPE Pipeline</a></td><td></td></tr>
+  </table>
+
+  <h2 id="ml"><span class="kicker">Hybrid inversion</span>Machine-learning inversion: spectra &rarr; traits</h2>
+  <p class="desc">Going backwards: from a simulated or real reflectance spectrum to the vegetation trait that produced it. LUT-trained Random Forest, SVM, PLSR and ensemble models, applied to both synthetic and real Sentinel-2 data.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="Tutorials/images/tutorial_ml_inversion.png" alt="Cab retrieved from Sentinel-2A bands via Random Forest"><div class="cap">Cab retrieved from Sentinel-2A bands, Random Forest (How-in-R/Python)</div></div>
+    <div class="card"><img src="Tutorials/images/scope_lai_inversion.png" alt="LAI retrieved from Sentinel-2A bands via SCOPE apparent reflectance"><div class="cap">LAI retrieved from SCOPE apparent reflectance (How-in-R/Python — SCOPEinR)</div></div>
+    <div class="card"><img src="scopeinr/articles/t11-photosynthesis-capstone_files/figure-html/actot-map-1.png" alt="Net photosynthesis map from real Sentinel-2 imagery"><div class="cap">Net photosynthesis mapped from real Sentinel-2, Speulderbos (Tutorial 11)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Tutorial</th><th></th></tr>
+    <tr><td>ToolsRTM 11</td><td><a href="toolsrtm/articles/t11-hybrid-inversion.html">From Physics to Vegetation Traits: Hybrid Inversion</a></td><td></td></tr>
+    <tr><td>ToolsRTM 12</td><td><a href="toolsrtm/articles/t12-ml-inversion-comparison.html">Comparing ML Algorithms for RTM Inversion</a></td><td></td></tr>
+    <tr><td>ToolsRTM 14</td><td><a href="toolsrtm/articles/t14-end-to-end-pipeline.html">End-to-End RTM Inversion Pipeline</a></td><td></td></tr>
+    <tr><td>ToolsRTM 15</td><td><a href="toolsrtm/articles/t15-real-eo-application.html">From Satellite Reflectance to Traits: Real EO Application</a></td><td></td></tr>
+    <tr><td>ToolsRTM 18</td><td><a href="toolsrtm/articles/t18-spatial-index-mapping.html">Data-Driven Spatial Index Mapping</a></td><td><a class="py-link" href="python/examples.html#real-sentinel-2-capstone-data-driven-spatial-index-cab-mapping-toolsrtm">Python capstone &rarr;</a></td></tr>
+    <tr><td>SCOPEinR 08</td><td><a href="scopeinr/articles/t08-hybrid-inversion.html">Hybrid Inversion from SCOPE Reflectance</a></td><td></td></tr>
+    <tr><td>SCOPEinR 09</td><td><a href="scopeinr/articles/t09-sif-photosynthesis.html">Does SIF Add Information About Photosynthesis?</a></td><td></td></tr>
+    <tr><td>SCOPEinR 11</td><td><a href="scopeinr/articles/t11-photosynthesis-capstone.html">Capstone: ML Inversion of Net Photosynthesis, Real Sentinel-2</a></td><td><a class="py-link" href="python/examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython">Python capstone &rarr;</a></td></tr>
+  </table>
+
+  <h2 id="deep-learning"><span class="kicker">ToolsRTM Tutorial 13</span>Deep learning for RTM inversion</h2>
+  <p class="desc">Where classic ML (Random Forest, SVM) plateaus and a neural net can still improve: dense networks on tabular LUT features, and a 1D-CNN reading a PRISMA-resolution spectrum directly, compared head-to-head against the classic algorithms from Tutorial 12.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="toolsrtm/articles/t13-deep-learning-inversion_files/figure-html/learning-curve-1.png" alt="Neural network training/validation loss curve"><div class="cap">Dense-network training curve (Tutorial 13)</div></div>
+    <div class="card"><img src="toolsrtm/articles/t13-deep-learning-inversion_files/figure-html/true-vs-predicted-1.png" alt="Deep learning true vs predicted trait scatter plot"><div class="cap">True vs. predicted Cab, CNN on PRISMA-resolution spectra (Tutorial 13)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Tutorial</th><th></th></tr>
+    <tr><td>13</td><td><a href="toolsrtm/articles/t13-deep-learning-inversion.html">Deep Learning for RTM Inversion</a></td><td></td></tr>
+  </table>
+
+  <h2 id="sensitivity"><span class="kicker">Global &amp; local sensitivity</span>Which traits actually move the signal</h2>
+  <p class="desc">One-at-a-time sweeps, Sobol variance-based indices, and Johnson relative-weights regression — three complementary ways to answer "which input trait matters, and where in the spectrum." Ported to Python (<code>toolsrtm.sensitivity</code>) and verified against R to 8 decimal places.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="Tutorials/images/tutorial_sensitivity.png" alt="Canopy reflectance sensitivity to Cab and EWT"><div class="cap">Canopy reflectance sensitivity to Cab and EWT (How-in-R/Python)</div></div>
+    <div class="card"><img src="toolsrtm/articles/t10-sensitivity_files/figure-html/johnson-plot-1.png" alt="Johnson relative-weights importance plot"><div class="cap">Johnson relative-weights: trait importance ranking (Tutorial 10)</div></div>
+    <div class="card"><img src="scopeinr/articles/t07-sensitivity_files/figure-html/sweep-vcmax-refl-1.png" alt="SCOPE reflectance sensitivity to Vcmax25"><div class="cap">Reflectance sensitivity to Vcmax25 — direct vs. indirect effect (SCOPEinR Tutorial 07)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Tutorial</th><th></th></tr>
+    <tr><td>ToolsRTM 10</td><td><a href="toolsrtm/articles/t10-sensitivity.html">Understanding RTM Sensitivity</a></td><td><a class="py-link" href="python/examples.html#global-sensitivity-analysis-toolsrtm">Python module &rarr;</a></td></tr>
+    <tr><td>SCOPEinR 07</td><td><a href="scopeinr/articles/t07-sensitivity.html">Sensitivity: Direct vs. Indirect Trait Effects</a></td><td></td></tr>
+  </table>
+
+  <p style="margin-top: 40px; font-size: 12.5px; color: var(--text-muted);">This is a curated visual subset — the full numbered list (31 tutorials) is on the <a href="index.html#tutorials">homepage</a>, and every package's complete article index is under its own <strong>Documentation</strong> (<a href="toolsrtm/articles/index.html">ToolsRTM</a> / <a href="scopeinr/articles/index.html">SCOPEinR</a>).</p>
+</div>
+</body>
+</html>
