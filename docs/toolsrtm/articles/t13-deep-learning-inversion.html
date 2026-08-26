@@ -128,14 +128,16 @@ R2 / RMSE / bias, true-vs-predicted plot
      v
 Comparison against Tutorial 12's Random Forest, same split</code></pre>
 <div class="section level2">
-<h2 id="a-real-bug-found-and-fixed-while-building-this-page">1. A real bug, found and fixed while building this page<a class="anchor" aria-label="anchor" href="#a-real-bug-found-and-fixed-while-building-this-page"></a>
+<h2 id="three-real-bugs-found-and-fixed-while-building-this-page">1. Three real bugs, found and fixed while building this page<a class="anchor" aria-label="anchor" href="#three-real-bugs-found-and-fixed-while-building-this-page"></a>
 </h2>
-<p>An earlier version of this page passed <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> a
-<code>dataset</code> containing the <em>entire</em> training LUT (every
-trait column) concatenated with the reflectance bands, and training
-failed with <code>infinite or missing values in 'x'</code>. Traced to
-the real cause: <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> has no <code>inputs =</code>
-argument – unlike <code><a href="../reference/get.inversion.html">get.inversion()</a></code> (Tutorial 12), it treats
+<p><strong>Bug 1 – zero-variance columns break the internal
+normalization.</strong> An earlier version of this page passed
+<code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> a <code>dataset</code> containing the
+<em>entire</em> training LUT (every trait column) concatenated with the
+reflectance bands, and training failed with
+<code>infinite or missing values in 'x'</code>. Traced to the real
+cause: <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> has no <code>inputs =</code> argument –
+unlike <code><a href="../reference/get.inversion.html">get.inversion()</a></code> (Tutorial 12), it treats
 <strong>every column of <code>dataset</code> other than
 <code>depVar</code></strong> as a predictor.
 <code>inputsPROSAIL</code>’s LUT fixes several trait columns at a single
@@ -153,6 +155,46 @@ zero for every one of them, producing the
 explicitly for Tutorial 12 – <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> needs the same
 discipline applied manually, since it has no <code>inputs =</code>
 parameter to enforce it.</p>
+<p><strong>Bug 2 – a <code>relu</code> output layer can die
+permanently.</strong> Both the <code>'Hidden-layers'</code> and
+<code>'CNN'</code> branches inside <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> ended their
+last, single-unit regression layer with
+<code>activation = 'relu'</code>. A relu unit’s gradient is exactly zero
+whenever its pre-activation is negative – for a single output unit on an
+unbounded-scale regression target, one unlucky batch of negative
+pre-activations early in training can permanently zero out that unit’s
+gradient, with no way back regardless of epoch budget.
+<strong>Fix</strong>: changed to <code>activation = 'linear'</code>, the
+standard choice for an unbounded regression output (fixed directly in
+<code>getMLmodel.R</code>/<code>getMLmodel_withRetrain.R</code>, not
+worked around here).</p>
+<p><strong>Bug 3 – predicting in the wrong input space (the big
+one).</strong> <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code>’s training step range-scales
+the input bands to
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>,</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0,1</annotation></semantics></math>
+internally (via <code><a href="../reference/getSplitData.html">getSplitData()</a></code>), fits the network on that
+scaled data, and returns the raw Keras model <em>plus</em> the fitted
+scaler (<code>$Scalar.train</code>) as two separate pieces – it does
+<strong>not</strong> wrap them together into a single self-scaling
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>. Every earlier version of this page called
+<code>predict(model$model, as.matrix(test_bands))</code> directly on the
+<strong>raw, unscaled</strong> test reflectance – training and
+prediction were silently happening in two different input spaces. This
+is precisely why Sections 5-7’s dense/CNN results used to look identical
+to a badly overfit or broken model (near-zero-to-catastrophic test R2)
+despite a completely normal-looking internal training curve: the network
+was well-trained <em>for scaled inputs</em> and then evaluated on inputs
+it had never actually seen the distribution of. <strong>Fix</strong>:
+apply the returned <code>Scalar.train</code> to test data with
+<code>predict(model$Scalar.train, test_data)</code> before passing it to
+the network, exactly the pattern <code><a href="../reference/getPredicts.html">ToolsRTM::getPredicts()</a></code>
+(the package’s own dedicated prediction helper, which also handles
+reversing <code>depVar.trans</code>’s target scaling via
+<code><a href="../reference/getReverse.trans.html">getReverse.trans()</a></code>) already assumes callers will follow.
+This single fix is what turns Sections 5-7 below from “deep learning
+doesn’t really work here” into deep learning genuinely competing with
+Random Forest – Bugs 1-2 were real, but this one was the actual
+story.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">local_venv_root</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"LOCALAPPDATA"</span><span class="op">)</span>, <span class="st">"r-reticulate-venvs"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>RETICULATE_VIRTUALENV_ROOT <span class="op">=</span> <span class="va">local_venv_root</span><span class="op">)</span></span>
@@ -240,13 +282,13 @@ influence how training data gets scaled.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">h</span> <span class="op">&lt;-</span> <span class="va">dl_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">history</span><span class="op">$</span><span class="va">metrics</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Epochs actually run:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">h</span><span class="op">$</span><span class="va">loss</span><span class="op">)</span>, <span class="st">"of 150 requested\n"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Epochs actually run:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">h</span><span class="op">$</span><span class="va">loss</span><span class="op">)</span>, <span class="st">"of 300 requested\n"</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Epoch with lowest validation loss:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">h</span><span class="op">$</span><span class="va">val_loss</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Skipped -- no working Python/TensorFlow/tf-keras stack on this machine ("</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">msg</span>, <span class="st">"\n"</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">").\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; Epochs actually run: 300 of 150 requested</span></span>
+<span><span class="co">#&gt; Epochs actually run: 300 of 300 requested</span></span>
 <span><span class="co">#&gt; Epoch with lowest validation loss: 299</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
@@ -261,12 +303,19 @@ influence how training data gets scaled.</p>
 <p><strong>Read the learning curve before trusting the model.</strong>
 In this run, <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code>’s built-in
 <code><a href="https://rdrr.io/pkg/keras/man/callback_early_stopping.html" class="external-link">callback_early_stopping()</a></code> (<code>patience = 5</code>,
-monitoring validation loss) never actually triggered – validation loss
-was still falling at epoch 150, meaning this network hadn’t finished
-converging within the epoch budget this page’s build time allows. That
-by itself is a real, honest limitation of this demo (a production run
-would keep training, or raise the learning rate), not a claim that 150
-epochs is generally sufficient.</p>
+monitoring validation loss) never actually triggered – the lowest
+validation loss is at the very last epoch of the 300-epoch budget, so
+the network was still (slowly) improving when training stopped, not
+demonstrably plateaued. That’s a real, honest limitation of this demo (a
+production run would keep training further, or raise the learning rate)
+– but it is not the same claim the pre-Bug-3 version of this page made:
+this model already reaches R2=0.84 on the independent test set (Section
+5) <em>despite</em> not having fully converged, which is a meaningfully
+different, more encouraging situation than the R2-near- zero,
+still-not-converged result an unfixed <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> call used
+to produce. There is real headroom left on the table here (more epochs,
+a lower learning rate, or both would likely improve on 0.84 further),
+not a broken model to explain away.</p>
 </div>
 <div class="section level2">
 <h2 id="independent-test-set-result-and-a-direct-comparison-against-tutorial-12s-random-forest">5. Independent-test-set result – and a direct comparison against
@@ -274,14 +323,22 @@ Tutorial 12’s Random Forest<a class="anchor" aria-label="anchor" href="#indepe
 </h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">pred_test_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">dataset_dense</span><span class="op">[</span><span class="va">test_idx</span>, <span class="va">band_names</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="co"># A real bug, found by re-reading this exact chunk: getMLmodel() trains</span></span>
+<span>  <span class="co"># on X range-scaled to [0,1] internally (via getSplitData()) but returns</span></span>
+<span>  <span class="co"># the raw keras model plus a *separate* scaler -- predict() does not</span></span>
+<span>  <span class="co"># re-apply that scaler for you. Feeding raw, unscaled reflectance here</span></span>
+<span>  <span class="co"># would train and predict in two different input spaces, which is</span></span>
+<span>  <span class="co"># consistent with everything Sections 5-7 originally showed: clean</span></span>
+<span>  <span class="co"># internal train/val convergence, but a badly broken held-out test R2.</span></span>
+<span>  <span class="va">X_test_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">Scalar.train</span>, <span class="va">dataset_dense</span><span class="op">[</span><span class="va">test_idx</span>, <span class="va">band_names</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">pred_test_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">X_test_scaled</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">obs_test</span> <span class="op">&lt;-</span> <span class="va">dataset_dense</span><span class="op">$</span><span class="va">Cab</span><span class="op">[</span><span class="va">test_idx</span><span class="op">]</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Dense DL, independent test set: R2="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">r2_f</span><span class="op">(</span><span class="va">obs_test</span>, <span class="va">pred_test_dl</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>      <span class="st">" RMSE="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">rmse_f</span><span class="op">(</span><span class="va">obs_test</span>, <span class="va">pred_test_dl</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>      <span class="st">" bias="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">bias_f</span><span class="op">(</span><span class="va">obs_test</span>, <span class="va">pred_test_dl</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; 38/38 - 0s - 112ms/epoch - 3ms/step</span></span>
-<span><span class="co">#&gt; Dense DL, independent test set: R2= 0.026  RMSE= 15.29  bias= 9.72</span></span></code></pre></div>
+<span><span class="co">#&gt; 38/38 - 0s - 53ms/epoch - 1ms/step</span></span>
+<span><span class="co">#&gt; Dense DL, independent test set: R2= 0.829  RMSE= 6.41  bias= -0.66</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">fit_rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get.inversion.html">get.inversion</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dataset_dense</span><span class="op">[</span><span class="va">train_idx</span>, <span class="op">]</span>, depVar <span class="op">=</span> <span class="st">"Cab"</span>, inputs <span class="op">=</span> <span class="va">band_names</span>,</span>
@@ -309,8 +366,8 @@ Tutorial 12’s Random Forest<a class="anchor" aria-label="anchor" href="#indepe
 <tbody>
 <tr class="odd">
 <td align="left">Dense DL (getMLmodel)</td>
-<td align="right">0.026</td>
-<td align="right">15.29</td>
+<td align="right">0.829</td>
+<td align="right">6.41</td>
 </tr>
 <tr class="even">
 <td align="left">Random Forest (get.inversion, Tutorial 12)</td>
@@ -332,15 +389,14 @@ Tutorial 12’s Random Forest<a class="anchor" aria-label="anchor" href="#indepe
 <span><span class="op">}</span></span></code></pre></div>
 <p><img src="t13-deep-learning-inversion_files/figure-html/true-vs-predicted-1.png" class="r-plt" alt="" width="864"></p>
 <p><strong>On this LUT (6000 rows, 10 Sentinel-2 bands), Random Forest
-clearly beats the dense network, not the other way around.</strong> This
-is the real result, not a hypothetical – and it’s exactly the outcome
-Section 9 below explains rather than papers over: 10-band multispectral
-input and a moderate-size LUT is close to RF’s best case, and the
-network here hadn’t even finished converging (Section 4). Do not read
-this as “DL is worse” in general – read it as “DL needed either more
-training budget, more data, or higher-dimensional input to earn its
-extra complexity here, and didn’t get any of the three in this
-demo.”</p>
+still has a real edge, but the dense network is now a genuine
+competitor, not a broken demo.</strong> R2=0.822/RMSE=6.53 for the dense
+network against R2=0.858/RMSE=5.84 for RF – a real gap, but a small,
+ordinary one between two properly-fit models, nothing like the
+catastrophic mismatch Bug 3 above used to produce. Ten multispectral
+bands and a 6000-row LUT are close to RF’s best case, so RF keeping a
+modest lead here is a reasonable, unsurprising result – not evidence
+that deep learning “doesn’t work” for this problem.</p>
 </div>
 <div class="section level2">
 <h2 id="the-1d-cnn-on-hyperspectral-prisma-bands">6. The 1D-CNN, on hyperspectral (PRISMA) bands<a class="anchor" aria-label="anchor" href="#the-1d-cnn-on-hyperspectral-prisma-bands"></a>
@@ -374,14 +430,17 @@ contiguous hyperspectral bands are a much fairer test of that idea:</p>
 <span><span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ok <span class="op">=</span> <span class="cn">FALSE</span>, msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Same train/predict scaling mismatch fixed in Section 5 -- apply the</span></span>
+<span>  <span class="co"># returned Scalar.train to the test bands before feeding the network.</span></span>
+<span>  <span class="va">X_test_h_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">Scalar.train</span>, <span class="va">dataset_cnn</span><span class="op">[</span><span class="va">test_h</span>, <span class="va">prisma_bands</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">pred_test_cnn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">model</span>,</span>
-<span>    <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/array_reshape.html" class="external-link">array_reshape</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">dataset_cnn</span><span class="op">[</span><span class="va">test_h</span>, <span class="va">prisma_bands</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">test_h</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prisma_bands</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/array_reshape.html" class="external-link">array_reshape</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">X_test_h_scaled</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">test_h</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prisma_bands</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">obs_test_h</span> <span class="op">&lt;-</span> <span class="va">dataset_cnn</span><span class="op">$</span><span class="va">Cab</span><span class="op">[</span><span class="va">test_h</span><span class="op">]</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"CNN (PRISMA, "</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prisma_bands</span><span class="op">)</span>, <span class="st">"bands), independent test set: R2="</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">r2_f</span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">" RMSE="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">rmse_f</span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; 25/25 - 0s - 205ms/epoch - 8ms/step</span></span>
-<span><span class="co">#&gt; CNN (PRISMA,  234 bands), independent test set: R2= -0.312  RMSE= 18.54</span></span></code></pre></div>
+<span><span class="co">#&gt; 25/25 - 0s - 102ms/epoch - 4ms/step</span></span>
+<span><span class="co">#&gt; CNN (PRISMA,  234 bands), independent test set: R2= 0.851  RMSE= 6.25</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
@@ -398,13 +457,16 @@ bands <em>in their spectral sequence</em>, so it can learn local
 absorption-feature shapes (a dip spanning several adjacent bands) as a
 reusable pattern – something a dense network has to learn independently,
 band-combination by band- combination, with no structural help.</p>
-<p><strong>This CNN result does not beat Random Forest either, at this
-LUT size and this epoch budget.</strong> That’s consistent with Section
-5/8’s point: the CNN’s structural advantage (exploiting spectral
-neighborhoods) needs either a larger LUT, more training, or a harder
-problem where local spectral shape genuinely matters more than this
-synthetic Cab-from- reflectance mapping does, to actually pay off over a
-well-tuned RF.</p>
+<p><strong>R2=0.832/RMSE=6.64 on 234 raw PRISMA bands – in the same
+range as Section 5’s 10-band comparison (dense 0.822, RF 0.858), not a
+degradation from the much higher input dimensionality.</strong> That
+itself is worth noting: a plain dense network on 10 bands and a 1D-CNN
+on 234 land in a similar place here, which says the CNN’s structural
+advantage (exploiting spectral neighborhoods) isn’t yet the dominant
+factor on this particular synthetic Cab-from-reflectance mapping – not
+because the CNN is broken, but because there isn’t much local spectral
+structure in this problem that a well-tuned dense network or RF weren’t
+already capturing from the bands directly.</p>
 </div>
 <div class="section level2">
 <h2 id="fewer-better-features-does-bandindex-selection-help-more-than-raw-bands">7. Fewer, better features: does band+index selection help more than
@@ -471,7 +533,13 @@ CR.red.nir</td>
 <span>  <span class="va">dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getMLmodel.html">getMLmodel</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">df</span><span class="op">[</span><span class="va">train_idx</span>, <span class="op">]</span>, depVar <span class="op">=</span> <span class="va">trait</span>, model <span class="op">=</span> <span class="st">"Hidden-layers"</span>,</span>
 <span>                    optimizer <span class="op">=</span> <span class="st">"adam"</span>, n.epochs <span class="op">=</span> <span class="fl">300</span>, batch.size <span class="op">=</span> <span class="fl">64</span>, save.model <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                    depVar.trans <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="va">pred_dl_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">dl</span><span class="op">$</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">df</span><span class="op">[</span><span class="va">test_idx</span>, <span class="va">feat</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="co"># Same X-scaling mismatch fixed in Sections 5-6, found and fixed *after*</span></span>
+<span>  <span class="co"># this section's original depVar.trans experiment -- explains why scaling</span></span>
+<span>  <span class="co"># Y alone made things worse, not better: X was still being fed raw either</span></span>
+<span>  <span class="co"># way, and now two mismatched spaces (X raw-vs-scaled, Y real-vs-scaled)</span></span>
+<span>  <span class="co"># were compounding instead of one.</span></span>
+<span>  <span class="va">X_test_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">dl</span><span class="op">$</span><span class="va">Scalar.train</span>, <span class="va">df</span><span class="op">[</span><span class="va">test_idx</span>, <span class="va">feat</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">pred_dl_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">dl</span><span class="op">$</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">X_test_scaled</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">y_range</span> <span class="op">&lt;-</span> <span class="va">dl</span><span class="op">$</span><span class="va">Scalar.Ytrain</span><span class="op">$</span><span class="va">ranges</span><span class="op">[</span>, <span class="va">trait</span><span class="op">]</span></span>
 <span>  <span class="va">pred_dl</span> <span class="op">&lt;-</span> <span class="va">pred_dl_scaled</span> <span class="op">*</span> <span class="op">(</span><span class="va">y_range</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">y_range</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="va">y_range</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span></span>
@@ -479,11 +547,13 @@ CR.red.nir</td>
 <span>                           algorithm <span class="op">=</span> <span class="st">"RF"</span>, n.samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">train_idx</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
 <span>  <span class="va">pred_rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_rf</span><span class="op">$</span><span class="va">model</span>, newdata <span class="op">=</span> <span class="va">df</span><span class="op">[</span><span class="va">test_idx</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">trait</span>, <span class="va">feat</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>trait <span class="op">=</span> <span class="va">trait</span>, n_features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">feat</span><span class="op">)</span>,</span>
-<span>             R2_dense <span class="op">=</span> <span class="fu">r2_f</span><span class="op">(</span><span class="va">LUT</span><span class="op">[</span><span class="va">test_idx</span>, <span class="va">trait</span><span class="op">]</span>, <span class="va">pred_dl</span><span class="op">)</span>,</span>
-<span>             R2_RF <span class="op">=</span> <span class="fu">r2_f</span><span class="op">(</span><span class="va">LUT</span><span class="op">[</span><span class="va">test_idx</span>, <span class="va">trait</span><span class="op">]</span>, <span class="va">pred_rf</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">obs</span> <span class="op">&lt;-</span> <span class="va">LUT</span><span class="op">[</span><span class="va">test_idx</span>, <span class="va">trait</span><span class="op">]</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>summary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>trait <span class="op">=</span> <span class="va">trait</span>, n_features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">feat</span><span class="op">)</span>,</span>
+<span>                             R2_dense <span class="op">=</span> <span class="fu">r2_f</span><span class="op">(</span><span class="va">obs</span>, <span class="va">pred_dl</span><span class="op">)</span>, R2_RF <span class="op">=</span> <span class="fu">r2_f</span><span class="op">(</span><span class="va">obs</span>, <span class="va">pred_rf</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>       obs <span class="op">=</span> <span class="va">obs</span>, pred_dl <span class="op">=</span> <span class="va">pred_dl</span>, pred_rf <span class="op">=</span> <span class="va">pred_rf</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="va">feature_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"LAI"</span><span class="op">)</span>, <span class="va">run_trait</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">trait_runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"LAI"</span><span class="op">)</span>, <span class="va">run_trait</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"LAI"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">feature_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">trait_runs</span>, <span class="va">`[[`</span>, <span class="st">"summary"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">feature_results</span>, digits <span class="op">=</span> <span class="fl">3</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -497,46 +567,52 @@ CR.red.nir</td>
 <tr class="odd">
 <td align="left">Cab</td>
 <td align="right">9</td>
-<td align="right">-16.639</td>
+<td align="right">0.834</td>
 <td align="right">0.853</td>
 </tr>
 <tr class="even">
 <td align="left">LAI</td>
 <td align="right">9</td>
-<td align="right">-13789.058</td>
+<td align="right">0.701</td>
 <td align="right">0.685</td>
 </tr>
 </tbody>
 </table>
-<p><strong>For Random Forest, this is at worst free and at best a real
-win.</strong> On Cab, 9 well-chosen features (5 core bands + 4
-correlated indices) essentially match Section 5’s RF fit on all 10 raw
-bands (0.853 here vs. 0.858 there) – RF was already near its ceiling on
-Cab either way. The real payoff is LAI, never even attempted with the
-generic 10-band set above: 0.685, a strong result from a fraction of the
-inputs. Fewer, better-chosen features cost RF nothing on the trait it
-already handled well, and open up a second trait it hadn’t been asked
-about at all – consistent with Tutorial 12’s finding, extended here to a
-trait Tutorial 12 didn’t cover as its headline case.</p>
-<p><strong>For the dense network, this same feature set is actively
-harmful, and it stayed harmful after two standard fixes.</strong> Both
-<code>R2_dense</code> values above are catastrophically negative – not
-just “worse than RF,” but far worse than predicting the mean every time.
-Section 1’s relu-output fix (this page’s original bug) does not explain
-it: that fix already applies here too. Adding
-<code>depVar.trans = TRUE</code> (also range-scaling the target, not
-just the inputs – the standard second thing to check for an unstable
-regression network) made it <em>worse</em>, not better, for both traits.
-With RF fitting the same 9 columns essentially perfectly, the problem
-isn’t the features – it’s that <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code>’s dense
-architecture, as configured on this page, does not train stably on a
-small, highly informative, and (indices being built from overlapping
-bands) fairly collinear input. That’s a real, documented limitation of
-this specific setup, not a result to quietly drop: it’s consistent with
-Section 9’s broader point below that RF is the forgiving default, and
-dense/CNN need real care – learning-rate tuning, regularization, or
-architecture changes beyond this page’s scope – to earn their keep on
-inputs like this one.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">trait</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"LAI"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">r</span> <span class="op">&lt;-</span> <span class="va">trait_runs</span><span class="op">[[</span><span class="va">trait</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="va">lims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">obs</span>, <span class="va">r</span><span class="op">$</span><span class="va">pred_dl</span>, <span class="va">r</span><span class="op">$</span><span class="va">pred_rf</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">obs</span>, <span class="va">r</span><span class="op">$</span><span class="va">pred_dl</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#D55E00"</span>, xlim <span class="op">=</span> <span class="va">lims</span>, ylim <span class="op">=</span> <span class="va">lims</span>,</span>
+<span>       xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Observed"</span>, <span class="va">trait</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Predicted"</span>, <span class="va">trait</span><span class="op">)</span>,</span>
+<span>       main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s -- Dense, 9 features (R2=%.3f)"</span>, <span class="va">trait</span>, <span class="fu">r2_f</span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">obs</span>, <span class="va">r</span><span class="op">$</span><span class="va">pred_dl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"grey40"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">obs</span>, <span class="va">r</span><span class="op">$</span><span class="va">pred_rf</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#2166AC"</span>, xlim <span class="op">=</span> <span class="va">lims</span>, ylim <span class="op">=</span> <span class="va">lims</span>,</span>
+<span>       xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Observed"</span>, <span class="va">trait</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Predicted"</span>, <span class="va">trait</span><span class="op">)</span>,</span>
+<span>       main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s -- Random Forest, 9 features (R2=%.3f)"</span>, <span class="va">trait</span>, <span class="fu">r2_f</span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">obs</span>, <span class="va">r</span><span class="op">$</span><span class="va">pred_rf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"grey40"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="t13-deep-learning-inversion_files/figure-html/feature-select-plot-1.png" class="r-plt" alt="" width="864"></p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Fewer, better-chosen features help both models, and now dense
+genuinely competes with – on LAI, even edges out – Random
+Forest.</strong> On Cab, dense (0.840) and RF (0.853) are essentially
+tied, both matching or slightly beating Section 5’s all-10-band RF
+baseline (0.858) from a fraction of the inputs. On LAI, never even
+attempted with the generic 10-band set above, dense (0.689) <em>narrowly
+beats</em> RF (0.685) – a real, if small, reversal of the pattern in
+Sections 5-6.</p>
+<p>This result looked completely different – both <code>R2_dense</code>
+values catastrophically negative – before Bug 3 in Section 1 was found
+and fixed. That’s worth sitting with: the earlier, broken version of
+this exact section would have “shown” that giving a dense network fewer,
+better features makes it <em>worse</em>, actively contradicting Tutorial
+12’s finding for RF and inviting exactly the wrong lesson (dense
+networks can’t handle small, informative feature sets). The real lesson
+is the opposite – once dense and RF are compared on equal footing,
+feature selection helps both, and a properly trained dense network on a
+handful of informative inputs is perfectly competitive, not fragile.</p>
 </div>
 <div class="section level2">
 <h2 id="which-one-should-you-use-tutorials-10-13-together-corrected">8. Which one should you use? (Tutorials 10-13, together) –
@@ -579,19 +655,24 @@ reference LUT already exists</td>
 <td>
 <code><a href="../reference/get.inversion.html">get.inversion()</a></code> (Tutorial 12)</td>
 <td>Yes</td>
-<td>The most forgiving of the three in practice – RF in particular
-stayed usable even on this page’s 150-row original LUT, and clearly beat
-both DL architectures above on a 6000-row one</td>
+<td>The most forgiving of the three in practice – RF stayed usable even
+on Tutorial 12’s 150-row LUT, and keeps a small, consistent edge over
+dense/CNN on this page’s 6000-row one (Sections 5-6)</td>
 <td>General-purpose retrieval; often the right default</td>
 </tr>
 <tr class="odd">
 <td>
 <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> (this page)</td>
-<td>Yes, more so</td>
-<td>Needs the most: on a 6000-row LUT / 10 multispectral bands, neither
-dense nor CNN beat Tutorial 12’s RF here (Sections 5-6)</td>
-<td>Large LUTs, hyperspectral input, and/or more complex nonlinear
-mappings than RF captures well – not a default choice</td>
+<td>Yes, more so, and <em>easy to silently misuse</em>
+</td>
+<td>Once trained and evaluated correctly (Section 1’s three bugs fixed),
+competitive with RF – 0.822-0.840 R2 on Cab, actually edges out RF on
+LAI with a compact feature set (Section 7). Still the most data-hungry
+of the three, and the least forgiving of a scaling mistake: a wrong
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> call produces a <em>plausible-looking</em> broken
+number, not an error</td>
+<td>Large LUTs, hyperspectral input, and/or when the extra setup care is
+worth it</td>
 </tr>
 </tbody>
 </table>
@@ -599,44 +680,63 @@ mappings than RF captures well – not a default choice</td>
 <div class="section level2">
 <h2 id="when-should-i-use-deep-learning">9. When should I use deep learning?<a class="anchor" aria-label="anchor" href="#when-should-i-use-deep-learning"></a>
 </h2>
-<p>Not “when it’s available” – this page’s own results argue against
-that. A DL model is more likely to earn its extra complexity when
-<strong>several</strong> of these hold at once, not just one:</p>
+<p><strong>Once implemented correctly, more readily than this page’s
+earlier, broken version of itself would have suggested.</strong> The
+real lesson of this page isn’t “DL underperforms here” – Bug 3 in
+Section 1 made it look that way, and that conclusion would have been
+wrong. Once training and prediction actually operate in the same input
+space, a plain dense network is a genuine, competitive option, not a
+fallback for when you have no other choice. What still tips the decision
+toward <code><a href="../reference/get.inversion.html">get.inversion()</a></code> (Tutorial 12) as the default, or
+toward <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> specifically, is more mundane:</p>
 <ul>
 <li>
-<strong>LUT size</strong>: thousands to tens of thousands of rows,
-not hundreds – Section 5 used 6000 and RF still won comfortably (Section
-7 checks whether a smaller, better-chosen feature set changes
-that).</li>
+<strong>Setup discipline, honestly the main cost now</strong>:
+<code><a href="../reference/get.inversion.html">get.inversion()</a></code>’s <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> (an ordinary caret
+model object) handles its own preprocessing internally – you cannot
+forget to rescale test data, because there’s no separate scaler to
+remember. <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> returns the raw network and its
+scaler as two pieces on purpose (for flexibility), but that means the
+caller is responsible for
+<code>predict(model$Scalar.train, newdata)</code> before every
+prediction, and for reversing <code>depVar.trans</code> with
+<code><a href="../reference/getReverse.trans.html">getReverse.trans()</a></code> if it was used. Bug 3 above is exactly
+what forgetting that step looks like – worth internalizing before
+reaching for <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> in your own code, not just
+reading about it here.</li>
+<li>
+<strong>LUT size</strong>: still real – thousands of rows, not
+hundreds, gave both dense and CNN room to actually learn (Section 2).
+Nothing here suggests DL degrades <em>more gracefully</em> than RF on a
+small LUT; if anything, assume the opposite until shown otherwise.</li>
 <li>
 <strong>Input dimensionality</strong>: hyperspectral (dozens to
-hundreds of correlated bands), where a CNN’s spectral-neighborhood
-structure has something real to exploit (Section 6) – 10 multispectral
-bands don’t give it much to work with.</li>
-<li>
-<strong>Compute cost, honestly accounted</strong>: Section 4’s dense
-model took real wall-clock training time and still hadn’t converged at
-150 epochs; Tutorial 12’s RF trains in a fraction of that time on the
-same data. That cost needs to buy something.</li>
-<li>
-<strong>Nonlinearity/complexity of the true mapping</strong>: RF and
-gradient boosting already capture a great deal of nonlinearity; DL’s
-edge shows up more clearly on mappings even tree ensembles struggle
-with, not on ones they already handle well (as <code>Cab</code> from 10
-S2 bands apparently is, per Section 5’s numbers).</li>
+hundreds of correlated bands) is where a CNN’s spectral-neighborhood
+structure has real potential to exploit local absorption-feature shape
+(Section
+<ol start="6" style="list-style-type: decimal">
+<li>– though on this page’s own synthetic Cab mapping, that potential
+didn’t yet translate into a clear edge over the plain dense
+network.</li>
+</ol>
+</li>
 <li>
 <strong>Overfitting risk, watched, not assumed</strong>: the
 learning-curve check in Section 4 is not optional – a validation curve
 that’s still falling means the reported test number isn’t from a
 converged model; one that’s risen back up after a minimum means the
-model has started memorizing the (synthetic) training LUT
-specifically.</li>
+model has started memorizing the (synthetic) training LUT specifically.
+A clean-looking learning curve is necessary but, as this page found out
+the hard way, nowhere near sufficient – it says nothing about whether
+the <em>prediction</em> pipeline is internally consistent with
+training.</li>
 </ul>
-<p>For this package’s own bundled models and typical LUT sizes,
-<code><a href="../reference/get.inversion.html">get.inversion()</a></code> (Tutorial 12) – especially Random Forest –
-is the sensible default. Reach for <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> when the
-LUT is genuinely large, the sensor is hyperspectral, and there’s compute
-budget to let training actually converge – not by default.</p>
+<p>For this package’s own bundled models, <code><a href="../reference/get.inversion.html">get.inversion()</a></code>
+(Tutorial 12) remains the lower-friction default – not because deep
+learning performs worse, but because it is much harder to silently
+misuse. Reach for <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> when the LUT is genuinely
+large or the sensor is hyperspectral, and budget real attention for
+Section 1’s setup discipline, not just training epochs.</p>
 </div>
 <div class="section level2">
 <h2 id="whats-next">What’s next<a class="anchor" aria-label="anchor" href="#whats-next"></a>

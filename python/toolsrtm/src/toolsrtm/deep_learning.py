@@ -123,7 +123,11 @@ def get_ml_model(
                 if i == 1:  # dropout after the 2nd hidden layer, matching R's Hidden-layers architecture
                     layers.append(tf.keras.layers.Dropout(0.1))
                 units = max(units // 2, 8)
-            layers.append(tf.keras.layers.Dense(1, activation="relu"))  # matches R's own output activation
+            # linear, not relu: a relu output can get permanently stuck at 0
+            # (zero gradient too) if its pre-activation goes negative early
+            # in training -- fixed on the R side in the same way, see
+            # getMLmodel.R's comment on this exact issue.
+            layers.append(tf.keras.layers.Dense(1, activation="linear"))
             net = tf.keras.Sequential(layers)
         else:  # CNN
             net = tf.keras.Sequential([
@@ -135,7 +139,7 @@ def get_ml_model(
                 tf.keras.layers.Flatten(),
                 tf.keras.layers.Dense(16, activation="relu"),
                 tf.keras.layers.Dropout(0.1),
-                tf.keras.layers.Dense(1, activation="relu"),  # matches R's own output activation
+                tf.keras.layers.Dense(1, activation="linear"),  # see the Hidden-layers branch above
             ])
         net.compile(loss="mse", optimizer=_OPTIMIZERS[optimizer](tf), metrics=["mean_absolute_error"])
         return net

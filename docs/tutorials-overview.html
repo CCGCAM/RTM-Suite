@@ -168,15 +168,16 @@
     <tr><td>SCOPEinR 11</td><td><a href="scopeinr/articles/t11-photosynthesis-capstone.html">Capstone: ML Inversion of Net Photosynthesis, Real Sentinel-2</a></td><td><a class="py-link" href="python/examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython">Python capstone &rarr;</a></td></tr>
   </table>
 
-  <h2 id="deep-learning"><span class="kicker">ToolsRTM Tutorial 13</span>Deep learning for RTM inversion</h2>
-  <p class="desc">Where classic ML (Random Forest, SVM) plateaus and a neural net can still improve: dense networks on tabular LUT features, and a 1D-CNN reading a PRISMA-resolution spectrum directly, compared head-to-head against the classic algorithms from Tutorial 12.</p>
+  <h2 id="deep-learning"><span class="kicker">ToolsRTM Tutorial 13, R + Python</span>Deep learning for RTM inversion</h2>
+  <p class="desc">Dense networks and a 1D-CNN reading a PRISMA-resolution spectrum directly (TensorFlow/Keras, R and Python both), compared head-to-head against Random Forest from Tutorial 12 -- and a real, documented bug hunt (a train/predict scaling mismatch) that took both architectures from looking broken to genuinely competing with, and sometimes beating, RF.</p>
   <div class="shot-grid">
-    <div class="card"><img src="toolsrtm/articles/t13-deep-learning-inversion_files/figure-html/learning-curve-1.png" alt="Neural network training/validation loss curve"><div class="cap">Dense-network training curve (Tutorial 13)</div></div>
-    <div class="card"><img src="toolsrtm/articles/t13-deep-learning-inversion_files/figure-html/true-vs-predicted-1.png" alt="Deep learning true vs predicted trait scatter plot"><div class="cap">True vs. predicted Cab, CNN on PRISMA-resolution spectra (Tutorial 13)</div></div>
+    <div class="card"><img src="toolsrtm/articles/t13-deep-learning-inversion_files/figure-html/feature-select-plot-1.png" alt="Dense network vs Random Forest, true vs predicted Cab and LAI, compact feature set"><div class="cap">Dense vs. RF on 9 well-chosen features — Cab (top) and LAI (bottom), where dense edges out RF (R, Tutorial 13)</div></div>
+    <div class="card"><img src="toolsrtm/articles/t13-deep-learning-inversion_files/figure-html/cnn-true-vs-predicted-1.png" alt="1D-CNN true vs predicted Cab scatter plot, 234 PRISMA bands"><div class="cap">1D-CNN on 234 PRISMA bands, true vs. predicted Cab (R, Tutorial 13)</div></div>
+    <div class="card"><img src="python/_images/deep_learning_cnn_inversion.png" alt="Python 1D-CNN training curve and true vs predicted Cab scatter plot"><div class="cap">Same 1D-CNN architecture, Python (<code>toolsrtm.deep_learning</code>)</div></div>
   </div>
   <table>
     <tr><th>#</th><th>Tutorial</th><th></th></tr>
-    <tr><td>13</td><td><a href="toolsrtm/articles/t13-deep-learning-inversion.html">Deep Learning for RTM Inversion</a></td><td></td></tr>
+    <tr><td>13</td><td><a href="toolsrtm/articles/t13-deep-learning-inversion.html">Deep Learning for RTM Inversion</a></td><td><a class="py-link" href="python/examples.html#deep-learning-trait-inversion-toolsrtm-optional-dl-extra">Python examples &rarr;</a></td></tr>
   </table>
 
   <h2 id="sensitivity"><span class="kicker">Global &amp; local sensitivity</span>Which traits actually move the signal</h2>

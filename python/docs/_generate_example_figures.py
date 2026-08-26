@@ -274,6 +274,43 @@ plt.savefig(os.path.join(OUTDIR, "deep_learning_inversion.png"), dpi=140)
 plt.close(fig)
 print("wrote deep_learning_inversion.png")
 
+# ---------------------------------------------------------------- 11b. Deep-learning inversion, 1D-CNN on hyperspectral bands
+rng2b = np.random.default_rng(3)
+rows_cnn = []
+hyp_wl = list(range(450, 2400, 10))  # ~195 contiguous bands, a PRISMA-like hyperspectral demo
+for _ in range(800):
+    Cab, LAI = rng2b.uniform(10, 80), rng2b.uniform(0.5, 6)
+    row_lut = dict(
+        N=1.5, Cab=Cab, Car=8, Anth=1, Cbrown=0, EWT=0.01, LMA=0.009, alpha=40,
+        LIDFa=-0.35, LIDFb=-0.15, TypeLidf=1,
+        LAI=LAI, hspot=0.01, tts=30, tto=0, psi=0,
+    )
+    sail_i = foursail(row_lut, np.full(2101, 0.15), leaf_model="PROSPECT-D", spectrum_all=True)
+    row = {"Cab": Cab}
+    for wl in hyp_wl:
+        row[f"R{wl}"] = sail_i.rsot[wl - 400]
+    rows_cnn.append(row)
+
+df_cnn = pd.DataFrame(rows_cnn)
+cnn_result = get_ml_model(df_cnn, dep_var="Cab", model="CNN",
+                           n_epochs=500, n_times=3, seed=3, verbose=0)
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
+axes[0].plot(cnn_result.history["loss"], color=palette["toolsrtm"], label="train")
+axes[0].plot(cnn_result.history["val_loss"], color=palette["s2"], label="val")
+axes[0].set_xlabel("Epoch"); axes[0].set_ylabel("Loss (MSE)"); axes[0].set_title(f"1D-CNN training ({len(hyp_wl)} bands)")
+axes[0].legend()
+obs_cnn, pred_cnn = cnn_result.predictions["y_true"], cnn_result.predictions["y_pred"]
+axes[1].scatter(obs_cnn, pred_cnn, s=14, alpha=0.6, color=palette["accent"])
+lims_cnn = [min(obs_cnn.min(), pred_cnn.min()), max(obs_cnn.max(), pred_cnn.max())]
+axes[1].plot(lims_cnn, lims_cnn, color="grey", linestyle="--", linewidth=1)
+axes[1].set_xlabel("Observed Cab"); axes[1].set_ylabel("Predicted Cab (1D-CNN)")
+axes[1].set_title(f"R2={cnn_result.stats['r2']:.3f}  RMSE={cnn_result.stats['rmse']:.2f}")
+plt.tight_layout()
+plt.savefig(os.path.join(OUTDIR, "deep_learning_cnn_inversion.png"), dpi=140)
+plt.close(fig)
+print("wrote deep_learning_cnn_inversion.png")
+
 # ---------------------------------------------------------------- 12. Global sensitivity analysis (Johnson index)
 from toolsrtm.sensitivity import spectral_sensitivity
 

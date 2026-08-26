@@ -295,7 +295,59 @@ trade-off the test suite itself budgets for.
    :alt: Keras training loss curve and observed vs predicted Cab scatter plot, real output of the code above
    :width: 100%
 
-   Real output: training/validation loss over 500 epochs (left) and predicted vs. observed Cab on the held-out split (right, R2=0.882, RMSE=7.00 ug/cm2).
+   Real output: training/validation loss over 500 epochs (left) and predicted vs. observed Cab on the held-out split (right, R2=0.900, RMSE=6.42 ug/cm2).
+
+The 1D-CNN, on hyperspectral bands (toolsrtm)
+------------------------------------------------
+
+`get_ml_model()`'s other architecture: ``model="CNN"``, a 1D
+convolution over the predictor vector *in spectral order* (matching R
+Tutorial 13's own PRISMA demo) instead of treating each band as an
+independent input. A wider, more contiguous band set gives the
+convolution real local spectral structure to exploit -- here, ~195
+bands spanning 450-2390nm every 10nm, a PRISMA-like hyperspectral
+setup:
+
+.. code-block:: python
+
+   import numpy as np
+   import pandas as pd
+   from toolsrtm import foursail
+   from toolsrtm.deep_learning import get_ml_model
+
+   rng = np.random.default_rng(3)
+   hyp_wl = list(range(450, 2400, 10))  # ~195 contiguous bands
+   rows = []
+   for _ in range(800):
+       Cab, LAI = rng.uniform(10, 80), rng.uniform(0.5, 6)
+       inputLUT = dict(
+           N=1.5, Cab=Cab, Car=8, Anth=1, Cbrown=0, EWT=0.01, LMA=0.009, alpha=40,
+           LIDFa=-0.35, LIDFb=-0.15, TypeLidf=1,
+           LAI=LAI, hspot=0.01, tts=30, tto=0, psi=0,
+       )
+       sail = foursail(inputLUT, np.full(2101, 0.15), leaf_model="PROSPECT-D", spectrum_all=True)
+       row = {"Cab": Cab}
+       for wl in hyp_wl:
+           row[f"R{wl}"] = sail.rsot[wl - 400]
+       rows.append(row)
+
+   df = pd.DataFrame(rows)
+   result = get_ml_model(df, dep_var="Cab", model="CNN",
+                          n_epochs=500, n_times=3, seed=3)
+   print("Held-out R2:", round(result.stats["r2"], 3))
+   print("Held-out RMSE:", round(result.stats["rmse"], 2))
+
+.. figure:: _figures/deep_learning_cnn_inversion.png
+   :alt: 1D-CNN training loss curve and observed vs predicted Cab scatter plot, real output of the code above
+   :width: 100%
+
+   Real output: training/validation loss over ~195 bands (left) and predicted vs. observed Cab on the held-out split (right, R2=0.866, RMSE=6.94 ug/cm2).
+
+Both architectures apply `x_scaler` internally and consistently between
+training and prediction (``result.x_scaler``, an sklearn
+``StandardScaler``, is returned for reuse on genuinely new data) --
+the R side of this same page (Tutorial 13) documents, as a real bug
+found and fixed, what happens when a caller forgets to do that by hand.
 
 MARMIT soil moisture model (toolsrtm)
 ------------------------------------------
