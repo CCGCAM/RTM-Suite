@@ -149,11 +149,18 @@ getSplitData_noMessages<-function(data=NULL, depVar='Cab',inputs=NULL,
     data.Xval<-as.matrix(predict(preprocess.scalar, data.Xval_))
     
     M <- cor(data.Xtrain)
+    # tl.cex=0.5 is only legible up to a few dozen variables -- scale it down
+    # (and drop labels entirely past ~80 variables, e.g. ~230 PRISMA bands)
+    # so the correlation structure stays readable instead of a solid block
+    # of overlapping text.
+    n.vars <- ncol(M)
+    tl.cex.val <- min(0.5, 15 / n.vars)
     plot.cor<-corrplot::corrplot(M, method = 'square', order = 'FPC',
                                  type = 'lower',
-                                 tl.cex=0.5,tl.col = 'black', cl.ratio=0.4,
+                                 tl.cex=tl.cex.val, tl.pos = if (n.vars > 80) 'n' else 'lt',
+                                 tl.col = 'black', cl.ratio=0.4,
                                  diag = FALSE)
-    
+
     
     
     split.database<- list('Xtrain' = data.Xtrain,'Ytrain' =data.Ytrain,

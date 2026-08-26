@@ -278,6 +278,15 @@ if (cnn_result$ok) {
 }
 ```
 
+```{r cnn-true-vs-predicted, fig.width=5, fig.height=5}
+if (cnn_result$ok) {
+  plot(obs_test_h, pred_test_cnn, pch = 19, col = "#009E73",
+       xlab = "Observed Cab", ylab = "Predicted Cab",
+       main = sprintf("1D-CNN, PRISMA (%d bands)", length(prisma_bands)))
+  abline(0, 1, col = "grey40", lty = 2)
+}
+```
+
 The dense-vs-1D-CNN architectural difference itself: `"Hidden-layers"`
 is a stack of plain fully-connected layers, treating each band as an
 independent input with no notion of spectral order; `"CNN"` instead
