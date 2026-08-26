@@ -51,6 +51,7 @@ articles:
   navbar: Manuals
   contents:
   - "ToolsRTM/ToolsRTM"
+  - "parameter-glossary"
   - "Getting-LUTs"
   - "articles/InversionOpt"
   - "articles/course-pipeline"

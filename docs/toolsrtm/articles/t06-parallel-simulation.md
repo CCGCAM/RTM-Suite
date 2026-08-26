@@ -72,7 +72,7 @@ t_seq <- system.time({
   })
 })
 cat("Sequential:", round(t_seq[["elapsed"]], 2), "s for", n.samples, "simulations\n")
-#> Sequential: 8.5 s for 300 simulations
+#> Sequential: 1.5 s for 300 simulations
 ```
 
 ## 3. Parallel with `doParallel`/`foreach`
@@ -95,9 +95,9 @@ t_par <- system.time({
 stopCluster(cl)
 
 cat("Parallel (", no_cores, "cores):", round(t_par[["elapsed"]], 2), "s for", n.samples, "simulations\n")
-#> Parallel ( 10 cores): 5.14 s for 300 simulations
+#> Parallel ( 10 cores): 4.53 s for 300 simulations
 cat("Speedup:", round(t_seq[["elapsed"]] / t_par[["elapsed"]], 2), "x\n")
-#> Speedup: 1.65 x
+#> Speedup: 0.33 x
 ```
 
 Three things matter for this pattern to actually work, not just look
@@ -152,7 +152,7 @@ histograms above, not noise: every curve is one specific, known
 
 cat("Per-simulation cost: sequential", round(1000 * t_seq[["elapsed"]] / n.samples, 2),
     "ms, parallel", round(1000 * t_par[["elapsed"]] / n.samples, 2), "ms\n")
-#> Per-simulation cost: sequential 28.33 ms, parallel 17.13 ms
+#> Per-simulation cost: sequential 5 ms, parallel 15.1 ms
 ```
 
 [`foursail()`](../reference/foursail.md) itself is fast (milliseconds

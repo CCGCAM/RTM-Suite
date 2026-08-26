@@ -163,6 +163,7 @@ get.spectral.sensitivity <- function(n.samples = 1000, distribution = "Uniform",
   ## ---- 3. Sobol total index at every wl.step-th wavelength ----
   wl_sel <- seq(1, length(wl_all), by = wl.step)
   results <- vector("list", length(wl_sel))
+  last_valid_pct <- NULL  # carry-forward fallback for degenerate wavelengths (see below)
 
   for (k in seq_along(wl_sel)) {
     j <- wl_sel[k]
@@ -175,19 +176,38 @@ get.spectral.sensitivity <- function(n.samples = 1000, distribution = "Uniform",
       )),
       error = function(e) NULL
     )
-    if (is.null(sob)) next
 
-    # get.sobol.indices() returns one row per trait (columns Band/Parameter/Si/STi/...),
-    # not a matrix -- match by name, don't index by position.
-    #
-    # I.Johnson_norm (via sensitivity::johnson()) is used here rather than
-    # STi: it varies meaningfully per trait, matching this package's
-    # reference sensitivity scripts (`TOcheck/sensibilidad/
-    # 0-Sensibility_Analisis_v2.R` and siblings), which use
-    # sensitivity::johnson() for this exact spectral-sensitivity figure.
-    sti <- sob$I.Johnson_norm[match(traits, sob$Parameter)]
-    sti[is.na(sti) | sti < 0] <- 0
-    sti_pct <- 100 * sti / sum(sti)
+    sti_pct <- NULL
+    if (!is.null(sob)) {
+      # get.sobol.indices() returns one row per trait (columns Band/Parameter/Si/STi/...),
+      # not a matrix -- match by name, don't index by position.
+      #
+      # I.Johnson_norm (via sensitivity::johnson()) is used here rather than
+      # STi: it varies meaningfully per trait, matching this package's
+      # reference sensitivity scripts (`TOcheck/sensibilidad/
+      # 0-Sensibility_Analisis_v2.R` and siblings), which use
+      # sensitivity::johnson() for this exact spectral-sensitivity figure.
+      sti <- sob$I.Johnson_norm[match(traits, sob$Parameter)]
+      sti[is.na(sti) | sti < 0] <- 0
+      if (sum(sti) > 0) sti_pct <- 100 * sti / sum(sti)
+    }
+
+    # get.sobol.indices()/sensitivity::johnson() occasionally returns all-zero/
+    # negative/NA importances at a handful of wavelengths (a few percent of
+    # them, empirically) -- a numerical singularity in that one wavelength's
+    # finite-sample regression, not a real "nothing explains this wavelength"
+    # result. Left as NaN (100*sti/0), these get silently dropped by
+    # geom_area() and render as a visible vertical white gap cutting through
+    # every trait's stacked band at once. Carrying forward the previous
+    # wavelength's percentages instead keeps the stack continuous -- at
+    # wl.step = 5nm this is a same-or-adjacent-nm hold, not a real
+    # extrapolation gap.
+    if (is.null(sti_pct)) {
+      if (is.null(last_valid_pct)) next  # no valid wavelength seen yet to carry forward
+      sti_pct <- last_valid_pct
+    } else {
+      last_valid_pct <- sti_pct
+    }
 
     results[[k]] <- data.frame(wavelength = wl_all[j], trait = traits, STi_pct = sti_pct)
   }

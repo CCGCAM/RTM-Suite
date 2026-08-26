@@ -33,7 +33,9 @@ covers it?**
 
 `ToolsRTM::get.marmit.rsoil()` (MARMIT: Bablet et al., soil reflectance
 as a function of surface water film thickness) gives a physically-based
-answer instead of an arbitrary blend. This page works through the
+answer instead of an arbitrary blend -- see the [Parameter & Trait
+Glossary](parameter-glossary.html#soil-marmit-dry---wet) for what `L`
+and `eps` mean and their realistic ranges. This page works through the
 sensitivity progression **L -> eps -> LAI -> wavelength -> TOC/TOA ->
 atmospheric variability**, then feeds MARMIT's output into BOTH
 `foursail()` (TOC only, Tutorials 01-02) and `SPART()` (TOC and TOA

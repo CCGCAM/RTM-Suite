@@ -237,11 +237,105 @@ legend("topright", colnames(soil_mat), col = colorRampPalette(c("#D55E00", "#007
 
 ![](t03-spart_files/figure-html/soil-lai-plot-1.png)
 
-Band-by-band, not just averaged: soil brightness matters most in the
-visible and NIR (bands 1-9, up to ~871nm) at low LAI, and the whole
-curve collapses toward zero as LAI rises from 0.01 to 6 – the canopy
-closing progressively removes the soil’s spectral signature rather than
-uniformly damping it.
+Band-by-band, not just averaged, and the picture is more nuanced than a
+single “visible + NIR” story: at near-bare canopy (LAI=0.01) the
+bright-minus-dark difference is almost flat across the whole spectrum
+(0.217-0.219 at every band) – soil so completely dominates the signal
+that wavelength barely matters yet. As soon as some canopy is present
+(LAI=0.5-2), the effect becomes clearly wavelength-dependent: moderate
+in the visible (445-701nm), strongest in the red-edge/NIR (743-942nm –
+roughly 1.4-1.5x the visible bands at LAI=0.5-1), and still appreciable
+– though below the NIR peak – in the near-SWIR bands (1372nm, 1639nm);
+only the longest SWIR band here (2256nm) falls back to visible-like
+levels. At every band the effect then decreases progressively with LAI,
+and is essentially gone (\<0.004 everywhere) by LAI=6. **The
+contribution of the soil background is spectrally dependent, not a fixed
+“these bands only” rule** – and it shrinks toward zero across the whole
+spectrum, at different rates per band, as the canopy closes. One caveat
+worth repeating: this comparison uses two flat, artificial reference
+soils (`rsoil = 0.08` vs `0.30`) chosen specifically to isolate the LAI
+effect cleanly, so it demonstrates *canopy masking x wavelength*, not
+the spectral response of a real soil. The BSM sensitivity test above is
+one realistic alternative; the MARMIT demo right below is the other, and
+shows a different (and in places stronger) spectral pattern once the
+soil spectrum itself has real physics behind it.
+
+### From flat brightness to a real soil spectrum: MARMIT wet vs. dry, across LAI
+
+The BSM sensitivity test above already showed real soil parameters
+mattering; this demo goes one step further and asks a soil-*moisture*
+question directly, the same way Tutorial 16 does but carried through
+[`SPART()`](../reference/SPART.md)’s full TOC output at Sentinel-2
+bands: swap `rsoil` for a measured dry-vs-wet soil pair from
+[`ToolsRTM::get.marmit.rsoil()`](../reference/get.marmit.rsoil.md)
+(Tutorial 16), instead of the two flat reference levels above, and sweep
+the same three LAI values low to high.
+
+``` r
+
+dry_soil_m <- get.marmit.rsoil(database = "Bablet_2016", id = 1, L = 0.001, eps = 0.05, wl.out = 400:2400)
+wet_soil_m <- get.marmit.rsoil(database = "Bablet_2016", id = 1, L = 0.15,  eps = 1.0,  wl.out = 400:2400)
+
+lai_seq2 <- c(0.5, 2, 6)
+marmit_effect_bands <- function(lai) {
+  row_i <- base_row; row_i$LAI <- lai
+  d <- suppressWarnings(SPART(inputLUT = row_i, CanopyModel = "fourSAIL", LeafModel = "PROSPECT-PRO",
+                               sensor.i = ToolsRTM::Sentinel2A.MSI, rsoil = dry_soil_m$rsoil.wet, get.plots = FALSE))
+  w <- suppressWarnings(SPART(inputLUT = row_i, CanopyModel = "fourSAIL", LeafModel = "PROSPECT-PRO",
+                               sensor.i = ToolsRTM::Sentinel2A.MSI, rsoil = wet_soil_m$rsoil.wet, get.plots = FALSE))
+  d$output$rfl.toc.BRDF - w$output$rfl.toc.BRDF
+}
+marmit_mat <- sapply(lai_seq2, marmit_effect_bands)
+rownames(marmit_mat) <- sim$output$wave
+colnames(marmit_mat) <- paste0("LAI=", lai_seq2)
+knitr::kable(round(marmit_mat, 3))
+```
+
+|      | LAI=0.5 | LAI=2 | LAI=6 |
+|:-----|--------:|------:|------:|
+| 445  |   0.017 | 0.002 | 0.000 |
+| 520  |   0.028 | 0.003 | 0.000 |
+| 560  |   0.039 | 0.005 | 0.000 |
+| 654  |   0.046 | 0.005 | 0.000 |
+| 701  |   0.055 | 0.007 | 0.000 |
+| 743  |   0.079 | 0.024 | 0.001 |
+| 779  |   0.089 | 0.032 | 0.002 |
+| 789  |   0.090 | 0.033 | 0.002 |
+| 871  |   0.097 | 0.038 | 0.003 |
+| 942  |   0.116 | 0.045 | 0.003 |
+| 1372 |   0.286 | 0.070 | 0.001 |
+| 1639 |   0.295 | 0.056 | 0.000 |
+| 2256 |   0.207 | 0.028 | 0.000 |
+
+``` r
+
+cols_lai2 <- colorRampPalette(c("#D55E00", "#0072B2"))(length(lai_seq2))
+matplot(sim$output$wave, marmit_mat, type = "o", pch = 19, lty = 1, col = cols_lai2,
+        xlab = "Wavelength (nm)", ylab = "Dry-minus-wet TOC reflectance (MARMIT soils)",
+        main = "Soil-moisture contribution vs. LAI, band by band (real soil spectrum)")
+legend("topright", colnames(marmit_mat), col = cols_lai2, lty = 1, pch = 19, cex = 0.8)
+```
+
+![](t03-spart_files/figure-html/marmit-lai-plot-1.png)
+
+Now soil *water absorption* physics, not just an arbitrary brightness
+offset, is doing the work: the bare dry-vs-wet soil spectra themselves
+already differ far more in the SWIR (0.47 vs 0.03 at 1639nm, 0.51 vs
+0.02 at 2256nm) than in the visible (0.08 vs 0.04 at 445nm) – MARMIT’s
+water-absorption features live in the SWIR, not the visible. That shows
+up directly in the TOC signal: at LAI=0.5 the SWIR-I bands (1372nm,
+1639nm) carry the *largest* soil-moisture contribution of the whole
+spectrum (0.286, 0.295) – larger even than the red-edge/NIR peak from
+the flat-brightness demo above – while the visible bands stay
+comparatively small (0.017-0.055). As LAI rises to 2 the SWIR-I
+advantage narrows (0.070, 0.056, still above the visible bands) and by
+LAI=6 the whole spectrum has collapsed to near zero, same as the
+brightness demo. Two soils, two different stories: flat brightness peaks
+in the red-edge/NIR; a physically realistic moisture contrast peaks in
+the SWIR – both point to the same underlying rule, that the soil
+background’s spectral fingerprint gets progressively and unevenly erased
+as the canopy closes, but *which* bands carry that fingerprint depends
+on what is actually varying in the soil.
 
 ## 3.4 Atmospheric contribution, independently by driver
 

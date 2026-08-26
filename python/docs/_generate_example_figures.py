@@ -505,4 +505,64 @@ plt.savefig(os.path.join(OUTDIR, "t11_python_capstone.png"), dpi=140, bbox_inche
 plt.close(fig)
 print("wrote t11_python_capstone.png")
 
+# ---------------------------------------------------------------- 12. glossary: LIDF shapes
+import csv
+from toolsrtm.canopy import dladgen
+
+shapes_glos = {"Planophile": (1, 0), "Erectophile": (-1, 0), "Plagiophile": (0, -1),
+               "Spherical": (-0.35, -0.15), "Uniform": (0, 0)}
+colors_glos = {"Planophile": "#0072B2", "Erectophile": "#D55E00", "Plagiophile": "#009E73",
+               "Spherical": "#CC79A7", "Uniform": "#999999"}
+results_glos = {name: dladgen(a, b) for name, (a, b) in shapes_glos.items()}
+angles_glos = results_glos["Planophile"].litab
+x_glos = np.arange(len(angles_glos))
+width_glos = 0.15
+
+fig, ax = plt.subplots(figsize=(9, 4))
+for i, (name, res) in enumerate(results_glos.items()):
+    ax.bar(x_glos + i * width_glos, res.lidf, width_glos, label=name, color=colors_glos[name])
+ax.set_xticks(x_glos + 2 * width_glos)
+ax.set_xticklabels([str(int(a)) for a in angles_glos], fontsize=8)
+ax.set_xlabel("Leaf inclination angle (deg, bin center, litab)")
+ax.set_ylabel("Relative frequency")
+ax.set_title("dladgen(): five named LIDF shapes, same 13 angle bins")
+ax.legend(fontsize=8)
+plt.tight_layout()
+plt.savefig(os.path.join(OUTDIR, "glossary_lidf.png"), dpi=140)
+plt.close(fig)
+print("wrote glossary_lidf.png")
+
+# ---------------------------------------------------------------- 13. glossary: SCOPE LUT trait sampling
+def _build_scope_lut_glossary(csv_path, n, seed):
+    rng = np.random.default_rng(seed)
+    with open(csv_path, newline="", encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    lut = {}
+    for row in rows:
+        trait, dist = row["variable"], row["Distribution"]
+        if trait in ("startDate", "endDate", "Type"):
+            continue
+        lo, hi = float(row["lower"]), float(row["upper"])
+        if dist == "Uniform":
+            lut[trait] = rng.uniform(lo, hi, size=n)
+        elif dist == "Fixed":
+            lut[trait] = np.full(n, float(row["default"]))
+        else:
+            mean, std = float(row["Mean_D"]), float(row["Std_D"])
+            vals = rng.normal(mean, std, size=n * 3)
+            lut[trait] = vals[(vals >= lo) & (vals <= hi)][:n]
+    return lut
+
+csv_path_glos = os.path.join(HERE, "..", "..", "SCOPEinR", "inst", "input", "inputs_SCOPE.csv")
+lut_glos = _build_scope_lut_glossary(csv_path_glos, 500, seed=1)
+
+fig, axes = plt.subplots(1, 3, figsize=(10, 3.2))
+axes[0].hist(lut_glos["Cab"], bins=20, color="#009E73"); axes[0].set_title("Cab (Gaussian)"); axes[0].set_xlabel("ug/cm2")
+axes[1].hist(lut_glos["LAI"], bins=20, color="#0072B2"); axes[1].set_title("LAI (Uniform)"); axes[1].set_xlabel("m2/m2")
+axes[2].hist(lut_glos["Vcmax25"], bins=20, color="#D55E00"); axes[2].set_title("Vcmax25 (Uniform)"); axes[2].set_xlabel("umol/m2/s")
+plt.tight_layout()
+plt.savefig(os.path.join(OUTDIR, "glossary_scope_lut.png"), dpi=140)
+plt.close(fig)
+print("wrote glossary_scope_lut.png")
+
 print("All figures written to", OUTDIR)

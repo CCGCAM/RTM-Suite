@@ -44,6 +44,7 @@ articles:
   navbar: Manuals
   contents:
   - "articles/SCOPEinR"
+  - "articles/trait-glossary"
   - "articles/getting-luts-scope"
   - "articles/scope-pipeline"
   - "articles/sensitivity-scope"

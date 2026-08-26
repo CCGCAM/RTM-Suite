@@ -69,7 +69,15 @@ p_sensitivity <- ggplot(si_all, aes(x = wavelength, y = STi_pct, fill = trait_la
   facet_wrap(~distribution, ncol = 1) +
   scale_fill_manual(values = trait_colors, name = NULL) +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 100)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  # coord_cartesian() (not scale_y_continuous(limits=...)): the 7 stacked
+  # percentages sum to 100 only up to floating-point noise (99.9999996 -
+  # 100.0000004 in practice), and scale_y_continuous's `limits` DROPS any
+  # point outside [0, 100] rather than just clipping the view -- with
+  # position="stack", that silently deleted ~35% of wavelengths and showed
+  # up as vertical white gaps cutting through every trait's band at once.
+  # coord_cartesian() zooms the view without discarding data.
+  coord_cartesian(ylim = c(0, 100)) +
   labs(title = "Spectral sensitivity of TOC reflectance (fourSAIL + PROSPECT-D)",
        subtitle = sprintf("Sobol total sensitivity index, %d simulations per PDF (N = %d)",
                           n_samples, n_samples %/% 2),

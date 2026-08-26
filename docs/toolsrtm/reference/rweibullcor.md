@@ -48,9 +48,9 @@ y <- rweibullcor(x, 0.2)
 #> Warning: NaNs produced
 #> Warning: NaNs produced
 cor(x,y) # very close to 0.2
-#> [1] 0.2475018
+#> [1] 0.1995778
 mean(y) 
-#> [1] 0.4824878
+#> [1] 0.4984476
 sd(y)  
-#> [1] 0.29319
+#> [1] 0.3096085
 ```

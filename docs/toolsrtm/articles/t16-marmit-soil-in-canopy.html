@@ -57,6 +57,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/parameter-glossary.html">Parameter &amp; Trait Glossary</a></li>
     <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
     <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
     <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
@@ -109,13 +110,15 @@ sensor sees – at the canopy level AND at the satellite level – and does
 that depend on how much vegetation covers it?</strong></p>
 <p><code><a href="../reference/get.marmit.rsoil.html">ToolsRTM::get.marmit.rsoil()</a></code> (MARMIT: Bablet et al.,
 soil reflectance as a function of surface water film thickness) gives a
-physically-based answer instead of an arbitrary blend. This page works
-through the sensitivity progression <strong>L -&gt; eps -&gt; LAI -&gt;
-wavelength -&gt; TOC/TOA -&gt; atmospheric variability</strong>, then
-feeds MARMIT’s output into BOTH <code><a href="../reference/foursail.html">foursail()</a></code> (TOC only,
-Tutorials 01-02) and <code><a href="../reference/SPART.html">SPART()</a></code> (TOC and TOA together,
-Tutorial 03) – MARMIT’s soil physics is the same either way; what
-changes is how far downstream that soil signal survives.</p>
+physically-based answer instead of an arbitrary blend – see the <a href="parameter-glossary.html#soil-marmit-dry---wet">Parameter &amp;
+Trait Glossary</a> for what <code>L</code> and <code>eps</code> mean and
+their realistic ranges. This page works through the sensitivity
+progression <strong>L -&gt; eps -&gt; LAI -&gt; wavelength -&gt; TOC/TOA
+-&gt; atmospheric variability</strong>, then feeds MARMIT’s output into
+BOTH <code><a href="../reference/foursail.html">foursail()</a></code> (TOC only, Tutorials 01-02) and
+<code><a href="../reference/SPART.html">SPART()</a></code> (TOC and TOA together, Tutorial 03) – MARMIT’s soil
+physics is the same either way; what changes is how far downstream that
+soil signal survives.</p>
 <pre class="text"><code>MARMIT: L (water film) and eps (wet fraction), separately first
         |
         v

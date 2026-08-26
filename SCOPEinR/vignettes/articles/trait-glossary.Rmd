@@ -1,0 +1,254 @@
+---
+title: "Trait & LUT Glossary"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Trait & LUT Glossary}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>", warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 4.5
+)
+```
+
+```{r setup}
+library(ToolsRTM)
+library(SCOPEinR)
+```
+
+`SCOPEinR::get.SCOPE()` reads one LUT row with ~65 columns -- leaf
+biochemistry, photosynthesis, fluorescence/NPQ, canopy structure, soil,
+aerodynamics, and meteorology, all at once. This page is the field guide
+to that row: what every variable physically means, its unit, its
+realistic range, and its default -- taken directly from the package's
+own `inputs_SCOPE.csv` (not re-typed, so it can't drift out of sync).
+
+For *how* `getLUT.SCOPE()` turns this table into random samples
+(`Uniform`/`Gaussian`/`Fixed` sampling, correlating two variables), see
+[Getting LUTs for SCOPE](getting-luts-scope.html) -- this page is the
+*meaning* of each variable, that page is the *mechanics* of sampling it.
+For SCOPE's own run-time numerical/solver options (iteration limits,
+convergence tolerances -- not plant/soil/meteo traits at all), see
+[Tutorial 00](../t00-scope-options.html).
+
+```{r load-csv}
+path_input <- system.file("input", package = "SCOPEinR")
+inputLUT <- read.table(file.path(path_input, "inputs_SCOPE.csv"), header = TRUE, sep = ",")
+```
+
+## 1. Leaf biochemistry (PROSPECT-PRO / Fluspect-Cx traits)
+
+These are the *same* PROSPECT/Fluspect leaf traits ToolsRTM's own
+[Parameter & Trait Glossary](../../toolsrtm/articles/parameter-glossary.html)
+covers in full detail (meaning, typical range, which leaf model reads
+each one) -- SCOPE's leaf-optics step is literally
+`getFluspect.Cx.SCOPE()` under the hood. Only the SCOPE-specific
+range/default/units, straight from `inputs_SCOPE.csv`, are repeated here:
+
+```{r leaf-table, echo = FALSE}
+leaf_vars <- c("N", "Cab", "Car", "Anth", "LMA", "EWT", "alpha", "Cbrown",
+                "Cs", "Prot", "CBC", "Cx", "fqe")
+knitr::kable(inputLUT[inputLUT$variable %in% leaf_vars,
+                       c("variable", "units", "lower", "upper", "Distribution", "default")],
+             row.names = FALSE)
+```
+
+`rho_thermal`/`tau_thermal` (both fixed at 0.01) are the leaf's
+thermal-infrared (~8-14 micron) reflectance/transmittance -- leaves are
+close to blackbody in the TIR, so these stay near zero and are rarely
+varied.
+
+## 2. Photosynthesis (Farquhar/Collatz + Ball-Berry)
+
+The traits `scopeinpython.biochemical`/`SCOPEinR::get.biochemical()`
+actually consume, at every candidate leaf temperature during the
+energy-balance iteration:
+
+```{r photo-table, echo = FALSE}
+photo_vars <- c("Vcmax25", "BallBerrySlope", "BallBerry0", "Type", "kV", "Rdparam")
+knitr::kable(inputLUT[inputLUT$variable %in% photo_vars,
+                       c("variable", "units", "lower", "upper", "Distribution", "default")],
+             row.names = FALSE)
+```
+
+- **`Vcmax25`** -- maximum carboxylation capacity of Rubisco at 25degC,
+  the single biggest driver of photosynthetic capacity (and therefore
+  fluorescence yield) in the whole model. Low values (<20) are stressed/
+  senescent canopies; 40-120 is typical healthy crop/forest; the CSV's
+  full 0.75-250 range covers everything from near-dead tissue to the
+  most productive C4 crops.
+- **`BallBerrySlope`**/**`BallBerry0`** -- the Ball-Berry stomatal
+  conductance model: `gs = BallBerrySlope * A * RH / Cs + BallBerry0`.
+  A steeper slope means stomata track photosynthesis more tightly;
+  `BallBerry0` is the residual (cuticular) conductance when `A` -> 0.
+- **`Type`** -- photosynthetic pathway, `"C3"` or `"C4"` (stored here as
+  `default = 3` -> `"C3"`). Changes which Farquhar sub-model
+  (Rubisco-limited vs. PEPcase-limited) is used.
+- **`kV`** -- canopy-depth extinction coefficient for `Vcmax` -- real
+  canopies down-regulate photosynthetic capacity in shaded lower leaves,
+  and `kV` sets how fast.
+- **`Rdparam`** -- dark (mitochondrial) respiration as a fraction of
+  `Vcmax25` (`Rd = Rdparam * Vcmax25`).
+
+## 3. Fluorescence / non-photochemical quenching (NPQ)
+
+The van der Tol et al. (2014) fluorescence-yield model traits, on top of
+the leaf's own `fqe` (Section 1):
+
+```{r fluo-table, echo = FALSE}
+fluo_vars <- c("Kn0", "Knalpha", "Knbeta", "Tyear", "beta", "kNPQs", "qLs", "stressfactor", "spectrum")
+knitr::kable(inputLUT[inputLUT$variable %in% fluo_vars,
+                       c("variable", "units", "lower", "upper", "Distribution", "default")],
+             row.names = FALSE)
+```
+
+- **`Kn0`/`Knalpha`/`Knbeta`** -- empirical constants shaping how the NPQ
+  rate constant `Kn` responds to light history (the reversible,
+  photoprotective quenching most leaves show within minutes).
+- **`beta`** -- fraction of absorbed PAR partitioned to Photosystem II
+  (the rest goes to PSI); default 0.51 matches the published SCOPE
+  default.
+- **`kNPQs`**/**`qLs`**/**`stressfactor`** -- *sustained* (slow-recovering,
+  stress-related) quenching terms, all defaulted "off"
+  (`kNPQs = 0`, `qLs = 1` = fully open PSII, `stressfactor = 1` = no
+  down-regulation) -- set these away from default to simulate a
+  chronically stressed canopy rather than one just responding to
+  instantaneous light.
+- **`Tyear`** -- a growth/acclimation temperature (degC) feeding the
+  biochemical model's temperature-correction functions.
+- **`spectrum`** -- internal switch selecting which bundled
+  fluorescence/optical parameter set to use; leave at the default `1`
+  unless told otherwise.
+
+## 4. Canopy structure
+
+```{r canopy-table, echo = FALSE}
+canopy_vars <- c("LAI", "hc", "LIDFa", "LIDFb", "TypeLidf", "leafwidth", "hspot", "Cv", "crowndiameter")
+knitr::kable(inputLUT[inputLUT$variable %in% canopy_vars,
+                       c("variable", "units", "lower", "upper", "Distribution", "default")],
+             row.names = FALSE)
+```
+
+`LAI`, `LIDFa`/`LIDFb`/`TypeLidf`, and `hspot` are exactly the fourSAIL
+traits ToolsRTM's glossary covers (Sections 2-3 there, including the
+named-LIDF-shape table). SCOPE-specific additions:
+
+- **`hc`** -- canopy height, needed for the aerodynamic-resistance chain
+  (Section 6) that plain optical-only fourSAIL never needs.
+- **`leafwidth`** -- characteristic leaf width, used in both the
+  aerodynamic boundary-layer resistance and (implicitly) the hot-spot
+  geometry.
+- **`Cv`** -- vertical foliage clumping/coverage fraction.
+- **`crowndiameter`** -- used together with `Cv` for a clumping
+  correction, the SCOPE analogue of INFORM's `cd`.
+
+## 5. Soil
+
+```{r soil-table, echo = FALSE}
+soil_vars <- c("rss", "rs_thermal", "cs", "rhos", "lambdas", "SMC", "BSMBrightness", "BSMlat", "BSMlon")
+knitr::kable(inputLUT[inputLUT$variable %in% soil_vars,
+                       c("variable", "units", "lower", "upper", "Distribution", "default")],
+             row.names = FALSE)
+```
+
+`SMC`, `BSMBrightness`, `BSMlat`, `BSMlon` are BSM's soil-reflectance
+traits -- see ToolsRTM's glossary Section 5 (shared with SPART) for what
+each one physically means. SCOPE-specific soil-thermal additions:
+
+- **`rss`** -- soil (sub-surface) resistance to evaporation.
+- **`rs_thermal`** -- a thermal-emission surface-resistance analogue used
+  in the TIR flux calculation.
+- **`cs`**, **`rhos`**, **`lambdas`** -- soil specific heat capacity, bulk
+  density, and thermal conductivity, feeding the soil heat-flux/
+  temperature part of the energy balance (`ebal`).
+
+## 6. Aerodynamics / energy-balance resistances
+
+Feeds `scopeinpython.thermal`/`SCOPEinR::get.resistances()`; not needed
+at all for optical-only runs (`run_rtmo()` alone), only once `ebal()`
+closes the energy balance:
+
+```{r aero-table, echo = FALSE}
+aero_vars <- c("zo", "d", "Cd", "rb", "CR", "CD1", "Psicor", "CSSOIL", "rbs", "rwc", "z")
+knitr::kable(inputLUT[inputLUT$variable %in% aero_vars,
+                       c("variable", "units", "lower", "upper", "Distribution", "default")],
+             row.names = FALSE)
+```
+
+`zo` (roughness length) and `d` (zero-plane displacement height) are
+normally *derived* from canopy height via `get_zo_and_d()` rather than
+hand-set -- the fixed defaults here are placeholders, not values meant
+to be sampled independently of `hc`.
+
+## 7. Meteorology, geometry, and site/time
+
+```{r meteo-table, echo = FALSE}
+meteo_vars <- c("Rin", "Rli", "Ta", "p", "ea", "RH", "u", "Ca", "Oa",
+                  "startDate", "endDate", "LAT", "LON", "timezn", "tts", "tto", "psi")
+knitr::kable(inputLUT[inputLUT$variable %in% meteo_vars,
+                       c("variable", "units", "lower", "upper", "Distribution", "default")],
+             row.names = FALSE)
+```
+
+- **`Rin`**/**`Rli`** -- incoming shortwave (solar) and longwave
+  (thermal) radiation, W/m2.
+- **`Ta`**, **`p`**, **`ea`**, **`u`** -- air temperature (degC), pressure
+  (hPa), actual vapour pressure (hPa), wind speed (m/s).
+- **`RH`** -- a real, documented quirk: the CSV's own `units` column
+  says `"hPa"`, but the `0-1` range and `0.64` default show it's
+  actually sampled as a **fraction** (0-1), not a pressure -- a
+  mislabeled units cell in the CSV itself, reproduced as-is here rather
+  than silently "fixed", since it doesn't affect what value is actually
+  sampled.
+- **`Ca`**, **`Oa`** -- atmospheric CO2 (ppm) and O2 concentration, both
+  feeding the Farquhar Ci-solver directly.
+- **`tts`**/**`tto`**/**`psi`** -- sun zenith, view zenith, relative
+  azimuth (degrees) -- identical geometry traits to fourSAIL/SPART.
+- **`LAT`**/**`LON`**/**`timezn`**/**`startDate`**/**`endDate`** -- site
+  location and simulation period, used when driving SCOPE from a real
+  time series (Tutorial 06) rather than one fixed LUT row.
+
+## 8. A real LUT: sampling and inspecting a few traits
+
+`getLUT.SCOPE()` (see [Getting LUTs for
+SCOPE](getting-luts-scope.html) for the full mechanics) reads each
+row's `Distribution` and samples accordingly -- `Uniform` traits spread
+evenly across `[lower, upper]`, `Gaussian` traits (only `Cab`, by
+default) cluster around `Mean_D`/`Std_D` while still respecting
+`[lower, upper]`, and `Fixed` traits never vary:
+
+```{r lut-sample, fig.height = 3.5}
+set.seed(1)
+lut <- getLUT.SCOPE(inputLUT = inputLUT, nLUT = 500, setseed = 1)
+
+op <- par(mfrow = c(1, 3), mar = c(4, 4, 2, 1))
+hist(lut$Cab, breaks = 20, col = "#009E73", main = "Cab (Gaussian)",
+     xlab = "ug/cm2")
+hist(lut$LAI, breaks = 20, col = "#0072B2", main = "LAI (Uniform)",
+     xlab = "m2/m2")
+hist(lut$Vcmax25, breaks = 20, col = "#D55E00", main = "Vcmax25 (Uniform)",
+     xlab = "umol/m2/s")
+par(op)
+```
+
+`Cab`'s histogram is visibly bell-shaped (its `Distribution` is
+`"Gaussian"`, `Mean_D = 50`, `Std_D = 20`, still clipped to `[5, 90]`),
+while `LAI` and `Vcmax25` (both `"Uniform"`) are flat across their own
+ranges -- exactly the sampling behaviour Section 1 of [Getting LUTs for
+SCOPE](getting-luts-scope.html) describes, now visible on three
+concrete traits from this page's own glossary.
+
+## What's next
+
+- **Tutorial 05** -- building a full SCOPE LUT and running it through
+  `get.SCOPE()` end to end.
+- **[Getting LUTs for SCOPE](getting-luts-scope.html)** -- the sampling
+  mechanics (`Distribution` handling, correlating two traits) this page
+  only summarizes.
+- **ToolsRTM's [Parameter & Trait
+  Glossary](../../toolsrtm/articles/parameter-glossary.html)** -- the
+  full leaf/canopy/soil/atmosphere reference for everything SCOPE's
+  leaf-optics and canopy-BRDF steps share with plain PROSAIL/SPART.

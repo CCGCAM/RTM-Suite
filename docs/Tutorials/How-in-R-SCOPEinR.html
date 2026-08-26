@@ -1687,7 +1687,7 @@ db.sim.many &lt;- get.SCOPE(
   canopy.model = &quot;fourSAIL&quot;, get.outputs = &quot;ALL&quot;, get.plots = FALSE
 )
 cat(&quot;Ran&quot;, N_SAMPLES, &quot;simulations in&quot;, round(as.numeric(Sys.time() - start_time), 1), &quot;s\n&quot;)</code></pre>
-<pre><code>## Ran 100 simulations in 2.2 s</code></pre>
+<pre><code>## Ran 100 simulations in 1.9 s</code></pre>
 <pre class="r"><code>Actot_vals &lt;- sapply(db.sim.many, function(r) r$data.fluxes$Actot)
 EoutF_vals &lt;- sapply(db.sim.many, function(r) r$data.rad$EoutF)
 
@@ -1757,6 +1757,26 @@ input spectrum: <code>reflapp</code> comes out of the full
 energy-balance/fluorescence-coupled SCOPE run instead of plain PROSAIL,
 so this trains on what a sensor would see over a canopy whose leaf/soil
 temperatures were actually solved for, not assumed.</p>
+<p><strong>Read the scatter plot, not just R²</strong>: the points
+aren’t scattered evenly around the 1:1 line – low observed LAI (&lt;1.5)
+is systematically <em>over</em>-predicted, and high observed LAI (&gt;5)
+is systematically <em>under</em>-predicted, so the point cloud visibly
+flattens toward the training set’s own mean at both tails. This is real,
+expected Random Forest behaviour, not a modelling error: an ensemble of
+trees can only average values it saw in training, so it can never
+extrapolate past the training range and pulls extreme predictions back
+toward the bulk of the data – worse here than usual because only 70 rows
+(<code>0.7 * N_SAMPLES</code>) are available to train on.
+<code>cor(pred, obs)^2</code> (a correlation-based R²) is fairly
+insensitive to exactly this kind of bias, since it only asks whether
+predicted and observed <em>move together</em>, not whether they agree in
+absolute terms – which is why the number alone (0.72) undersells how
+much the retrieval degrades at the LAI extremes visible in the plot
+above. More/better-distributed training LUT rows (Section 4’s
+<code>nLUT</code>) or a model less prone to mean-reversion (e.g. a
+linear/PLSR baseline for comparison) are the two standard fixes, not
+shown here to keep this tutorial’s scope to “one clean end-to-end
+example.”</p>
 <p><strong>If you compare this R² to the Python version of this
 section</strong>: R’s <code>getLUT.SCOPE()</code> (Section 4) randomizes
 essentially every free parameter at once – leaf biochemistry, LAI,

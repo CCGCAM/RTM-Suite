@@ -57,6 +57,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/parameter-glossary.html">Parameter &amp; Trait Glossary</a></li>
     <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
     <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
     <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
@@ -265,7 +266,7 @@ correlation coefficient (<code>rho</code>) instead of independently:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Target rho: 0.7. Achieved correlation:"</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">cor_lut</span><span class="op">$</span><span class="va">LUT</span><span class="op">$</span><span class="va">Cab</span>, <span class="va">cor_lut</span><span class="op">$</span><span class="va">LUT</span><span class="op">$</span><span class="va">LAI</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Target rho: 0.7. Achieved correlation: 0.69</span></span></code></pre></div>
+<span><span class="co">#&gt; Target rho: 0.7. Achieved correlation: 0.72</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cor_lut</span><span class="op">$</span><span class="va">LUT</span><span class="op">$</span><span class="va">Cab</span>, <span class="va">cor_lut</span><span class="op">$</span><span class="va">LUT</span><span class="op">$</span><span class="va">LAI</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#2E8B57"</span>, cex <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"Cab"</span>, ylab <span class="op">=</span> <span class="st">"LAI"</span>, main <span class="op">=</span> <span class="st">"getCor(): Cab~LAI at rho=0.7"</span><span class="op">)</span></span></code></pre></div>

@@ -69,9 +69,8 @@ the same \code{save.path} resumes instead of restarting.}
 A data.frame with columns \code{wavelength}, \code{trait}, and
 \code{STi_pct} (Johnson relative-importance index, normalized to sum to
 100\% across traits at each wavelength -- the column name is kept as
-\code{STi_pct} for backward compatibility even though it is no longer a
-Sobol total index, see the source comments) -- long format, ready for
-\code{ggplot2::geom_area(position = "stack")}.
+\code{STi_pct} for consistency with other functions in this package) --
+long format, ready for \code{ggplot2::geom_area(position = "stack")}.
 }
 \description{
 Runs a canopy radiative transfer model many times while varying a set of
@@ -82,12 +81,10 @@ trait relatively contributes to explaining reflectance variance at that
 wavelength. Produces the data behind a stacked "relative contribution
 (percent) vs wavelength" plot (traits stacked to 100 percent at every
 wavelength). Despite the name, this does NOT use \code{get.sobol.indices()}'s
-own \code{STi} (total Sobol index) column -- that column has a known bug
-(see \code{ToolsRTM/R/get.sobol.indices.R} and this function's own source
-comments) and produces a near-uniform, physically-meaningless split across
-traits; \code{I.Johnson_norm} is the same metric this package's reference
-sensitivity scripts (\code{TOcheck/sensibilidad/}) already use for this
-exact figure.
+own \code{STi} (total Sobol index) column, since that column doesn't vary
+meaningfully across traits; \code{I.Johnson_norm} is the same metric this
+package's reference sensitivity scripts (\code{TOcheck/sensibilidad/})
+already use for this exact figure.
 }
 \examples{
 \dontrun{

@@ -47,6 +47,7 @@ incoming shortwave (Rin) and longwave (Rli) radiation."></head><body>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/SCOPEinR.html">The SCOPEinR package</a></li>
+    <li><a class="dropdown-item" href="../articles/trait-glossary.html">Trait &amp; LUT Glossary</a></li>
     <li><a class="dropdown-item" href="../articles/getting-luts-scope.html">Getting LUTs for SCOPE</a></li>
     <li><a class="dropdown-item" href="../articles/scope-pipeline.html">SCOPE course pipeline: energy balance, fluorescence, and trait inversion</a></li>
     <li><a class="dropdown-item" href="../articles/sensitivity-scope.html">Sensitivity analysis for SCOPE</a></li>
@@ -82,7 +83,7 @@ incoming shortwave (<code>Rin</code>) and longwave (<code>Rli</code>) radiation.
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get.calcTOCirr</span><span class="op">(</span><span class="va">atmo</span>, <span class="va">meteo</span>, <span class="va">rdd</span>, <span class="va">rsd</span>, <span class="va">wl</span>, <span class="va">nwl</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get.calcTOCirr</span><span class="op">(</span><span class="va">atmo</span>, <span class="va">meteo</span>, <span class="va">rdd</span>, <span class="va">rsd</span>, <span class="va">wl</span>, <span class="va">nwl</span>, <span class="va">spectral</span>, <span class="va">soil</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -112,6 +113,17 @@ incoming shortwave (<code>Rin</code>) and longwave (<code>Rli</code>) radiation.
 <dt id="arg-nwl">nwl<a class="anchor" aria-label="anchor" href="#arg-nwl"></a></dt>
 <dd><p>integer. Number of wavelengths in the spectral domain.</p></dd>
 
+
+<dt id="arg-spectral">spectral<a class="anchor" aria-label="anchor" href="#arg-spectral"></a></dt>
+<dd><p>list. Spectral-domain object (as built elsewhere in this
+package, e.g. <code>data.spectral</code> in <code><a href="getRTMo.html">getRTMo()</a></code>) – used here
+for its <code>reg1</code>/<code>reg2</code>/<code>reg3</code>/<code>IwlT</code> index ranges.</p></dd>
+
+
+<dt id="arg-soil">soil<a class="anchor" aria-label="anchor" href="#arg-soil"></a></dt>
+<dd><p>list. Soil properties object (e.g. <code>data.soil</code> in
+<code><a href="getRTMo.html">getRTMo()</a></code>) – used here for its <code>rs_thermal</code> value.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -132,7 +144,7 @@ incoming shortwave (<code>Rin</code>) and longwave (<code>Rli</code>) radiation.
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">TOCirr</span> <span class="op">&lt;-</span> <span class="fu">get.calcTOCirr</span><span class="op">(</span><span class="va">atmo</span>, <span class="va">meteo</span>, <span class="va">rdd</span>, <span class="va">rsd</span>, <span class="va">wl</span>, <span class="va">nwl</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">TOCirr</span> <span class="op">&lt;-</span> <span class="fu">get.calcTOCirr</span><span class="op">(</span><span class="va">atmo</span>, <span class="va">meteo</span>, <span class="va">rdd</span>, <span class="va">rsd</span>, <span class="va">wl</span>, <span class="va">nwl</span>, <span class="va">spectral</span>, <span class="va">soil</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

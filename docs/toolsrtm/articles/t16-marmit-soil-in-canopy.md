@@ -21,13 +21,15 @@ covers it?**
 [`ToolsRTM::get.marmit.rsoil()`](../reference/get.marmit.rsoil.md)
 (MARMIT: Bablet et al., soil reflectance as a function of surface water
 film thickness) gives a physically-based answer instead of an arbitrary
-blend. This page works through the sensitivity progression **L -\> eps
--\> LAI -\> wavelength -\> TOC/TOA -\> atmospheric variability**, then
-feeds MARMIT’s output into BOTH [`foursail()`](../reference/foursail.md)
-(TOC only, Tutorials 01-02) and [`SPART()`](../reference/SPART.md) (TOC
-and TOA together, Tutorial 03) – MARMIT’s soil physics is the same
-either way; what changes is how far downstream that soil signal
-survives.
+blend – see the [Parameter & Trait
+Glossary](parameter-glossary.html#soil-marmit-dry---wet) for what `L`
+and `eps` mean and their realistic ranges. This page works through the
+sensitivity progression **L -\> eps -\> LAI -\> wavelength -\> TOC/TOA
+-\> atmospheric variability**, then feeds MARMIT’s output into BOTH
+[`foursail()`](../reference/foursail.md) (TOC only, Tutorials 01-02) and
+[`SPART()`](../reference/SPART.md) (TOC and TOA together, Tutorial 03) –
+MARMIT’s soil physics is the same either way; what changes is how far
+downstream that soil signal survives.
 
 ``` text
 MARMIT: L (water film) and eps (wet fraction), separately first

@@ -27,7 +27,9 @@ paragraph inside a leaf/canopy comparison, because it represents a more
 complete modelling chain, not just another canopy option. This page
 stays focused on that unique chain (soil -> canopy -> atmosphere -> TOA)
 -- soil-moisture spectroscopy in depth is Tutorial 16's job, not this
-one's.
+one's. For what every BSM soil / SMAC atmosphere parameter below
+actually means and its realistic range, see the [Parameter & Trait
+Glossary](parameter-glossary.html#soil-atmosphere-spart-bsm-soil-smac-atmosphere).
 
 ```text
                  Atmosphere

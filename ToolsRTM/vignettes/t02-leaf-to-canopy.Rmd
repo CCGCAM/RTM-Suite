@@ -21,7 +21,10 @@ library(ToolsRTM)
 Tutorial 01 ran ONE leaf model through ONE canopy model. This page opens
 both boxes: every leaf model this package implements, every canopy model,
 and how a trait change at the leaf level propagates to a change at the
-canopy level.
+canopy level. For what every trait below actually means, its unit, and
+its realistic range, see the [Parameter & Trait
+Glossary](parameter-glossary.html) -- this page is about the mechanism,
+that page is the reference to come back to.
 
 ```text
 Leaf biochemical/structural parameters

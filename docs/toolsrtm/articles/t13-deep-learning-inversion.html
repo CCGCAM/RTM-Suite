@@ -57,6 +57,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/parameter-glossary.html">Parameter &amp; Trait Glossary</a></li>
     <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
     <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
     <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
@@ -440,7 +441,7 @@ the fitted scaler both come back in the result:</p>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">msg</span>, <span class="st">"\n"</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">").\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; Epochs actually run: 300 of 300 requested</span></span>
-<span><span class="co">#&gt; Epoch with lowest validation loss: 300</span></span></code></pre></div>
+<span><span class="co">#&gt; Epoch with lowest validation loss: 299</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="evaluate-the-model">6. Evaluate the model<a class="anchor" aria-label="anchor" href="#evaluate-the-model"></a>
@@ -482,8 +483,8 @@ it reaches the network:</p>
 <span>      <span class="st">" RMSE="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">rmse_f</span><span class="op">(</span><span class="va">obs_test</span>, <span class="va">pred_test_dl</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>      <span class="st">" bias="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">bias_f</span><span class="op">(</span><span class="va">obs_test</span>, <span class="va">pred_test_dl</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; 38/38 - 0s - 52ms/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Dense DL, independent test set: R2= 0.836  RMSE= 6.27  bias= 0.05</span></span></code></pre></div>
+<span><span class="co">#&gt; 38/38 - 0s - 53ms/epoch - 1ms/step</span></span>
+<span><span class="co">#&gt; Dense DL, independent test set: R2= 0.832  RMSE= 6.36  bias= -0.16</span></span></code></pre></div>
 <p>Skip that <code>predict(model$Scalar.train, ...)</code> line and pass
 raw, unscaled reflectance straight to <code>model$model</code> instead –
 an easy mistake, since it runs without error – and training and
@@ -517,8 +518,8 @@ easy to miss.</p>
 <tbody>
 <tr class="odd">
 <td align="left">Dense DL (getMLmodel)</td>
-<td align="right">0.836</td>
-<td align="right">6.27</td>
+<td align="right">0.832</td>
+<td align="right">6.36</td>
 </tr>
 <tr class="even">
 <td align="left">Random Forest (get.inversion, Tutorial 12)</td>
@@ -611,8 +612,8 @@ scaler:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"CNN (PRISMA, "</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prisma_bands</span><span class="op">)</span>, <span class="st">"bands), independent test set: R2="</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">r2_f</span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">" RMSE="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">rmse_f</span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; 25/25 - 0s - 115ms/epoch - 5ms/step</span></span>
-<span><span class="co">#&gt; CNN (PRISMA,  234 bands), independent test set: R2= 0.835  RMSE= 6.58</span></span></code></pre></div>
+<span><span class="co">#&gt; 25/25 - 0s - 68ms/epoch - 3ms/step</span></span>
+<span><span class="co">#&gt; CNN (PRISMA,  234 bands), independent test set: R2= -0.005  RMSE= 16.23</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
@@ -802,13 +803,13 @@ CR.red.nir</td>
 <tr class="odd">
 <td align="left">Cab</td>
 <td align="right">9</td>
-<td align="right">0.841</td>
+<td align="right">0.842</td>
 <td align="right">0.853</td>
 </tr>
 <tr class="even">
 <td align="left">LAI</td>
 <td align="right">9</td>
-<td align="right">0.702</td>
+<td align="right">0.696</td>
 <td align="right">0.685</td>
 </tr>
 </tbody>

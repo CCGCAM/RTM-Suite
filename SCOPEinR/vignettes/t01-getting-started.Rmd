@@ -26,7 +26,9 @@ photosynthesis, and a full energy-balance closure loop into one
 simulation. `ToolsRTM`'s series (this site's other tutorial set) covers
 leaf/canopy radiative transfer alone; this series covers what SCOPE adds
 on top: energy balance, fluorescence, and photosynthesis, all coupled
-together.
+together. See the [Trait & LUT Glossary](trait-glossary.html)
+for what every LUT column consumed below actually means, its unit, and
+its realistic range.
 
 ```text
 Leaf/canopy/soil/meteo inputs (one LUT row)

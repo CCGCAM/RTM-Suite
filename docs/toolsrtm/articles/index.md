@@ -36,6 +36,7 @@
 ### Reference manuals and deep dives
 
 - [The ToolsRTM package](ToolsRTM/ToolsRTM.md):
+- [Parameter & Trait Glossary](parameter-glossary.md):
 - [Getting-LUTs](Getting-LUTs.md):
 - [Trait inversion: merit-function matching, ML, and deep
   learning](InversionOpt.md):

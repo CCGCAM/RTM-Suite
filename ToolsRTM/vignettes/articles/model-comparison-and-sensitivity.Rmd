@@ -92,6 +92,17 @@ a Uniform-PDF sampling scenario against a Gaussian one:
 knitr::include_graphics("figures/comparison-sensitivity/sobol_spectral_uniform_vs_gaussian.png")
 ```
 
+Chlorophyll (`Cab`) dominates the visible (400-700nm) almost completely;
+dry matter (`LMA`) takes over through the red-edge and much of the NIR/SWIR;
+equivalent water thickness (`EWT`) dominates the SWIR water-absorption
+region (roughly 1300-2500nm, strongest around the 1450/1940nm bands); leaf
+angle (`LIDFa`) and LAI contribute a real but secondary share in the NIR
+plateau -- the same global-vs-OAT story Section "One-at-a-time" makes with
+single-trait sweeps, now with every trait varying at once and interactions
+included. Both PDFs (Uniform, Gaussian) agree on this overall pattern; the
+Gaussian run's tighter Cab distribution around its mean sharpens the
+chlorophyll dominance slightly in the visible.
+
 ### Global Sobol sensitivity, per Sentinel-2A band
 
 `2-Sobol_perband_sensitivity.R` uses the `sensobol` package's proper

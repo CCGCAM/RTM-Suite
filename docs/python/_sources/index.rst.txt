@@ -9,13 +9,15 @@ BRDF pipeline of SCOPE). Pure NumPy/SciPy at runtime — no R dependency.
 This is a **partial, deliberately scoped** port. Every function documented
 here has been numerically verified against the original R package (see
 :doc:`verification`) before being included — nothing here is a guess at
-what the R code does.
+what the R code does. New to what ``N``, ``Cab``, ``LIDFa``, ``Vcmax25``,
+or any other trait actually means? See the :doc:`glossary` first.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents
 
    install
+   glossary
    toolsrtm/index
    scopeinpython/index
    verification

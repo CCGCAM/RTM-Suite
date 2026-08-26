@@ -57,6 +57,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Manuals</h6></li>
     <li><a class="dropdown-item" href="../articles/ToolsRTM/ToolsRTM.html">The ToolsRTM package</a></li>
+    <li><a class="dropdown-item" href="../articles/parameter-glossary.html">Parameter &amp; Trait Glossary</a></li>
     <li><a class="dropdown-item" href="../articles/Getting-LUTs.html">Getting-LUTs</a></li>
     <li><a class="dropdown-item" href="../articles/InversionOpt.html">Trait inversion: merit-function matching, ML, and deep learning</a></li>
     <li><a class="dropdown-item" href="../articles/course-pipeline.html">Full pipeline: simulate, convolve, invert</a></li>
@@ -188,6 +189,17 @@ trait varies simultaneously, so this captures interactions OAT can’t.
 Run twice, comparing a Uniform-PDF sampling scenario against a Gaussian
 one:</p>
 <p><img src="figures/comparison-sensitivity/sobol_spectral_uniform_vs_gaussian.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
+<p>Chlorophyll (<code>Cab</code>) dominates the visible (400-700nm)
+almost completely; dry matter (<code>LMA</code>) takes over through the
+red-edge and much of the NIR/SWIR; equivalent water thickness
+(<code>EWT</code>) dominates the SWIR water-absorption region (roughly
+1300-2500nm, strongest around the 1450/1940nm bands); leaf angle
+(<code>LIDFa</code>) and LAI contribute a real but secondary share in
+the NIR plateau – the same global-vs-OAT story Section “One-at-a-time”
+makes with single-trait sweeps, now with every trait varying at once and
+interactions included. Both PDFs (Uniform, Gaussian) agree on this
+overall pattern; the Gaussian run’s tighter Cab distribution around its
+mean sharpens the chlorophyll dominance slightly in the visible.</p>
 </div>
 <div class="section level3">
 <h3 id="global-sobol-sensitivity-per-sentinel-2a-band">Global Sobol sensitivity, per Sentinel-2A band<a class="anchor" aria-label="anchor" href="#global-sobol-sensitivity-per-sentinel-2a-band"></a>

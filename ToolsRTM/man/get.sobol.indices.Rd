@@ -16,7 +16,17 @@ get.sobol.indices(data, output, N, normalize = FALSE)
 \item{normalize}{A boolean value; if TRUE, the Sobol indices will be normalized.}
 }
 \value{
-A data frame containing the first-order and total Sobol indices for each input variable.
+A data frame containing \code{Si} (first-order index) and
+\code{STi}, plus \code{I.Johnson}/\code{I.Johnson_norm} (Johnson
+relative-importance index, via \code{sensitivity::johnson()}) for each
+input variable. \code{Si} and \code{I.Johnson} vary meaningfully by
+input; \code{I.Johnson} is the more standard, independently verifiable
+metric of the three and is what \code{\link{get.spectral.sensitivity}}
+uses. \code{STi} here is an approximate total-index estimate from a
+simplified two-sample-split calculation (not a full resampling-based
+Sobol estimator, which would need additional model evaluations this
+function's data-only interface doesn't request) -- treat it as a rough
+indicator rather than a precise total-effect index.
 }
 \description{
 This function calculates the first-order and total Sobol indices for sensitivity analysis
