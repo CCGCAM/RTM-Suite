@@ -36,3 +36,8 @@ Scripts/Comparison/_out/refl_R_*.csv
 # CRAN/PyPI submission staging -- cleaned copies assembled locally, never
 # meant to live in repo history (see toUpload/README.md)
 toUpload/
+
+# Ad-hoc local build/check logs (pkgdown rebuilds, R CMD check runs) --
+# scratch output, not meant to live in repo history
+ToolsRTM_*.log
+SCOPEinR_*.log
