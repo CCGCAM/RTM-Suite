@@ -14,6 +14,23 @@ temperature -- it does not itself solve for temperature.
    combination of ``biochemical.R`` (only the ``tempcor==1`` C4 branch and
    a separate C3-only block set them). Not worked around here.
 
+Where this fits
+----------------
+
+This is a pipeline-internal component, not something you typically call
+directly: :func:`scopeinpython.scope.get_scope` calls
+:func:`scopeinpython.ebal.ebal`, which calls this once per canopy layer,
+per iteration, at each candidate leaf temperature, to get the
+fluorescence yield ``eta`` and net photosynthesis at that temperature.
+Most users should just call :func:`~scopeinpython.scope.get_scope` --
+see :doc:`scope` for a full end-to-end example.
+
+.. code-block:: text
+
+   get_scope()  ->  ebal()  ->  get_biochemical()  [per layer, per iteration]
+                                   Ci-solver (Ball-Berry) + Farquhar/Collatz
+                                   -> An (net photosynthesis), eta (SIF yield)
+
 .. automodule:: scopeinpython.biochemical
    :members:
    :undoc-members:

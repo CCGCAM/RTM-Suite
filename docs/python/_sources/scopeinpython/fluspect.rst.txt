@@ -24,6 +24,26 @@ Key differences from ``toolsrtm.fluspect_cx``:
   parameter table (``optipar2017.ProspectD`` is missing ``Kp``/``Kcbc``
   data needed for the PROSPECT-PRO/Cx ``Kall`` formula).
 
+Quick example
+-------------
+
+.. code-block:: python
+
+   from scopeinpython.fluspect import get_fluspect_cx_scope
+
+   fl = get_fluspect_cx_scope(Cab=40, Car=8, EWT=0.01, LMA=0.009, Cs=0, N=1.5,
+                               fqe=0.01, Cx=0, Prot=0.0, CBC=0.0, Anth=1.0, step=5.0)
+   print(fl.refl.shape, fl.Mb.shape)   # (2001,) reflectance; (53, 71) fluorescence matrix
+
+.. code-block:: text
+
+   Input                              get_fluspect_cx_scope()   Output
+   ---------------------------        ----------------------    ---------------------------
+   Cab, Car, EWT, LMA, Cs, N                                     fl.refl / fl.tran  [2001]
+   fqe (fluorescence quantum eff.)    -------------------->      fl.Mb / fl.Mf  [53x71 @step=5]
+   Cx, Prot, CBC, Anth                                            (single-layer input to
+   step (nm, EEM matrix resolution)                                fluspect_mscope())
+
 .. automodule:: scopeinpython.fluspect
    :members:
    :undoc-members:

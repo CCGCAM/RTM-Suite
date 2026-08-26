@@ -17,6 +17,25 @@ energy-balance chain to be ported.
    ``resist_out[['Kh']]``) -- reproduced exactly rather than "fixed",
    since there's no independent way to tell whether this was intentional.
 
+Quick example
+-------------
+
+.. code-block:: python
+
+   import numpy as np
+   from scopeinpython.thermal import stefan_boltzmann
+
+   M = stefan_boltzmann(np.array([15.0, 25.0]))   # leaf/soil temperature, degC
+   print(M)   # blackbody radiant exitance, W/m2
+
+.. code-block:: text
+
+   Input                              stefan_boltzmann()        Output
+   ---------------------------        ----------------------    ---------------------------
+   T_C  temperature(s), degC          -------------------->      M  blackbody radiant
+                                                                    exitance, W/m2 (Stefan-
+                                                                    Boltzmann law)
+
 .. automodule:: scopeinpython.thermal
    :members:
    :undoc-members:

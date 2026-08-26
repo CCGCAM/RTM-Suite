@@ -27,6 +27,31 @@ partial port of ``SCOPEinR::get.SCOPE``.
    canopy-level "derived data products" beyond :class:`~scopeinpython.scope.ScopeResult`
    aren't computed yet.
 
+Quick example
+-------------
+
+.. code-block:: python
+
+   import csv
+   from scopeinpython import ScopeOptions, get_scope
+
+   with open("SCOPEinR/inst/input/LUT_input.csv", newline="") as f:
+       row = next(csv.DictReader(f))
+
+   res = get_scope(row, options=ScopeOptions(k_maxit=100, maxEBer=1.0))
+   print(res.rtmo.refl[550 - 400])   # TOC reflectance at 550nm
+   print(res.ebal.Actot)             # total photosynthesis, umol CO2/m2/s
+
+.. code-block:: text
+
+   Input                              get_scope()               Output
+   ---------------------------        ----------------------    ---------------------------
+   row : dict  (one LUT row -- leaf,                             res.rtmo   optical BRDF
+     canopy, soil, meteo traits,       -------------------->      res.ebal   energy balance,
+     matching inputs_SCOPE.csv)                                              photosynthesis
+   options : ScopeOptions                                        res.rtmf   fluorescence (opt.)
+                                                                   res.rtmz   zeaxanthin (opt.)
+
 .. automodule:: scopeinpython.scope
    :members:
    :undoc-members:

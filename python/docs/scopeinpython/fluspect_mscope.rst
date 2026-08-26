@@ -30,6 +30,34 @@ weighted by ``pLAI``.
      code path can never succeed, ``step`` is a **required** parameter
      here rather than optional-with-a-crashing-default.
 
+Quick example
+-------------
+
+.. code-block:: python
+
+   import numpy as np
+   from scopeinpython import get_spectra_scope
+   from scopeinpython.fluspect_mscope import MultiLayerLeafBio, fluspect_mscope
+
+   spectral = get_spectra_scope()
+   mly = MultiLayerLeafBio(nly=2, pLAI=np.array([0.5, 0.5]),
+                            pCab=np.array([40.0, 30.0]), pEWT=np.array([0.01, 0.01]),
+                            pCar=np.array([8.0, 8.0]), pLMA=np.array([0.009, 0.009]),
+                            pCs=np.array([0.0, 0.0]), pN=np.array([1.5, 1.5]))
+   res = fluspect_mscope(mly, spectral, nl=10, Cx=0.0, fqe=0.01,
+                          Prot=0.0, CBC=0.0, Anth=1.0, step=5.0)
+   print(res.refl.shape)   # (nl, nwlP) -- one reflectance spectrum per canopy sublayer
+
+.. code-block:: text
+
+   Input                              fluspect_mscope()         Output
+   ---------------------------        ----------------------    ---------------------------
+   mly : MultiLayerLeafBio                                      res.refl / res.tran  (nl, nwlP)
+     (nly biochem. profile layers,     -------------------->     res.Mb / res.Mf  (nwlf,nwle,nl)
+      pLAI-weighted)                                              -- replicated across all nl
+   spectral, nl (canopy sublayers)                                 canopy sublayers, feeds
+   Cx, fqe, Prot, CBC, Anth, step                                  run_rtmo()/rtmf()
+
 .. automodule:: scopeinpython.fluspect_mscope
    :members:
    :undoc-members:

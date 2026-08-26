@@ -25,6 +25,24 @@ chain built this session.
    function's Brent Ci-solver was only proven correct for scalar leaf
    micro-environments.
 
+Where this fits
+----------------
+
+This is a pipeline-internal component, not something you typically call
+directly: :func:`scopeinpython.scope.get_scope` calls this once, after
+:func:`scopeinpython.rtmo.run_rtmo`, to close the energy balance. Most
+users should just call :func:`~scopeinpython.scope.get_scope` -- see
+:doc:`scope` for a full end-to-end example.
+
+.. code-block:: text
+
+   get_scope()  ->  run_rtmo()  [optical BRDF]
+                ->  ebal()      [iterates leaf/soil temperature until
+                                 sensible+latent heat flux matches net
+                                 radiation, calling get_biochemical() and
+                                 rtmt_sb() at each candidate temperature]
+                ->  rtmf()/rtmz()  [fluorescence/zeaxanthin, optional]
+
 .. automodule:: scopeinpython.ebal
    :members:
    :undoc-members:

@@ -19,6 +19,25 @@ fluorescence quantum efficiencies (from
    with a deliberate, documented sub-floating-point-precision
    approximation.
 
+Where this fits
+----------------
+
+This is a pipeline-internal component, not something you typically call
+directly: :func:`scopeinpython.scope.get_scope` calls this after
+:func:`scopeinpython.ebal.ebal`, when fluorescence output is requested,
+using the ``Mb``/``Mf`` matrices from
+:func:`scopeinpython.fluspect_mscope.fluspect_mscope` and the per-layer
+``eta`` from :func:`scopeinpython.biochemical.get_biochemical`. Most
+users should just call :func:`~scopeinpython.scope.get_scope` -- see
+:doc:`scope` for a full end-to-end example.
+
+.. code-block:: text
+
+   fluspect_mscope()  ->  Mb, Mf  (excitation-emission matrices)
+   ebal()              ->  eta   (per-layer fluorescence yield)
+                                  \
+                                   -->  rtmf()  ->  TOC fluorescence radiance/flux
+
 .. automodule:: scopeinpython.rtmf
    :members:
    :undoc-members:
