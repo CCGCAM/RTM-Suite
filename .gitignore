@@ -41,3 +41,7 @@ toUpload/
 # scratch output, not meant to live in repo history
 ToolsRTM_*.log
 SCOPEinR_*.log
+
+# Old standalone reference scripts kept locally for comparison, not part
+# of the RTM-Suite package/tutorial set
+To-CheckCodes/
