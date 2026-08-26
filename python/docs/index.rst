@@ -12,6 +12,12 @@ here has been numerically verified against the original R package (see
 what the R code does. New to what ``N``, ``Cab``, ``LIDFa``, ``Vcmax25``,
 or any other trait actually means? See the :doc:`t02-parameters-traits` first.
 
+New here? `Python tutorials overview <../tutorials-python.html>`_ is a
+five-minute visual map of all 20 chapters below (a real figure from
+each, grouped by topic) — this page is the detailed version, and the
+:doc:`toolsrtm/index`/:doc:`scopeinpython/index` reference pages have
+exact function signatures once you know which one you need.
+
 .. toctree::
    :maxdepth: 1
    :caption: LEARN -- I. Fundamentals & RTM Simulation

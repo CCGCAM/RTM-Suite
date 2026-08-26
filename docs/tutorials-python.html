@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python tutorials overview — RTM-Suite</title>
+<style>
+  :root { --brand:#0f3d5c; --brand-light:#1a6ea8; --text-muted:#5c6b76; --border-soft:#e1e7ea; --bg-light:#f5f8fa; --radius-lg:14px; --radius-sm:10px; --card-shadow:0 1px 3px rgba(15,61,92,0.08); }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; color: #1c2b33; background: #fff; line-height: 1.5; }
+  .navbar { position: sticky; top: 0; z-index: 999; background: var(--brand); color: #fff; }
+  .nav-container { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .nav-logo { font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+  .nav-logo span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; }
+  .nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
+  .nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
+  .nav-links a:hover, .nav-links a.active { opacity: 1; }
+  .nav-links a.active { border-bottom: 2px solid #fff; }
+  .nav-cta { background: #2bb3a3; color: #fff !important; opacity: 1 !important; padding: 6px 16px; border-radius: 999px; font-weight: 600; transition: background 0.2s, transform 0.15s; }
+  .nav-cta:hover { background: #23998b; transform: translateY(-1px); }
+  .nav-toggle { display: none; background: none; border: 1px solid rgba(255,255,255,0.5); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 18px; line-height: 1; cursor: pointer; }
+  @media (max-width: 900px) {
+    .nav-toggle { display: block; }
+    .nav-links { display: none; width: 100%; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 0 16px; }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 8px 4px; width: 100%; }
+    .nav-links a.nav-cta { width: auto; margin-top: 6px; }
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 80px; }
+  a { color: var(--brand-light); }
+  h1 { font-size: 28px; margin: 0 0 8px; color: var(--brand); }
+  .subtitle { color: var(--text-muted); font-size: 15px; max-width: 780px; margin-bottom: 22px; }
+  h2 { font-size: 21px; color: var(--brand); margin: 46px 0 6px; scroll-margin-top: 76px; }
+  h2 .kicker { display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-light); margin-bottom: 3px; }
+  .desc { color: var(--text-muted); font-size: 14px; max-width: 780px; margin-bottom: 18px; }
+  .card { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); padding: 14px; margin-bottom: 10px; }
+  .card img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  .card .cap { font-size: 12px; color: var(--text-muted); padding: 8px 4px 2px; }
+  .shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 4px; font-size: 13.5px; }
+  th, td { text-align: left; padding: 7px 12px; border-bottom: 1px solid var(--border-soft); }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+  td:first-child { color: var(--text-muted); width: 34px; }
+  td a.py-link { font-size: 12px; color: var(--text-muted); margin-left: 8px; white-space: nowrap; }
+  .back { display: inline-block; margin-bottom: 24px; font-size: 13px; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+  .toc a { display: inline-block; background: var(--bg-light); border: 1px solid var(--border-soft); border-radius: 999px; padding: 6px 14px; font-size: 13px; color: var(--brand); text-decoration: none; }
+  .toc a:hover { border-color: var(--brand-light); }
+  .print-hint { font-size: 12px; color: var(--text-muted); margin: 4px 0 0; }
+  @media print {
+    .navbar, .back, .toc, .print-hint { display: none; }
+    .wrap { padding: 0; max-width: none; }
+    h2 { break-before: page; }
+    .card { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html#packages">Packages</a>
+      <a href="index.html#install">Install</a>
+      <a href="index.html#docs">Documentation</a>
+      <a href="index.html#apps">Apps</a>
+      <a href="index.html#tutorials">Tutorials</a>
+      <a href="index.html#examples">Examples</a>
+      <a href="comparison.html">R vs Python</a>
+      <a href="index.html#related">R Ecosystem</a>
+      <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
+    </nav>
+  </div>
+</header>
+<script>
+  (function () {
+    var toggle = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    if (!toggle || !links) return;
+    toggle.addEventListener('click', function () {
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+</script>
+
+<div class="wrap">
+  <a class="back" href="index.html#tutorials">&larr; RTM-Suite tutorials</a>
+  <h1>Python tutorials overview</h1>
+  <p class="subtitle">A 20-chapter, Python-first learning path through <code>toolsrtm</code> and <code>scopeinpython</code> -- from a first simulation to a real Sentinel-2 trait map. Every chapter follows the same template (concept, runnable code, real output figure, scientific interpretation) and every number/figure below was produced by actually executing the documented code -- not written by hand. This page is the five-minute visual map; the <a href="python/index.html">Python documentation</a> is where each chapter lives in full, and the <a href="python/toolsrtm/index.html">API reference</a> has exact function signatures.</p>
+  <p class="print-hint">Tip: use your browser's Print &rarr; Save as PDF to keep an offline copy of this page.</p>
+
+  <div class="toc">
+    <a href="#part1">I. Fundamentals &amp; RTM Simulation</a>
+    <a href="#part2">II. Simulation to Observations</a>
+    <a href="#part3">III. Spectra to Traits</a>
+    <a href="#part4">IV. Real Earth Observation</a>
+  </div>
+
+  <h2 id="part1"><span class="kicker">Chapters 01&ndash;06</span>I. Fundamentals &amp; RTM Simulation</h2>
+  <p class="desc">A first simulation in minutes, what every trait means, then all four model families -- leaf, canopy, soil/atmosphere, and SCOPE -- each run, plotted, and interpreted on real output.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="python/_images/t03_leaf_model_comparison.png" alt="PROSPECT-D vs PROSPECT-PRO vs LIBERTY leaf reflectance and transmittance"><div class="cap">Three leaf models, same traits: PROSPECT-D/PRO agree, LIBERTY (needle) diverges (Ch. 03)</div></div>
+    <div class="card"><img src="python/_images/t04_canopy_model_comparison.png" alt="fourSAIL vs fourSAIL2 vs INFORM TOC reflectance"><div class="cap">fourSAIL vs. fourSAIL2 vs. INFORM, same leaf and LAI (Ch. 04)</div></div>
+    <div class="card"><img src="python/_images/scope_full.png" alt="Full SCOPE TOC reflectance and emitted SIF spectrum"><div class="cap">SCOPE: reflectance and emitted SIF from one coupled simulation (Ch. 06)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Chapter</th><th></th></tr>
+    <tr><td>01</td><td><a href="python/t01-getting-started.html">Getting Started</a></td><td></td></tr>
+    <tr><td>02</td><td><a href="python/t02-parameters-traits.html">Parameters &amp; Traits</a></td><td></td></tr>
+    <tr><td>03</td><td><a href="python/t03-leaf-models.html">Leaf Radiative Transfer Models</a></td><td></td></tr>
+    <tr><td>04</td><td><a href="python/t04-canopy-models.html">Canopy Radiative Transfer Models</a></td><td></td></tr>
+    <tr><td>05</td><td><a href="python/t05-soil-atmosphere.html">Soil &amp; Atmosphere</a></td><td></td></tr>
+    <tr><td>06</td><td><a href="python/t06-scope.html">SCOPE</a></td><td></td></tr>
+  </table>
+
+  <h2 id="part2"><span class="kicker">Chapters 07&ndash;10</span>II. From Simulation to Observations</h2>
+  <p class="desc">How the models chain together into real pipelines, resampling onto real sensor bands (with the actual measured Sentinel-2A response curves, not idealized shapes), spectral indices, and a quantified, wavelength-resolved sensitivity analysis.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="python/_images/t08_sensor_srf_convolution.png" alt="Sentinel-2A spectral response functions and resulting convolved band reflectances"><div class="cap">Real, measured Sentinel-2A response curves + resulting band values (Ch. 08)</div></div>
+    <div class="card"><img src="python/_images/t09_indices_vs_lai.png" alt="NDVI, MSAVI, and red-edge position vs LAI"><div class="cap">NDVI's real saturation above LAI~4, vs. MSAVI's gentler response (Ch. 09)</div></div>
+    <div class="card"><img src="python/_images/t10_sensitivity_heatmap.png" alt="Wavelength x trait sensitivity heatmap"><div class="cap">Which trait dominates at each wavelength -- Cab (VIS), EWT+LMA (SWIR) (Ch. 10)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Chapter</th><th></th></tr>
+    <tr><td>07</td><td><a href="python/t07-building-workflows.html">Building RTM Workflows</a></td><td></td></tr>
+    <tr><td>08</td><td><a href="python/t08-sensor-simulation.html">Sensor Simulation</a></td><td></td></tr>
+    <tr><td>09</td><td><a href="python/t09-spectral-indices.html">Spectral Indices</a></td><td></td></tr>
+    <tr><td>10</td><td><a href="python/t10-sensitivity-analysis.html">Sensitivity Analysis</a></td><td></td></tr>
+  </table>
+
+  <h2 id="part3"><span class="kicker">Chapters 11&ndash;15</span>III. From Spectra to Traits</h2>
+  <p class="desc">Building a realistic (1000-row) training LUT, then three genuinely different ways to invert it: LUT matching, machine learning, and deep learning -- the DL chapter shows a real, successful fit (R&sup2;=0.95, healthy training/validation loss curves, early stopping), not a broken demo.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="python/_images/t11_lut_distributions.png" alt="Cab Gaussian and LAI Uniform distributions, and Cab vs Car constrained scatter"><div class="cap">Realistic trait sampling: distributions plus real trait co-variation (Ch. 11)</div></div>
+    <div class="card"><img src="python/_images/t12_lut_inversion.png" alt="Observed spectrum vs best-matching LUT rows, and retrieved vs true Cab"><div class="cap">LUT matching: observed spectrum against its best-matching neighbours (Ch. 12)</div></div>
+    <div class="card"><img src="python/_images/t14_dl_inversion.png" alt="Dense neural network training/validation loss curve and predicted vs true Cab"><div class="cap">A dense network that genuinely learns -- real loss curve, R&sup2;=0.95 (Ch. 14)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Chapter</th><th></th></tr>
+    <tr><td>11</td><td><a href="python/t11-lut-generation.html">LUT Generation</a></td><td></td></tr>
+    <tr><td>12</td><td><a href="python/t12-lut-inversion.html">LUT Inversion</a></td><td></td></tr>
+    <tr><td>13</td><td><a href="python/t13-machine-learning-inversion.html">Machine-Learning Inversion</a></td><td></td></tr>
+    <tr><td>14</td><td><a href="python/t14-deep-learning-inversion.html">Deep-Learning Inversion</a></td><td></td></tr>
+    <tr><td>15</td><td><a href="python/t15-choosing-inversion-strategy.html">Choosing an Inversion Strategy</a></td><td></td></tr>
+  </table>
+
+  <h2 id="part4"><span class="kicker">Chapters 16&ndash;20</span>IV. Real Earth Observation</h2>
+  <p class="desc">Retrieving a live Sentinel-2 scene via STAC, preparing it properly (including a real, verified case where naive cloud masking fails and a working fix), applying a trained inversion model spatially, and a flagship end-to-end script from raw RTM parameters to a real, cross-checked trait map.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="python/_images/t17_masking.png" alt="True color Sentinel-2 image and a brightness-based cloud flag"><div class="cap">A naive mask misses the real cloud; a verified brightness heuristic catches it (Ch. 17)</div></div>
+    <div class="card"><img src="python/_images/t18_python_capstone.png" alt="REP index map and retrieved Cab map over the real Loobos Sentinel-2 scene"><div class="cap">Retrieved Cab and an independent index (REP), same real forest gap (Ch. 18&ndash;20)</div></div>
+    <div class="card"><img src="python/_images/t11_python_capstone.png" alt="True color, NDVI, retrieved Actot map, and seasonal time series over real Speulderbos Sentinel-2 data"><div class="cap">NDVI vs. retrieved net photosynthesis, tracking across a real season (Ch. 19)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Chapter</th><th></th></tr>
+    <tr><td>16</td><td><a href="python/t16-retrieving-eo-data.html">Retrieving Real EO Data</a></td><td></td></tr>
+    <tr><td>17</td><td><a href="python/t17-preparing-eo-observations.html">Preparing EO Observations</a></td><td></td></tr>
+    <tr><td>18</td><td><a href="python/t18-applying-inversion-spatially.html">Applying an Inversion Model Spatially</a></td><td></td></tr>
+    <tr><td>19</td><td><a href="python/t19-trait-maps-uncertainty.html">Trait Maps &amp; Uncertainty</a></td><td></td></tr>
+    <tr><td>20</td><td><a href="python/t20-end-to-end-workflow.html"><strong>End-to-End Workflow</strong> (flagship)</a></td><td></td></tr>
+  </table>
+
+  <p style="margin-top: 40px; font-size: 12.5px; color: var(--text-muted);">This is a curated visual subset of the full 20-chapter path -- the complete <a href="python/index.html">Python documentation</a> has every chapter in full, each with runnable code, real output, and a scientific interpretation, and the <a href="python/toolsrtm/index.html">toolsrtm</a> / <a href="python/scopeinpython/index.html">scopeinpython</a> API references have exact function signatures. Using R? See the equivalent <a href="tutorials-overview.html">R tutorials overview</a>.</p>
+</div>
+</body>
+</html>
