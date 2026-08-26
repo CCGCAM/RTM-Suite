@@ -140,7 +140,7 @@ Which one should I use?
   and only after confirming ML doesn't already do the job -- it usually
   does.
 
-Spectral indices (:doc:`spectral_indices`) are a fourth, even simpler
+Spectral indices (:doc:`t09-spectral-indices`) are a fourth, even simpler
 option worth trying first for a quick sanity check: rank indices by
 correlation with the trait, and see how far a single-formula retrieval
 already gets before reaching for any of the three methods above.

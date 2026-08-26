@@ -28,9 +28,10 @@ or any other trait actually means? See the :doc:`t02-parameters-traits` first.
    :maxdepth: 1
    :caption: LEARN -- II. From Simulation to Observations
 
-   workflows
-   sensor_simulation
-   spectral_indices
+   t07-building-workflows
+   t08-sensor-simulation
+   t09-spectral-indices
+   t10-sensitivity-analysis
 
 .. toctree::
    :maxdepth: 1

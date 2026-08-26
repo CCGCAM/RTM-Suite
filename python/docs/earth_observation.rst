@@ -37,7 +37,7 @@ useful over a month where any single date might be cloudy).
 
 Sentinel-2 L2A reflectance from STAC is scaled by 10000 (integer storage);
 rescale to `[0, 1]` before feeding it to anything trained on simulated
-reflectance (:doc:`sensor_simulation`'s ``spectral_convolution_srf``
+reflectance (:doc:`t08-sensor-simulation`'s ``spectral_convolution_srf``
 already returns `[0, 1]`, so both sides need to match):
 
 .. code-block:: python
@@ -65,7 +65,7 @@ Every pixel, through the same model trained in :doc:`trait_inversion`:
 A single ``.predict()`` call gives a point estimate per pixel, not
 uncertainty -- two practical ways to get a sense of it without a fully
 Bayesian model: compare the map against an independent spectral index
-computed on the same real bands (:doc:`spectral_indices`; the two should
+computed on the same real bands (:doc:`t09-spectral-indices`; the two should
 agree spatially if the retrieval is trustworthy), or, for
 ``algorithm="RF"``, use the per-tree prediction spread
 (``fit.model.estimators_``) as a rough per-pixel confidence proxy.
@@ -85,5 +85,5 @@ What's next
 -----------------
 
 - :doc:`trait_inversion` -- training the model applied spatially above.
-- :doc:`sensor_simulation` -- matching simulated-spectrum band
+- :doc:`t08-sensor-simulation` -- matching simulated-spectrum band
   definitions to what STAC actually returns.

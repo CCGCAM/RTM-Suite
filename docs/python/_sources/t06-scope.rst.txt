@@ -152,7 +152,7 @@ Common mistakes
 Next
 --------
 
-:doc:`workflows` -- Part II starts here: how the models
+:doc:`t07-building-workflows` -- Part II starts here: how the models
 from Chapters 03-06 chain together into the four standard simulation
 pipelines used throughout the rest of this site.
 

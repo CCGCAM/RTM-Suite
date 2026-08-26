@@ -3,7 +3,7 @@ Radiative Transfer Models
 
 Every function on this site belongs to one of a small number of named
 physical models. This page is what each one *is* -- scale, what it
-simulates, and how it differs from its siblings -- before :doc:`workflows`
+simulates, and how it differs from its siblings -- before :doc:`t07-building-workflows`
 shows how they chain together and :doc:`examples` runs them.
 
 At a glance
@@ -241,7 +241,7 @@ distinct components, chained together:
 What's next
 -----------------
 
-- :doc:`workflows` -- how these models chain together into the four
+- :doc:`t07-building-workflows` -- how these models chain together into the four
   standard simulation pipelines.
 - :doc:`t02-parameters-traits` -- what every input trait to these models means, its
   unit, and its realistic range.

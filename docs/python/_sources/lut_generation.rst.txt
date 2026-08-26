@@ -10,7 +10,7 @@ raw material every method on :doc:`trait_inversion` needs: rank spectral
 indices by correlation with a trait, train an ML/DL model, or match a
 real observation against simulated neighbours. Building one well is
 mostly about *how* traits are sampled, not the RTM call itself (that part
-is just :doc:`workflows`, called once per row).
+is just :doc:`t07-building-workflows`, called once per row).
 
 Parameter distributions
 ----------------------------
@@ -65,7 +65,7 @@ don't vary that way -- chlorophyll and carotenoids, or ``Cab`` and
 RTM simulation: from a trait table to a spectral LUT
 ----------------------------------------------------------
 
-Once the trait table exists, run the chosen model (:doc:`workflows`) once
+Once the trait table exists, run the chosen model (:doc:`t07-building-workflows`) once
 per row -- the pattern every ML/DL example on this site uses:
 
 .. code-block:: python
