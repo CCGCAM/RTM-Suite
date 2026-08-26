@@ -32,7 +32,8 @@ code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 0.
 .nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
 .nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
 .nav-links a:hover { opacity: 1; }
-.nav-cta { border: 1px solid #fff; padding: 6px 16px; border-radius: 999px; font-weight: 600; }
+.nav-cta { background: var(--accent); color: #fff !important; opacity: 1 !important; padding: 6px 16px; border-radius: 999px; font-weight: 600; transition: background 0.2s, transform 0.15s; }
+.nav-cta:hover { background: #23998b; transform: translateY(-1px); }
 
 .hero { padding: 70px 24px 60px; background: radial-gradient(circle at top left, #e7f4f7 0, #ffffff 55%); }
 .hero-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
