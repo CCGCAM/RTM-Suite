@@ -39,7 +39,25 @@ path_input <- system.file("input", package = "SCOPEinR")
 inputLUT <- read.table(file.path(path_input, "inputs_SCOPE.csv"), header = TRUE, sep = ",")
 ```
 
-## 1. Leaf biochemistry (PROSPECT-PRO / Fluspect-Cx traits)
+## 1. SCOPE's models at a glance
+
+`get.SCOPE()` isn't one model -- it's five distinct components chained
+together, each solving a different piece of physics, in this order:
+
+| Component | What it does | Depends on |
+|---|---|---|
+| **Fluspect-Cx (SCOPE variant)** (`getFluspect.Cx.SCOPE()`) | Leaf optics: reflectance/transmittance + fluorescence excitation-emission matrices, per canopy layer (mSCOPE multi-layer wrapper: `get.fluspect_mSCOPE()`). Same PROSPECT/Fluspect physics as ToolsRTM's leaf models (see its [Parameter & Trait Glossary](../../toolsrtm/articles/parameter-glossary.html#models-at-a-glance)) -- just the SCOPE-specific wrapper. | Leaf biochemistry traits (Section 2) |
+| **RTMo** (`get.RTMo()`) | Optical top-of-canopy BRDF -- physically the same turbid-medium idea as fourSAIL, re-implemented to plug into the layers below. Stops at reflectance; assumes no temperature yet. | Fluspect-Cx output + canopy structure (Section 5) + BSM soil |
+| **ebal** (`get.ebal()`) | The energy balance: **iteratively solves** leaf and soil temperature so absorbed radiation balances sensible + latent heat, calling the biochemistry model at every candidate temperature. This is what makes SCOPE fundamentally different from PROSAIL/SPART -- temperature is solved for, not assumed. | RTMo output + aerodynamic resistances (Section 7) + meteorology (Section 8) |
+| **biochemical** (`get.biochemical()`) | Leaf-level photosynthesis (Farquhar/Collatz) and fluorescence yield, given a leaf micro-environment -- called repeatedly by `ebal` at each candidate temperature, not run standalone. | Photosynthesis traits (Section 3) + NPQ traits (Section 4) |
+| **RTMf** (`get.RTMf()`) / **RTMz** (`get.RTMz()`, optional) | Canopy-level fluorescence radiance/flux, and a small zeaxanthin (photoprotection) correction to the TOC spectrum -- both derived from the already-solved energy balance, not computed independently. | ebal output + Fluspect-Cx's fluorescence matrices |
+
+`get.SCOPE()` runs all five for one LUT row and returns everything
+together (`data.rad` reflectance/fluorescence, `data.fluxes` energy
+balance/photosynthesis). The rest of this page documents the ~65 input
+variables these five components read, grouped by which one consumes them.
+
+## 2. Leaf biochemistry (PROSPECT-PRO / Fluspect-Cx traits)
 
 These are the *same* PROSPECT/Fluspect leaf traits ToolsRTM's own
 [Parameter & Trait Glossary](../../toolsrtm/articles/parameter-glossary.html)
@@ -61,7 +79,7 @@ thermal-infrared (~8-14 micron) reflectance/transmittance -- leaves are
 close to blackbody in the TIR, so these stay near zero and are rarely
 varied.
 
-## 2. Photosynthesis (Farquhar/Collatz + Ball-Berry)
+## 3. Photosynthesis (Farquhar/Collatz + Ball-Berry)
 
 The traits `scopeinpython.biochemical`/`SCOPEinR::get.biochemical()`
 actually consume, at every candidate leaf temperature during the
@@ -93,10 +111,10 @@ knitr::kable(inputLUT[inputLUT$variable %in% photo_vars,
 - **`Rdparam`** -- dark (mitochondrial) respiration as a fraction of
   `Vcmax25` (`Rd = Rdparam * Vcmax25`).
 
-## 3. Fluorescence / non-photochemical quenching (NPQ)
+## 4. Fluorescence / non-photochemical quenching (NPQ)
 
 The van der Tol et al. (2014) fluorescence-yield model traits, on top of
-the leaf's own `fqe` (Section 1):
+the leaf's own `fqe` (Section 2):
 
 ```{r fluo-table, echo = FALSE}
 fluo_vars <- c("Kn0", "Knalpha", "Knbeta", "Tyear", "beta", "kNPQs", "qLs", "stressfactor", "spectrum")
@@ -123,7 +141,7 @@ knitr::kable(inputLUT[inputLUT$variable %in% fluo_vars,
   fluorescence/optical parameter set to use; leave at the default `1`
   unless told otherwise.
 
-## 4. Canopy structure
+## 5. Canopy structure
 
 ```{r canopy-table, echo = FALSE}
 canopy_vars <- c("LAI", "hc", "LIDFa", "LIDFb", "TypeLidf", "leafwidth", "hspot", "Cv", "crowndiameter")
@@ -137,7 +155,7 @@ traits ToolsRTM's glossary covers (Sections 2-3 there, including the
 named-LIDF-shape table). SCOPE-specific additions:
 
 - **`hc`** -- canopy height, needed for the aerodynamic-resistance chain
-  (Section 6) that plain optical-only fourSAIL never needs.
+  (Section 7) that plain optical-only fourSAIL never needs.
 - **`leafwidth`** -- characteristic leaf width, used in both the
   aerodynamic boundary-layer resistance and (implicitly) the hot-spot
   geometry.
@@ -145,7 +163,7 @@ named-LIDF-shape table). SCOPE-specific additions:
 - **`crowndiameter`** -- used together with `Cv` for a clumping
   correction, the SCOPE analogue of INFORM's `cd`.
 
-## 5. Soil
+## 6. Soil
 
 ```{r soil-table, echo = FALSE}
 soil_vars <- c("rss", "rs_thermal", "cs", "rhos", "lambdas", "SMC", "BSMBrightness", "BSMlat", "BSMlon")
@@ -155,7 +173,7 @@ knitr::kable(inputLUT[inputLUT$variable %in% soil_vars,
 ```
 
 `SMC`, `BSMBrightness`, `BSMlat`, `BSMlon` are BSM's soil-reflectance
-traits -- see ToolsRTM's glossary Section 5 (shared with SPART) for what
+traits -- see ToolsRTM's glossary Section 6 (shared with SPART) for what
 each one physically means. SCOPE-specific soil-thermal additions:
 
 - **`rss`** -- soil (sub-surface) resistance to evaporation.
@@ -165,7 +183,7 @@ each one physically means. SCOPE-specific soil-thermal additions:
   density, and thermal conductivity, feeding the soil heat-flux/
   temperature part of the energy balance (`ebal`).
 
-## 6. Aerodynamics / energy-balance resistances
+## 7. Aerodynamics / energy-balance resistances
 
 Feeds `scopeinpython.thermal`/`SCOPEinR::get.resistances()`; not needed
 at all for optical-only runs (`run_rtmo()` alone), only once `ebal()`
@@ -183,7 +201,7 @@ normally *derived* from canopy height via `get_zo_and_d()` rather than
 hand-set -- the fixed defaults here are placeholders, not values meant
 to be sampled independently of `hc`.
 
-## 7. Meteorology, geometry, and site/time
+## 8. Meteorology, geometry, and site/time
 
 ```{r meteo-table, echo = FALSE}
 meteo_vars <- c("Rin", "Rli", "Ta", "p", "ea", "RH", "u", "Ca", "Oa",
@@ -211,7 +229,7 @@ knitr::kable(inputLUT[inputLUT$variable %in% meteo_vars,
   location and simulation period, used when driving SCOPE from a real
   time series (Tutorial 06) rather than one fixed LUT row.
 
-## 8. A real LUT: sampling and inspecting a few traits
+## 9. A real LUT: sampling and inspecting a few traits
 
 `getLUT.SCOPE()` (see [Getting LUTs for
 SCOPE](getting-luts-scope.html) for the full mechanics) reads each

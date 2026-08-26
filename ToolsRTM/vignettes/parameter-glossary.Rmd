@@ -25,7 +25,45 @@ stop: one place with every input's meaning, units, typical range, and
 which model(s) actually use it. It's a reference to come back to, not a
 tutorial to read start to finish.
 
-## 1. Leaf traits
+## 1. Models at a glance
+
+Before the parameter tables: what each named model actually *is*, and how
+it differs from its siblings. Section 7 below cross-references every
+model against every trait it reads.
+
+### Leaf models -- what goes into a canopy simulation's leaf optics
+
+| Model | What it represents | How it differs from the others |
+|---|---|---|
+| **PROSPECT-D** (`prospect_D`, bundled inside `foursail(..., LeafModel = "PROSPECT-D")`) | The reference leaf model: a stack of `N` absorbing/scattering plates, pigments (`Cab`/`Car`/`Anth`) + water (`EWT`) + one lumped dry-matter term (`LMA`). | The default -- broadleaf, no fluorescence, dry matter as a single term. |
+| **PROSPECT-PRO** (`prospect_PRO()`) | Same physics as PROSPECT-D, but splits `LMA` into `Prot` (protein) + `CBC` (cellulose+lignin) -- useful when those two dry-matter pools matter separately (e.g. nitrogen/protein retrieval). | Only differs from PROSPECT-D in how dry matter is parameterized. |
+| **Fluspect-B** (`getFluspect.B()`) | PROSPECT-D's optics *plus* chlorophyll-fluorescence excitation-emission matrices (`MbI`/`MbII`) -- needed wherever solar-induced fluorescence (SIF) is simulated. | Adds fluorescence on top of PROSPECT-D; reflectance/transmittance themselves are near-identical to PROSPECT-D. |
+| **Fluspect-Cx** (`getFluspect.Cx()`) | Fluspect-B plus a `Cx` (xanthophyll de-epoxidation / NPQ) term, letting fluorescence yield respond to photoprotection state, not just pigment content. | The only leaf model with a photoprotection (`Cx`) term; what SCOPE's own leaf-optics step uses internally. |
+| **LIBERTY** (`liberty()`) | A structurally different model built for conifer needles (Dawson et al. 1998) -- explicit cell diameter/intercellular air space instead of PROSPECT's Fresnel-refraction layer. | Not a PROSPECT variant at all; needle-specific anatomy, a genuinely different internal structure, not just different defaults. |
+
+### Canopy models -- what turns leaf optics into a canopy-level BRDF
+
+| Model | What it represents | How it differs from the others |
+|---|---|---|
+| **fourSAIL** (`foursail()`) | The classic PROSAIL turbid-medium canopy: a single, statistically homogeneous "cloud" of leaves at a given LAI and angle distribution -- no explicit 3D structure. | The reference/default; single-layer, single leaf-biochemistry profile. |
+| **fourSAIL2** (`foursail2()`) | Two-layer canopy (a green layer + a brown/senescent layer, `fraction_brown`-weighted) -- e.g. a canopy with visible dead/dry material mixed in with live foliage. | Same turbid-medium idea as fourSAIL, but two vertically-stacked layers instead of one. |
+| **INFORM** (`inform()`) | Forest-stand extension (Atzberger): explicit tree crowns (stem density, crown diameter, height) over an understorey + background, rather than one homogeneous canopy. | The only one of the three with real gap/shadow geometry -- produces visibly lower reflectance than fourSAIL at the same LAI, matching a discontinuous forest stand's real physics. |
+
+### Soil + atmosphere models
+
+| Model | What it represents | How it differs from the others |
+|---|---|---|
+| **MARMIT** (`get.marmit.rsoil()`) | Starts from a real *dry* reference soil spectrum and adds a physically modelled liquid-water film, so the same soil can be simulated at any moisture level. | The only soil model driven by an actual measured reference spectrum rather than empirical shape parameters. |
+| **BSM** (Brightness-Shape-Moisture, used inside `SPART()`) | Builds a soil spectrum from three empirical parameters (`BSMBrightness`, `BSMlat`, `BSMlon`) plus a wetting term -- no reference spectrum needed. | Purely parametric, not spectrum-driven -- SPART's own soil model. |
+| **SMAC** (used inside `spart_toa()`) | Atmospheric radiative transfer (gas absorption + aerosol scattering) that converts top-of-canopy reflectance into what a real satellite sensor would measure above the atmosphere. | Not a soil or canopy model at all -- the atmosphere step, only relevant when going all the way to top-of-atmosphere (TOA). |
+| **SPART** (`SPART()`/`spart_toa()`) | Not a new physical model, but the full chain: BSM soil -> fourSAIL canopy -> SMAC atmosphere -> TOA reflectance, already resampled to a real sensor's bands in one call. | The end-to-end pipeline; see Tutorial 03. |
+
+SCOPE builds a fully independent, larger model on top of this same
+leaf-optics/canopy-BRDF idea -- energy balance, photosynthesis and
+fluorescence coupled together, not just reflectance -- covered in its own
+[Trait & LUT Glossary](../../scopeinr/articles/trait-glossary.html).
+
+## 2. Leaf traits
 
 All five leaf models (`prospect_D` -- bundled inside `foursail(...,
 LeafModel = "PROSPECT-D")`, `prospect_PRO()`, `liberty()`,
@@ -57,7 +95,7 @@ row is a modelling choice, not something the package validates for you
 (`getMLmodel()`'s R version silently keeps whichever the leaf-model
 branch you called actually reads).
 
-### 1.1 LIBERTY-only structural traits
+### 2.1 LIBERTY-only structural traits
 
 `liberty()` targets conifer needles, not broadleaves, and needs a
 different structural parameterization -- no `N`/`alpha` Fresnel-optics
@@ -73,7 +111,7 @@ layer, but explicit cell geometry instead:
 | `lign.cell` | Lignin+cellulose cell-wall absorption term (LIBERTY's own dry-matter proxy, distinct from PROSPECT's `LMA`/`CBC`). | unitless | 1 -- 3 |
 | `Nitrogen` | Foliar nitrogen content, scaling protein-related absorption. | relative units | ~1 (typical default) |
 
-## 2. Canopy structure and viewing geometry
+## 3. Canopy structure and viewing geometry
 
 Once a leaf model produces reflectance/transmittance, `foursail()`,
 `foursail2()`, and `inform()` turn it into a canopy-level BRF. All three
@@ -83,14 +121,14 @@ share the leaf-angle-distribution and geometry parameters below;
 | Symbol | Meaning | Units | Typical range | Used by |
 |---|---|---|---|---|
 | `LAI` | Leaf area index -- total one-sided leaf area per unit ground area. The single strongest canopy-level driver of NIR-plateau height and visible-band saturation. | m2/m2 | 0.1 -- 8 (0 = bare soil) | foursail, foursail2, inform |
-| `LIDFa`, `LIDFb` | Leaf inclination distribution function shape parameters (Verhoef 1998's two-parameter system, `TypeLidf = 1`). `LIDFa` mainly sets the *average* leaf angle (from -1 = horizontal/planophile to +1 = vertical/erectophile); `LIDFb` adjusts the distribution's bimodality/spread. See Section 3 for the canonical named shapes. | unitless, each in [-1, 1] | see Section 3 table | foursail, foursail2, inform |
-| `TypeLidf` | Which LIDF parameterization `LIDFa`/`LIDFb` are read as: `1` = Verhoef's two-parameter system (Section 3); `2` = ellipsoidal, in which case `LIDFa` alone is the mean leaf angle in **degrees** (0-90) and `LIDFb` is ignored. | `1` or `2` | -- | foursail, foursail2, inform |
+| `LIDFa`, `LIDFb` | Leaf inclination distribution function shape parameters (Verhoef 1998's two-parameter system, `TypeLidf = 1`). `LIDFa` mainly sets the *average* leaf angle (from -1 = horizontal/planophile to +1 = vertical/erectophile); `LIDFb` adjusts the distribution's bimodality/spread. See Section 4 for the canonical named shapes. | unitless, each in [-1, 1] | see Section 4 table | foursail, foursail2, inform |
+| `TypeLidf` | Which LIDF parameterization `LIDFa`/`LIDFb` are read as: `1` = Verhoef's two-parameter system (Section 4); `2` = ellipsoidal, in which case `LIDFa` alone is the mean leaf angle in **degrees** (0-90) and `LIDFb` is ignored. | `1` or `2` | -- | foursail, foursail2, inform |
 | `hspot` | Hot-spot size parameter -- leaf width divided by canopy height, controlling how sharply reflectance peaks when the sun and viewer are aligned (no visible shadows). | unitless | 0.01 -- 0.5 | foursail, foursail2, inform |
 | `tts` | Sun zenith angle. | degrees | 0 -- 90 | foursail, foursail2, inform, spart |
 | `tto` | View (sensor) zenith angle. | degrees | 0 -- 90 (0 = nadir) | foursail, foursail2, inform, spart |
 | `psi` | Relative azimuth between sun and viewer. | degrees | 0 -- 180 | foursail, foursail2, inform, spart |
 
-### 2.1 `foursail2()`-only: two-layer (green + brown) canopy
+### 3.1 `foursail2()`-only: two-layer (green + brown) canopy
 
 | Symbol | Meaning | Units | Typical range |
 |---|---|---|---|
@@ -99,7 +137,7 @@ share the leaf-angle-distribution and geometry parameters below;
 | `Cv` | Vertical clumping/coverage factor for the canopy. | unitless | ~0.2 -- 5 |
 | `Zeta` | Structure factor controlling the relative vertical placement of the two layers. | unitless | 0 -- 1 |
 
-### 2.2 `inform()`-only: explicit forest-stand geometry
+### 3.2 `inform()`-only: explicit forest-stand geometry
 
 | Symbol | Meaning | Units | Typical range |
 |---|---|---|---|
@@ -113,7 +151,7 @@ share the leaf-angle-distribution and geometry parameters below;
 only -- `LAIu` is added as a separate, independently-varying understorey
 term, not a component subtracted from `LAI`.
 
-## 3. Named leaf-angle distributions
+## 4. Named leaf-angle distributions
 
 `LIDFa`/`LIDFb` rarely need to be hand-tuned: six canonical shapes cover
 most real canopies (from `dladgen()`'s own documentation, `TypeLidf = 1`):
@@ -148,7 +186,7 @@ erectophile at high angles (vertical leaves), and spherical spreads
 smoothly across the whole range -- exactly the qualitative behaviour the
 names promise.
 
-## 4. Soil: MARMIT (dry -> wet)
+## 5. Soil: MARMIT (dry -> wet)
 
 `get.marmit.rsoil()` turns a dry reference soil spectrum into a wet one
 (Tutorial 03's soil-brightness section, Tutorial 16 in full):
@@ -159,7 +197,7 @@ names promise.
 | `L` | Water-film optical thickness -- how much liquid water coats the soil surface. `L` near 0 is dry; larger `L` is wetter. | cm (thin-film optical path) | 0.001 (dry) -- 0.15+ (wet) |
 | `eps` | Soil surface roughness/optical-path parameter modulating how the water film scatters light. | unitless | 0.05 (dry/smooth) -- 1.0 (wet/rough) |
 
-## 5. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)
+## 6. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)
 
 `SPART()`/`spart_toa()`-family functions (Tutorial 03) use a different
 soil parameterization (BSM, Brightness-Shape-Moisture) plus an
@@ -178,7 +216,7 @@ atmospheric-correction layer (SMAC) that plain `foursail()` doesn't need:
 | `uo3` | Total-column ozone amount. | atm-cm | ~0.3 -- 0.4 |
 | `uh2o` | Total-column water vapour amount. | g/cm2 | ~1 -- 3 |
 
-## 6. Which models actually read which leaf/canopy inputs
+## 7. Which models actually read which leaf/canopy inputs
 
 A single glance at which of this page's traits feed which function --
 useful when assembling one LUT row meant to drive several models at once

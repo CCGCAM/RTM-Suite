@@ -102,7 +102,186 @@ that stop: one place with every input’s meaning, units, typical range,
 and which model(s) actually use it. It’s a reference to come back to,
 not a tutorial to read start to finish.</p>
 <div class="section level2">
-<h2 id="leaf-traits">1. Leaf traits<a class="anchor" aria-label="anchor" href="#leaf-traits"></a>
+<h2 id="models-at-a-glance">1. Models at a glance<a class="anchor" aria-label="anchor" href="#models-at-a-glance"></a>
+</h2>
+<p>Before the parameter tables: what each named model actually
+<em>is</em>, and how it differs from its siblings. Section 7 below
+cross-references every model against every trait it reads.</p>
+<div class="section level3">
+<h3 id="leaf-models-what-goes-into-a-canopy-simulations-leaf-optics">Leaf models – what goes into a canopy simulation’s leaf optics<a class="anchor" aria-label="anchor" href="#leaf-models-what-goes-into-a-canopy-simulations-leaf-optics"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Model</th>
+<th>What it represents</th>
+<th>How it differs from the others</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<strong>PROSPECT-D</strong> (<code>prospect_D</code>, bundled inside
+<code>foursail(..., LeafModel = "PROSPECT-D")</code>)</td>
+<td>The reference leaf model: a stack of <code>N</code>
+absorbing/scattering plates, pigments
+(<code>Cab</code>/<code>Car</code>/<code>Anth</code>) + water
+(<code>EWT</code>) + one lumped dry-matter term (<code>LMA</code>).</td>
+<td>The default – broadleaf, no fluorescence, dry matter as a single
+term.</td>
+</tr>
+<tr class="even">
+<td>
+<strong>PROSPECT-PRO</strong> (<code><a href="../reference/prospect_PRO.html">prospect_PRO()</a></code>)</td>
+<td>Same physics as PROSPECT-D, but splits <code>LMA</code> into
+<code>Prot</code> (protein) + <code>CBC</code> (cellulose+lignin) –
+useful when those two dry-matter pools matter separately
+(e.g. nitrogen/protein retrieval).</td>
+<td>Only differs from PROSPECT-D in how dry matter is
+parameterized.</td>
+</tr>
+<tr class="odd">
+<td>
+<strong>Fluspect-B</strong> (<code><a href="../reference/getFluspect.B.html">getFluspect.B()</a></code>)</td>
+<td>PROSPECT-D’s optics <em>plus</em> chlorophyll-fluorescence
+excitation-emission matrices (<code>MbI</code>/<code>MbII</code>) –
+needed wherever solar-induced fluorescence (SIF) is simulated.</td>
+<td>Adds fluorescence on top of PROSPECT-D; reflectance/transmittance
+themselves are near-identical to PROSPECT-D.</td>
+</tr>
+<tr class="even">
+<td>
+<strong>Fluspect-Cx</strong> (<code><a href="../reference/getFluspect.Cx.html">getFluspect.Cx()</a></code>)</td>
+<td>Fluspect-B plus a <code>Cx</code> (xanthophyll de-epoxidation / NPQ)
+term, letting fluorescence yield respond to photoprotection state, not
+just pigment content.</td>
+<td>The only leaf model with a photoprotection (<code>Cx</code>) term;
+what SCOPE’s own leaf-optics step uses internally.</td>
+</tr>
+<tr class="odd">
+<td>
+<strong>LIBERTY</strong> (<code><a href="../reference/liberty.html">liberty()</a></code>)</td>
+<td>A structurally different model built for conifer needles (Dawson et
+al. 1998) – explicit cell diameter/intercellular air space instead of
+PROSPECT’s Fresnel-refraction layer.</td>
+<td>Not a PROSPECT variant at all; needle-specific anatomy, a genuinely
+different internal structure, not just different defaults.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="canopy-models-what-turns-leaf-optics-into-a-canopy-level-brdf">Canopy models – what turns leaf optics into a canopy-level BRDF<a class="anchor" aria-label="anchor" href="#canopy-models-what-turns-leaf-optics-into-a-canopy-level-brdf"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Model</th>
+<th>What it represents</th>
+<th>How it differs from the others</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<strong>fourSAIL</strong> (<code><a href="../reference/foursail.html">foursail()</a></code>)</td>
+<td>The classic PROSAIL turbid-medium canopy: a single, statistically
+homogeneous “cloud” of leaves at a given LAI and angle distribution – no
+explicit 3D structure.</td>
+<td>The reference/default; single-layer, single leaf-biochemistry
+profile.</td>
+</tr>
+<tr class="even">
+<td>
+<strong>fourSAIL2</strong> (<code><a href="../reference/foursail2.html">foursail2()</a></code>)</td>
+<td>Two-layer canopy (a green layer + a brown/senescent layer,
+<code>fraction_brown</code>-weighted) – e.g. a canopy with visible
+dead/dry material mixed in with live foliage.</td>
+<td>Same turbid-medium idea as fourSAIL, but two vertically-stacked
+layers instead of one.</td>
+</tr>
+<tr class="odd">
+<td>
+<strong>INFORM</strong> (<code><a href="../reference/inform.html">inform()</a></code>)</td>
+<td>Forest-stand extension (Atzberger): explicit tree crowns (stem
+density, crown diameter, height) over an understorey + background,
+rather than one homogeneous canopy.</td>
+<td>The only one of the three with real gap/shadow geometry – produces
+visibly lower reflectance than fourSAIL at the same LAI, matching a
+discontinuous forest stand’s real physics.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="soil-atmosphere-models">Soil + atmosphere models<a class="anchor" aria-label="anchor" href="#soil-atmosphere-models"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Model</th>
+<th>What it represents</th>
+<th>How it differs from the others</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<strong>MARMIT</strong> (<code><a href="../reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code>)</td>
+<td>Starts from a real <em>dry</em> reference soil spectrum and adds a
+physically modelled liquid-water film, so the same soil can be simulated
+at any moisture level.</td>
+<td>The only soil model driven by an actual measured reference spectrum
+rather than empirical shape parameters.</td>
+</tr>
+<tr class="even">
+<td>
+<strong>BSM</strong> (Brightness-Shape-Moisture, used inside
+<code><a href="../reference/SPART.html">SPART()</a></code>)</td>
+<td>Builds a soil spectrum from three empirical parameters
+(<code>BSMBrightness</code>, <code>BSMlat</code>, <code>BSMlon</code>)
+plus a wetting term – no reference spectrum needed.</td>
+<td>Purely parametric, not spectrum-driven – SPART’s own soil
+model.</td>
+</tr>
+<tr class="odd">
+<td>
+<strong>SMAC</strong> (used inside <code>spart_toa()</code>)</td>
+<td>Atmospheric radiative transfer (gas absorption + aerosol scattering)
+that converts top-of-canopy reflectance into what a real satellite
+sensor would measure above the atmosphere.</td>
+<td>Not a soil or canopy model at all – the atmosphere step, only
+relevant when going all the way to top-of-atmosphere (TOA).</td>
+</tr>
+<tr class="even">
+<td>
+<strong>SPART</strong>
+(<code><a href="../reference/SPART.html">SPART()</a></code>/<code>spart_toa()</code>)</td>
+<td>Not a new physical model, but the full chain: BSM soil -&gt;
+fourSAIL canopy -&gt; SMAC atmosphere -&gt; TOA reflectance, already
+resampled to a real sensor’s bands in one call.</td>
+<td>The end-to-end pipeline; see Tutorial 03.</td>
+</tr>
+</tbody>
+</table>
+<p>SCOPE builds a fully independent, larger model on top of this same
+leaf-optics/canopy-BRDF idea – energy balance, photosynthesis and
+fluorescence coupled together, not just reflectance – covered in its own
+<a href="../../scopeinr/articles/trait-glossary.html">Trait &amp; LUT
+Glossary</a>.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="leaf-traits">2. Leaf traits<a class="anchor" aria-label="anchor" href="#leaf-traits"></a>
 </h2>
 <p>All five leaf models (<code>prospect_D</code> – bundled inside
 <code>foursail(..., LeafModel = "PROSPECT-D")</code>,
@@ -257,7 +436,7 @@ package validates for you (<code><a href="../reference/getMLmodel.html">getMLmod
 silently keeps whichever the leaf-model branch you called actually
 reads).</p>
 <div class="section level3">
-<h3 id="liberty-only-structural-traits">1.1 LIBERTY-only structural traits<a class="anchor" aria-label="anchor" href="#liberty-only-structural-traits"></a>
+<h3 id="liberty-only-structural-traits">2.1 LIBERTY-only structural traits<a class="anchor" aria-label="anchor" href="#liberty-only-structural-traits"></a>
 </h3>
 <p><code><a href="../reference/liberty.html">liberty()</a></code> targets conifer needles, not broadleaves, and
 needs a different structural parameterization – no
@@ -328,7 +507,7 @@ proxy, distinct from PROSPECT’s <code>LMA</code>/<code>CBC</code>).</td>
 </div>
 </div>
 <div class="section level2">
-<h2 id="canopy-structure-and-viewing-geometry">2. Canopy structure and viewing geometry<a class="anchor" aria-label="anchor" href="#canopy-structure-and-viewing-geometry"></a>
+<h2 id="canopy-structure-and-viewing-geometry">3. Canopy structure and viewing geometry<a class="anchor" aria-label="anchor" href="#canopy-structure-and-viewing-geometry"></a>
 </h2>
 <p>Once a leaf model produces reflectance/transmittance,
 <code><a href="../reference/foursail.html">foursail()</a></code>, <code><a href="../reference/foursail2.html">foursail2()</a></code>, and
@@ -370,16 +549,16 @@ visible-band saturation.</td>
 <code>LIDFa</code> mainly sets the <em>average</em> leaf angle (from -1
 = horizontal/planophile to +1 = vertical/erectophile);
 <code>LIDFb</code> adjusts the distribution’s bimodality/spread. See
-Section 3 for the canonical named shapes.</td>
+Section 4 for the canonical named shapes.</td>
 <td>unitless, each in [-1, 1]</td>
-<td>see Section 3 table</td>
+<td>see Section 4 table</td>
 <td>foursail, foursail2, inform</td>
 </tr>
 <tr class="odd">
 <td><code>TypeLidf</code></td>
 <td>Which LIDF parameterization <code>LIDFa</code>/<code>LIDFb</code>
 are read as: <code>1</code> = Verhoef’s two-parameter system (Section
-3); <code>2</code> = ellipsoidal, in which case <code>LIDFa</code> alone
+4); <code>2</code> = ellipsoidal, in which case <code>LIDFa</code> alone
 is the mean leaf angle in <strong>degrees</strong> (0-90) and
 <code>LIDFb</code> is ignored.</td>
 <td>
@@ -421,7 +600,7 @@ aligned (no visible shadows).</td>
 </tbody>
 </table>
 <div class="section level3">
-<h3 id="foursail2-only-two-layer-green-brown-canopy">2.1 <code>foursail2()</code>-only: two-layer (green + brown)
+<h3 id="foursail2-only-two-layer-green-brown-canopy">3.1 <code>foursail2()</code>-only: two-layer (green + brown)
 canopy<a class="anchor" aria-label="anchor" href="#foursail2-only-two-layer-green-brown-canopy"></a>
 </h3>
 <table class="table">
@@ -470,7 +649,7 @@ two layers.</td>
 </table>
 </div>
 <div class="section level3">
-<h3 id="inform-only-explicit-forest-stand-geometry">2.2 <code>inform()</code>-only: explicit forest-stand geometry<a class="anchor" aria-label="anchor" href="#inform-only-explicit-forest-stand-geometry"></a>
+<h3 id="inform-only-explicit-forest-stand-geometry">3.2 <code>inform()</code>-only: explicit forest-stand geometry<a class="anchor" aria-label="anchor" href="#inform-only-explicit-forest-stand-geometry"></a>
 </h3>
 <table class="table">
 <colgroup>
@@ -526,7 +705,7 @@ component subtracted from <code>LAI</code>.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="named-leaf-angle-distributions">3. Named leaf-angle distributions<a class="anchor" aria-label="anchor" href="#named-leaf-angle-distributions"></a>
+<h2 id="named-leaf-angle-distributions">4. Named leaf-angle distributions<a class="anchor" aria-label="anchor" href="#named-leaf-angle-distributions"></a>
 </h2>
 <p><code>LIDFa</code>/<code>LIDFb</code> rarely need to be hand-tuned:
 six canonical shapes cover most real canopies (from
@@ -607,7 +786,7 @@ smoothly across the whole range – exactly the qualitative behaviour the
 names promise.</p>
 </div>
 <div class="section level2">
-<h2 id="soil-marmit-dry---wet">4. Soil: MARMIT (dry -&gt; wet)<a class="anchor" aria-label="anchor" href="#soil-marmit-dry---wet"></a>
+<h2 id="soil-marmit-dry---wet">5. Soil: MARMIT (dry -&gt; wet)<a class="anchor" aria-label="anchor" href="#soil-marmit-dry---wet"></a>
 </h2>
 <p><code><a href="../reference/get.marmit.rsoil.html">get.marmit.rsoil()</a></code> turns a dry reference soil spectrum
 into a wet one (Tutorial 03’s soil-brightness section, Tutorial 16 in
@@ -654,7 +833,7 @@ water film scatters light.</td>
 </table>
 </div>
 <div class="section level2">
-<h2 id="soil-atmosphere-spart-bsm-soil-smac-atmosphere">5. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)<a class="anchor" aria-label="anchor" href="#soil-atmosphere-spart-bsm-soil-smac-atmosphere"></a>
+<h2 id="soil-atmosphere-spart-bsm-soil-smac-atmosphere">6. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)<a class="anchor" aria-label="anchor" href="#soil-atmosphere-spart-bsm-soil-smac-atmosphere"></a>
 </h2>
 <p><code><a href="../reference/SPART.html">SPART()</a></code>/<code>spart_toa()</code>-family functions
 (Tutorial 03) use a different soil parameterization (BSM,
@@ -743,7 +922,7 @@ is.</td>
 </table>
 </div>
 <div class="section level2">
-<h2 id="which-models-actually-read-which-leafcanopy-inputs">6. Which models actually read which leaf/canopy inputs<a class="anchor" aria-label="anchor" href="#which-models-actually-read-which-leafcanopy-inputs"></a>
+<h2 id="which-models-actually-read-which-leafcanopy-inputs">7. Which models actually read which leaf/canopy inputs<a class="anchor" aria-label="anchor" href="#which-models-actually-read-which-leafcanopy-inputs"></a>
 </h2>
 <p>A single glance at which of this page’s traits feed which function –
 useful when assembling one LUT row meant to drive several models at once

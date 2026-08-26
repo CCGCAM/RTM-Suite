@@ -61,6 +61,20 @@
 <li class="toctree-l2"><a class="reference internal" href="install.html#building-these-docs">Building these docs</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Parameter &amp; Trait Glossary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#leaf-traits">1. Leaf traits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="glossary.html#liberty-only-structural-traits">LIBERTY-only structural traits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#canopy-structure-and-viewing-geometry">2. Canopy structure and viewing geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#named-leaf-angle-distributions">3. Named leaf-angle distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#soil-marmit-dry-wet">4. Soil: MARMIT (dry -&gt; wet)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#soil-atmosphere-spart-bsm-soil-smac-atmosphere">5. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#scope-traits-leaf-photosynthesis-fluorescence-energy-balance">6. SCOPE traits: leaf + photosynthesis + fluorescence + energy balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#a-real-lut-sampling-and-inspecting-a-few-traits">7. A real LUT: sampling and inspecting a few traits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="toolsrtm/index.html">toolsrtm</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="toolsrtm/leaf.html">toolsrtm.leaf</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="toolsrtm/leaf.html#quick-example">Quick example</a></li>
@@ -230,11 +244,35 @@ These mirror the R tutorial series (<a class="reference external" href="https://
 <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/scopeinr/articles/index.html">SCOPEinR</a>)
 topic-for-topic where a Python port exists; see each package’s own
 <code class="docutils literal notranslate"><span class="pre">README.md</span></code> for the full R-tutorial-to-Python-module bridge table,
-including the gaps called out at the bottom of this page.</p>
+including the gaps called out at the bottom of this page. New to what
+<code class="docutils literal notranslate"><span class="pre">Cab</span></code>, <code class="docutils literal notranslate"><span class="pre">LIDFa</span></code>, <code class="docutils literal notranslate"><span class="pre">Vcmax25</span></code>, or any other trait/parameter below
+actually means, its unit, or its realistic range? See the <a class="reference internal" href="glossary.html"><span class="doc">Parameter &amp; Trait Glossary</span></a>
+first – this page assumes that vocabulary and focuses on running the
+models.</p>
+<p><strong>The model landscape, in one line each</strong>: <code class="xref py py-func docutils literal notranslate"><span class="pre">prospect_d()</span></code>/
+<code class="xref py py-func docutils literal notranslate"><span class="pre">prospect_pro()</span></code> (PROSPECT) simulate a single leaf’s
+reflectance/transmittance from its pigments, water and dry matter;
+<code class="xref py py-func docutils literal notranslate"><span class="pre">foursail()</span></code> (fourSAIL) turns that leaf optics into a
+canopy-level BRDF given leaf area, leaf angle and viewing geometry;
+<a class="reference internal" href="toolsrtm/inform.html#module-toolsrtm.inform" title="toolsrtm.inform"><code class="xref py py-func docutils literal notranslate"><span class="pre">inform()</span></code></a> adds explicit forest-stand structure on top of
+fourSAIL; <code class="xref py py-func docutils literal notranslate"><span class="pre">spart_toa()</span></code> (SPART) chains fourSAIL with a soil
+model (BSM) and an atmosphere model (SMAC) to go all the way to
+top-of-atmosphere; and <code class="xref py py-func docutils literal notranslate"><span class="pre">scopeinpython.get_scope()</span></code> (SCOPE) replaces
+the “soil brightness + fixed leaf temperature” shortcuts the others take
+with a real coupled energy balance and photosynthesis model, so it can
+also predict leaf/soil temperature, carbon flux and solar-induced
+fluorescence (SIF) – not just reflectance.</p>
 <section id="leaf-canopy-toolsrtm">
 <h2>Leaf + canopy (toolsrtm)<a class="headerlink" href="#leaf-canopy-toolsrtm" title="Link to this heading"></a></h2>
-<p>Mirrors R Tutorials 01-02 (<code class="docutils literal notranslate"><span class="pre">prospect_d</span></code> = leaf optics, <code class="docutils literal notranslate"><span class="pre">foursail</span></code> =
-canopy BRDF).</p>
+<p>Mirrors R Tutorials 01-02. <code class="docutils literal notranslate"><span class="pre">prospect_d</span></code> (PROSPECT-D) models a leaf as a
+stack of absorbing/scattering plates – chlorophyll, carotenoids, water
+and dry matter each leave their own signature in the resulting
+reflectance/transmittance spectrum. <code class="docutils literal notranslate"><span class="pre">foursail</span></code> (fourSAIL, the classic
+PROSAIL canopy model) then takes that leaf optics and a soil background
+and turns them into canopy-level bidirectional reflectance (BRDF) via a
+turbid-medium radiative-transfer solution – the canopy is treated as a
+statistical cloud of leaves at a given area density (LAI) and angle
+distribution, not explicit 3D geometry.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">prospect_d</span><span class="p">,</span> <span class="n">foursail</span>
 
@@ -296,8 +334,13 @@ needs) both work as drop-in leaf models for <code class="docutils literal notran
 </section>
 <section id="soil-bsm-optical-canopy-brdf-scopeinpython">
 <h2>Soil (BSM) + optical canopy BRDF (scopeinpython)<a class="headerlink" href="#soil-bsm-optical-canopy-brdf-scopeinpython" title="Link to this heading"></a></h2>
-<p>Mirrors SCOPEinR Tutorials 01-02 (soil model + canopy optics via
-<code class="docutils literal notranslate"><span class="pre">rtmo</span></code>).</p>
+<p>Mirrors SCOPEinR Tutorials 01-02. <code class="docutils literal notranslate"><span class="pre">get_bsm</span></code> (BSM, Brightness-Shape-
+Moisture) is SCOPE’s own soil reflectance model – three parameters
+(brightness, two empirical shape terms) plus a wetting model, rather than
+a flat assumed spectrum. <code class="docutils literal notranslate"><span class="pre">run_rtmo</span></code> is SCOPE’s optical top-of-canopy
+BRDF solver – physically the same turbid-medium idea as <code class="docutils literal notranslate"><span class="pre">foursail</span></code>,
+but re-implemented to plug into SCOPE’s own multi-layer energy-balance
+loop (Section “Full SCOPE run” below) rather than standing alone.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">prospect_d</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.canopy</span><span class="w"> </span><span class="kn">import</span> <span class="n">dladgen</span>
@@ -561,8 +604,12 @@ found and fixed, what happens when a caller forgets to do that by hand.</p>
 </section>
 <section id="marmit-soil-moisture-model-toolsrtm">
 <h2>MARMIT soil moisture model (toolsrtm)<a class="headerlink" href="#marmit-soil-moisture-model-toolsrtm" title="Link to this heading"></a></h2>
-<p>Mirrors R Tutorial 16: build a wetted soil spectrum from a dry
-reference and couple it into a canopy simulation.</p>
+<p>Mirrors R Tutorial 16. Where BSM (above) builds a soil spectrum from
+brightness/shape parameters, MARMIT (Bablet et al. 2018) goes the other
+way: it starts from a real <em>dry</em> reference spectrum and adds a physically
+modelled liquid-water film on top, so the same soil can be simulated at
+any moisture level. The example below builds a wetted soil spectrum from
+a dry reference and couples it into a canopy simulation.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.marmit</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_marmit_rsoil</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">prospect_d</span><span class="p">,</span> <span class="n">foursail</span>
 
@@ -591,10 +638,20 @@ reference and couple it into a canopy simulation.</p>
 </section>
 <section id="full-scope-run-energy-balance-fluorescence-scopeinpython">
 <h2>Full SCOPE run: energy balance + fluorescence (scopeinpython)<a class="headerlink" href="#full-scope-run-energy-balance-fluorescence-scopeinpython" title="Link to this heading"></a></h2>
-<p>Mirrors SCOPEinR Tutorials 03-04: one full <code class="docutils literal notranslate"><span class="pre">get_scope()</span></code> call –
-optics, energy balance, photosynthesis and fluorescence together –
-against the same bundled example LUT row SCOPEinR’s own test suite and
-R vignettes use (<code class="docutils literal notranslate"><span class="pre">SCOPEinR/inst/input/LUT_input.csv</span></code>).</p>
+<p>Mirrors SCOPEinR Tutorials 03-04. SCOPE (Soil Canopy Observation,
+Photochemistry and Energy fluxes, van der Tol et al. 2009) is a different
+kind of model from PROSAIL/SPART above, not just a bigger one: instead of
+assuming leaf/soil temperature and computing reflectance alone, it
+iteratively <strong>solves</strong> leaf and soil temperature so that absorbed
+radiation balances sensible + latent heat + photosynthesis (the energy
+balance), then derives fluorescence and carbon flux from that solved
+state – one full <code class="docutils literal notranslate"><span class="pre">get_scope()</span></code> call chains optics
+(<code class="xref py py-func docutils literal notranslate"><span class="pre">get_fluspect_cx_scope()</span></code> + <code class="docutils literal notranslate"><span class="pre">run_rtmo</span></code>), the energy
+balance (<a class="reference internal" href="scopeinpython/ebal.html#module-scopeinpython.ebal" title="scopeinpython.ebal"><code class="xref py py-func docutils literal notranslate"><span class="pre">ebal()</span></code></a>), photosynthesis
+(<code class="xref py py-func docutils literal notranslate"><span class="pre">get_biochemical()</span></code>) and fluorescence
+(<a class="reference internal" href="scopeinpython/rtmf.html#module-scopeinpython.rtmf" title="scopeinpython.rtmf"><code class="xref py py-func docutils literal notranslate"><span class="pre">rtmf()</span></code></a>) together, against the same bundled example
+LUT row SCOPEinR’s own test suite and R vignettes use
+(<code class="docutils literal notranslate"><span class="pre">SCOPEinR/inst/input/LUT_input.csv</span></code>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scopeinpython</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScopeOptions</span><span class="p">,</span> <span class="n">get_scope</span>

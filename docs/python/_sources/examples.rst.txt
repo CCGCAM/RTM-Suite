@@ -9,13 +9,38 @@ These mirror the R tutorial series (`ToolsRTM
 <https://ccgcam.github.io/RTM-Suite/scopeinr/articles/index.html>`_)
 topic-for-topic where a Python port exists; see each package's own
 ``README.md`` for the full R-tutorial-to-Python-module bridge table,
-including the gaps called out at the bottom of this page.
+including the gaps called out at the bottom of this page. New to what
+``Cab``, ``LIDFa``, ``Vcmax25``, or any other trait/parameter below
+actually means, its unit, or its realistic range? See the :doc:`glossary`
+first -- this page assumes that vocabulary and focuses on running the
+models.
+
+**The model landscape, in one line each**: :func:`~toolsrtm.prospect_d`/
+:func:`~toolsrtm.prospect_pro` (PROSPECT) simulate a single leaf's
+reflectance/transmittance from its pigments, water and dry matter;
+:func:`~toolsrtm.foursail` (fourSAIL) turns that leaf optics into a
+canopy-level BRDF given leaf area, leaf angle and viewing geometry;
+:func:`~toolsrtm.inform` adds explicit forest-stand structure on top of
+fourSAIL; :func:`~toolsrtm.spart_toa` (SPART) chains fourSAIL with a soil
+model (BSM) and an atmosphere model (SMAC) to go all the way to
+top-of-atmosphere; and :func:`scopeinpython.get_scope` (SCOPE) replaces
+the "soil brightness + fixed leaf temperature" shortcuts the others take
+with a real coupled energy balance and photosynthesis model, so it can
+also predict leaf/soil temperature, carbon flux and solar-induced
+fluorescence (SIF) -- not just reflectance.
 
 Leaf + canopy (toolsrtm)
 -------------------------
 
-Mirrors R Tutorials 01-02 (``prospect_d`` = leaf optics, ``foursail`` =
-canopy BRDF).
+Mirrors R Tutorials 01-02. ``prospect_d`` (PROSPECT-D) models a leaf as a
+stack of absorbing/scattering plates -- chlorophyll, carotenoids, water
+and dry matter each leave their own signature in the resulting
+reflectance/transmittance spectrum. ``foursail`` (fourSAIL, the classic
+PROSAIL canopy model) then takes that leaf optics and a soil background
+and turns them into canopy-level bidirectional reflectance (BRDF) via a
+turbid-medium radiative-transfer solution -- the canopy is treated as a
+statistical cloud of leaves at a given area density (LAI) and angle
+distribution, not explicit 3D geometry.
 
 .. code-block:: python
 
@@ -78,8 +103,13 @@ needs) both work as drop-in leaf models for ``foursail``/``foursail2``/
 Soil (BSM) + optical canopy BRDF (scopeinpython)
 -------------------------------------------------
 
-Mirrors SCOPEinR Tutorials 01-02 (soil model + canopy optics via
-``rtmo``).
+Mirrors SCOPEinR Tutorials 01-02. ``get_bsm`` (BSM, Brightness-Shape-
+Moisture) is SCOPE's own soil reflectance model -- three parameters
+(brightness, two empirical shape terms) plus a wetting model, rather than
+a flat assumed spectrum. ``run_rtmo`` is SCOPE's optical top-of-canopy
+BRDF solver -- physically the same turbid-medium idea as ``foursail``,
+but re-implemented to plug into SCOPE's own multi-layer energy-balance
+loop (Section "Full SCOPE run" below) rather than standing alone.
 
 .. code-block:: python
 
@@ -352,8 +382,12 @@ found and fixed, what happens when a caller forgets to do that by hand.
 MARMIT soil moisture model (toolsrtm)
 ------------------------------------------
 
-Mirrors R Tutorial 16: build a wetted soil spectrum from a dry
-reference and couple it into a canopy simulation.
+Mirrors R Tutorial 16. Where BSM (above) builds a soil spectrum from
+brightness/shape parameters, MARMIT (Bablet et al. 2018) goes the other
+way: it starts from a real *dry* reference spectrum and adds a physically
+modelled liquid-water film on top, so the same soil can be simulated at
+any moisture level. The example below builds a wetted soil spectrum from
+a dry reference and couples it into a canopy simulation.
 
 .. code-block:: python
 
@@ -383,10 +417,20 @@ reference and couple it into a canopy simulation.
 Full SCOPE run: energy balance + fluorescence (scopeinpython)
 -------------------------------------------------------------------
 
-Mirrors SCOPEinR Tutorials 03-04: one full ``get_scope()`` call --
-optics, energy balance, photosynthesis and fluorescence together --
-against the same bundled example LUT row SCOPEinR's own test suite and
-R vignettes use (``SCOPEinR/inst/input/LUT_input.csv``).
+Mirrors SCOPEinR Tutorials 03-04. SCOPE (Soil Canopy Observation,
+Photochemistry and Energy fluxes, van der Tol et al. 2009) is a different
+kind of model from PROSAIL/SPART above, not just a bigger one: instead of
+assuming leaf/soil temperature and computing reflectance alone, it
+iteratively **solves** leaf and soil temperature so that absorbed
+radiation balances sensible + latent heat + photosynthesis (the energy
+balance), then derives fluorescence and carbon flux from that solved
+state -- one full ``get_scope()`` call chains optics
+(:func:`~scopeinpython.get_fluspect_cx_scope` + ``run_rtmo``), the energy
+balance (:func:`~scopeinpython.ebal`), photosynthesis
+(:func:`~scopeinpython.get_biochemical`) and fluorescence
+(:func:`~scopeinpython.rtmf`) together, against the same bundled example
+LUT row SCOPEinR's own test suite and R vignettes use
+(``SCOPEinR/inst/input/LUT_input.csv``).
 
 .. code-block:: python
 

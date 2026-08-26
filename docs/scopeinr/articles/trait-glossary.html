@@ -109,7 +109,80 @@ plant/soil/meteo traits at all), see <a href="../t00-scope-options.html">Tutoria
 <code class="sourceCode R"><span><span class="va">path_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"input"</span>, package <span class="op">=</span> <span class="st">"SCOPEinR"</span><span class="op">)</span></span>
 <span><span class="va">inputLUT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">path_input</span>, <span class="st">"inputs_SCOPE.csv"</span><span class="op">)</span>, header <span class="op">=</span> <span class="cn">TRUE</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="leaf-biochemistry-prospect-pro-fluspect-cx-traits">1. Leaf biochemistry (PROSPECT-PRO / Fluspect-Cx traits)<a class="anchor" aria-label="anchor" href="#leaf-biochemistry-prospect-pro-fluspect-cx-traits"></a>
+<h2 id="scopes-models-at-a-glance">1. SCOPE’s models at a glance<a class="anchor" aria-label="anchor" href="#scopes-models-at-a-glance"></a>
+</h2>
+<p><code><a href="../reference/get.SCOPE.html">get.SCOPE()</a></code> isn’t one model – it’s five distinct
+components chained together, each solving a different piece of physics,
+in this order:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Component</th>
+<th>What it does</th>
+<th>Depends on</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<strong>Fluspect-Cx (SCOPE variant)</strong>
+(<code><a href="../reference/getFluspect.Cx.SCOPE.html">getFluspect.Cx.SCOPE()</a></code>)</td>
+<td>Leaf optics: reflectance/transmittance + fluorescence
+excitation-emission matrices, per canopy layer (mSCOPE multi-layer
+wrapper: <code><a href="../reference/get.fluspect_mSCOPE.html">get.fluspect_mSCOPE()</a></code>). Same PROSPECT/Fluspect
+physics as ToolsRTM’s leaf models (see its <a href="../../toolsrtm/articles/parameter-glossary.html#models-at-a-glance">Parameter
+&amp; Trait Glossary</a>) – just the SCOPE-specific wrapper.</td>
+<td>Leaf biochemistry traits (Section 2)</td>
+</tr>
+<tr class="even">
+<td>
+<strong>RTMo</strong> (<code>get.RTMo()</code>)</td>
+<td>Optical top-of-canopy BRDF – physically the same turbid-medium idea
+as fourSAIL, re-implemented to plug into the layers below. Stops at
+reflectance; assumes no temperature yet.</td>
+<td>Fluspect-Cx output + canopy structure (Section 5) + BSM soil</td>
+</tr>
+<tr class="odd">
+<td>
+<strong>ebal</strong> (<code><a href="../reference/get.ebal.html">get.ebal()</a></code>)</td>
+<td>The energy balance: <strong>iteratively solves</strong> leaf and
+soil temperature so absorbed radiation balances sensible + latent heat,
+calling the biochemistry model at every candidate temperature. This is
+what makes SCOPE fundamentally different from PROSAIL/SPART –
+temperature is solved for, not assumed.</td>
+<td>RTMo output + aerodynamic resistances (Section 7) + meteorology
+(Section 8)</td>
+</tr>
+<tr class="even">
+<td>
+<strong>biochemical</strong> (<code><a href="../reference/get.biochemical.html">get.biochemical()</a></code>)</td>
+<td>Leaf-level photosynthesis (Farquhar/Collatz) and fluorescence yield,
+given a leaf micro-environment – called repeatedly by <code>ebal</code>
+at each candidate temperature, not run standalone.</td>
+<td>Photosynthesis traits (Section 3) + NPQ traits (Section 4)</td>
+</tr>
+<tr class="odd">
+<td>
+<strong>RTMf</strong> (<code><a href="../reference/get.RTMf.html">get.RTMf()</a></code>) /
+<strong>RTMz</strong> (<code><a href="../reference/get.RTMz.html">get.RTMz()</a></code>, optional)</td>
+<td>Canopy-level fluorescence radiance/flux, and a small zeaxanthin
+(photoprotection) correction to the TOC spectrum – both derived from the
+already-solved energy balance, not computed independently.</td>
+<td>ebal output + Fluspect-Cx’s fluorescence matrices</td>
+</tr>
+</tbody>
+</table>
+<p><code><a href="../reference/get.SCOPE.html">get.SCOPE()</a></code> runs all five for one LUT row and returns
+everything together (<code>data.rad</code> reflectance/fluorescence,
+<code>data.fluxes</code> energy balance/photosynthesis). The rest of
+this page documents the ~65 input variables these five components read,
+grouped by which one consumes them.</p>
+</div>
+<div class="section level2">
+<h2 id="leaf-biochemistry-prospect-pro-fluspect-cx-traits">2. Leaf biochemistry (PROSPECT-PRO / Fluspect-Cx traits)<a class="anchor" aria-label="anchor" href="#leaf-biochemistry-prospect-pro-fluspect-cx-traits"></a>
 </h2>
 <p>These are the <em>same</em> PROSPECT/Fluspect leaf traits ToolsRTM’s
 own <a href="../../toolsrtm/articles/parameter-glossary.html">Parameter
@@ -240,7 +313,7 @@ reflectance/transmittance – leaves are close to blackbody in the TIR, so
 these stay near zero and are rarely varied.</p>
 </div>
 <div class="section level2">
-<h2 id="photosynthesis-farquharcollatz-ball-berry">2. Photosynthesis (Farquhar/Collatz + Ball-Berry)<a class="anchor" aria-label="anchor" href="#photosynthesis-farquharcollatz-ball-berry"></a>
+<h2 id="photosynthesis-farquharcollatz-ball-berry">3. Photosynthesis (Farquhar/Collatz + Ball-Berry)<a class="anchor" aria-label="anchor" href="#photosynthesis-farquharcollatz-ball-berry"></a>
 </h2>
 <p>The traits
 <code>scopeinpython.biochemical</code>/<code><a href="../reference/get.biochemical.html">SCOPEinR::get.biochemical()</a></code>
@@ -338,10 +411,10 @@ respiration as a fraction of <code>Vcmax25</code>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="fluorescence-non-photochemical-quenching-npq">3. Fluorescence / non-photochemical quenching (NPQ)<a class="anchor" aria-label="anchor" href="#fluorescence-non-photochemical-quenching-npq"></a>
+<h2 id="fluorescence-non-photochemical-quenching-npq">4. Fluorescence / non-photochemical quenching (NPQ)<a class="anchor" aria-label="anchor" href="#fluorescence-non-photochemical-quenching-npq"></a>
 </h2>
 <p>The van der Tol et al. (2014) fluorescence-yield model traits, on top
-of the leaf’s own <code>fqe</code> (Section 1):</p>
+of the leaf’s own <code>fqe</code> (Section 2):</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">variable</th>
@@ -454,7 +527,7 @@ default <code>1</code> unless told otherwise.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="canopy-structure">4. Canopy structure<a class="anchor" aria-label="anchor" href="#canopy-structure"></a>
+<h2 id="canopy-structure">5. Canopy structure<a class="anchor" aria-label="anchor" href="#canopy-structure"></a>
 </h2>
 <table class="table">
 <thead><tr class="header">
@@ -548,7 +621,7 @@ SCOPE-specific additions:</p>
 <ul>
 <li>
 <strong><code>hc</code></strong> – canopy height, needed for the
-aerodynamic-resistance chain (Section 6) that plain optical-only
+aerodynamic-resistance chain (Section 7) that plain optical-only
 fourSAIL never needs.</li>
 <li>
 <strong><code>leafwidth</code></strong> – characteristic leaf width,
@@ -564,7 +637,7 @@ INFORM’s <code>cd</code>.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="soil">5. Soil<a class="anchor" aria-label="anchor" href="#soil"></a>
+<h2 id="soil">6. Soil<a class="anchor" aria-label="anchor" href="#soil"></a>
 </h2>
 <table class="table">
 <thead><tr class="header">
@@ -652,7 +725,7 @@ INFORM’s <code>cd</code>.</li>
 </table>
 <p><code>SMC</code>, <code>BSMBrightness</code>, <code>BSMlat</code>,
 <code>BSMlon</code> are BSM’s soil-reflectance traits – see ToolsRTM’s
-glossary Section 5 (shared with SPART) for what each one physically
+glossary Section 6 (shared with SPART) for what each one physically
 means. SCOPE-specific soil-thermal additions:</p>
 <ul>
 <li>
@@ -670,7 +743,7 @@ temperature part of the energy balance (<code>ebal</code>).</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="aerodynamics-energy-balance-resistances">6. Aerodynamics / energy-balance resistances<a class="anchor" aria-label="anchor" href="#aerodynamics-energy-balance-resistances"></a>
+<h2 id="aerodynamics-energy-balance-resistances">7. Aerodynamics / energy-balance resistances<a class="anchor" aria-label="anchor" href="#aerodynamics-energy-balance-resistances"></a>
 </h2>
 <p>Feeds
 <code>scopeinpython.thermal</code>/<code><a href="../reference/get.resistances.html">SCOPEinR::get.resistances()</a></code>;
@@ -783,7 +856,7 @@ defaults here are placeholders, not values meant to be sampled
 independently of <code>hc</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="meteorology-geometry-and-sitetime">7. Meteorology, geometry, and site/time<a class="anchor" aria-label="anchor" href="#meteorology-geometry-and-sitetime"></a>
+<h2 id="meteorology-geometry-and-sitetime">8. Meteorology, geometry, and site/time<a class="anchor" aria-label="anchor" href="#meteorology-geometry-and-sitetime"></a>
 </h2>
 <table class="table">
 <thead><tr class="header">
@@ -966,7 +1039,7 @@ real time series (Tutorial 06) rather than one fixed LUT row.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="a-real-lut-sampling-and-inspecting-a-few-traits">8. A real LUT: sampling and inspecting a few traits<a class="anchor" aria-label="anchor" href="#a-real-lut-sampling-and-inspecting-a-few-traits"></a>
+<h2 id="a-real-lut-sampling-and-inspecting-a-few-traits">9. A real LUT: sampling and inspecting a few traits<a class="anchor" aria-label="anchor" href="#a-real-lut-sampling-and-inspecting-a-few-traits"></a>
 </h2>
 <p><code><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE()</a></code> (see <a href="getting-luts-scope.html">Getting LUTs for SCOPE</a> for the full
 mechanics) reads each row’s <code>Distribution</code> and samples
@@ -981,11 +1054,11 @@ vary:</p>
 <span><span class="va">lut</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getLUT.SCOPE.html">getLUT.SCOPE</a></span><span class="op">(</span>inputLUT <span class="op">=</span> <span class="va">inputLUT</span>, nLUT <span class="op">=</span> <span class="fl">500</span>, setseed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">lut</span><span class="op">$</span><span class="va">Cab</span>, breaks <span class="op">=</span> <span class="fl">20</span>, col <span class="op">=</span> <span class="st">"#009E73"</span>, main <span class="op">=</span> <span class="st">"Cab (Gaussian)"</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">lut</span><span class="op">$</span><span class="va">Cab</span>, breaks <span class="op">=</span> <span class="fl">20</span>, col <span class="op">=</span> <span class="st">"#009E73"</span>, main <span class="op">=</span> <span class="st">"Cab (Gaussian)"</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"ug/cm2"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">lut</span><span class="op">$</span><span class="va">LAI</span>, breaks <span class="op">=</span> <span class="fl">20</span>, col <span class="op">=</span> <span class="st">"#0072B2"</span>, main <span class="op">=</span> <span class="st">"LAI (Uniform)"</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">lut</span><span class="op">$</span><span class="va">LAI</span>, breaks <span class="op">=</span> <span class="fl">20</span>, col <span class="op">=</span> <span class="st">"#0072B2"</span>, main <span class="op">=</span> <span class="st">"LAI (Uniform)"</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"m2/m2"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">lut</span><span class="op">$</span><span class="va">Vcmax25</span>, breaks <span class="op">=</span> <span class="fl">20</span>, col <span class="op">=</span> <span class="st">"#D55E00"</span>, main <span class="op">=</span> <span class="st">"Vcmax25 (Uniform)"</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">lut</span><span class="op">$</span><span class="va">Vcmax25</span>, breaks <span class="op">=</span> <span class="fl">20</span>, col <span class="op">=</span> <span class="st">"#D55E00"</span>, main <span class="op">=</span> <span class="st">"Vcmax25 (Uniform)"</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"umol/m2/s"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="trait-glossary_files/figure-html/lut-sample-1.png" class="r-plt" alt="" width="672"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
