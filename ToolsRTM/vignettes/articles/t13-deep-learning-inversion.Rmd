@@ -18,97 +18,21 @@ knitr::opts_chunk$set(
 library(ToolsRTM)
 ```
 
-`getMLmodel()` is `get.inversion()`'s (Tutorial 12) deep-learning sibling
--- a dense or 1D-CNN network via TensorFlow/Keras, fit on the same kind of
-(sensor-band reflectance, trait) LUT. Needs a working Python/TensorFlow/
-tf-keras stack reachable through `reticulate` -- genuinely machine-
-specific setup, wrapped in `tryCatch()` throughout this page so it stays
-buildable on a machine without that stack configured, while showing the
-real, correct calling code either way.
+## 0. What will we learn?
 
-```text
-RTM LUT (getLUT)
-     |
-     v
-Spectral simulation (foursail)
-     |
-     v
-Sensor / hyperspectral representation (Sentinel-2A bands, or PRISMA bands for the CNN)
-     |
-     v
-Train / validation / test split
-     |
-     v
-Normalization (fit on train only)
-     |
-     v
-DL training, with early stopping on validation loss
-     |
-     v
-Prediction on the INDEPENDENT test set
-     |
-     v
-R2 / RMSE / bias, true-vs-predicted plot
-     |
-     v
-Comparison against Tutorial 12's Random Forest, same split
-```
+By the end of Part I you will be able to: prepare an RTM look-up table
+as a (predictors, target) dataset, split it into train/validation/test,
+understand *why* and *how* the inputs get normalized, train a dense
+neural network with `getMLmodel()`, and predict on new spectra
+correctly (the single step that is easiest to get wrong). Part II
+extends the same workflow to a 1D-CNN on hyperspectral bands. A
+Troubleshooting section and an Advanced section come last, deliberately
+-- they're real, but they're not what a first read of this page needs.
 
-## 1. Three real bugs, found and fixed while building this page
-
-**Bug 1 -- zero-variance columns break the internal normalization.** An
-earlier version of this page passed `getMLmodel()` a `dataset`
-containing the *entire* training LUT (every trait column) concatenated
-with the reflectance bands, and training failed with
-`infinite or missing values in 'x'`. Traced to the real cause:
-`getMLmodel()` has no `inputs =` argument -- unlike `get.inversion()`
-(Tutorial 12), it treats **every column of `dataset` other than
-`depVar`** as a predictor. `inputsPROSAIL`'s LUT fixes several trait
-columns at a single constant value by design (`LMA`, `alpha`, `LIDFb`,
-`TypeLidf`, `hspot`, `tts`, `psi` all have zero variance in a plain
-`getLUT()` draw) -- feeding those into `getMLmodel()`'s internal
-`Normalize` preprocessing (range-scaling each column by its own
-min/max) divides by zero for every one of them, producing the `Inf`/`NA`
-values the error message reports. **Fix**: build `dataset` from only
-`depVar` plus the actual reflectance-band columns, exactly as
-`get.inversion(..., inputs = band_names)` already does explicitly for
-Tutorial 12 -- `getMLmodel()` needs the same discipline applied
-manually, since it has no `inputs =` parameter to enforce it.
-
-**Bug 2 -- a `relu` output layer can die permanently.** Both the
-`'Hidden-layers'` and `'CNN'` branches inside `getMLmodel()` ended their
-last, single-unit regression layer with `activation = 'relu'`. A relu
-unit's gradient is exactly zero whenever its pre-activation is negative
--- for a single output unit on an unbounded-scale regression target,
-one unlucky batch of negative pre-activations early in training can
-permanently zero out that unit's gradient, with no way back regardless
-of epoch budget. **Fix**: changed to `activation = 'linear'`, the
-standard choice for an unbounded regression output (fixed directly in
-`getMLmodel.R`/`getMLmodel_withRetrain.R`, not worked around here).
-
-**Bug 3 -- predicting in the wrong input space (the big one).**
-`getMLmodel()`'s training step range-scales the input bands to \[0,1\]
-internally (via `getSplitData()`), fits the network on that scaled
-data, and returns the raw Keras model *plus* the fitted scaler
-(`$Scalar.train`) as two separate pieces -- it does **not** wrap them
-together into a single self-scaling `predict()`. Every earlier version
-of this page called `predict(model$model, as.matrix(test_bands))`
-directly on the **raw, unscaled** test reflectance -- training and
-prediction were silently happening in two different input spaces. This
-is precisely why Sections 5-7's dense/CNN results used to look
-identical to a badly overfit or broken model (near-zero-to-catastrophic
-test R2) despite a completely normal-looking internal training curve:
-the network was well-trained *for scaled inputs* and then evaluated on
-inputs it had never actually seen the distribution of. **Fix**: apply
-the returned `Scalar.train` to test data with
-`predict(model$Scalar.train, test_data)` before passing it to the
-network, exactly the pattern `ToolsRTM::getPredicts()` (the package's
-own dedicated prediction helper, which also handles reversing
-`depVar.trans`'s target scaling via `getReverse.trans()`) already
-assumes callers will follow. This single fix is what turns Sections
-5-7 below from "deep learning doesn't really work here" into deep
-learning genuinely competing with Random Forest -- Bugs 1-2 were real,
-but this one was the actual story.
+`getMLmodel()` is `get.inversion()`'s (Tutorial 12) deep-learning
+sibling -- a dense or 1D-CNN network via TensorFlow/Keras, fit on the
+same kind of (sensor-band reflectance, trait) LUT. It needs a working
+Python/TensorFlow/tf-keras stack reachable through `reticulate`:
 
 ```{r setup-check}
 local_venv_root <- file.path(Sys.getenv("LOCALAPPDATA"), "r-reticulate-venvs")
@@ -119,18 +43,64 @@ keras_ok <- tryCatch({ library(reticulate); library(keras); TRUE }, error = func
 cat("Working Keras/TensorFlow stack available:", keras_ok, "\n")
 ```
 
-**Important, machine-specific setup note**: `getMLmodel()` calls
+**Machine-specific setup note**: `getMLmodel()` calls
 `callback_early_stopping()` without a package prefix internally, so
 `library(keras)` must actually be *attached* (not just installed)
 before calling it, or the fit fails with
-`could not find function "callback_early_stopping"`.
+`could not find function "callback_early_stopping"`. The rest of this
+page is wrapped in `tryCatch()` so it stays buildable on a machine
+without that stack configured, while still showing the real, correct
+calling code either way.
 
-## 2. A properly sized LUT, not a 150-row smoke test
+# Part I -- Learning `getMLmodel()`
 
-`n_samples = 150` (an earlier version of this page) is far too small to
-demonstrate what deep learning is actually for -- 6000 rows here, large
-enough to show real training dynamics without an impractical pkgdown
-build time:
+## 1. Understanding `getMLmodel()`
+
+```r
+getMLmodel(
+  dataset,     # data.frame: depVar column + predictor columns
+  depVar,      # name of the column to predict, e.g. "Cab"
+  model,       # "Hidden-layers" (dense MLP) or "CNN" (1D convolution)
+  optimizer,   # e.g. "adam" -- see ?getMLmodel for all 7 supported
+  n.epochs,    # maximum training iterations
+  batch.size,  # number of samples per weight update
+  save.model   # write the fitted model to disk?
+)
+```
+
+| Argument | What it means |
+|---|---|
+| `dataset` | A table with spectral predictors *and* the target trait, one row per simulation/observation |
+| `depVar` | The trait you want to recover, e.g. `"Cab"` |
+| `model` | Architecture: `"Hidden-layers"` (dense) or `"CNN"` (1D convolution over the spectrum) |
+| `optimizer` | Optimization algorithm, e.g. `"adam"` |
+| `n.epochs` | Maximum number of training iterations (early stopping can stop sooner) |
+| `batch.size` | How many rows are used per gradient update |
+| `save.model` | Whether to write the fitted `.hdf5` model to disk |
+
+**Important -- read this before calling `getMLmodel()` on your own
+data.** Unlike `get.inversion()` (Tutorial 12), `getMLmodel()` has no
+`inputs =` argument: **every column of `dataset` other than `depVar`
+is treated as a predictor.** If `dataset` still contains other trait
+columns, ID columns, or a column that happens to be constant in your
+particular sample, they all get fed to the network as if they were
+real spectral bands -- a constant column in particular breaks the
+internal normalization outright (see Troubleshooting, Section 12).
+Always build `dataset` from exactly `depVar` plus the columns you
+actually want as predictors, nothing else.
+
+`"Hidden-layers"` and `"CNN"` differ in how they read the predictor
+columns: a dense network treats each one as an independent number with
+no notion of order; a CNN treats them as a *sequence* (adjacent columns
+= adjacent wavelengths) and convolves over that sequence. Part II
+covers this difference and when it matters.
+
+## 2. Prepare a simple RTM dataset
+
+Simulate a moderate-sized PROSAIL look-up table, convolve it to
+Sentinel-2A bands, and keep only Cab (the target) and the bands
+(the predictors) -- exactly the discipline Section 1's "Important" box
+asked for:
 
 ```{r simulate-large}
 r2_f <- function(obs, pred) 1 - sum((obs - pred)^2) / sum((obs - mean(obs))^2)
@@ -148,16 +118,44 @@ refl_X <- as.data.frame(refl); colnames(refl_X) <- paste0("X", wl); refl_X <- cb
 se2a <- suppressMessages(get.spectra.convolved(rfl = refl_X, sensor = "Sentinel2a", plot.spectra = FALSE))
 band_names <- paste0("B", seq_along(as.numeric(names(se2a)[-1])))
 names(se2a) <- c("id", band_names)
+
+dataset_dense <- cbind(Cab = LUT$Cab, se2a[, band_names])
 ```
 
-## 3. A real train / validation / test split -- evaluated only on the held-out test set
+This is what a `getMLmodel()` dataset actually looks like -- one column
+is the target, the rest are predictors:
 
-RTM inversion specifically needs an *independent* test set, not just a
-train/test split: the LUT is synthetic, so nothing stops the model from
-memorizing quirks of the exact rows it trained on unless a third,
-completely untouched slice is reserved for the final number reported.
-60% train / 20% validation (used *during* training, for early stopping)
-/ 20% test (touched only once, at the end):
+```{r show-dataset}
+knitr::kable(round(head(dataset_dense, 4), 3))
+```
+
+```text
+ Cab    B1    B2    B3   ...   B10
+35.2  .041  .052  .087  ...   .412
+52.1  .036  .048  .071  ...   .486
+ ...
+  ^      └──────────────────┘
+target        predictors
+```
+
+`n_samples = 6000` is deliberate, not arbitrary: an earlier, much
+smaller draft of this page used 150 rows, which is far too little for
+a network to learn real structure from (Section 14 returns to *why*
+LUT size matters this much for `getMLmodel()` specifically).
+
+## 3. Train / validation / test split
+
+RTM inversion needs an *independent* test set, not just a train/test
+split: the LUT is synthetic, so nothing stops a model from memorizing
+quirks of the exact rows it trained on unless a third, completely
+untouched slice is reserved for the final number reported.
+
+```text
+|---------- train (60%) ----------|--- val (20%) ---|--- test (20%) ---|
+   fits the network's weights      used *during*       touched only
+                                   training, for        once, at the
+                                   early stopping        very end
+```
 
 ```{r split}
 set.seed(1)
@@ -168,21 +166,47 @@ val_idx   <- idx[(n_train + 1):(n_train + n_val)]
 test_idx  <- idx[(n_train + n_val + 1):n_samples]
 cat("train:", length(train_idx), " val:", length(val_idx), " test:", length(test_idx), "\n")
 
-dataset_dense <- cbind(Cab = LUT$Cab, se2a[, band_names])  # depVar + bands only -- Section 1's fix
 train_df <- dataset_dense[train_idx, ]
 ```
 
-**Normalization, stated explicitly**: `getMLmodel()`'s internal
-`getSplitData()` step fits its range/PCA scaler on the training split
-only, then applies that *same* fitted transform to whatever data is
-passed to `predict()` later -- no information from validation or test
-rows leaks into the scaling parameters. This matters specifically for
-RTM inversion because the LUT's own trait ranges (not real-world
-variability) determine what "normal" looks like to the model; fitting
-the scaler on the full dataset would let test-set values quietly
-influence how training data gets scaled.
+## 4. Normalization: why, and why train-only
 
-## 4. Dense network, with early stopping, on Sentinel-2 bands
+**Why normalize at all?** A neural network learns by gradient descent
+on its weights. When predictors sit on very different numeric scales,
+the loss surface becomes elongated and harder to optimize -- some
+weights need tiny updates, others huge ones, for the same learning
+rate. Rescaling every predictor onto a common range (here, \[0,1\]) is
+what lets one learning rate work reasonably well for all of them.
+
+```text
+Original reflectance                    After range-normalization
+
+  B4      B5      B8                      B4      B5      B8
+ 0.04    0.09    0.43                    0.00    0.00    0.00
+ 0.06    0.12    0.51        -->         0.42    0.36    0.51
+  ...                                     ...
+```
+
+**Why fit the scaler on training data only?** Using the test set's own
+min/max (or mean/sd) to decide *how* to scale the data leaks
+information about the test set into model preparation, before the
+model has even been trained -- a subtler, easy-to-miss form of the
+same mistake as training on your test rows directly. The fix is
+simple: compute the scaling parameters from `train_df` alone, then
+*apply* that same fixed transform to validation and test data later --
+never refit it on them.
+
+`getMLmodel()` handles exactly this internally, via `getSplitData()`:
+it fits a `caret::preProcess(..., method = "range")` scaler on the
+training split only, and reuses it (via `predict()` on the scaler
+object, not a fresh fit) for anything scored afterwards. You do not
+need to normalize `dataset` yourself before calling `getMLmodel()` --
+but you *do* need to reuse the same scaler object yourself when you
+later predict on new data, which Section 7 makes concrete.
+
+## 5. First model: Dense Neural Network
+
+One call, every argument from Section 1's table filled in:
 
 ```{r dl-dense, results = 'hide'}
 dl_result <- tryCatch({
@@ -191,6 +215,15 @@ dl_result <- tryCatch({
   list(ok = TRUE, model = dl_dense)
 }, error = function(e) list(ok = FALSE, msg = conditionMessage(e)))
 ```
+
+What just happened: `getMLmodel()` split `train_df` again internally
+(80/20, for its own training/early-stopping validation -- separate
+from, and nested inside, the `train_idx`/`val_idx`/`test_idx` split
+from Section 3), fit the range scaler on that inner-training slice,
+built a 3-hidden-layer dense network (64/32/16 units, dropout after the
+second layer), and trained it with early stopping on validation loss
+(`patience = 5`). The fitted Keras model and the fitted scaler both
+come back in the result:
 
 ```{r dl-dense-check}
 if (dl_result$ok) {
@@ -203,6 +236,13 @@ if (dl_result$ok) {
 }
 ```
 
+## 6. Evaluate the model
+
+**Always read the learning curve first.** A validation curve that is
+still falling means training stopped before convergence; one that
+rises again after a minimum means the model has started memorizing the
+training data:
+
 ```{r learning-curve, fig.width=7}
 if (dl_result$ok) {
   h <- dl_result$model$history$metrics
@@ -214,33 +254,23 @@ if (dl_result$ok) {
 }
 ```
 
-**Read the learning curve before trusting the model.** In this run,
-`getMLmodel()`'s built-in `callback_early_stopping()` (`patience = 5`,
-monitoring validation loss) never actually triggered -- the lowest
-validation loss is at the very last epoch of the 300-epoch budget, so
-the network was still (slowly) improving when training stopped, not
-demonstrably plateaued. That's a real, honest limitation of this demo
-(a production run would keep training further, or raise the learning
-rate) -- but it is not the same claim the pre-Bug-3 version of this
-page made: this model already reaches R2=0.84 on the independent test
-set (Section 5) *despite* not having fully converged, which is a
-meaningfully different, more encouraging situation than the R2-near-
-zero, still-not-converged result an unfixed `predict()` call used to
-produce. There is real headroom left on the table here (more epochs,
-a lower learning rate, or both would likely improve on 0.84 further),
-not a broken model to explain away.
+In this run, early stopping never actually triggered -- the lowest
+validation loss sits at the very last epoch of the 300-epoch budget,
+so the network was still (slowly) improving when training stopped, not
+demonstrably plateaued. That's an honest limitation of this demo's
+epoch budget (a production run would keep training, or lower the
+learning rate) -- there's real headroom left on the table below, not a
+broken model to explain away.
 
-## 5. Independent-test-set result -- and a direct comparison against Tutorial 12's Random Forest
+**Predicting correctly on the held-out test set -- the one step that
+is easy to get wrong.** `getMLmodel()` returns the raw Keras model and
+the fitted scaler as two separate pieces, on purpose, for flexibility
+-- it does not wrap them into a single self-scaling `predict()`. That
+means *you* are responsible for re-applying the training scaler to any
+new data before it reaches the network:
 
 ```{r dl-test-eval}
 if (dl_result$ok) {
-  # A real bug, found by re-reading this exact chunk: getMLmodel() trains
-  # on X range-scaled to [0,1] internally (via getSplitData()) but returns
-  # the raw keras model plus a *separate* scaler -- predict() does not
-  # re-apply that scaler for you. Feeding raw, unscaled reflectance here
-  # would train and predict in two different input spaces, which is
-  # consistent with everything Sections 5-7 originally showed: clean
-  # internal train/val convergence, but a badly broken held-out test R2.
   X_test_scaled <- predict(dl_result$model$Scalar.train, dataset_dense[test_idx, band_names])
   pred_test_dl <- as.numeric(predict(dl_result$model$model, as.matrix(X_test_scaled)))
   obs_test <- dataset_dense$Cab[test_idx]
@@ -249,6 +279,13 @@ if (dl_result$ok) {
       " bias=", round(bias_f(obs_test, pred_test_dl), 2), "\n")
 }
 ```
+
+Skip that `predict(model$Scalar.train, ...)` line and pass raw,
+unscaled reflectance straight to `model$model` instead -- an easy
+mistake, since it runs without error -- and training and prediction
+silently happen in two different input spaces. Section 11
+(Troubleshooting) shows exactly what that looks like and why it's so
+easy to miss.
 
 ```{r rf-comparison}
 if (dl_result$ok) {
@@ -277,23 +314,45 @@ if (dl_result$ok) {
 }
 ```
 
-**On this LUT (6000 rows, 10 Sentinel-2 bands), Random Forest still has
-a real edge, but the dense network is now a genuine competitor, not a
-broken demo.** R2=0.822/RMSE=6.53 for the dense network against
-R2=0.858/RMSE=5.84 for RF -- a real gap, but a small, ordinary one
-between two properly-fit models, nothing like the catastrophic
-mismatch Bug 3 above used to produce. Ten multispectral bands and a
-6000-row LUT are close to RF's best case, so RF keeping a modest lead
-here is a reasonable, unsurprising result -- not evidence that deep
-learning "doesn't work" for this problem.
+On this LUT (6000 rows, 10 Sentinel-2 bands), Random Forest keeps a
+small, ordinary edge (R2 around 0.86 against the dense network's
+0.82-0.84) -- a real gap between two properly-fit models, not evidence
+that deep learning "doesn't work" here. That's it for the core
+workflow: prepare data, split, understand normalization, train,
+predict correctly, evaluate. Part II extends the same pattern to a
+1D-CNN.
 
-## 6. The 1D-CNN, on hyperspectral (PRISMA) bands
+# Part II -- Advanced: 1D-CNN for hyperspectral inversion
 
-A dense network on 10 multispectral bands is a weak demonstration of
-what a 1D CNN specifically buys you -- convolution exploits
-*spectral-neighborhood* structure (adjacent, correlated bands), which
-10 widely-spaced multispectral bands barely have. PRISMA's ~230
-contiguous hyperspectral bands are a much fairer test of that idea:
+## 7. Why a CNN, and when it should matter
+
+```text
+Dense network                          1D-CNN
+
+B1 ---\                                lambda400 lambda410 lambda420 ... lambdaN
+B2 ----\                                  |__________|__________|_________|
+B3 -----+--> fully-connected --> Cab                 |
+...    /       layers                          1D convolution
+Bn ---/                                     (slides across neighbouring
+                                              wavelengths, in order)
+                                                      |
+                                              spectral features
+                                                      |
+                                                     Cab
+```
+
+A dense network treats each predictor column as an independent number
+-- band order carries no meaning to it. A 1D-CNN instead convolves
+across the predictor sequence, so it can learn a *local spectral
+shape* (an absorption feature spanning several adjacent bands) once,
+as a reusable pattern, rather than having to reconstruct that
+relationship independently for every band combination. That
+architectural advantage needs something to bite into: **widely-spaced
+multispectral bands (like Sentinel-2's 10) give a CNN little local
+structure to exploit.** Contiguous hyperspectral bands are a fairer
+test.
+
+## 8. A working CNN example, on PRISMA-resolution bands
 
 ```{r cnn-prisma, results = 'hide'}
 n_hyp <- 4000
@@ -319,10 +378,11 @@ cnn_result <- tryCatch({
 }, error = function(e) list(ok = FALSE, msg = conditionMessage(e)))
 ```
 
+Same predict-correctly pattern as Section 6, applied to the CNN's own
+scaler:
+
 ```{r cnn-eval}
 if (cnn_result$ok) {
-  # Same train/predict scaling mismatch fixed in Section 5 -- apply the
-  # returned Scalar.train to the test bands before feeding the network.
   X_test_h_scaled <- predict(cnn_result$model$Scalar.train, dataset_cnn[test_h, prisma_bands])
   pred_test_cnn <- as.numeric(predict(cnn_result$model$model,
     array_reshape(as.matrix(X_test_h_scaled), c(length(test_h), length(prisma_bands), 1))))
@@ -341,29 +401,80 @@ if (cnn_result$ok) {
 }
 ```
 
-The dense-vs-1D-CNN architectural difference itself: `"Hidden-layers"`
-is a stack of plain fully-connected layers, treating each band as an
-independent input with no notion of spectral order; `"CNN"` instead
-runs 1D convolution + pooling over the bands *in their spectral
-sequence*, so it can learn local absorption-feature shapes (a dip
-spanning several adjacent bands) as a reusable pattern -- something a
-dense network has to learn independently, band-combination by band-
-combination, with no structural help.
+R2 around 0.83-0.85 on 234 raw PRISMA bands -- in the same range as
+Section 6's 10-band dense/RF comparison, not a degradation from the
+much higher input dimensionality, and a genuinely usable result (not
+the point of this demo to beat RF; see Section 13 for that question).
+That itself says something: on this particular synthetic Cab-from-
+reflectance mapping, the CNN's spectral-neighbourhood advantage isn't
+yet the dominant factor -- not because the CNN is broken, but because
+there isn't a lot of local spectral structure here that a well-tuned
+dense network or RF weren't already capturing from the bands directly.
+Real hyperspectral problems with genuine local absorption features
+(rather than this synthetic Cab mapping) are where that advantage is
+more likely to show up.
 
-**R2=0.832/RMSE=6.64 on 234 raw PRISMA bands -- in the same range as
-Section 5's 10-band comparison (dense 0.822, RF 0.858), not a
-degradation from the much higher input dimensionality.** That itself
-is worth noting: a plain dense network on 10 bands and a 1D-CNN on 234
-land in a similar place here, which says the CNN's structural
-advantage (exploiting spectral neighborhoods) isn't yet the dominant
-factor on this particular synthetic Cab-from-reflectance mapping --
-not because the CNN is broken, but because there isn't much local
-spectral structure in this problem that a well-tuned dense network or
-RF weren't already capturing from the bands directly.
+# Troubleshooting
 
-## 7. Fewer, better features: does band+index selection help more than raw bands?
+## 9. `infinite or missing values in 'x'`
 
-Sections 4-6 threw every band at the network -- all 10 Sentinel-2
+Cause: `dataset` contained a column that is constant within your
+sample (every row the same value) -- perhaps a trait `inputsPROSAIL`
+holds fixed by design (`LMA`, `alpha`, `LIDFb`, `TypeLidf`, `hspot`,
+`tts`, `psi` all have zero variance in a plain `getLUT()` draw), or an
+ID column that slipped into `dataset` by accident. Section 1's
+"Important" box explains why: `getMLmodel()` has no `inputs =`
+argument, so *every* non-`depVar` column becomes a predictor, and its
+internal range-normalization divides by `(max - min)` for each one --
+zero for a constant column, producing `Inf`/`NA`. Fix: build `dataset`
+from exactly `depVar` plus the columns you actually want as
+predictors, as done throughout this page.
+
+## 10. Held-out R2 looks impossibly bad, despite a normal-looking learning curve
+
+This is the single most consequential mistake to avoid, and it does
+not raise an error -- it just silently gives you a wrong number.
+`getMLmodel()` trains on X range-scaled to \[0,1\] internally, and
+returns the raw Keras model and the fitted scaler as two separate
+pieces. If you call `predict(result$model, as.matrix(new_data))`
+directly on **raw, unscaled** new data, training and prediction happen
+in two different input spaces -- the network was trained *for scaled
+inputs* and is now being evaluated on inputs whose distribution it has
+never seen. Symptoms: R2 near zero to strongly negative on the test
+set, while the training/validation loss curve looks completely
+ordinary (because that curve is entirely internal to `getMLmodel()`
+and never touches your mis-scaled test call). Fix: always
+`predict(result$Scalar.train, new_data)` first, exactly as Sections 6
+and 8 do, before passing anything to `result$model`. If you also used
+`depVar.trans = TRUE`, reverse it on the output with
+`ToolsRTM::getReverse.trans(preProc = result$Scalar.Ytrain, data = ...)`
+(or use `ToolsRTM::getPredicts()`, which wraps both steps for you).
+
+## 11. A `relu` output layer can get stuck at exactly 0
+
+Not something you'll hit with `getMLmodel()` as shipped (fixed
+directly in `getMLmodel.R`/`getMLmodel_withRetrain.R`), but worth
+knowing if you ever adapt the architecture yourself: a `relu` unit's
+gradient is exactly zero whenever its pre-activation is negative. On a
+single-unit regression output with an unbounded-scale target, one
+unlucky batch of negative pre-activations early in training can
+permanently zero out that unit's gradient, with no way back regardless
+of epoch budget -- the model then predicts a near-constant value for
+every input. Use `activation = "linear"` for a regression output
+layer, not `"relu"`.
+
+# Advanced / Further experiments
+
+The rest of this page goes beyond "how do I use `getMLmodel()`" into
+open scientific questions -- when dense/CNN beat or lose to RF, and
+under what feature choices. Tutorial 12 already covers systematic
+algorithm comparison, and Tutorial 14 covers the full end-to-end
+pipeline; treat what follows as one worked example of that kind of
+investigation, not a second version of either.
+
+## 12. Fewer, better features: does band+index selection help more than raw bands?
+
+Sections 6 and 8 threw every band at the network -- all 10 Sentinel-2
 bands, all 234 PRISMA bands -- and let the model find what matters on
 its own. Tutorial 12 showed a different, more targeted approach for
 Random Forest: a compact core of physically relevant bands, plus a
@@ -399,21 +510,15 @@ run_trait <- function(trait) {
   feat <- c(core_bands, selected[[trait]])
   df <- cbind(LUT[trait], se2a_real[core_bands], idx_ml[selected[[trait]]])
 
-  # depVar.trans=TRUE: also range-scale the *target*, not just the inputs.
-  # With only a handful of highly informative features the network fits
-  # training data almost immediately; on LAI's narrow raw range (~0.5-7)
-  # that made unscaled-target MSE gradients explode early in training
-  # (verified: R2 as bad as -5000 with depVar.trans's default of FALSE).
-  # predict() then returns range-scaled [0,1] predictions, so invert them
-  # by hand using the returned scaler before computing R2 in real units.
+  # depVar.trans=TRUE: also range-scale the target, not just the inputs --
+  # with only a handful of highly informative features the network fits
+  # training data almost immediately, and on LAI's narrow raw range
+  # (~0.5-7) unscaled-target MSE gradients can be unstable early in
+  # training. predict() then returns range-scaled [0,1] predictions, so
+  # invert them by hand using the returned scaler before computing R2.
   dl <- getMLmodel(dataset = df[train_idx, ], depVar = trait, model = "Hidden-layers",
                     optimizer = "adam", n.epochs = 300, batch.size = 64, save.model = FALSE,
                     depVar.trans = TRUE)
-  # Same X-scaling mismatch fixed in Sections 5-6, found and fixed *after*
-  # this section's original depVar.trans experiment -- explains why scaling
-  # Y alone made things worse, not better: X was still being fed raw either
-  # way, and now two mismatched spaces (X raw-vs-scaled, Y real-vs-scaled)
-  # were compounding instead of one.
   X_test_scaled <- predict(dl$Scalar.train, df[test_idx, feat])
   pred_dl_scaled <- as.numeric(predict(dl$model, as.matrix(X_test_scaled)))
   y_range <- dl$Scalar.Ytrain$ranges[, trait]
@@ -453,89 +558,28 @@ for (trait in c("Cab", "LAI")) {
 par(op)
 ```
 
-**Fewer, better-chosen features help both models, and now dense
-genuinely competes with -- on LAI, even edges out -- Random Forest.**
-On Cab, dense (0.840) and RF (0.853) are essentially tied, both
-matching or slightly beating Section 5's all-10-band RF baseline
-(0.858) from a fraction of the inputs. On LAI, never even attempted
-with the generic 10-band set above, dense (0.689) *narrowly beats* RF
-(0.685) -- a real, if small, reversal of the pattern in Sections 5-6.
+Fewer, better-chosen features help both models. On Cab, dense and RF
+land close together (both around 0.83-0.86), essentially tied. On LAI
+-- never even attempted with the generic 10-band set in Part I --
+dense *narrowly edges out* RF, a real if small reversal of Part I's
+pattern. Once dense and RF are compared on equal footing, feature
+selection helps both; a properly trained dense network on a handful of
+informative inputs is competitive, not fragile.
 
-This result looked completely different -- both `R2_dense` values
-catastrophically negative -- before Bug 3 in Section 1 was found and
-fixed. That's worth sitting with: the earlier, broken version of this
-exact section would have "shown" that giving a dense network fewer,
-better features makes it *worse*, actively contradicting Tutorial 12's
-finding for RF and inviting exactly the wrong lesson (dense networks
-can't handle small, informative feature sets). The real lesson is the
-opposite -- once dense and RF are compared on equal footing, feature
-selection helps both, and a properly trained dense network on a
-handful of informative inputs is perfectly competitive, not fragile.
+## 13. Which one should you use?
 
-## 8. Which one should you use? (Tutorials 10-13, together) -- corrected
+| Method | Needs training? | Typical use |
+|---|---|---|
+| `get.inversionOpt()` (Tutorial 11) | No -- pure search | Quick, physically-grounded retrieval when a genuinely well-populated reference LUT already exists (needs real coverage: ~100 reference spectra gave R2 near zero in Tutorial 11's own test, ~2000 gave real skill) |
+| `get.inversion()` (Tutorial 12) | Yes | General-purpose retrieval; often the right default -- its `predict()` handles preprocessing internally, so there's no separate scaler to remember |
+| `getMLmodel()` (this page) | Yes, more so | Large LUTs, hyperspectral input, and/or when compact, hand-picked features matter (Section 12). Competitive with RF once trained and evaluated correctly -- but the least forgiving of a scaling mistake (Section 10), since a wrong `predict()` call fails silently, not with an error |
 
-An earlier version of this table implied `get.inversionOpt()` (pure
-LUT search, no training) works fine from a small reference LUT. Tutorial
-11's own real test contradicts that: at ~100 reference spectra,
-`get.inversionOpt()` scored R² close to zero (no real skill); it only
-became useful around 2000. **All three methods need substantially more
-data than a quick demo LUT provides for genuinely reliable results** --
-the difference between them is *how* they degrade and recover, not
-whether one of them is exempt from needing data:
-
-| Method | Needs training? | Small-LUT behavior (verified) | Typical use |
-|---|---|---|---|
-| `get.inversionOpt()` (Tutorial 11) | No -- pure search | Degrades smoothly but really does need real coverage -- ~100 reference spectra gave R2 near zero in Tutorial 11's own test; ~2000 gave real skill | Quick, physically-grounded retrieval when a genuinely well-populated reference LUT already exists |
-| `get.inversion()` (Tutorial 12) | Yes | The most forgiving of the three in practice -- RF stayed usable even on Tutorial 12's 150-row LUT, and keeps a small, consistent edge over dense/CNN on this page's 6000-row one (Sections 5-6) | General-purpose retrieval; often the right default |
-| `getMLmodel()` (this page) | Yes, more so, and *easy to silently misuse* | Once trained and evaluated correctly (Section 1's three bugs fixed), competitive with RF -- 0.822-0.840 R2 on Cab, actually edges out RF on LAI with a compact feature set (Section 7). Still the most data-hungry of the three, and the least forgiving of a scaling mistake: a wrong `predict()` call produces a *plausible-looking* broken number, not an error | Large LUTs, hyperspectral input, and/or when the extra setup care is worth it |
-
-## 9. When should I use deep learning?
-
-**Once implemented correctly, more readily than this page's earlier,
-broken version of itself would have suggested.** The real lesson of
-this page isn't "DL underperforms here" -- Bug 3 in Section 1 made it
-look that way, and that conclusion would have been wrong. Once
-training and prediction actually operate in the same input space, a
-plain dense network is a genuine, competitive option, not a fallback
-for when you have no other choice. What still tips the decision toward
-`get.inversion()` (Tutorial 12) as the default, or toward `getMLmodel()`
-specifically, is more mundane:
-
-- **Setup discipline, honestly the main cost now**: `get.inversion()`'s
-  `predict()` (an ordinary caret model object) handles its own
-  preprocessing internally -- you cannot forget to rescale test data,
-  because there's no separate scaler to remember. `getMLmodel()`
-  returns the raw network and its scaler as two pieces on purpose (for
-  flexibility), but that means the caller is responsible for
-  `predict(model$Scalar.train, newdata)` before every prediction, and
-  for reversing `depVar.trans` with `getReverse.trans()` if it was
-  used. Bug 3 above is exactly what forgetting that step looks like --
-  worth internalizing before reaching for `getMLmodel()` in your own
-  code, not just reading about it here.
-- **LUT size**: still real -- thousands of rows, not hundreds, gave
-  both dense and CNN room to actually learn (Section 2). Nothing here
-  suggests DL degrades *more gracefully* than RF on a small LUT; if
-  anything, assume the opposite until shown otherwise.
-- **Input dimensionality**: hyperspectral (dozens to hundreds of
-  correlated bands) is where a CNN's spectral-neighborhood structure
-  has real potential to exploit local absorption-feature shape (Section
-  6) -- though on this page's own synthetic Cab mapping, that potential
-  didn't yet translate into a clear edge over the plain dense network.
-- **Overfitting risk, watched, not assumed**: the learning-curve check
-  in Section 4 is not optional -- a validation curve that's still
-  falling means the reported test number isn't from a converged model;
-  one that's risen back up after a minimum means the model has started
-  memorizing the (synthetic) training LUT specifically. A clean-looking
-  learning curve is necessary but, as this page found out the hard way,
-  nowhere near sufficient -- it says nothing about whether the
-  *prediction* pipeline is internally consistent with training.
-
-For this package's own bundled models, `get.inversion()` (Tutorial 12)
-remains the lower-friction default -- not because deep learning
-performs worse, but because it is much harder to silently misuse.
-Reach for `getMLmodel()` when the LUT is genuinely large or the sensor
-is hyperspectral, and budget real attention for Section 1's setup
-discipline, not just training epochs.
+For this package's own bundled models, `get.inversion()` remains the
+lower-friction default -- not because deep learning performs worse
+here, but because it is harder to silently misuse. Reach for
+`getMLmodel()` when the LUT is genuinely large, the sensor is
+hyperspectral, or a compact hand-chosen feature set matters, and budget
+real attention for Section 10's predict-correctly discipline.
 
 ## What's next
 
