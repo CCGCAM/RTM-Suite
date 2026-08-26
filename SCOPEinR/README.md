@@ -1,6 +1,6 @@
 ### SCOPEinR
 
-[![R \>= 4.3](https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white)](https://www.r-project.org/) [![SCOPEinR on GitLab](https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/scopeinr) [![RTM--Suite on GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite) [![scopeinpython (Python port) on GitHub](https://img.shields.io/badge/GitHub-scopeinpython%20(Python)-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/scopeinpython)
+[![R \>= 4.3](https://img.shields.io/badge/R-%3E%3D%204.3-276DC3?logo=r&logoColor=white)](https://www.r-project.org/) [![SCOPEinR on GitLab](https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/scopeinr) [![RTM--Suite on GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite) [![scopeinpython (Python port) on GitHub](https://img.shields.io/badge/GitHub-scopeinpython%20(Python)-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite/tree/main/python/scopeinpython)
 
 **SCOPEinR** is an R package designed for implementing the Soil Canopy Observation, Photochemistry, and Energy Fluxes (SCOPE) radiative transfer model. Originally developed in MATLAB. SCOPE is a physically based model that simulates the interactions between **soil, vegetation and atmosphere**, linking radiative transfer with photosynthesis, chlorophyll fluorescence and energy balance processes (Van der Tol et al., 2009; Yang et al., 2020).
 
@@ -22,8 +22,8 @@ SCOPEinR is part of **RTM-Suite**, which brings together the R packages, interac
 |------------------------|------------------------|------------------------|
 | **ToolsRTM** (R) | Leaf, canopy, soil, atmosphere, sensor convolution, and trait inversion | [![GitLab](https://img.shields.io/badge/GitLab-ToolsRTM-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/toolsrtm) |
 | **SCOPEinR** (R) | Energy balance, photosynthesis, fluorescence, and SCOPE simulations in R | [![GitLab](https://img.shields.io/badge/GitLab-SCOPEinR-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/scopeinr) |
-| **toolsrtm** (Python) | Python port of ToolsRTM | [![GitHub](https://img.shields.io/badge/GitHub-toolsrtm-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/ToolsRTMinPython) |
-| **scopeinpython** (Python) | Python port of SCOPEinR | [![GitHub](https://img.shields.io/badge/GitHub-scopeinpython-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/scopeinpython) |
+| **toolsrtm** (Python) | Python port of ToolsRTM | [![GitHub](https://img.shields.io/badge/GitHub-toolsrtm-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite/tree/main/python/toolsrtm) |
+| **scopeinpython** (Python) | Python port of SCOPEinR | [![GitHub](https://img.shields.io/badge/GitHub-scopeinpython-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite/tree/main/python/scopeinpython) |
 | **RTM-Suite** | Monorepo: both R packages, both Python ports, apps, tutorials, docs | [![GitHub](https://img.shields.io/badge/GitHub-RTM--Suite-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite) |
 | **Apps/RTMs** | Interactive access to the models without writing code (Shiny, run locally) | [Source](https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/RTMs) |
 

@@ -1,0 +1,17 @@
+R side, PROSPECT-D + fourSAIL : 100 / 100 valid, domain = 2101 pts
+R side, PROSPECT-PRO + fourSAIL : 100 / 100 valid, domain = 2101 pts
+R side, Liberty + fourSAIL : 89 / 100 valid, domain = 2101 pts
+R side, Fluspect-B + fourSAIL : 100 / 100 valid, domain = 2001 pts
+R side, Fluspect-B-Cx + fourSAIL : 100 / 100 valid, domain = 2001 pts
+R side, PROSPECT-D + foursail2 : 100 / 100 valid, domain = 2101 pts
+R side, PROSPECT-PRO + foursail2 : 100 / 100 valid, domain = 2101 pts
+R side, Liberty + foursail2 : 93 / 100 valid, domain = 2101 pts
+R side, Fluspect-B + foursail2 : 100 / 100 valid, domain = 2001 pts
+R side, Fluspect-B-Cx + foursail2 : 100 / 100 valid, domain = 2001 pts
+R side, PROSPECT-D + INFORM : 100 / 100 valid, domain = 2101 pts
+R side, PROSPECT-PRO + INFORM : 100 / 100 valid, domain = 2101 pts
+R side, Liberty + INFORM : 92 / 100 valid, domain = 2101 pts
+R side, Fluspect-B + INFORM : 100 / 100 valid, domain = 2001 pts
+R side, Fluspect-B-Cx + INFORM : 100 / 100 valid, domain = 2001 pts
+There were 50 or more warnings (use warnings() to see the first 50)
+Done, all 15 leaf x canopy combinations written to C:\Users\camin001\OneDrive - Wageningen University & Research\Workspace\0-RTM-Suite/Scripts/Comparison/_out 

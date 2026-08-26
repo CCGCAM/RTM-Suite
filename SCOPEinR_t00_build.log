@@ -1,0 +1,25 @@
+Reading vignettes/t00-scope-options.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+
+
+processing file: t00-scope-options.Rmd
+1/11                   
+2/11 [unnamed-chunk-1] 
+3/11                   
+4/11 [setup]           
+5/11                   
+6/11 [shipped-defaults]
+7/11                   
+8/11 [appendix-helpers]
+9/11                   
+10/11 [appendix-test]   
+11/11                   
+output file: C:/Users/camin001/AppData/Local/Temp/RtmpEjxPDZ/t00-scope-options.knit.md
+
+"C:/Users/camin001/AppData/Local/Pandoc/pandoc" +RTS -K512m -RTS "C:\Users\camin001\AppData\Local\Temp\RtmpEjxPDZ\t00-scope-options.knit.md" --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output pandoc8e0c74675ade.html --lua-filter "C:\Users\camin001\AppData\Local\Programs\R\R-4.5.1\library\rmarkdown\rmarkdown\lua\pagebreak.lua" --lua-filter "C:\Users\camin001\AppData\Local\Programs\R\R-4.5.1\library\rmarkdown\rmarkdown\lua\latex-div.lua" --lua-filter "C:\Users\camin001\AppData\Local\Programs\R\R-4.5.1\library\rmarkdown\rmarkdown\lua\table-classes.lua" --standalone --section-divs --template "C:\Users\camin001\AppData\Local\Temp\RtmpEjxPDZ\pkgdown-rmd-template-65d0fae502e.html" --highlight-style pygments --mathml --include-in-header "C:\Users\camin001\AppData\Local\Temp\RtmpGuvMlu\rmarkdown-str8e0c369d739a.html" 
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+
+Output created: docs/articles/t00-scope-options.html
+Writing `articles/t00-scope-options.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+T00_SCOPE_BUILD_DONE

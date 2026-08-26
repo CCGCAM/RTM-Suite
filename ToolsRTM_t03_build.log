@@ -1,0 +1,47 @@
+Reading vignettes/t03-spart.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+
+
+processing file: t03-spart.Rmd
+1/33                    
+2/33 [unnamed-chunk-1]  
+3/33                    
+4/33 [setup]            
+5/33                    
+6/33 [lut]              
+7/33                    
+8/33 [baseline]         
+9/33                    
+10/33 [baseline-plot]    
+11/33                    
+12/33 [toa-toc-diff]     
+13/33                    
+14/33 [bsm-sensitivity]  
+15/33                    
+16/33 [soil-lai-gradient]
+17/33                    
+18/33 [soil-lai-plot]    
+19/33                    
+20/33 [marmit-lai]       
+21/33                    
+22/33 [marmit-lai-plot]  
+23/33                    
+24/33 [atmos-drivers]    
+25/33                    
+26/33 [geometry]         
+27/33                    
+28/33 [multi-factor]     
+29/33                    
+30/33 [domain-gap]       
+31/33                    
+32/33 [sensors]          
+33/33                    
+output file: C:/Users/camin001/AppData/Local/Temp/RtmpoTI7Lz/t03-spart.knit.md
+
+"C:/Users/camin001/AppData/Local/Pandoc/pandoc" +RTS -K512m -RTS "C:\Users\camin001\AppData\Local\Temp\RtmpoTI7Lz\t03-spart.knit.md" --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output pandoca7c8301a3030.html --lua-filter "C:\Users\camin001\AppData\Local\Programs\R\R-4.5.1\library\rmarkdown\rmarkdown\lua\pagebreak.lua" --lua-filter "C:\Users\camin001\AppData\Local\Programs\R\R-4.5.1\library\rmarkdown\rmarkdown\lua\latex-div.lua" --lua-filter "C:\Users\camin001\AppData\Local\Programs\R\R-4.5.1\library\rmarkdown\rmarkdown\lua\table-classes.lua" --standalone --section-divs --template "C:\Users\camin001\AppData\Local\Temp\RtmpoTI7Lz\pkgdown-rmd-template-7294f066189.html" --highlight-style pygments --mathml --include-in-header "C:\Users\camin001\AppData\Local\Temp\RtmpsJ9VMj\rmarkdown-stra7c8657921d5.html" 
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+
+Output created: docs/articles/t03-spart.html
+Writing `articles/t03-spart.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+T03_BUILD_DONE

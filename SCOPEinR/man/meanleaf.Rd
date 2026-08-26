@@ -16,7 +16,7 @@ meanleaf(canopy, F_, canopy.choice, Ps)
 \item{Ps}{numeric vector of length nl. Fraction of sunlit leaf area per layer, used as the layer weight for \code{canopy.choice \%in\% c('layers', 'angles_and_layers')}.}
 }
 \value{
-numeric vector. \code{Fout_vertical}: for \code{canopy.choice = 'angles'}, one averaged value per layer (length \code{nl}); for \code{'layers'}, a single averaged value; for \code{'angles_and_layers'}, one averaged value per layer (length \code{nl}).
+numeric vector. \code{Fout_vertical}: for \code{canopy.choice = 'angles'}, one averaged value per layer (length \code{nl}); for \code{'layers'} or \code{'angles_and_layers'}, a single averaged value.
 }
 \description{
 \code{meanleaf} averages a leaf-scale property, given as a 3D array over

@@ -13,6 +13,7 @@ src/toolsrtm/leaf.py
 src/toolsrtm/liberty.py
 src/toolsrtm/marmit.py
 src/toolsrtm/satellite.py
+src/toolsrtm/sensitivity.py
 src/toolsrtm/smac.py
 src/toolsrtm/spart.py
 src/toolsrtm/srf.py
@@ -84,6 +85,7 @@ tests/test_leaf_model_wiring.py
 tests/test_liberty.py
 tests/test_marmit.py
 tests/test_satellite.py
+tests/test_sensitivity.py
 tests/test_smac.py
 tests/test_spart.py
 tests/test_srf.py

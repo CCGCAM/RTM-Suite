@@ -4,7 +4,7 @@
 \alias{get.calcTOCirr}
 \title{get.calcTOCirr}
 \usage{
-get.calcTOCirr(atmo, meteo, rdd, rsd, wl, nwl)
+get.calcTOCirr(atmo, meteo, rdd, rsd, wl, nwl, spectral, soil)
 }
 \arguments{
 \item{atmo}{list or data.frame. Atmospheric input, either pre-computed \code{Esun_}/\code{Esky_} spectra, or MODTRAN output containing wavenumber (\code{WN}) and transmittance/radiance functions \code{T1, T2, T3, T4, T5, T12, T16}.}
@@ -18,6 +18,13 @@ get.calcTOCirr(atmo, meteo, rdd, rsd, wl, nwl)
 \item{wl}{numeric vector of length \code{nwl}. Wavelengths of the spectral domain (nm).}
 
 \item{nwl}{integer. Number of wavelengths in the spectral domain.}
+
+\item{spectral}{list. Spectral-domain object (as built elsewhere in this
+package, e.g. \code{data.spectral} in \code{getRTMo()}) -- used here
+for its \code{reg1}/\code{reg2}/\code{reg3}/\code{IwlT} index ranges.}
+
+\item{soil}{list. Soil properties object (e.g. \code{data.soil} in
+\code{getRTMo()}) -- used here for its \code{rs_thermal} value.}
 }
 \value{
 A list with:
@@ -37,7 +44,7 @@ incoming shortwave (\code{Rin}) and longwave (\code{Rli}) radiation.
 }
 \examples{
 \dontrun{
-TOCirr <- get.calcTOCirr(atmo, meteo, rdd, rsd, wl, nwl)
+TOCirr <- get.calcTOCirr(atmo, meteo, rdd, rsd, wl, nwl, spectral, soil)
 }
 }
 \author{

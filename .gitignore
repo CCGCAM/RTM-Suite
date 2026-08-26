@@ -32,3 +32,7 @@ __pycache__/
 # is committed, same pattern as the R pkgdown sites in docs/toolsrtm, docs/scopeinr
 python/docs/_build/
 Scripts/Comparison/_out/refl_R_*.csv
+
+# CRAN/PyPI submission staging -- cleaned copies assembled locally, never
+# meant to live in repo history (see toUpload/README.md)
+toUpload/

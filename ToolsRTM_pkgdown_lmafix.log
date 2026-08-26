@@ -1,0 +1,267 @@
+── Installing package ToolsRTM into temporary library ──────────────────────────
+── Building pkgdown site for package ToolsRTM ──────────────────────────────────
+Reading from: C:/Users/camin001/OneDrive - Wageningen University &
+Research/Workspace/0-RTM-Suite/ToolsRTM
+Writing to: C:/Users/camin001/OneDrive - Wageningen University &
+Research/Workspace/0-RTM-Suite/ToolsRTM/docs
+── Sitrep ──────────────────────────────────────────────────────────────────────
+✖ URLs not ok.
+  In _pkgdown.yml, url is missing.
+  See details in `vignette(pkgdown::metadata)`.
+✔ Favicons ok.
+✔ Open graph metadata ok.
+✔ Articles metadata ok.
+✔ Reference metadata ok.
+── Initialising site ───────────────────────────────────────────────────────────
+── Building home ───────────────────────────────────────────────────────────────
+Reading README.md
+Writing `404.html`
+── Building function reference ─────────────────────────────────────────────────
+Reading man/calctav.Rd
+Reading man/calc_fluspect_bcar.Rd
+Reading man/campbell.Rd
+Reading man/color.gradient.Rd
+Reading man/Compute_BRF.Rd
+Reading man/compute_stats.Rd
+Reading man/ConservativeScattering.Rd
+Reading man/correlatedValue.Rd
+Reading man/COST_4Fluspect.Rd
+Reading man/dataspec.liberty.Rd
+Reading man/dataSpec_PDB.Rd
+Reading man/dataSpec_PRO.Rd
+Reading man/dcum.Rd
+Reading man/define_bands.Rd
+Reading man/define_constants.Rd
+Reading man/dladgen.Rd
+Reading man/EnMap.characteristics.Rd
+Reading man/ephoton.Rd
+Reading man/exp1_base.Rd
+Reading man/extract_dates_from_tiff_files.Rd
+Reading man/Extraterrestrial_irradiance.Rd
+Reading man/filter_outliers.Rd
+Reading man/foursail.inf.Rd
+Reading man/foursail.inform.Rd
+Reading man/foursail.Rd
+Reading man/foursail2.Rd
+Reading man/foursail_t_o.Rd
+Reading man/foursail_t_s.Rd
+Reading man/fwhm.prisma.Rd
+Reading man/gauss_byMin_Max.Rd
+Reading man/get.Altitude2Pa.Rd
+Reading man/get.cars.pls.Rd
+Reading man/get.coef.SMAC.Rd
+Reading man/get.Extraterrestrial_radiance.Rd
+Reading man/get.foursail2.leafopt.Rd
+Reading man/get.indices.v2.Rd
+Writing `reference/get.indices.v2.html`
+Reading man/get.inversion.Rd
+Reading man/get.inversionOpt.Rd
+Writing `reference/get.inversionOpt.html`
+Reading man/get.LUTfromRanges.Rd
+Reading man/get.marmit.rsoil.Rd
+Reading man/get.marmit1.Rd
+Reading man/get.marmit2.Rd
+Reading man/get.packages.Rd
+Reading man/get.plot.cars.pls.Rd
+Reading man/get.plot.ML.Rd
+Reading man/get.plot.plsr.Rd
+Reading man/get.plots.Rd
+Reading man/get.RTM.Rd
+Reading man/get.satellite_collection.Rd
+Reading man/get.sentinel2_cube.Rd
+Reading man/get.smac.Rd
+Reading man/get.sobol.indices.Rd
+Reading man/get.spectra.convolved.Rd
+Reading man/get.spectra.spart.Rd
+Reading man/get.spectral.convolution.gaussian.Rd
+Reading man/get.spectral.convolution.Rd
+Reading man/get.spectral.convolution.rfl.Rd
+Reading man/get.spectral.convolution.srf.Rd
+Reading man/get.spectral.derivative.Rd
+Reading man/get.spectral.Rd
+Reading man/get.spectral.sensitivity.Rd
+Registered S3 method overwritten by 'sensitivity':
+  method    from 
+  print.src dplyr
+Reading man/get.srf.from_fwhm.Rd
+Reading man/get.stats.ind.Rd
+Reading man/get.stats.plsr.Rd
+Reading man/get.stats.Rd
+Reading man/getBSM.toolsRTM.Rd
+Reading man/getCor.Rd
+Reading man/getCWSI.Rd
+Reading man/getFLD2.Rd
+Reading man/getFLD2_SE.Rd
+Reading man/getFluspect.B.Rd
+Reading man/getFluspect.Cx.Rd
+Reading man/getIndices.Rd
+Writing `reference/getIndices.html`
+Reading man/getIndicesSE2.ML.Rd
+Reading man/getIndicesSE2.Rd
+Reading man/getKmeans.Rd
+Reading man/getLUT.Rd
+Reading man/getLUTs.Rd
+Reading man/getLUT_liberty.Rd
+Reading man/getMLmodel.Rd
+Reading man/getMLmodel.withRetrain.Rd
+Reading man/GetMosaics.Rd
+Reading man/getPredicts.Rd
+Reading man/getReverse.trans.Rd
+Reading man/getSeries.Rd
+Reading man/getSim_fromLUT.Rd
+Reading man/getSpatialTrait.Rd
+Reading man/getSpatial_index.Rd
+Reading man/getSpectraIndices.Rd
+Reading man/GetSpectralseries.Rd
+Reading man/getSplitData.Rd
+Reading man/getSplitData_noMessages.Rd
+Reading man/getStacks.Rd
+Reading man/getTIFFs.Rd
+Reading man/getVIF.Rd
+Reading man/get_append.Rd
+Reading man/get_bounding_box.Rd
+Reading man/get_data.Rd
+Reading man/get_distributionLUT.Rd
+Reading man/get_response.R.Rd
+Reading man/get_simulations.Rd
+Reading man/hybrid_inversion.Rd
+Reading man/hybrid_inversionE.Rd
+Reading man/inform.Rd
+Reading man/Jfunc1.Rd
+Reading man/jfunc1_.Rd
+Reading man/Jfunc2.Rd
+Reading man/Jfunc3.Rd
+Reading man/Jfunc4.Rd
+Reading man/LeafDB.Angers.Rd
+Reading man/leaf_spectrum.Rd
+Reading man/liberty.Rd
+Reading man/MAE.Rd
+Reading man/NonConservativeScattering.Rd
+Reading man/normalize.Rd
+Reading man/numjacobian.Rd
+Reading man/optipar.2015.Rd
+Reading man/optipar.Rd
+Reading man/plotspectra.Rd
+Reading man/plotspectra_image.Rd
+Reading man/plotspectra_SE.Rd
+Reading man/prospect_DB.Rd
+Reading man/prospect_PRO.Rd
+Reading man/rbinomcor.Rd
+Reading man/rchisqcor.Rd
+Writing `reference/rchisqcor.html`
+Reading man/resample_fun.Rd
+Reading man/rgammacor.Rd
+Writing `reference/rgammacor.html`
+Reading man/rlnormcor.Rd
+Reading man/RMSE.Rd
+Reading man/rnegbinomcor.Rd
+Reading man/rnormcor.Rd
+Reading man/rnormcorV.Rd
+Writing `reference/rnormcorV.html`
+Reading man/rpoiscor.Rd
+Writing `reference/rpoiscor.html`
+Reading man/rtm-input-specs.Rd
+Reading man/runifcor.cor.Rd
+Writing `reference/runifcor.cor.html`
+Reading man/run_simulation.Rd
+Reading man/rweibullcor.Rd
+Writing `reference/rweibullcor.html`
+Reading man/sensor-smac-srf.Rd
+Reading man/sensor.characteristics.Rd
+Reading man/sigmoid.soil.Rd
+Reading man/simulate_RTM.Rd
+Reading man/Sint.Rd
+Reading man/soilwat.Rd
+Reading man/SPART.Rd
+Reading man/SPART.simN.Rd
+Reading man/srf-sentinel2.Rd
+Reading man/srf.prisma.Rd
+Reading man/ToolsRTM-package.Rd
+Reading man/volscatt.Rd
+── Building articles ───────────────────────────────────────────────────────────
+Reading vignettes/articles/course-pipeline.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/Getting-LUTs.Rmd
+Writing `articles/Getting-LUTs.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/articles/InversionOpt.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/articles/model-comparison-and-sensitivity.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t01-getting-started.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t02-leaf-to-canopy.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t03-spart.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t04-comparing-models.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t05-building-luts.Rmd
+Writing `articles/t05-building-luts.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t06-parallel-simulation.Rmd
+Writing `articles/t06-parallel-simulation.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t07-sensor-convolution.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t08-hyperspectral-sensors.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t09-vegetation-indices.Rmd
+Writing `articles/t09-vegetation-indices.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t10-sensitivity.Rmd
+Writing `articles/t10-sensitivity.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t11-hybrid-inversion.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t12-ml-inversion-comparison.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/articles/t13-deep-learning-inversion.Rmd
+Writing `articles/t13-deep-learning-inversion.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/articles/t14-end-to-end-pipeline.Rmd
+Writing `articles/t14-end-to-end-pipeline.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/articles/t15-real-eo-application.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/t16-marmit-soil-in-canopy.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/articles/t17-forest-time-series.Rmd
+Writing `articles/t17-forest-time-series.html`
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/articles/t18-spatial-index-mapping.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/articles/t19-flex-esu-heterogeneity.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+Reading vignettes/ToolsRTM/ToolsRTM.Rmd
+[WARNING] Deprecated: --highlight-style. Use --syntax-highlighting instead.
+✖ Missing alt-text in 'vignettes/ToolsRTM/ToolsRTM.Rmd'
+• images/rtm_sims.png
+ℹ Learn more in `vignette(pkgdown::accessibility)`.
+── Building news ───────────────────────────────────────────────────────────────
+── Building sitemap ────────────────────────────────────────────────────────────
+── Building docs for llms ──────────────────────────────────────────────────────
+── Building search index ───────────────────────────────────────────────────────
+── Checking for problems ───────────────────────────────────────────────────────
+✖ Missing alt-text in 'README.md'
+• reference/figures/rtm_sims.png
+• reference/figures/shiny.png
+ℹ Learn more in `vignette(pkgdown::accessibility)`.
+── Finished building pkgdown site for package ToolsRTM ─────────────────────────
+Warning messages:
+1: In dir.create(target_dir) :
+  'C:\Users\camin001\OneDrive - Wageningen University & Research\Workspace\0-RTM-Suite\ToolsRTM\docs\deps\jquery-3.6.0' already exists
+2: In dir.create(target_dir) :
+  'C:\Users\camin001\OneDrive - Wageningen University & Research\Workspace\0-RTM-Suite\ToolsRTM\docs\deps\bootstrap-5.3.1' already exists
+3: In dir.create(target_dir) :
+  'C:\Users\camin001\OneDrive - Wageningen University & Research\Workspace\0-RTM-Suite\ToolsRTM\docs\deps\font-awesome-6.5.2' already exists
+4: In dir.create(target_dir) :
+  'C:\Users\camin001\OneDrive - Wageningen University & Research\Workspace\0-RTM-Suite\ToolsRTM\docs\deps\headroom-0.11.0' already exists
+5: In dir.create(target_dir) :
+  'C:\Users\camin001\OneDrive - Wageningen University & Research\Workspace\0-RTM-Suite\ToolsRTM\docs\deps\bootstrap-toc-1.0.1' already exists
+6: In dir.create(target_dir) :
+  'C:\Users\camin001\OneDrive - Wageningen University & Research\Workspace\0-RTM-Suite\ToolsRTM\docs\deps\clipboard.js-2.0.11' already exists
+7: In dir.create(target_dir) :
+  'C:\Users\camin001\OneDrive - Wageningen University & Research\Workspace\0-RTM-Suite\ToolsRTM\docs\deps\search-1.0.0' already exists
+── Finished building pkgdown site for package ToolsRTM ─────────────────────────
+PKGDOWN_BUILD_DONE
