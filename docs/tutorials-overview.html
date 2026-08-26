@@ -78,6 +78,7 @@
     <a href="#ml">ML inversion</a>
     <a href="#deep-learning">Deep learning</a>
     <a href="#sensitivity">Sensitivity analysis</a>
+    <a href="#spatial">Satellite &amp; spatial applications</a>
   </div>
 
   <h2 id="toolsrtm-models"><span class="kicker">ToolsRTM</span>Leaf, canopy, soil, atmosphere models</h2>
@@ -156,13 +157,29 @@
   <p class="desc">One-at-a-time sweeps, Sobol variance-based indices, and Johnson relative-weights regression — three complementary ways to answer "which input trait matters, and where in the spectrum." Ported to Python (<code>toolsrtm.sensitivity</code>) and verified against R to 8 decimal places.</p>
   <div class="shot-grid">
     <div class="card"><img src="Tutorials/images/tutorial_sensitivity.png" alt="Canopy reflectance sensitivity to Cab and EWT"><div class="cap">Canopy reflectance sensitivity to Cab and EWT (How-in-R/Python)</div></div>
-    <div class="card"><img src="toolsrtm/articles/t10-sensitivity_files/figure-html/johnson-plot-1.png" alt="Johnson relative-weights importance plot"><div class="cap">Johnson relative-weights: trait importance ranking (Tutorial 10)</div></div>
+    <div class="card"><img src="toolsrtm/articles/t10-sensitivity_files/figure-html/sobol-spectral-plot-1.png" alt="Stacked-area chart of Johnson relative-importance index by wavelength for Cab, EWT, LAI, SoilCoef"><div class="cap">Which trait dominates at each wavelength — Cab (VIS), LAI (red-edge/NIR), EWT (SWIR) (Tutorial 10)</div></div>
     <div class="card"><img src="scopeinr/articles/t07-sensitivity_files/figure-html/sweep-vcmax-refl-1.png" alt="SCOPE reflectance sensitivity to Vcmax25"><div class="cap">Reflectance sensitivity to Vcmax25 — direct vs. indirect effect (SCOPEinR Tutorial 07)</div></div>
   </div>
   <table>
     <tr><th>#</th><th>Tutorial</th><th></th></tr>
     <tr><td>ToolsRTM 10</td><td><a href="toolsrtm/articles/t10-sensitivity.html">Understanding RTM Sensitivity</a></td><td><a class="py-link" href="python/examples.html#global-sensitivity-analysis-toolsrtm">Python module &rarr;</a></td></tr>
     <tr><td>SCOPEinR 07</td><td><a href="scopeinr/articles/t07-sensitivity.html">Sensitivity: Direct vs. Indirect Trait Effects</a></td><td></td></tr>
+  </table>
+
+  <h2 id="spatial"><span class="kicker">Real Sentinel-2 &amp; FLEX</span>Satellite &amp; spatial applications</h2>
+  <p class="desc">Same models, real pixels: pulling actual Sentinel-2 scenes via STAC, inverting trait maps pixel-by-pixel, and scaling up to FLEX's coarser footprint with sub-pixel heterogeneity. This is where the LUTs, ML inversion, and sensitivity results above turn into an actual map.</p>
+  <div class="shot-grid">
+    <div class="card"><img src="toolsrtm/articles/t18-spatial-index-mapping_files/figure-html/cab-map-1.png" alt="Spatial maps of REIP1 index and retrieved Cab from real Sentinel-2 imagery"><div class="cap">REIP1 index and retrieved Cab, real Sentinel-2 scene (Tutorial 18)</div></div>
+    <div class="card"><img src="toolsrtm/articles/t19-flex-esu-heterogeneity_files/figure-html/trait-maps-1.png" alt="Cab, LAI and Car trait maps at 10m resolution over a FLEX elementary sampling unit"><div class="cap">Cab, LAI, Car trait maps at 10m, FLEX ESU (Tutorial 19)</div></div>
+    <div class="card"><img src="scopeinr/articles/t11-photosynthesis-capstone_files/figure-html/ndvi-map-1.png" alt="NDVI spatial map from a real Sentinel-2 scene over Speulderbos"><div class="cap">NDVI from a real Sentinel-2 scene, Speulderbos (SCOPEinR Tutorial 11)</div></div>
+  </div>
+  <table>
+    <tr><th>#</th><th>Tutorial</th><th></th></tr>
+    <tr><td>ToolsRTM 15</td><td><a href="toolsrtm/articles/t15-real-eo-application.html">From Satellite Reflectance to Traits: Real EO Application</a></td><td></td></tr>
+    <tr><td>ToolsRTM 17</td><td><a href="toolsrtm/articles/t17-forest-time-series.html">Monitoring a Forest Site Through Time</a></td><td></td></tr>
+    <tr><td>ToolsRTM 18</td><td><a href="toolsrtm/articles/t18-spatial-index-mapping.html">Data-Driven Spatial Index Mapping</a></td><td><a class="py-link" href="python/examples.html#real-sentinel-2-capstone-data-driven-spatial-index-cab-mapping-toolsrtm">Python capstone &rarr;</a></td></tr>
+    <tr><td>ToolsRTM 19</td><td><a href="toolsrtm/articles/t19-flex-esu-heterogeneity.html">FLEX Cal/Val: ESU Heterogeneity Mapping</a></td><td></td></tr>
+    <tr><td>SCOPEinR 11</td><td><a href="scopeinr/articles/t11-photosynthesis-capstone.html">Capstone: ML Inversion of Net Photosynthesis, Real Sentinel-2</a></td><td><a class="py-link" href="python/examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython">Python capstone &rarr;</a></td></tr>
   </table>
 
   <p style="margin-top: 40px; font-size: 12.5px; color: var(--text-muted);">This is a curated visual subset — the full numbered list (31 tutorials) is on the <a href="index.html#tutorials">homepage</a>, and every package's complete article index is under its own <strong>Documentation</strong> (<a href="toolsrtm/articles/index.html">ToolsRTM</a> / <a href="scopeinr/articles/index.html">SCOPEinR</a>).</p>
