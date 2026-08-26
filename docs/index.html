@@ -115,9 +115,15 @@ footer { background: #08202e; color: #b9cbd6; padding: 34px 24px; font-size: 12.
 .footer-links a { color: #cfe3ec; margin-right: 18px; }
 .footer-links a:hover { text-decoration: underline; }
 
+.nav-toggle { display: none; background: none; border: 1px solid rgba(255,255,255,0.5); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 18px; line-height: 1; cursor: pointer; }
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr; }
-  .nav-links { display: none; }
+  .nav-toggle { display: block; }
+  .nav-links { display: none; width: 100%; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 0 16px; }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 8px 4px; width: 100%; }
+  .nav-links a.nav-cta { width: auto; margin-top: 6px; }
+  .nav-container { flex-wrap: wrap; }
 }
 
 /* Code examples */
@@ -157,7 +163,8 @@ img.zoomable { cursor: zoom-in; }
 <header class="navbar">
   <div class="nav-container">
     <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
-    <nav class="nav-links">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links" id="navLinks">
       <a href="#packages">Packages</a>
       <a href="#install">Install</a>
       <a href="#docs">Documentation</a>
@@ -166,11 +173,27 @@ img.zoomable { cursor: zoom-in; }
       <a href="#examples">Examples</a>
       <a href="comparison.html">R vs Python</a>
       <a href="#related">R Ecosystem</a>
-      <a href="#partners">Partners</a>
       <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
     </nav>
   </div>
 </header>
+<script>
+  (function () {
+    var toggle = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    if (!toggle || !links) return;
+    toggle.addEventListener('click', function () {
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+</script>
 
 <section class="hero">
   <div class="hero-inner">
