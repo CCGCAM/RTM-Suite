@@ -153,6 +153,94 @@ favour with more training data, and in `get.inversionOpt()`'s favour when
 too little data is available to fit a model reliably (Tutorial 11's
 discussion of when to use which).
 
+## 4. Multiple traits: do spectral indices actually help?
+
+Every comparison so far predicted one trait (Cab) from raw bands
+alone. Real applications need several traits, and raw reflectance
+bands are not the only useful input -- vegetation indices (Tutorial
+09) can carry trait-specific signal that a generic ML algorithm has to
+work harder to reconstruct from bands on its own. This section checks
+that directly, on the same LUT and train/test split, across six
+traits: Random Forest fit twice per trait -- bands only, and bands
+plus a small, *per-trait* selection of the indices most correlated
+with that specific trait (not one fixed index set reused everywhere).
+
+```{r multi-trait-setup}
+# Real Sentinel-2A band names (not the generic B1..B10 from Section 1) --
+# getIndicesSE2.ML()'s index formulas need to find specific bands like
+# B8A/B11/B12 by name.
+se2a_full <- suppressMessages(get.spectra.convolved(rfl = refl_X, sensor = "Sentinel2a", plot.spectra = FALSE))
+names(se2a_full) <- c("id", "B1","B2","B3","B4","B5","B6","B7","B8","B8A","B9","B10","B11","B12")
+bands_real <- c("B2","B3","B4","B5","B6","B7","B8","B8A","B11","B12")  # skip the atmospheric-only bands (B1, B9, B10)
+
+idx_ml <- suppressMessages(getIndicesSE2.ML(df = se2a_full[, -1], sensor = "Sentinel-2a", df.data = NULL, fast.process = TRUE))
+cat("Candidate indices:", ncol(idx_ml), "\n")
+```
+
+```{r multi-trait-select}
+traits <- c("Cab", "Car", "Anth", "LAI", "EWT", "Cbrown")
+n_top <- 5  # indices kept per trait
+
+# Correlation against training rows only, per trait -- an index useful for
+# EWT is not necessarily useful for Anth, so this is computed separately
+# for each trait rather than picking one index set for all of them.
+select_indices <- function(trait) {
+  cors <- sapply(names(idx_ml), function(nm) suppressWarnings(cor(idx_ml[train_idx, nm], LUT[train_idx, trait])))
+  cors <- cors[is.finite(cors)]
+  names(sort(abs(cors), decreasing = TRUE))[seq_len(min(n_top, length(cors)))]
+}
+selected <- setNames(lapply(traits, select_indices), traits)
+knitr::kable(data.frame(trait = traits, top_indices = sapply(selected, paste, collapse = ", ")), row.names = FALSE)
+```
+
+```{r multi-trait-fit, results='hide', fig.show='hide'}
+run_pair <- function(trait) {
+  idx_cols <- selected[[trait]]
+  df_bands <- cbind(LUT[trait], se2a_full[bands_real])
+  df_full  <- cbind(df_bands, idx_ml[idx_cols])
+
+  fit_bands <- get.inversion(data = df_bands[train_idx, ], depVar = trait, inputs = bands_real,
+                              algorithm = "RF", n.samples = length(train_idx), seed = 42)
+  fit_full  <- get.inversion(data = df_full[train_idx, ], depVar = trait, inputs = c(bands_real, idx_cols),
+                              algorithm = "RF", n.samples = length(train_idx), seed = 42)
+
+  pred_bands <- as.numeric(predict(fit_bands$model, newdata = df_bands[test_idx, c(trait, bands_real)]))
+  pred_full  <- as.numeric(predict(fit_full$model,  newdata = df_full[test_idx,  c(trait, bands_real, idx_cols)]))
+
+  data.frame(trait = trait,
+             R2_bands_only = r2_f(LUT[test_idx, trait], pred_bands),
+             R2_bands_plus_indices = r2_f(LUT[test_idx, trait], pred_full))
+}
+trait_results <- do.call(rbind, lapply(traits, run_pair))
+trait_results$delta <- trait_results$R2_bands_plus_indices - trait_results$R2_bands_only
+```
+
+```{r multi-trait-table}
+knitr::kable(trait_results[order(-trait_results$delta), ], digits = 3, row.names = FALSE)
+```
+
+```{r multi-trait-plot, fig.width=8}
+ord <- order(trait_results$delta)
+barplot(rbind(trait_results$R2_bands_only[ord], trait_results$R2_bands_plus_indices[ord]),
+        beside = TRUE, names.arg = trait_results$trait[ord],
+        col = c("#999999", "#0072B2"), ylab = "R2 (independent test set)",
+        main = "Bands only vs. bands + top-5 correlated indices, per trait")
+legend("topleft", c("Bands only", "+ indices"), fill = c("#999999", "#0072B2"), bty = "n")
+```
+
+**Adding indices helps every single trait here, but by very different
+amounts.** `EWT` and `Cbrown` gain the most -- unsurprising, since
+water- and senescence-sensitive indices (built from SWIR bands the raw
+per-band RF split has to rediscover on its own) target exactly that
+signal directly. `Cab`/`Car`/`LAI` gain a real but more modest amount --
+RF was already extracting a fair fraction of the available structure
+from the bands alone. `Anth` stays the weakest predictor of the six
+even with indices added, consistent with anthocyanin's famously subtle
+spectral footprint (Tutorial 09) -- indices help, but they don't turn a
+physically hard retrieval into an easy one. The lesson generalises
+past this specific LUT: *which* indices to add, computed and selected
+per trait, matters more than adding indices in general.
+
 ## What's next
 
 - **Tutorial 13** -- deep learning (`getMLmodel()`) on the same kind of

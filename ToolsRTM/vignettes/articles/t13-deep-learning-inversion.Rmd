@@ -151,7 +151,7 @@ influence how training data gets scaled.
 ```{r dl-dense, results = 'hide'}
 dl_result <- tryCatch({
   dl_dense <- getMLmodel(dataset = train_df, depVar = "Cab", model = "Hidden-layers",
-                          optimizer = "adam", n.epochs = 150, batch.size = 64, save.model = FALSE)
+                          optimizer = "adam", n.epochs = 300, batch.size = 64, save.model = FALSE)
   list(ok = TRUE, model = dl_dense)
 }, error = function(e) list(ok = FALSE, msg = conditionMessage(e)))
 ```
@@ -263,7 +263,7 @@ dataset_cnn <- cbind(Cab = LUT_h$Cab, prisma[, prisma_bands])
 
 cnn_result <- tryCatch({
   m <- getMLmodel(dataset = dataset_cnn[train_h, ], depVar = "Cab", model = "CNN",
-                   optimizer = "adam", n.epochs = 40, batch.size = 64, save.model = FALSE)
+                   optimizer = "adam", n.epochs = 300, batch.size = 64, save.model = FALSE)
   list(ok = TRUE, model = m)
 }, error = function(e) list(ok = FALSE, msg = conditionMessage(e)))
 ```
