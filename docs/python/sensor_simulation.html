@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sensor Simulation &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Spectral Indices" href="spectral_indices.html" />
+    <link rel="prev" title="Simulation Workflows" href="workflows.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Parameter &amp; Trait Glossary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#leaf-traits">1. Leaf traits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="glossary.html#liberty-only-structural-traits">LIBERTY-only structural traits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#canopy-structure-and-viewing-geometry">2. Canopy structure and viewing geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#named-leaf-angle-distributions">3. Named leaf-angle distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#soil-marmit-dry-wet">4. Soil: MARMIT (dry -&gt; wet)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#soil-atmosphere-spart-bsm-soil-smac-atmosphere">5. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#scope-traits-leaf-photosynthesis-fluorescence-energy-balance">6. SCOPE traits: leaf + photosynthesis + fluorescence + energy balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#a-real-lut-sampling-and-inspecting-a-few-traits">7. A real LUT: sampling and inspecting a few traits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html#at-a-glance">At a glance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#leaf-optical-models">Leaf optical models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#canopy-models">Canopy models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#soil">Soil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#soil-plant-atmosphere">Soil-Plant-Atmosphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#energy-balance-fluorescence-scope">Energy balance / fluorescence: SCOPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Simulation Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#prospect-foursail-canopy-reflectance">1. PROSPECT -&gt; fourSAIL -&gt; canopy reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#prospect-inform-forest-reflectance">2. PROSPECT -&gt; INFORM -&gt; forest reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#marmit-foursail-spart-toa">3. MARMIT -&gt; fourSAIL -&gt; SPART -&gt; TOA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#scope-reflectance-sif-energy-balance">4. SCOPE -&gt; reflectance + SIF + energy balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sensor Simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#two-ways-to-convolve-depending-on-what-s-known-about-the-sensor">Two ways to convolve, depending on what’s known about the sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sentinel-2a-prisma-real-measured-srf">Sentinel-2A / PRISMA: real measured SRF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hyperspectral-multispectral-enmap-landsat-modis-custom">Hyperspectral -&gt; multispectral: EnMAP, Landsat, MODIS, custom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spectral_indices.html">Spectral Indices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#vnir-vs-swir-domain">VNIR vs. SWIR domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#r-python-compatibility">R &lt;-&gt; Python compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lut_generation.html">LUT Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#what-is-a-lut">What is a LUT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#parameter-distributions">Parameter distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#parameter-constraints-real-trait-co-variation-not-independence">Parameter constraints: real trait co-variation, not independence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#rtm-simulation-from-a-trait-table-to-a-spectral-lut">RTM simulation: from a trait table to a spectral LUT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#adding-noise">Adding noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#train-validation-test">Train / validation / test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trait_inversion.html">Trait Inversion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#lut-inversion-merit-function">1. LUT inversion (merit function)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#machine-learning">2. Machine learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#deep-learning">3. Deep learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#which-one-should-i-use">Which one should I use?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="earth_observation.html">Earth Observation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#retrieving-a-real-scene">1. Retrieving a real scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#image-preparation-reflectance-scaling-and-band-naming">2. Image preparation: reflectance scaling and band naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#applying-a-trained-inversion-model-spatially">3. Applying a trained inversion model spatially</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#trait-maps-and-uncertainty">4. Trait maps and uncertainty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="toolsrtm/index.html">toolsrtm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/leaf.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/fluspect.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/liberty.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/canopy.html">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/canopy.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/inform.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/spart.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/smac.html">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/smac.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/srf.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/indices.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/marmit.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/satellite.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/inversion.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/deep_learning.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/sensitivity.html">toolsrtm.sensitivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/soil.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/spectral.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmo.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/biochemical.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/fluspect.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/fluspect_mscope.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmf.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmz.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/thermal.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmt_sb.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/ebal.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/scope.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/utils.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#alternative-leaf-models-liberty-and-fluspect-b-toolsrtm">Alternative leaf models: Liberty and Fluspect-B (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#sensor-convolution-vegetation-indices-toolsrtm">Sensor convolution + vegetation indices (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#inform-explicit-forest-canopy-model-toolsrtm">INFORM: explicit forest-canopy model (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#machine-learning-trait-inversion-toolsrtm">Machine-learning trait inversion (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#spart-full-soil-plant-atmosphere-chain-toolsrtm">SPART: full soil-plant-atmosphere chain (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#deep-learning-trait-inversion-toolsrtm-optional-dl-extra">Deep-learning trait inversion (toolsrtm, optional <code class="docutils literal notranslate"><span class="pre">dl</span></code> extra)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#the-1d-cnn-on-hyperspectral-bands-toolsrtm">The 1D-CNN, on hyperspectral bands (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#marmit-soil-moisture-model-toolsrtm">MARMIT soil moisture model (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#full-scope-run-energy-balance-fluorescence-scopeinpython">Full SCOPE run: energy balance + fluorescence (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython">Real Sentinel-2 capstone: retrieving net photosynthesis (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#global-sensitivity-analysis-toolsrtm">Global sensitivity analysis (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-data-driven-spatial-index-cab-mapping-toolsrtm">Real Sentinel-2 capstone: data-driven spatial index + Cab mapping (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#what-isn-t-ported-yet">What isn’t ported yet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Sensor Simulation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sensor_simulation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sensor-simulation">
+<h1>Sensor Simulation<a class="headerlink" href="#sensor-simulation" title="Link to this heading"></a></h1>
+<p>Every model on <a class="reference internal" href="models.html"><span class="doc">Radiative Transfer Models</span></a> simulates a spectrum at native resolution
+(400-2500nm, 1nm steps). A real sensor never sees that – it integrates
+incoming light over each band’s own spectral response function (SRF):
+some wavelengths inside the band contribute fully, others (near the
+edges) only partially, and everything outside the band contributes
+nothing. <strong>Spectral convolution</strong> is that integration, applied to a
+simulated spectrum so it can be compared apples-to-apples with real
+sensor data (or used to train a model that will later run on real sensor
+bands, as in <a class="reference internal" href="trait_inversion.html"><span class="doc">Trait Inversion</span></a>).</p>
+<section id="two-ways-to-convolve-depending-on-what-s-known-about-the-sensor">
+<h2>Two ways to convolve, depending on what’s known about the sensor<a class="headerlink" href="#two-ways-to-convolve-depending-on-what-s-known-about-the-sensor" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 35.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Uses</p></th>
+<th class="head"><p>When to use it</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_srf" title="toolsrtm.srf.spectral_convolution_srf"><code class="xref py py-func docutils literal notranslate"><span class="pre">spectral_convolution_srf()</span></code></a></p></td>
+<td><p>A real, measured per-wavelength SRF table</p></td>
+<td><p>Sentinel-2A/B (<a class="reference internal" href="toolsrtm/srf.html#toolsrtm.srf.srf_sentinel2a" title="toolsrtm.srf.srf_sentinel2a"><code class="xref py py-func docutils literal notranslate"><span class="pre">srf_sentinel2a()</span></code></a>/
+<a class="reference internal" href="toolsrtm/srf.html#toolsrtm.srf.srf_sentinel2b" title="toolsrtm.srf.srf_sentinel2b"><code class="xref py py-func docutils literal notranslate"><span class="pre">srf_sentinel2b()</span></code></a>), PRISMA
+(<a class="reference internal" href="toolsrtm/srf.html#toolsrtm.srf.srf_prisma" title="toolsrtm.srf.srf_prisma"><code class="xref py py-func docutils literal notranslate"><span class="pre">srf_prisma()</span></code></a>) – the most accurate option,
+whenever a real measured SRF is available.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_gaussian" title="toolsrtm.srf.spectral_convolution_gaussian"><code class="xref py py-func docutils literal notranslate"><span class="pre">spectral_convolution_gaussian()</span></code></a></p></td>
+<td><p>Only nominal band center (+ FWHM or band edges), approximated as a
+Gaussian response</p></td>
+<td><p>EnMAP (<a class="reference internal" href="toolsrtm/srf.html#toolsrtm.srf.enmap_characteristics" title="toolsrtm.srf.enmap_characteristics"><code class="xref py py-func docutils literal notranslate"><span class="pre">enmap_characteristics()</span></code></a>), Landsat,
+MODIS, and 9 other bundled sensors
+(<a class="reference internal" href="toolsrtm/srf.html#toolsrtm.srf.sensor_characteristics" title="toolsrtm.srf.sensor_characteristics"><code class="xref py py-func docutils literal notranslate"><span class="pre">sensor_characteristics()</span></code></a>), or <strong>any custom
+sensor/camera</strong> – pass your own <code class="docutils literal notranslate"><span class="pre">centers</span></code>/<code class="docutils literal notranslate"><span class="pre">fwhm</span></code> directly.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sentinel-2a-prisma-real-measured-srf">
+<h2>Sentinel-2A / PRISMA: real measured SRF<a class="headerlink" href="#sentinel-2a-prisma-real-measured-srf" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">prospect_d</span><span class="p">,</span> <span class="n">foursail</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.srf</span><span class="w"> </span><span class="kn">import</span> <span class="n">srf_sentinel2a</span><span class="p">,</span> <span class="n">srf_prisma</span><span class="p">,</span> <span class="n">spectral_convolution_srf</span>
+
+<span class="n">inputLUT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+                 <span class="n">LIDFa</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">LIDFb</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">LAI</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hspot</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tto</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">sail</span> <span class="o">=</span> <span class="n">foursail</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">2101</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span> <span class="n">leaf_model</span><span class="o">=</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">spectrum_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">wl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">2501</span><span class="p">)</span>
+
+<span class="n">s2a</span> <span class="o">=</span> <span class="n">srf_sentinel2a</span><span class="p">()</span>
+<span class="n">conv_s2</span> <span class="o">=</span> <span class="n">spectral_convolution_srf</span><span class="p">(</span><span class="n">wl</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">,</span> <span class="n">s2a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s2a</span><span class="o">.</span><span class="n">band_names</span><span class="p">,</span> <span class="n">conv_s2</span><span class="o">.</span><span class="n">rfl</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="c1"># [&#39;B1&#39;, &#39;B2&#39;, ..., &#39;B12&#39;] [0.019  0.0247 0.0511 ... ]</span>
+
+<span class="n">prisma</span> <span class="o">=</span> <span class="n">srf_prisma</span><span class="p">()</span>
+<span class="n">conv_pr</span> <span class="o">=</span> <span class="n">spectral_convolution_srf</span><span class="p">(</span><span class="n">wl</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">,</span> <span class="n">prisma</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">conv_pr</span><span class="o">.</span><span class="n">rfl</span><span class="p">),</span> <span class="s2">&quot;PRISMA bands&quot;</span><span class="p">)</span>   <span class="c1"># 234</span>
+</pre></div>
+</div>
+</section>
+<section id="hyperspectral-multispectral-enmap-landsat-modis-custom">
+<h2>Hyperspectral -&gt; multispectral: EnMAP, Landsat, MODIS, custom<a class="headerlink" href="#hyperspectral-multispectral-enmap-landsat-modis-custom" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.srf</span><span class="w"> </span><span class="kn">import</span> <span class="n">spectral_convolution_gaussian</span>
+
+<span class="n">conv_enmap</span> <span class="o">=</span> <span class="n">spectral_convolution_gaussian</span><span class="p">(</span><span class="n">wl</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">,</span> <span class="n">sensor</span><span class="o">=</span><span class="s2">&quot;EnMAP&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">conv_enmap</span><span class="o">.</span><span class="n">rfl</span><span class="p">),</span> <span class="s2">&quot;EnMAP channels&quot;</span><span class="p">)</span>   <span class="c1"># 242</span>
+
+<span class="n">conv_modis</span> <span class="o">=</span> <span class="n">spectral_convolution_gaussian</span><span class="p">(</span><span class="n">wl</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">,</span> <span class="n">sensor</span><span class="o">=</span><span class="s2">&quot;MODIS&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">conv_modis</span><span class="o">.</span><span class="n">rfl</span><span class="p">),</span> <span class="s2">&quot;MODIS bands&quot;</span><span class="p">)</span>   <span class="c1"># 19</span>
+
+<span class="c1"># Your own sensor/camera: just pass band centers (nm) -- fwhm is optional,</span>
+<span class="c1"># approximated from neighbouring-band spacing if omitted.</span>
+<span class="n">my_centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">550.0</span><span class="p">,</span> <span class="mf">660.0</span><span class="p">,</span> <span class="mf">790.0</span><span class="p">,</span> <span class="mf">1050.0</span><span class="p">])</span>
+<span class="n">conv_custom</span> <span class="o">=</span> <span class="n">spectral_convolution_gaussian</span><span class="p">(</span><span class="n">wl</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="n">my_centers</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conv_custom</span><span class="o">.</span><span class="n">rfl</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>   <span class="c1"># [0.0391 0.0623 0.27   0.3267]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sensor_characteristics()</span></code>’s docstring lists all 13 other bundled
+sensors (ALI, Hyperion, Landsat4-8, MODIS, Quickbird, RapidEye,
+Sentinel2a/b, WorldView2-4/2-8).</p>
+</section>
+<section id="what-s-next">
+<h2>What’s next<a class="headerlink" href="#what-s-next" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="spectral_indices.html"><span class="doc">Spectral Indices</span></a> – computing vegetation indices from the
+convolved bands above.</p></li>
+<li><p><a class="reference internal" href="trait_inversion.html"><span class="doc">Trait Inversion</span></a> – training an inversion model on convolved
+bands, so it can later run on real sensor data.</p></li>
+<li><p><a class="reference internal" href="earth_observation.html"><span class="doc">Earth Observation</span></a> – applying that model to a real Sentinel-2
+scene via STAC.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="workflows.html" class="btn btn-neutral float-left" title="Simulation Workflows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="spectral_indices.html" class="btn btn-neutral float-right" title="Spectral Indices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

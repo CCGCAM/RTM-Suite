@@ -18,6 +18,18 @@ or any other trait actually means? See the :doc:`glossary` first.
 
    install
    glossary
+   models
+   workflows
+   sensor_simulation
+   spectral_indices
+   lut_generation
+   trait_inversion
+   earth_observation
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Reference
+
    toolsrtm/index
    scopeinpython/index
    verification

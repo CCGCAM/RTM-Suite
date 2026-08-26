@@ -1,0 +1,486 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trait Inversion &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Earth Observation" href="earth_observation.html" />
+    <link rel="prev" title="LUT Generation" href="lut_generation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Parameter &amp; Trait Glossary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#leaf-traits">1. Leaf traits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="glossary.html#liberty-only-structural-traits">LIBERTY-only structural traits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#canopy-structure-and-viewing-geometry">2. Canopy structure and viewing geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#named-leaf-angle-distributions">3. Named leaf-angle distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#soil-marmit-dry-wet">4. Soil: MARMIT (dry -&gt; wet)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#soil-atmosphere-spart-bsm-soil-smac-atmosphere">5. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#scope-traits-leaf-photosynthesis-fluorescence-energy-balance">6. SCOPE traits: leaf + photosynthesis + fluorescence + energy balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#a-real-lut-sampling-and-inspecting-a-few-traits">7. A real LUT: sampling and inspecting a few traits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html#at-a-glance">At a glance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#leaf-optical-models">Leaf optical models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#canopy-models">Canopy models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#soil">Soil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#soil-plant-atmosphere">Soil-Plant-Atmosphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#energy-balance-fluorescence-scope">Energy balance / fluorescence: SCOPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Simulation Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#prospect-foursail-canopy-reflectance">1. PROSPECT -&gt; fourSAIL -&gt; canopy reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#prospect-inform-forest-reflectance">2. PROSPECT -&gt; INFORM -&gt; forest reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#marmit-foursail-spart-toa">3. MARMIT -&gt; fourSAIL -&gt; SPART -&gt; TOA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#scope-reflectance-sif-energy-balance">4. SCOPE -&gt; reflectance + SIF + energy balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sensor_simulation.html">Sensor Simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sensor_simulation.html#two-ways-to-convolve-depending-on-what-s-known-about-the-sensor">Two ways to convolve, depending on what’s known about the sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor_simulation.html#sentinel-2a-prisma-real-measured-srf">Sentinel-2A / PRISMA: real measured SRF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor_simulation.html#hyperspectral-multispectral-enmap-landsat-modis-custom">Hyperspectral -&gt; multispectral: EnMAP, Landsat, MODIS, custom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor_simulation.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spectral_indices.html">Spectral Indices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#vnir-vs-swir-domain">VNIR vs. SWIR domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#r-python-compatibility">R &lt;-&gt; Python compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lut_generation.html">LUT Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#what-is-a-lut">What is a LUT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#parameter-distributions">Parameter distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#parameter-constraints-real-trait-co-variation-not-independence">Parameter constraints: real trait co-variation, not independence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#rtm-simulation-from-a-trait-table-to-a-spectral-lut">RTM simulation: from a trait table to a spectral LUT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#adding-noise">Adding noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#train-validation-test">Train / validation / test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Trait Inversion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lut-inversion-merit-function">1. LUT inversion (merit function)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#machine-learning">2. Machine learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deep-learning">3. Deep learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#which-one-should-i-use">Which one should I use?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="earth_observation.html">Earth Observation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#retrieving-a-real-scene">1. Retrieving a real scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#image-preparation-reflectance-scaling-and-band-naming">2. Image preparation: reflectance scaling and band naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#applying-a-trained-inversion-model-spatially">3. Applying a trained inversion model spatially</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#trait-maps-and-uncertainty">4. Trait maps and uncertainty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="toolsrtm/index.html">toolsrtm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/leaf.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/fluspect.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/liberty.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/canopy.html">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/canopy.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/inform.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/spart.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/smac.html">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/smac.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/srf.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/indices.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/marmit.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/satellite.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/inversion.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/deep_learning.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/sensitivity.html">toolsrtm.sensitivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/soil.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/spectral.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmo.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/biochemical.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/fluspect.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/fluspect_mscope.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmf.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmz.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/thermal.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmt_sb.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/ebal.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/scope.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/utils.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#alternative-leaf-models-liberty-and-fluspect-b-toolsrtm">Alternative leaf models: Liberty and Fluspect-B (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#sensor-convolution-vegetation-indices-toolsrtm">Sensor convolution + vegetation indices (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#inform-explicit-forest-canopy-model-toolsrtm">INFORM: explicit forest-canopy model (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#machine-learning-trait-inversion-toolsrtm">Machine-learning trait inversion (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#spart-full-soil-plant-atmosphere-chain-toolsrtm">SPART: full soil-plant-atmosphere chain (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#deep-learning-trait-inversion-toolsrtm-optional-dl-extra">Deep-learning trait inversion (toolsrtm, optional <code class="docutils literal notranslate"><span class="pre">dl</span></code> extra)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#the-1d-cnn-on-hyperspectral-bands-toolsrtm">The 1D-CNN, on hyperspectral bands (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#marmit-soil-moisture-model-toolsrtm">MARMIT soil moisture model (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#full-scope-run-energy-balance-fluorescence-scopeinpython">Full SCOPE run: energy balance + fluorescence (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython">Real Sentinel-2 capstone: retrieving net photosynthesis (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#global-sensitivity-analysis-toolsrtm">Global sensitivity analysis (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-data-driven-spatial-index-cab-mapping-toolsrtm">Real Sentinel-2 capstone: data-driven spatial index + Cab mapping (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#what-isn-t-ported-yet">What isn’t ported yet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Trait Inversion</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/trait_inversion.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="trait-inversion">
+<h1>Trait Inversion<a class="headerlink" href="#trait-inversion" title="Link to this heading"></a></h1>
+<p>The whole point of the models on <a class="reference internal" href="models.html"><span class="doc">Radiative Transfer Models</span></a>, running forward
+(traits -&gt; reflectance), is usually to go <strong>backward</strong>: given a real or
+simulated reflectance spectrum, recover the trait that produced it. This
+package offers three genuinely different ways to do that, from simplest
+to most flexible:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>How it works</p></th>
+<th class="head"><p>Best when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LUT inversion (merit function)</p></td>
+<td><p>Find the LUT row(s) whose simulated spectrum most closely matches
+the observation, average their trait values.</p></td>
+<td><p>You already have (or can quickly build) a well-sampled LUT and
+want an interpretable, no-training-required retrieval.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Machine learning</p></td>
+<td><p>Fit a regression model (PLSR/RF/SVM/…) on (spectrum -&gt; trait)
+pairs from a LUT, then predict on new spectra.</p></td>
+<td><p>You have a reasonably-sized LUT and want a fast, reusable trained
+model – the most common choice.</p></td>
+</tr>
+<tr class="row-even"><td><p>Deep learning</p></td>
+<td><p>A neural network (dense or 1D-CNN), same idea as ML but able to
+learn more complex, nonlinear structure, especially across many
+contiguous hyperspectral bands.</p></td>
+<td><p>Hyperspectral data (many contiguous bands) and a large-enough LUT
+to train on; needs the optional <code class="docutils literal notranslate"><span class="pre">dl</span></code> extra.</p></td>
+</tr>
+</tbody>
+</table>
+<p>All three consume a LUT built as in <a class="reference internal" href="lut_generation.html"><span class="doc">LUT Generation</span></a>.</p>
+<section id="lut-inversion-merit-function">
+<h2>1. LUT inversion (merit function)<a class="headerlink" href="#lut-inversion-merit-function" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="toolsrtm/inversion.html#toolsrtm.inversion.get_inversion_opt" title="toolsrtm.inversion.get_inversion_opt"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_inversion_opt()</span></code></a> ranks every LUT row by how
+well its simulated spectrum matches an observation (a merit/error
+function – RMSE by default), then averages the <code class="docutils literal notranslate"><span class="pre">n_opt</span></code> best matches’
+trait values. No training step at all – just a LUT and a comparison:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">foursail</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.inversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_inversion_opt</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+    <span class="n">Cab</span><span class="p">,</span> <span class="n">LAI</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">inputLUT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="n">Cab</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+                     <span class="n">LIDFa</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">LIDFb</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="n">LAI</span><span class="o">=</span><span class="n">LAI</span><span class="p">,</span> <span class="n">hspot</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tto</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">sail</span> <span class="o">=</span> <span class="n">foursail</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">2101</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span> <span class="n">leaf_model</span><span class="o">=</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">spectrum_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Cab&quot;</span><span class="p">:</span> <span class="n">Cab</span><span class="p">,</span> <span class="s2">&quot;LAI&quot;</span><span class="p">:</span> <span class="n">LAI</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">wl</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">490</span><span class="p">,</span> <span class="mi">560</span><span class="p">,</span> <span class="mi">665</span><span class="p">,</span> <span class="mi">705</span><span class="p">,</span> <span class="mi">740</span><span class="p">,</span> <span class="mi">783</span><span class="p">,</span> <span class="mi">842</span><span class="p">,</span> <span class="mi">865</span><span class="p">,</span> <span class="mi">1610</span><span class="p">,</span> <span class="mi">2190</span><span class="p">):</span>
+        <span class="n">row</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;R</span><span class="si">{</span><span class="n">wl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">[</span><span class="n">wl</span> <span class="o">-</span> <span class="mi">400</span><span class="p">]</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+<span class="n">lut_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+<span class="n">band_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">lut_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">)]</span>
+
+<span class="c1"># one held-out &quot;observation&quot; (in practice: a real convolved sensor spectrum)</span>
+<span class="n">obs_sail</span> <span class="o">=</span> <span class="n">foursail</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mf">42.0</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+                          <span class="n">LIDFa</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">LIDFb</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                          <span class="n">LAI</span><span class="o">=</span><span class="mf">3.2</span><span class="p">,</span> <span class="n">hspot</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tto</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">2101</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span> <span class="n">leaf_model</span><span class="o">=</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">spectrum_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">obs_refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">obs_sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">[</span><span class="n">wl</span> <span class="o">-</span> <span class="mi">400</span><span class="p">]</span> <span class="k">for</span> <span class="n">wl</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">490</span><span class="p">,</span> <span class="mi">560</span><span class="p">,</span> <span class="mi">665</span><span class="p">,</span> <span class="mi">705</span><span class="p">,</span> <span class="mi">740</span><span class="p">,</span> <span class="mi">783</span><span class="p">,</span> <span class="mi">842</span><span class="p">,</span> <span class="mi">865</span><span class="p">,</span> <span class="mi">1610</span><span class="p">,</span> <span class="mi">2190</span><span class="p">)]])</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">get_inversion_opt</span><span class="p">(</span><span class="n">rfl_sensor</span><span class="o">=</span><span class="n">obs_refl</span><span class="p">,</span> <span class="n">rfl_rtm</span><span class="o">=</span><span class="n">lut_df</span><span class="p">[</span><span class="n">band_cols</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                            <span class="n">lut</span><span class="o">=</span><span class="n">lut_df</span><span class="p">[[</span><span class="s2">&quot;Cab&quot;</span><span class="p">,</span> <span class="s2">&quot;LAI&quot;</span><span class="p">]],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;merit-RMSE&quot;</span><span class="p">,</span> <span class="n">n_opt</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">lut_best</span><span class="p">[</span><span class="s2">&quot;Cab&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">lut_best</span><span class="p">[</span><span class="s2">&quot;LAI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># retrieved Cab, LAI</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">method</span></code> also accepts <code class="docutils literal notranslate"><span class="pre">&quot;merit-NRMSE&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;merit-MAE&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;merit-NMB&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;merit-FGE&quot;</span></code>, or a fully custom <code class="docutils literal notranslate"><span class="pre">custom_stat=f(sim,</span> <span class="pre">obs)</span> <span class="pre">-&gt;</span> <span class="pre">error</span></code>.
+<code class="docutils literal notranslate"><span class="pre">n_opt</span></code> trades off noise (<code class="docutils literal notranslate"><span class="pre">n_opt=1</span></code>, most exact match, most sensitive
+to a single lucky/unlucky LUT row) against bias (larger <code class="docutils literal notranslate"><span class="pre">n_opt</span></code>,
+smoother but pulled toward the LUT’s own average).</p>
+</section>
+<section id="machine-learning">
+<h2>2. Machine learning<a class="headerlink" href="#machine-learning" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="toolsrtm/inversion.html#toolsrtm.inversion.get_inversion" title="toolsrtm.inversion.get_inversion"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_inversion()</span></code></a> dispatches to 12 algorithms
+(PLSR/SVM/RF/GB/NN/Bayesian/AdaBag/BRNN/xGB/RVM/qLASSO/Ensemble – see
+<a class="reference internal" href="toolsrtm/inversion.html#toolsrtm.inversion.ALGORITHMS" title="toolsrtm.inversion.ALGORITHMS"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALGORITHMS</span></code></a> for exactly which scikit-learn/
+xgboost estimator each maps to) behind one interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.inversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_inversion</span>
+
+<span class="n">lut_df</span><span class="p">[</span><span class="s2">&quot;Cab&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;Cab&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span>   <span class="c1"># already in lut_df above</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">get_inversion</span><span class="p">(</span><span class="n">lut_df</span><span class="p">,</span> <span class="n">dep_var</span><span class="o">=</span><span class="s2">&quot;Cab&quot;</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">band_cols</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;PLSR&quot;</span><span class="p">,</span>
+                     <span class="n">n_samples</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">lut_df</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">][</span><span class="s2">&quot;r2&quot;</span><span class="p">],</span> <span class="n">fit</span><span class="o">.</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">][</span><span class="s2">&quot;rmse&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Swap <code class="docutils literal notranslate"><span class="pre">algorithm=&quot;RF&quot;</span></code>/<code class="docutils literal notranslate"><span class="pre">&quot;SVM&quot;</span></code>/… for any of the 12; the held-out
+train/test split and evaluation stats are computed the same way
+regardless of which one is chosen.</p>
+</section>
+<section id="deep-learning">
+<h2>3. Deep learning<a class="headerlink" href="#deep-learning" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="toolsrtm/deep_learning.html#toolsrtm.deep_learning.get_ml_model" title="toolsrtm.deep_learning.get_ml_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">toolsrtm.deep_learning.get_ml_model()</span></code></a> – a dense network or a 1D-CNN
+(needs <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;toolsrtm[dl]&quot;</span></code>). The 1D-CNN treats predictor bands
+<em>in spectral order</em>, so it benefits from wide, contiguous hyperspectral
+input rather than a handful of scattered multispectral bands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.deep_learning</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_ml_model</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">get_ml_model</span><span class="p">(</span><span class="n">lut_df</span><span class="p">,</span> <span class="n">dep_var</span><span class="o">=</span><span class="s2">&quot;Cab&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;Hidden-layers&quot;</span><span class="p">,</span>
+                       <span class="n">n_epochs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_times</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;r2&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><code class="docutils literal notranslate"><span class="pre">result.x_scaler</span></code> (a fitted <code class="docutils literal notranslate"><span class="pre">sklearn.StandardScaler</span></code>) must be
+applied to any new predictor data before calling
+<code class="docutils literal notranslate"><span class="pre">result.model.predict(...)</span></code> – training happens in scaled space, so
+predicting on raw reflectance directly produces silently wrong
+results. This is a real bug found and fixed in <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/t13-deep-learning-inversion.html">ToolsRTM Tutorial 13</a>
+– worth reading before relying on a DL model’s predictions.</p>
+</div>
+<p>Full DL examples (dense + 1D-CNN, with training-curve and true-vs-
+predicted figures): <a class="reference external" href="examples.html#deep-learning-trait-inversion-toolsrtm-optional-dl-extra">Deep-learning trait inversion, on examples.rst</a>.</p>
+</section>
+<section id="which-one-should-i-use">
+<h2>Which one should I use?<a class="headerlink" href="#which-one-should-i-use" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Small LUT, need it fast, want it interpretable</strong>: LUT inversion.</p></li>
+<li><p><strong>Default choice for most trait-retrieval work</strong>: ML (<code class="docutils literal notranslate"><span class="pre">RF</span></code> or
+<code class="docutils literal notranslate"><span class="pre">PLSR</span></code> are good starting points).</p></li>
+<li><p><strong>Wide hyperspectral input, large LUT, willing to tune a network</strong>: DL,
+and only after confirming ML doesn’t already do the job – it usually
+does.</p></li>
+</ul>
+<p>Spectral indices (<a class="reference internal" href="spectral_indices.html"><span class="doc">Spectral Indices</span></a>) are a fourth, even simpler
+option worth trying first for a quick sanity check: rank indices by
+correlation with the trait, and see how far a single-formula retrieval
+already gets before reaching for any of the three methods above.</p>
+</section>
+<section id="what-s-next">
+<h2>What’s next<a class="headerlink" href="#what-s-next" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="lut_generation.html"><span class="doc">LUT Generation</span></a> – building the LUT these methods all consume.</p></li>
+<li><p><a class="reference internal" href="earth_observation.html"><span class="doc">Earth Observation</span></a> – applying a trained ML/DL model to a real
+Sentinel-2 scene.</p></li>
+<li><p><a class="reference internal" href="examples.html"><span class="doc">Examples</span></a> – every method above with full runnable code and
+result figures.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lut_generation.html" class="btn btn-neutral float-left" title="LUT Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earth_observation.html" class="btn btn-neutral float-right" title="Earth Observation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

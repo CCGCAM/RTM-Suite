@@ -13,115 +13,13 @@ and `SCOPEinR Trait & LUT Glossary
 -- same models, same physics, same parameter names, Python calling
 convention.
 
-1. Models at a glance
-------------------------
+What each model *is* (not just its parameters) now has its own page:
+:doc:`models` covers every leaf/canopy/soil/atmosphere/SCOPE model's
+identity and how it differs from its siblings, with a one-line-per-model
+summary table up top. This page stays focused on the *inputs* those
+models read.
 
-Before the parameter tables: what each named model actually *is*, and how
-it differs from its siblings. Section 8 below cross-references every
-model against every trait it reads.
-
-**Leaf models** -- what goes into a canopy simulation's leaf optics:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 45 35
-
-   * - Model
-     - What it represents
-     - How it differs from the others
-   * - :func:`~toolsrtm.leaf.prospect_d` (PROSPECT-D)
-     - The reference leaf model: a stack of ``N`` absorbing/scattering
-       plates, pigments (``Cab``/``Car``/``Anth``) + water (``EWT``) +
-       one lumped dry-matter term (``LMA``).
-     - The default -- broadleaf, no fluorescence, dry matter as a single
-       term.
-   * - :func:`~toolsrtm.leaf.prospect_pro` (PROSPECT-PRO)
-     - Same physics as PROSPECT-D, but splits ``LMA`` into ``Prot``
-       (protein) + ``CBC`` (cellulose+lignin).
-     - Only differs from PROSPECT-D in how dry matter is parameterized.
-   * - :func:`~toolsrtm.fluspect.fluspect_b` (Fluspect-B)
-     - PROSPECT-D's optics *plus* chlorophyll-fluorescence excitation-
-       emission matrices (``MbI``/``MbII``) -- needed wherever SIF is
-       simulated.
-     - Adds fluorescence on top of PROSPECT-D; reflectance/transmittance
-       themselves are near-identical to PROSPECT-D.
-   * - :func:`~toolsrtm.fluspect.fluspect_cx` (Fluspect-Cx)
-     - Fluspect-B plus a ``Cx`` (xanthophyll de-epoxidation / NPQ) term,
-       letting fluorescence yield respond to photoprotection state.
-     - The only leaf model with a photoprotection (``Cx``) term; what
-       SCOPE's own leaf-optics step uses internally.
-   * - :func:`~toolsrtm.liberty.liberty` (LIBERTY)
-     - A structurally different model built for conifer needles (Dawson
-       et al. 1998) -- explicit cell diameter/intercellular air space
-       instead of PROSPECT's Fresnel-refraction layer.
-     - Not a PROSPECT variant at all; a genuinely different internal
-       structure, not just different defaults.
-
-**Canopy models** -- what turns leaf optics into a canopy-level BRDF:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 45 35
-
-   * - Model
-     - What it represents
-     - How it differs from the others
-   * - :func:`~toolsrtm.canopy.foursail` (fourSAIL)
-     - The classic PROSAIL turbid-medium canopy: a single, statistically
-       homogeneous "cloud" of leaves at a given LAI and angle
-       distribution -- no explicit 3D structure.
-     - The reference/default; single-layer, single leaf-biochemistry
-       profile.
-   * - ``toolsrtm.canopy.foursail2`` (fourSAIL2)
-     - Two-layer canopy (a green layer + a brown/senescent layer) -- a
-       canopy with visible dead/dry material mixed in with live foliage.
-     - Same turbid-medium idea as fourSAIL, but two vertically-stacked
-       layers instead of one.
-   * - :func:`~toolsrtm.inform.inform` (INFORM)
-     - Forest-stand extension (Atzberger): explicit tree crowns (stem
-       density, crown diameter, height) over an understorey + background.
-     - The only one of the three with real gap/shadow geometry -- lower
-       reflectance than fourSAIL at the same LAI, matching a
-       discontinuous forest stand's real physics.
-
-**Soil + atmosphere models**:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 45 35
-
-   * - Model
-     - What it represents
-     - How it differs from the others
-   * - :func:`~toolsrtm.marmit.get_marmit_rsoil` (MARMIT)
-     - Starts from a real *dry* reference soil spectrum and adds a
-       physically modelled liquid-water film, so the same soil can be
-       simulated at any moisture level.
-     - The only soil model driven by an actual measured reference
-       spectrum rather than empirical shape parameters.
-   * - :func:`~scopeinpython.soil.get_bsm` (BSM)
-     - Builds a soil spectrum from three empirical parameters
-       (``BSMBrightness``, ``BSMlat``, ``BSMlon``) plus a wetting term --
-       no reference spectrum needed.
-     - Purely parametric, not spectrum-driven -- SPART's own soil model.
-   * - :func:`~toolsrtm.smac.sentinel2a_msi` + ``get_smac`` (SMAC)
-     - Atmospheric radiative transfer (gas absorption + aerosol
-       scattering) converting top-of-canopy reflectance into what a real
-       satellite sensor would measure above the atmosphere.
-     - Not a soil or canopy model -- the atmosphere step, only relevant
-       when going all the way to top-of-atmosphere (TOA).
-   * - :func:`~toolsrtm.spart.spart_toa` (SPART)
-     - Not a new physical model, but the full chain: BSM soil -> fourSAIL
-       canopy -> SMAC atmosphere -> TOA reflectance, already resampled
-       to a real sensor's bands in one call.
-     - The end-to-end pipeline; see :doc:`examples`.
-
-SCOPE (:func:`scopeinpython.scope.get_scope`) builds a fully independent,
-larger model on top of this same leaf-optics/canopy-BRDF idea -- energy
-balance, photosynthesis and fluorescence coupled together, not just
-reflectance -- see Section 7 below for its own five-component breakdown.
-
-2. Leaf traits
+1. Leaf traits
 ---------------
 
 All leaf models (:func:`toolsrtm.leaf.prospect_d`, :func:`toolsrtm.leaf.prospect_pro`,
@@ -275,7 +173,7 @@ Fresnel-optics layer:
      - relative units
      - ~1 (typical default)
 
-3. Canopy structure and viewing geometry
+2. Canopy structure and viewing geometry
 -------------------------------------------
 
 Once a leaf model produces reflectance/transmittance,
@@ -317,7 +215,7 @@ it into a canopy-level BRF, sharing the geometry/LIDF parameters below:
      - degrees
      - 0-90 / 0-90 / 0-180
 
-4. Named leaf-angle distributions
+3. Named leaf-angle distributions
 -------------------------------------
 
 .. code-block:: python
@@ -367,7 +265,7 @@ it into a canopy-level BRF, sharing the geometry/LIDF parameters below:
 
    Real output: ``dladgen()``'s relative frequency per leaf-angle bin, for five named shapes. Planophile concentrates mass at low angles (horizontal leaves), erectophile at high angles (vertical leaves), spherical spreads smoothly across the whole range.
 
-5. Soil: MARMIT (dry -> wet)
+4. Soil: MARMIT (dry -> wet)
 --------------------------------
 
 :func:`toolsrtm.marmit.get_marmit_rsoil` turns a dry reference soil spectrum into
@@ -391,7 +289,7 @@ a wet one:
      - Soil surface roughness/optical-path parameter.
      - 0.05 (dry/smooth) -- 1.0 (wet/rough)
 
-6. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)
+5. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)
 ------------------------------------------------------------
 
 :func:`toolsrtm.spart.spart_toa` (and :func:`scopeinpython.soil.get_bsm`) use BSM
@@ -433,51 +331,17 @@ soil plus SMAC atmospheric correction:
      - Total-column water vapour.
      - ~1-3 g/cm2
 
-7. SCOPE traits: leaf + photosynthesis + fluorescence + energy balance
+6. SCOPE traits: leaf + photosynthesis + fluorescence + energy balance
 ---------------------------------------------------------------------------
 
-:func:`scopeinpython.scope.get_scope` isn't one model -- it's five distinct
-components chained together, each solving a different piece of physics:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 45 35
-
-   * - Component
-     - What it does
-     - Depends on
-   * - :func:`~scopeinpython.fluspect.get_fluspect_cx_scope` (+ :func:`~scopeinpython.fluspect_mscope.fluspect_mscope` for multi-layer)
-     - Leaf optics: reflectance/transmittance + fluorescence excitation-
-       emission matrices, per canopy layer. Same PROSPECT/Fluspect
-       physics as Section 1's leaf models -- just the SCOPE-specific
-       wrapper.
-     - Leaf biochemistry traits (below)
-   * - :func:`~scopeinpython.rtmo.run_rtmo`
-     - Optical top-of-canopy BRDF -- physically the same turbid-medium
-       idea as fourSAIL, re-implemented to plug into the layers below.
-       Stops at reflectance; assumes no temperature yet.
-     - Fluspect-Cx output + canopy structure + BSM soil
-   * - :func:`~scopeinpython.ebal.ebal`
-     - The energy balance: **iteratively solves** leaf and soil
-       temperature so absorbed radiation balances sensible + latent
-       heat, calling the biochemistry model at every candidate
-       temperature. This is what makes SCOPE fundamentally different
-       from PROSAIL/SPART -- temperature is solved for, not assumed.
-     - RTMo output + aerodynamic resistances + meteorology
-   * - :func:`~scopeinpython.biochemical.get_biochemical`
-     - Leaf-level photosynthesis (Farquhar/Collatz) and fluorescence
-       yield, given a leaf micro-environment -- called repeatedly by
-       ``ebal`` at each candidate temperature, not run standalone.
-     - Photosynthesis + NPQ traits (below)
-   * - :func:`~scopeinpython.rtmf.rtmf` / :func:`~scopeinpython.rtmz.rtmz` (optional)
-     - Canopy-level fluorescence radiance/flux, and a small zeaxanthin
-       (photoprotection) correction to the TOC spectrum -- both derived
-       from the already-solved energy balance.
-     - ebal output + Fluspect-Cx's fluorescence matrices
-
-``get_scope()`` runs all five for one LUT row and returns everything
-together. Its leaf-biochemistry traits are exactly Section 2's
-PROSPECT/Fluspect traits -- the traits genuinely unique to SCOPE:
+:func:`scopeinpython.scope.get_scope` isn't one model -- it's five
+distinct components chained together (leaf optics, optical BRDF, energy
+balance, photosynthesis, fluorescence); see :doc:`models`'s "Energy
+balance / fluorescence: SCOPE" section for what each one does and how
+they depend on each other. ``get_scope()`` runs all five for one LUT row
+and returns everything together. Its leaf-biochemistry traits are exactly
+Section 1's PROSPECT/Fluspect traits -- the traits genuinely unique to
+SCOPE:
 
 .. list-table::
    :header-rows: 1
@@ -537,7 +401,7 @@ re-typed by hand), lives in the R side's `SCOPEinR Trait & LUT Glossary
 -- the same CSV drives both the R and Python capstone examples on
 :doc:`examples`.
 
-8. A real LUT: sampling and inspecting a few traits
+7. A real LUT: sampling and inspecting a few traits
 --------------------------------------------------------
 
 Each row of ``inputs_SCOPE.csv`` carries its own ``Distribution``
@@ -582,6 +446,11 @@ example (:doc:`examples`) samples from:
 What's next
 -----------------
 
+- :doc:`models` -- what each named model actually *is*, not just its
+  input traits.
+- :doc:`lut_generation` -- the general LUT-building workflow (sampling
+  distributions, constraints, adding noise, train/validation/test
+  splits) this page's Section 7 only previews.
 - :doc:`examples` -- every model in this glossary, used in a runnable,
   verified example.
 - `ToolsRTM Parameter & Trait Glossary

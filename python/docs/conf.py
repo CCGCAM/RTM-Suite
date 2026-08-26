@@ -21,8 +21,11 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.autosectionlabel",  # lets :ref:`page:Section Title` link across pages (workflows.rst -> examples.rst, etc.)
     "myst_parser",
 ]
+
+autosectionlabel_prefix_document = True
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
