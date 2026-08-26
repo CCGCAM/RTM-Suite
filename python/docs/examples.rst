@@ -11,7 +11,7 @@ topic-for-topic where a Python port exists; see each package's own
 ``README.md`` for the full R-tutorial-to-Python-module bridge table,
 including the gaps called out at the bottom of this page. New to what
 ``Cab``, ``LIDFa``, ``Vcmax25``, or any other trait/parameter below
-actually means, its unit, or its realistic range? See the :doc:`glossary`
+actually means, its unit, or its realistic range? See the :doc:`t02-parameters-traits`
 first -- this page assumes that vocabulary and focuses on running the
 models.
 

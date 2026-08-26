@@ -10,26 +10,46 @@ This is a **partial, deliberately scoped** port. Every function documented
 here has been numerically verified against the original R package (see
 :doc:`verification`) before being included — nothing here is a guess at
 what the R code does. New to what ``N``, ``Cab``, ``LIDFa``, ``Vcmax25``,
-or any other trait actually means? See the :doc:`glossary` first.
+or any other trait actually means? See the :doc:`t02-parameters-traits` first.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents
+   :maxdepth: 1
+   :caption: LEARN -- I. Fundamentals & RTM Simulation
 
    install
-   glossary
-   models
+   t01-getting-started
+   t02-parameters-traits
+   t03-leaf-models
+   t04-canopy-models
+   t05-soil-atmosphere
+   t06-scope
+
+.. toctree::
+   :maxdepth: 1
+   :caption: LEARN -- II. From Simulation to Observations
+
    workflows
    sensor_simulation
    spectral_indices
+
+.. toctree::
+   :maxdepth: 1
+   :caption: LEARN -- III. From Spectra to Traits
+
    lut_generation
    trait_inversion
+
+.. toctree::
+   :maxdepth: 1
+   :caption: LEARN -- IV. Real Earth Observation
+
    earth_observation
 
 .. toctree::
    :maxdepth: 2
-   :caption: Reference
+   :caption: REFERENCE
 
+   models
    toolsrtm/index
    scopeinpython/index
    verification

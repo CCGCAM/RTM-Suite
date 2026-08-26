@@ -1,26 +1,30 @@
-Parameter & Trait Glossary
+02. Parameters & Traits
 ============================
 
-Every example on this site passes trait values into a leaf, canopy,
-soil, atmosphere, or SCOPE model without stopping to explain what each
-one physically means or what a realistic value looks like. This page is
-that stop: one place with every input's meaning, units, typical range,
-and which model(s) actually use it. It mirrors the R side's own
-`ToolsRTM Parameter & Trait Glossary
-<https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/parameter-glossary.html>`_
-and `SCOPEinR Trait & LUT Glossary
-<https://ccgcam.github.io/RTM-Suite/scopeinr/articles/trait-glossary.html>`_
--- same models, same physics, same parameter names, Python calling
-convention.
+What you will learn
+------------------------
 
-What each model *is* (not just its parameters) now has its own page:
-:doc:`models` covers every leaf/canopy/soil/atmosphere/SCOPE model's
-identity and how it differs from its siblings, with a one-line-per-model
-summary table up top. This page stays focused on the *inputs* those
-models read.
+- What every trait fed to a leaf, canopy, soil, atmosphere, or SCOPE
+  model actually means physically -- not just its symbol.
+- Each trait's unit and realistic range, so a simulation input is a
+  deliberate choice, not a guess.
+- Which model(s) actually read each trait.
 
-1. Leaf traits
----------------
+Concept
+-----------
+
+Every function in this package takes a handful of physically meaningful
+inputs -- a pigment concentration, a leaf angle, a soil moisture level --
+and this chapter is the reference to come back to for what each one
+means. It's organized the same way the models themselves are layered:
+leaf, then canopy structure/geometry, then soil, then atmosphere, then
+SCOPE's own physiological/energy variables on top of all of it. What each
+*model* is (PROSPECT vs. Fluspect vs. LIBERTY, fourSAIL vs. INFORM, ...)
+has its own chapter -- :doc:`t03-leaf-models` and :doc:`t04-canopy-models`
+-- this page stays focused on the inputs.
+
+Leaf biochemical traits
+----------------------------
 
 All leaf models (:func:`toolsrtm.leaf.prospect_d`, :func:`toolsrtm.leaf.prospect_pro`,
 :func:`toolsrtm.liberty.liberty`, :func:`toolsrtm.fluspect.fluspect_b`) build on the same
@@ -173,12 +177,12 @@ Fresnel-optics layer:
      - relative units
      - ~1 (typical default)
 
-2. Canopy structure and viewing geometry
--------------------------------------------
+Canopy structural traits
+-----------------------------
 
 Once a leaf model produces reflectance/transmittance,
 :func:`toolsrtm.canopy.foursail`, ``foursail2``, and :func:`toolsrtm.inform.inform` turn
-it into a canopy-level BRF, sharing the geometry/LIDF parameters below:
+it into a canopy-level BRF, sharing the structural parameters below:
 
 .. list-table::
    :header-rows: 1
@@ -198,9 +202,9 @@ it into a canopy-level BRF, sharing the geometry/LIDF parameters below:
      - Leaf inclination distribution shape parameters (Verhoef 1998,
        ``TypeLidf=1``). ``LIDFa`` mainly sets the average leaf angle
        (-1 = horizontal to +1 = vertical); ``LIDFb`` adjusts bimodality/
-       spread. See Section 4 for named shapes.
+       spread. See "Named leaf-angle distributions" below.
      - unitless, each in [-1, 1]
-     - see Section 4
+     - see below
    * - ``TypeLidf``
      - ``1`` = Verhoef two-parameter system; ``2`` = ellipsoidal, where
        ``LIDFa`` alone is the mean leaf angle in **degrees**.
@@ -210,13 +214,29 @@ it into a canopy-level BRF, sharing the geometry/LIDF parameters below:
      - Hot-spot size parameter -- leaf width / canopy height.
      - unitless
      - 0.01 -- 0.5
-   * - ``tts`` / ``tto`` / ``psi``
-     - Sun zenith / view zenith / relative azimuth.
-     - degrees
-     - 0-90 / 0-90 / 0-180
 
-3. Named leaf-angle distributions
--------------------------------------
+Viewing / illumination geometry
+------------------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 50 30
+
+   * - Symbol
+     - Meaning
+     - Typical range
+   * - ``tts``
+     - Sun zenith angle.
+     - 0-90 degrees
+   * - ``tto``
+     - View (sensor) zenith angle -- 0 is straight down (nadir).
+     - 0-90 degrees
+   * - ``psi``
+     - Relative azimuth between sun and viewer.
+     - 0-180 degrees
+
+Named leaf-angle distributions
+------------------------------------
 
 .. code-block:: python
 
@@ -265,11 +285,10 @@ it into a canopy-level BRF, sharing the geometry/LIDF parameters below:
 
    Real output: ``dladgen()``'s relative frequency per leaf-angle bin, for five named shapes. Planophile concentrates mass at low angles (horizontal leaves), erectophile at high angles (vertical leaves), spherical spreads smoothly across the whole range.
 
-4. Soil: MARMIT (dry -> wet)
---------------------------------
+Soil variables
+------------------
 
-:func:`toolsrtm.marmit.get_marmit_rsoil` turns a dry reference soil spectrum into
-a wet one:
+Two independent soil models, covered in full in :doc:`t05-soil-atmosphere`:
 
 .. list-table::
    :header-rows: 1
@@ -279,21 +298,38 @@ a wet one:
      - Meaning
      - Typical range
    * - ``soil_id``
-     - Which dry reference spectrum to start from, from a bundled soil-
-       spectral-library database.
+     - MARMIT: which dry reference spectrum to start from, from a
+       bundled soil-spectral-library database.
      - database-dependent
    * - ``L``
-     - Water-film optical thickness (cm). Near 0 is dry, larger is wetter.
+     - MARMIT: water-film optical thickness (cm). Near 0 is dry, larger
+       is wetter.
      - 0.001 (dry) -- 0.15+ (wet)
    * - ``eps``
-     - Soil surface roughness/optical-path parameter.
+     - MARMIT: soil surface roughness/optical-path parameter.
      - 0.05 (dry/smooth) -- 1.0 (wet/rough)
+   * - ``BSMBrightness``
+     - BSM: overall soil brightness.
+     - 0.3 -- 0.9
+   * - ``BSMlat``, ``BSMlon``
+     - BSM: soil spectral-shape "latitude"/"longitude" -- empirical
+       shape parameters, not geographic coordinates.
+     - 20-40 / 45-65
+   * - ``SMp``
+     - BSM: soil moisture, volume percentage.
+     - 5 -- 55 %
+   * - ``SMC``
+     - BSM: soil moisture capacity.
+     - ~25 (recommended)
+   * - ``film``
+     - BSM: effective optical thickness of a single water film.
+     - ~0.015 (recommended)
 
-5. Soil + atmosphere: SPART (BSM soil, SMAC atmosphere)
-------------------------------------------------------------
+Atmospheric variables
+--------------------------
 
-:func:`toolsrtm.spart.spart_toa` (and :func:`scopeinpython.soil.get_bsm`) use BSM
-soil plus SMAC atmospheric correction:
+SMAC's atmospheric-correction parameters, used by :func:`toolsrtm.spart.spart_toa`
+(:doc:`t05-soil-atmosphere`):
 
 .. list-table::
    :header-rows: 1
@@ -302,22 +338,6 @@ soil plus SMAC atmospheric correction:
    * - Symbol
      - Meaning
      - Typical range
-   * - ``BSMBrightness``
-     - Overall soil brightness.
-     - 0.3 -- 0.9
-   * - ``BSMlat``, ``BSMlon``
-     - Soil spectral-shape "latitude"/"longitude" -- BSM-specific
-       empirical shape parameters, not geographic coordinates.
-     - 20-40 / 45-65
-   * - ``SMp``
-     - Soil moisture, volume percentage.
-     - 5 -- 55 %
-   * - ``SMC``
-     - Soil moisture capacity.
-     - ~25 (recommended)
-   * - ``film``
-     - Effective optical thickness of a single water film.
-     - ~0.015 (recommended)
    * - ``Pa``
      - Atmospheric surface pressure.
      - ~900-1030 hPa
@@ -331,17 +351,13 @@ soil plus SMAC atmospheric correction:
      - Total-column water vapour.
      - ~1-3 g/cm2
 
-6. SCOPE traits: leaf + photosynthesis + fluorescence + energy balance
----------------------------------------------------------------------------
+SCOPE physiological / energy variables
+-------------------------------------------
 
-:func:`scopeinpython.scope.get_scope` isn't one model -- it's five
-distinct components chained together (leaf optics, optical BRDF, energy
-balance, photosynthesis, fluorescence); see :doc:`models`'s "Energy
-balance / fluorescence: SCOPE" section for what each one does and how
-they depend on each other. ``get_scope()`` runs all five for one LUT row
-and returns everything together. Its leaf-biochemistry traits are exactly
-Section 1's PROSPECT/Fluspect traits -- the traits genuinely unique to
-SCOPE:
+:func:`scopeinpython.scope.get_scope` (:doc:`t06-scope`) adds photosynthesis,
+fluorescence, and energy-balance variables on top of everything above.
+Its leaf-biochemistry traits are exactly the leaf traits above; the
+traits genuinely unique to SCOPE:
 
 .. list-table::
    :header-rows: 1
@@ -396,68 +412,38 @@ SCOPE:
 
 The full ~65-variable table, straight from the package's own bundled
 ``inputs_SCOPE.csv`` (units, range, distribution, default -- nothing
-re-typed by hand), lives in the R side's `SCOPEinR Trait & LUT Glossary
+re-typed by hand), lives on the R side (linked below).
+
+Try it yourself
+--------------------
+
+- Look up ``Cab`` here, then run it through :doc:`t01-getting-started`'s
+  code at 3 different values (10, 40, 70) and compare the visible-region
+  reflectance.
+- Pick a LIDF shape other than Spherical from the named-shapes table and
+  re-run :doc:`t04-canopy-models`'s LAI/LIDF experiment with it.
+
+Common mistakes
+--------------------
+
+- ``Anth`` is in different units for PROSPECT-D (ug/cm2) vs.
+  PROSPECT-PRO (nmol/cm2) -- copying a value between the two silently
+  changes what it represents.
+- Angles (``tts``, ``tto``, ``psi``, ``LIDFa`` under ``TypeLidf=2``) are
+  degrees, not radians.
+- Supplying both ``LMA`` and non-zero ``Prot``/``CBC`` doesn't error --
+  ``prospect_pro`` silently drops ``LMA`` to 0 and uses ``Prot``/``CBC``
+  instead.
+
+Next
+--------
+
+:doc:`t03-leaf-models` -- what PROSPECT-D, PROSPECT-PRO, Fluspect-B/Cx,
+and LIBERTY each actually simulate, run and plotted side by side.
+
+----
+
+Using R? -> `ToolsRTM Parameter & Trait Glossary
+<https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/parameter-glossary.html>`_
+and `SCOPEinR Trait & LUT Glossary
 <https://ccgcam.github.io/RTM-Suite/scopeinr/articles/trait-glossary.html>`_
--- the same CSV drives both the R and Python capstone examples on
-:doc:`examples`.
-
-7. A real LUT: sampling and inspecting a few traits
---------------------------------------------------------
-
-Each row of ``inputs_SCOPE.csv`` carries its own ``Distribution``
-(``Uniform``/``Gaussian``/``Fixed``) plus ``lower``/``upper`` bounds --
-the same table :func:`scopeinpython.scope.get_scope`'s Sentinel-2 capstone
-example (:doc:`examples`) samples from:
-
-.. code-block:: python
-
-   import csv
-   import numpy as np
-
-   def build_scope_lut(csv_path, n, seed):
-       rng = np.random.default_rng(seed)
-       with open(csv_path, newline="", encoding="utf-8-sig") as f:
-           rows = list(csv.DictReader(f))
-       lut = {}
-       for row in rows:
-           trait, dist = row["variable"], row["Distribution"]
-           if trait in ("startDate", "endDate", "Type"):
-               continue
-           lo, hi = float(row["lower"]), float(row["upper"])
-           if dist == "Uniform":
-               lut[trait] = rng.uniform(lo, hi, size=n)
-           elif dist == "Fixed":
-               lut[trait] = np.full(n, float(row["default"]))
-           else:  # Gaussian, clipped to [lo, hi]
-               mean, std = float(row["Mean_D"]), float(row["Std_D"])
-               vals = rng.normal(mean, std, size=n * 3)
-               lut[trait] = vals[(vals >= lo) & (vals <= hi)][:n]
-       return lut
-
-   lut = build_scope_lut("SCOPEinR/inst/input/inputs_SCOPE.csv", n=500, seed=1)
-   print(lut["Cab"].mean(), lut["LAI"].min(), lut["LAI"].max())
-
-.. figure:: _figures/glossary_scope_lut.png
-   :alt: Histograms of Cab (Gaussian), LAI (Uniform), and Vcmax25 (Uniform) sampled from inputs_SCOPE.csv, real output of the code above
-   :width: 100%
-
-   Real output: ``Cab``'s histogram is visibly bell-shaped (``Distribution="Gaussian"``, ``Mean_D=50``, ``Std_D=20``, clipped to ``[5, 90]``), while ``LAI`` and ``Vcmax25`` (both ``"Uniform"``) are flat across their own ranges.
-
-What's next
------------------
-
-- :doc:`models` -- what each named model actually *is*, not just its
-  input traits.
-- :doc:`lut_generation` -- the general LUT-building workflow (sampling
-  distributions, constraints, adding noise, train/validation/test
-  splits) this page's Section 7 only previews.
-- :doc:`examples` -- every model in this glossary, used in a runnable,
-  verified example.
-- `ToolsRTM Parameter & Trait Glossary
-  <https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/parameter-glossary.html>`_
-  and `SCOPEinR Trait & LUT Glossary
-  <https://ccgcam.github.io/RTM-Suite/scopeinr/articles/trait-glossary.html>`_
-  -- this page's R-side counterparts, with the full ~65-variable SCOPE
-  table and named-LIDF bar chart in R.
-- :doc:`toolsrtm/index` / :doc:`scopeinpython/index` -- the full function
-  reference, each page now with its own runnable Quick example.

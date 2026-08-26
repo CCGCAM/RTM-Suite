@@ -76,7 +76,7 @@ Leaf optical models
 ------------------------
 
 All leaf models take pigment/water/dry-matter traits and return a
-reflectance/transmittance spectrum -- see the :doc:`glossary` for exactly
+reflectance/transmittance spectrum -- see the :doc:`t02-parameters-traits` for exactly
 what each trait (``N``, ``Cab``, ``EWT``, ...) means.
 
 .. list-table::
@@ -218,7 +218,7 @@ distinct components, chained together:
      - Leaf optics: reflectance/transmittance + fluorescence excitation-
        emission matrices, per canopy layer. Same PROSPECT/Fluspect
        physics as above -- just the SCOPE-specific wrapper.
-     - Leaf biochemistry traits (:doc:`glossary`)
+     - Leaf biochemistry traits (:doc:`t02-parameters-traits`)
    * - :func:`~scopeinpython.rtmo.run_rtmo`
      - Optical top-of-canopy BRDF -- physically the same turbid-medium
        idea as fourSAIL, re-implemented to plug into the layers below.
@@ -232,7 +232,7 @@ distinct components, chained together:
    * - :func:`~scopeinpython.biochemical.get_biochemical`
      - Leaf-level photosynthesis (Farquhar/Collatz) and fluorescence
        yield, given a leaf micro-environment.
-     - Photosynthesis + NPQ traits (:doc:`glossary`)
+     - Photosynthesis + NPQ traits (:doc:`t02-parameters-traits`)
    * - :func:`~scopeinpython.rtmf.rtmf` / :func:`~scopeinpython.rtmz.rtmz` (optional)
      - Canopy-level fluorescence radiance/flux, and a small zeaxanthin
        (photoprotection) correction to the TOC spectrum.
@@ -243,6 +243,6 @@ What's next
 
 - :doc:`workflows` -- how these models chain together into the four
   standard simulation pipelines.
-- :doc:`glossary` -- what every input trait to these models means, its
+- :doc:`t02-parameters-traits` -- what every input trait to these models means, its
   unit, and its realistic range.
 - :doc:`examples` -- every model above, run with real, verified code.

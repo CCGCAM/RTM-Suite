@@ -1,0 +1,594 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>04. Canopy Radiative Transfer Models &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="05. Soil &amp; Atmosphere" href="t05-soil-atmosphere.html" />
+    <link rel="prev" title="03. Leaf Radiative Transfer Models" href="t03-leaf-models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t01-getting-started.html">01. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t02-parameters-traits.html">02. Parameters &amp; Traits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#leaf-biochemical-traits">Leaf biochemical traits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="t02-parameters-traits.html#liberty-only-structural-traits">LIBERTY-only structural traits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#canopy-structural-traits">Canopy structural traits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#viewing-illumination-geometry">Viewing / illumination geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#named-leaf-angle-distributions">Named leaf-angle distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#soil-variables">Soil variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#atmospheric-variables">Atmospheric variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#scope-physiological-energy-variables">SCOPE physiological / energy variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t03-leaf-models.html">03. Leaf Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">04. Canopy Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t06-scope.html">06. SCOPE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#next">Next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Simulation Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#prospect-foursail-canopy-reflectance">1. PROSPECT -&gt; fourSAIL -&gt; canopy reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#prospect-inform-forest-reflectance">2. PROSPECT -&gt; INFORM -&gt; forest reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#marmit-foursail-spart-toa">3. MARMIT -&gt; fourSAIL -&gt; SPART -&gt; TOA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#scope-reflectance-sif-energy-balance">4. SCOPE -&gt; reflectance + SIF + energy balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sensor_simulation.html">Sensor Simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sensor_simulation.html#two-ways-to-convolve-depending-on-what-s-known-about-the-sensor">Two ways to convolve, depending on what’s known about the sensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor_simulation.html#sentinel-2a-prisma-real-measured-srf">Sentinel-2A / PRISMA: real measured SRF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor_simulation.html#hyperspectral-multispectral-enmap-landsat-modis-custom">Hyperspectral -&gt; multispectral: EnMAP, Landsat, MODIS, custom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sensor_simulation.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spectral_indices.html">Spectral Indices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#vnir-vs-swir-domain">VNIR vs. SWIR domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#r-python-compatibility">R &lt;-&gt; Python compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectral_indices.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lut_generation.html">LUT Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#what-is-a-lut">What is a LUT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#parameter-distributions">Parameter distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#parameter-constraints-real-trait-co-variation-not-independence">Parameter constraints: real trait co-variation, not independence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#rtm-simulation-from-a-trait-table-to-a-spectral-lut">RTM simulation: from a trait table to a spectral LUT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#adding-noise">Adding noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#train-validation-test">Train / validation / test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lut_generation.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trait_inversion.html">Trait Inversion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#lut-inversion-merit-function">1. LUT inversion (merit function)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#machine-learning">2. Machine learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#deep-learning">3. Deep learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#which-one-should-i-use">Which one should I use?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trait_inversion.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="earth_observation.html">Earth Observation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#retrieving-a-real-scene">1. Retrieving a real scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#image-preparation-reflectance-scaling-and-band-naming">2. Image preparation: reflectance scaling and band naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#applying-a-trained-inversion-model-spatially">3. Applying a trained inversion model spatially</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#trait-maps-and-uncertainty">4. Trait maps and uncertainty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earth_observation.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html#at-a-glance">At a glance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#leaf-optical-models">Leaf optical models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#canopy-models">Canopy models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#soil">Soil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#soil-plant-atmosphere">Soil-Plant-Atmosphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#energy-balance-fluorescence-scope">Energy balance / fluorescence: SCOPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="toolsrtm/index.html">toolsrtm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/leaf.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/fluspect.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/liberty.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/canopy.html">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/canopy.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/inform.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/spart.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/smac.html">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/smac.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/srf.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/indices.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/marmit.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/satellite.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/inversion.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/deep_learning.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/sensitivity.html">toolsrtm.sensitivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/soil.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/spectral.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmo.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/biochemical.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/fluspect.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/fluspect_mscope.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmf.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmz.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/thermal.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmt_sb.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/ebal.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/scope.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/utils.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#alternative-leaf-models-liberty-and-fluspect-b-toolsrtm">Alternative leaf models: Liberty and Fluspect-B (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#sensor-convolution-vegetation-indices-toolsrtm">Sensor convolution + vegetation indices (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#inform-explicit-forest-canopy-model-toolsrtm">INFORM: explicit forest-canopy model (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#machine-learning-trait-inversion-toolsrtm">Machine-learning trait inversion (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#spart-full-soil-plant-atmosphere-chain-toolsrtm">SPART: full soil-plant-atmosphere chain (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#deep-learning-trait-inversion-toolsrtm-optional-dl-extra">Deep-learning trait inversion (toolsrtm, optional <code class="docutils literal notranslate"><span class="pre">dl</span></code> extra)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#the-1d-cnn-on-hyperspectral-bands-toolsrtm">The 1D-CNN, on hyperspectral bands (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#marmit-soil-moisture-model-toolsrtm">MARMIT soil moisture model (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#full-scope-run-energy-balance-fluorescence-scopeinpython">Full SCOPE run: energy balance + fluorescence (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython">Real Sentinel-2 capstone: retrieving net photosynthesis (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#global-sensitivity-analysis-toolsrtm">Global sensitivity analysis (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-data-driven-spatial-index-cab-mapping-toolsrtm">Real Sentinel-2 capstone: data-driven spatial index + Cab mapping (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#what-isn-t-ported-yet">What isn’t ported yet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">04. Canopy Radiative Transfer Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/t04-canopy-models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="canopy-radiative-transfer-models">
+<h1>04. Canopy Radiative Transfer Models<a class="headerlink" href="#canopy-radiative-transfer-models" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>What fourSAIL, fourSAIL2, and INFORM each simulate, and what
+structural assumption separates them.</p></li>
+<li><p>How LAI and leaf-angle distribution (LIDF) change top-of-canopy (TOC)
+reflectance, quantitatively.</p></li>
+<li><p>How to run and interpret all three canopy models on the same leaf
+optics.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<p>A canopy model takes a leaf model’s reflectance/transmittance, a soil
+background, canopy structure, and sun/view geometry, and returns TOC
+reflectance – what a sensor above the canopy sees.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 45.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>What it represents</p></th>
+<th class="head"><p>What makes it different</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>fourSAIL</p></td>
+<td><p>The classic PROSAIL turbid-medium canopy: a single, statistically
+homogeneous “cloud” of leaves at a given LAI and angle
+distribution – no explicit 3D structure.</p></td>
+<td><p>The reference/default; single-layer, single leaf-biochemistry
+profile.</p></td>
+</tr>
+<tr class="row-odd"><td><p>fourSAIL2</p></td>
+<td><p>Two-layer canopy (a green layer + a brown/senescent layer,
+<code class="docutils literal notranslate"><span class="pre">fraction_brown</span></code>-weighted).</p></td>
+<td><p>Same turbid-medium idea, but two vertically-stacked layers
+instead of one – e.g. a canopy with visible dead/dry material
+mixed in with live foliage.</p></td>
+</tr>
+<tr class="row-even"><td><p>INFORM</p></td>
+<td><p>Forest-stand extension (Atzberger): explicit tree crowns (stem
+density, crown diameter, height) over an understorey + background.</p></td>
+<td><p>The only one of the three with real gap/shadow geometry.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="python-tools-used">
+<h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Key arguments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="toolsrtm/canopy.html#toolsrtm.canopy.foursail" title="toolsrtm.canopy.foursail"><code class="xref py py-func docutils literal notranslate"><span class="pre">foursail()</span></code></a></p></td>
+<td><p>Trait dict (leaf + <code class="docutils literal notranslate"><span class="pre">LAI,</span> <span class="pre">LIDFa,</span> <span class="pre">LIDFb,</span> <span class="pre">TypeLidf,</span> <span class="pre">hspot,</span> <span class="pre">tts,</span> <span class="pre">tto,</span> <span class="pre">psi</span></code>),
+<code class="docutils literal notranslate"><span class="pre">rsoil</span></code> (2101-element soil spectrum), <code class="docutils literal notranslate"><span class="pre">leaf_model</span></code>. Returns an
+object whose <code class="docutils literal notranslate"><span class="pre">.rsot</span></code> is the TOC BRDF.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">toolsrtm.canopy.foursail2</span></code></p></td>
+<td><p>Adds <code class="docutils literal notranslate"><span class="pre">fraction_brown,</span> <span class="pre">diss,</span> <span class="pre">Cv,</span> <span class="pre">Zeta</span></code> on top of <code class="docutils literal notranslate"><span class="pre">foursail</span></code>’s arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="toolsrtm/inform.html#toolsrtm.inform.inform" title="toolsrtm.inform.inform"><code class="xref py py-func docutils literal notranslate"><span class="pre">inform()</span></code></a></p></td>
+<td><p>Adds <code class="docutils literal notranslate"><span class="pre">LAIu,</span> <span class="pre">sd,</span> <span class="pre">cd,</span> <span class="pre">h,</span> <span class="pre">skyl</span></code> on top of <code class="docutils literal notranslate"><span class="pre">foursail</span></code>’s arguments.
+Returns the TOC spectrum directly (not wrapped in a result object).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">foursail</span>
+
+<span class="n">inputLUT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+                 <span class="n">LIDFa</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">LIDFb</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">LAI</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hspot</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tto</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">rsoil</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">2101</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>
+<span class="n">wl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">2501</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sweep_lai</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+        <span class="n">lut</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">);</span> <span class="n">lut</span><span class="p">[</span><span class="s2">&quot;LAI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">foursail</span><span class="p">(</span><span class="n">lut</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">leaf_model</span><span class="o">=</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">spectrum_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">rsot</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="n">lai_vals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="n">lai_curves</span> <span class="o">=</span> <span class="n">sweep_lai</span><span class="p">(</span><span class="n">lai_vals</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NIR (850nm) reflectance by LAI:&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lai_vals</span><span class="p">,</span> <span class="n">lai_curves</span><span class="p">[:,</span> <span class="mi">450</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))))</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<p>Printed output (exact, deterministic):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NIR</span> <span class="p">(</span><span class="mi">850</span><span class="n">nm</span><span class="p">)</span> <span class="n">reflectance</span> <span class="n">by</span> <span class="n">LAI</span><span class="p">:</span> <span class="p">{</span><span class="mf">0.5</span><span class="p">:</span> <span class="mf">0.1872</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">:</span> <span class="mf">0.2576</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">0.3404</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mf">0.4038</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="mf">0.4316</span><span class="p">}</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/t04_canopy_lai_lidf.png"><img alt="Effect of LAI and leaf angle distribution on fourSAIL TOC reflectance, real output of the code above" src="_images/t04_canopy_lai_lidf.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: increasing LAI raises NIR reflectance but with visibly
+diminishing returns (LAI 5 -&gt; 7 barely moves); leaf angle distribution
+has almost no effect at this nadir view (<code class="docutils literal notranslate"><span class="pre">tto=0</span></code>) except for
+erectophile, whose near-vertical leaves present much less projected
+area to a straight-down sensor.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="_images/t04_canopy_model_comparison.png"><img alt="fourSAIL vs fourSAIL2 vs INFORM TOC reflectance, same leaf optics and LAI, real output" src="_images/t04_canopy_model_comparison.png" style="width: 75%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: same leaf optics and LAI (3) through all three models –
+INFORM sits well below fourSAIL/fourSAIL2 across the whole spectrum
+(explicit crown/gap shadow geometry that a homogeneous turbid medium
+doesn’t have); fourSAIL2 with a modest <code class="docutils literal notranslate"><span class="pre">fraction_brown=0.1</span></code> is
+nearly indistinguishable from plain fourSAIL here.</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>NIR reflectance rises with LAI (0.187 at LAI=0.5 to 0.432 at LAI=7) but
+saturates – the jump from LAI 0.5 to 3 (+0.153) is much larger than from
+LAI 5 to 7 (+0.028). This is the physically expected “LAI saturation”
+behaviour: once enough leaf layers exist to scatter nearly all incoming
+NIR light multiple times before it can escape, adding still more leaves
+changes the outgoing signal only marginally – one of the best-known
+practical limits of optical LAI retrieval (very high LAI canopies become
+hard to distinguish from each other in the NIR alone). Leaf angle
+distribution barely changes reflectance at this nadir viewing geometry
+for planophile vs. spherical, but erectophile (near-vertical leaves)
+drops noticeably – at <code class="docutils literal notranslate"><span class="pre">tto=0</span></code> a vertical leaf presents little
+projected area to a straight-down sensor, so more of the signal comes
+from the soil/lower canopy instead. INFORM’s forest-stand reflectance is
+lower than a same-LAI fourSAIL canopy at every wavelength – exactly what
+real forest canopies show relative to a closed homogeneous canopy,
+because gaps between tree crowns let some of the signal come from
+shadow/background rather than sunlit leaves.</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Re-run the LIDF comparison at <code class="docutils literal notranslate"><span class="pre">tto=40</span></code> (an oblique view) instead of
+nadir – the erectophile/planophile difference should become much
+larger.</p></li>
+<li><p>Push <code class="docutils literal notranslate"><span class="pre">LAI</span></code> past 7 (try 10, 15) and confirm the NIR value keeps
+flattening rather than continuing to rise linearly.</p></li>
+<li><p>In the fourSAIL vs. fourSAIL2 comparison, raise <code class="docutils literal notranslate"><span class="pre">fraction_brown</span></code> from
+0.1 to 0.6 and see how much more the two curves separate.</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rsoil</span></code> must be a 2101-element array matching the model’s native
+400-2500nm/1nm grid – not a scalar.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inform()</span></code> returns the TOC spectrum directly (a plain array), unlike
+<code class="docutils literal notranslate"><span class="pre">foursail()</span></code>/<code class="docutils literal notranslate"><span class="pre">foursail2()</span></code> which return a result object with
+<code class="docutils literal notranslate"><span class="pre">.rsot</span></code> – a real, useful-to-know inconsistency across the three
+functions.</p></li>
+<li><p>LAI-vs-reflectance saturation means a small reflectance difference at
+high LAI can correspond to a large true LAI difference – don’t expect
+linear sensitivity across the whole LAI range (the sensitivity-analysis chapter
+covers this quantitatively).</p></li>
+</ul>
+</section>
+<section id="next">
+<h2>Next<a class="headerlink" href="#next" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="t05-soil-atmosphere.html"><span class="doc">05. Soil &amp; Atmosphere</span></a> – the soil background these canopy models
+take as an input, modelled properly instead of assumed flat, plus the
+atmosphere step to go all the way to top-of-atmosphere.</p>
+<hr class="docutils" />
+<p>Using R? -&gt; <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/t02-leaf-to-canopy.html">ToolsRTM Tutorial 02: From Leaf to Canopy Reflectance</a>
+and <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/t04-comparing-models.html">Tutorial 04: Comparing Models</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="t03-leaf-models.html" class="btn btn-neutral float-left" title="03. Leaf Radiative Transfer Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="t05-soil-atmosphere.html" class="btn btn-neutral float-right" title="05. Soil &amp; Atmosphere" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

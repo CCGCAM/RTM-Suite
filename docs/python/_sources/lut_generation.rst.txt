@@ -35,7 +35,7 @@ multi-trait LUT from a per-trait distribution choice in one call:
 samples around ``mean_gauss``/``std_gauss`` while still clipped to
 ``[minval, maxval]`` (:func:`~toolsrtm.sensitivity.gauss_by_min_max`) --
 the same two distributions SCOPE's own ``inputs_SCOPE.csv``-driven LUT
-uses (:doc:`glossary`'s Section 7 shows that side real, with histograms).
+uses (see the SCOPE-LUT sampling example later in this chapter).
 
 Parameter constraints: real trait co-variation, not independence
 ------------------------------------------------------------------------
@@ -125,7 +125,7 @@ What's next
 
 - :doc:`trait_inversion` -- what to do with a LUT once it's built: LUT
   matching, ML, or DL.
-- :doc:`glossary` -- realistic ranges for every trait, so
+- :doc:`t02-parameters-traits` -- realistic ranges for every trait, so
   ``minval``/``maxval`` above aren't guessed.
 - SCOPEinR's `Getting LUTs for SCOPE
   <https://ccgcam.github.io/RTM-Suite/scopeinr/articles/getting-luts-scope.html>`_
