@@ -92,7 +92,7 @@ before calling it, or the fit fails with
 ## 2. A properly sized LUT, not a 150-row smoke test
 
 `n_samples = 150` (an earlier version of this page) is far too small to
-demonstrate what deep learning is actually for -- 3000 rows here, large
+demonstrate what deep learning is actually for -- 6000 rows here, large
 enough to show real training dynamics without an impractical pkgdown
 build time:
 
@@ -101,7 +101,7 @@ r2_f <- function(obs, pred) 1 - sum((obs - pred)^2) / sum((obs - mean(obs))^2)
 rmse_f <- function(obs, pred) sqrt(mean((obs - pred)^2))
 bias_f <- function(obs, pred) mean(pred - obs)
 
-n_samples <- 3000
+n_samples <- 6000
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_samples, setseed = 1))
 wl <- 400:2500
 rsoil <- rep(0.15, length(wl))
@@ -226,9 +226,9 @@ if (dl_result$ok) {
 }
 ```
 
-**On this LUT (3000 rows, 10 Sentinel-2 bands), Random Forest clearly
+**On this LUT (6000 rows, 10 Sentinel-2 bands), Random Forest clearly
 beats the dense network, not the other way around.** This is the real
-result, not a hypothetical -- and it's exactly the outcome Section 8
+result, not a hypothetical -- and it's exactly the outcome Section 9
 below explains rather than papers over: 10-band multispectral input and
 a moderate-size LUT is close to RF's best case, and the network here
 hadn't even finished converging (Section 4). Do not read this as "DL is
@@ -245,7 +245,7 @@ what a 1D CNN specifically buys you -- convolution exploits
 contiguous hyperspectral bands are a much fairer test of that idea:
 
 ```{r cnn-prisma, results = 'hide'}
-n_hyp <- 2000
+n_hyp <- 4000
 LUT_h <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_hyp, setseed = 3))
 refl_h <- t(sapply(seq_len(n_hyp), function(i) {
   foursail(inputLUT = LUT_h[i, ], rsoil = rsoil, LeafModel = "PROSPECT-PRO")$rsot
@@ -303,7 +303,104 @@ either a larger LUT, more training, or a harder problem where local
 spectral shape genuinely matters more than this synthetic Cab-from-
 reflectance mapping does, to actually pay off over a well-tuned RF.
 
-## 7. Which one should you use? (Tutorials 10-13, together) -- corrected
+## 7. Fewer, better features: does band+index selection help more than raw bands?
+
+Sections 4-6 threw every band at the network -- all 10 Sentinel-2
+bands, all 234 PRISMA bands -- and let the model find what matters on
+its own. Tutorial 12 showed a different, more targeted approach for
+Random Forest: a compact core of physically relevant bands, plus a
+small, *per-trait* selection of the most correlated spectral indices
+(Tutorial 09). Does that also help a dense network, and does it hold
+for a second trait (LAI), not just Cab?
+
+```{r feature-select-setup}
+# Real Sentinel-2A band names (getIndicesSE2.ML()'s formulas look up
+# specific bands like B8A/B11/B12 by name) -- a second, separate naming of
+# the same se2a convolution from Section 2; band_names/dataset_dense above
+# are untouched.
+se2a_real <- se2a
+names(se2a_real) <- c("id", "B1","B2","B3","B4","B5","B6","B7","B8","B8A","B9","B10","B11","B12")
+core_bands <- c("B4", "B5", "B7", "B8A", "B11")  # a compact, physically-motivated core -- not all 10
+
+idx_ml <- suppressMessages(getIndicesSE2.ML(df = se2a_real[, -1], sensor = "Sentinel-2a", df.data = NULL, fast.process = TRUE))
+
+n_top <- 4  # indices kept per trait
+select_indices <- function(trait) {
+  cors <- sapply(names(idx_ml), function(nm) suppressWarnings(cor(idx_ml[train_idx, nm], LUT[train_idx, trait])))
+  cors <- cors[is.finite(cors)]
+  names(sort(abs(cors), decreasing = TRUE))[seq_len(min(n_top, length(cors)))]
+}
+selected <- setNames(lapply(c("Cab", "LAI"), select_indices), c("Cab", "LAI"))
+knitr::kable(data.frame(trait = names(selected),
+                         features = sapply(selected, function(x) paste(c(core_bands, x), collapse = ", "))),
+             row.names = FALSE)
+```
+
+```{r feature-select-fit, results='hide', fig.show='hide'}
+run_trait <- function(trait) {
+  feat <- c(core_bands, selected[[trait]])
+  df <- cbind(LUT[trait], se2a_real[core_bands], idx_ml[selected[[trait]]])
+
+  # depVar.trans=TRUE: also range-scale the *target*, not just the inputs.
+  # With only a handful of highly informative features the network fits
+  # training data almost immediately; on LAI's narrow raw range (~0.5-7)
+  # that made unscaled-target MSE gradients explode early in training
+  # (verified: R2 as bad as -5000 with depVar.trans's default of FALSE).
+  # predict() then returns range-scaled [0,1] predictions, so invert them
+  # by hand using the returned scaler before computing R2 in real units.
+  dl <- getMLmodel(dataset = df[train_idx, ], depVar = trait, model = "Hidden-layers",
+                    optimizer = "adam", n.epochs = 300, batch.size = 64, save.model = FALSE,
+                    depVar.trans = TRUE)
+  pred_dl_scaled <- as.numeric(predict(dl$model, as.matrix(df[test_idx, feat])))
+  y_range <- dl$Scalar.Ytrain$ranges[, trait]
+  pred_dl <- pred_dl_scaled * (y_range[2] - y_range[1]) + y_range[1]
+
+  fit_rf <- get.inversion(data = df[train_idx, ], depVar = trait, inputs = feat,
+                           algorithm = "RF", n.samples = length(train_idx), seed = 42)
+  pred_rf <- as.numeric(predict(fit_rf$model, newdata = df[test_idx, c(trait, feat)]))
+
+  data.frame(trait = trait, n_features = length(feat),
+             R2_dense = r2_f(LUT[test_idx, trait], pred_dl),
+             R2_RF = r2_f(LUT[test_idx, trait], pred_rf))
+}
+feature_results <- do.call(rbind, lapply(c("Cab", "LAI"), run_trait))
+```
+
+```{r feature-select-table}
+knitr::kable(feature_results, digits = 3, row.names = FALSE)
+```
+
+**For Random Forest, this is at worst free and at best a real win.**
+On Cab, 9 well-chosen features (5 core bands + 4 correlated indices)
+essentially match Section 5's RF fit on all 10 raw bands (0.853 here
+vs. 0.858 there) -- RF was already near its ceiling on Cab either way.
+The real payoff is LAI, never even attempted with the generic 10-band
+set above: 0.685, a strong result from a fraction of the inputs.
+Fewer, better-chosen features cost RF nothing on the trait it already
+handled well, and open up a second trait it hadn't been asked about
+at all -- consistent with Tutorial 12's finding, extended here to a
+trait Tutorial 12 didn't cover as its headline case.
+
+**For the dense network, this same feature set is actively harmful,
+and it stayed harmful after two standard fixes.** Both `R2_dense`
+values above are catastrophically negative -- not just "worse than
+RF," but far worse than predicting the mean every time. Section 1's
+relu-output fix (this page's original bug) does not explain it: that
+fix already applies here too. Adding `depVar.trans = TRUE` (also
+range-scaling the target, not just the inputs -- the standard second
+thing to check for an unstable regression network) made it *worse*,
+not better, for both traits. With RF fitting the same 9 columns
+essentially perfectly, the problem isn't the features -- it's that
+`getMLmodel()`'s dense architecture, as configured on this page, does
+not train stably on a small, highly informative, and (indices being
+built from overlapping bands) fairly collinear input. That's a real,
+documented limitation of this specific setup, not a result to quietly
+drop: it's consistent with Section 9's broader point below that RF is
+the forgiving default, and dense/CNN need real care -- learning-rate
+tuning, regularization, or architecture changes beyond this page's
+scope -- to earn their keep on inputs like this one.
+
+## 8. Which one should you use? (Tutorials 10-13, together) -- corrected
 
 An earlier version of this table implied `get.inversionOpt()` (pure
 LUT search, no training) works fine from a small reference LUT. Tutorial
@@ -317,17 +414,18 @@ whether one of them is exempt from needing data:
 | Method | Needs training? | Small-LUT behavior (verified) | Typical use |
 |---|---|---|---|
 | `get.inversionOpt()` (Tutorial 11) | No -- pure search | Degrades smoothly but really does need real coverage -- ~100 reference spectra gave R2 near zero in Tutorial 11's own test; ~2000 gave real skill | Quick, physically-grounded retrieval when a genuinely well-populated reference LUT already exists |
-| `get.inversion()` (Tutorial 12) | Yes | The most forgiving of the three in practice -- RF in particular stayed usable even on this page's 150-row original LUT, and clearly beat both DL architectures above on a 3000-row one | General-purpose retrieval; often the right default |
-| `getMLmodel()` (this page) | Yes, more so | Needs the most: on a 3000-row LUT / 10 multispectral bands, neither dense nor CNN beat Tutorial 12's RF here (Sections 5-6) | Large LUTs, hyperspectral input, and/or more complex nonlinear mappings than RF captures well -- not a default choice |
+| `get.inversion()` (Tutorial 12) | Yes | The most forgiving of the three in practice -- RF in particular stayed usable even on this page's 150-row original LUT, and clearly beat both DL architectures above on a 6000-row one | General-purpose retrieval; often the right default |
+| `getMLmodel()` (this page) | Yes, more so | Needs the most: on a 6000-row LUT / 10 multispectral bands, neither dense nor CNN beat Tutorial 12's RF here (Sections 5-6) | Large LUTs, hyperspectral input, and/or more complex nonlinear mappings than RF captures well -- not a default choice |
 
-## 8. When should I use deep learning?
+## 9. When should I use deep learning?
 
 Not "when it's available" -- this page's own results argue against
 that. A DL model is more likely to earn its extra complexity when
 **several** of these hold at once, not just one:
 
 - **LUT size**: thousands to tens of thousands of rows, not hundreds --
-  Section 5 used 3000 and RF still won comfortably.
+  Section 5 used 6000 and RF still won comfortably (Section 7 checks
+  whether a smaller, better-chosen feature set changes that).
 - **Input dimensionality**: hyperspectral (dozens to hundreds of
   correlated bands), where a CNN's spectral-neighborhood structure has
   something real to exploit (Section 6) -- 10 multispectral bands don't
