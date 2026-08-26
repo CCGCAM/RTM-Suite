@@ -43,8 +43,8 @@ Also in this repo: a Python port of the core models ([`python/`](python/)), narr
 ├── ToolsRTM/     R package — leaf + canopy radiative transfer models, trait inversion
 ├── SCOPEinR/     R package — full SCOPE energy-balance simulation (needs ToolsRTM)
 ├── ToolsRTM.app/ R package — get.simulator() + the interactive Shiny apps
-├── python/       Python port of the core models (toolsrtm, scopeinpython — also published standalone,
-│                 see "Canonical repos" below)
+├── python/       Python port of the core models (toolsrtm, scopeinpython — pip-installable directly
+│                 from this subdirectory, see "Canonical repos" below)
 ├── Apps/         Standalone Shiny apps, run directly with shiny::runApp() — no course material needed
 │   ├── RTMs/         Model Explorer, PROSAIL-WithSatellite, How in R/Python tutorials, Reference
 │   └── STAC/         real Sentinel-2 time series retrieval via STAC, interactive map
@@ -410,7 +410,7 @@ This suite repo is where the two R packages, both Python ports, their docs, and 
 - **Course pipeline** (`Scripts/R/For*/`) — one self-contained folder per model (`ForPROSAIL`, `ForFoursail2`, `ForINFORM`, `ForSPART`, `ForMARMIT`, `ForSCOPE`), each always: simulate 100 runs → save trait histograms/correlations/example spectra → convolve to real sensors → invert with 11 ML algorithms and deep learning, saving every fitted model, metric, and figure. Plus `Comparison/` (models side by side) and `Sensibility/` (OAT, Sobol, and Johnson sensitivity indices).
 - **Articles** — narrative write-ups of the course pipeline above, with the real figures embedded: [ToolsRTM: course pipeline](docs/toolsrtm/articles/course-pipeline.html), [ToolsRTM: model comparison & sensitivity](docs/toolsrtm/articles/model-comparison-and-sensitivity.html), [SCOPEinR: SCOPE course pipeline](docs/scopeinr/articles/scope-pipeline.html) (includes a real SIF-vs-Vcmax25 experiment, not just a discussion).
 - **Reference manuals** ([`docs/`](docs/index.html)) — auto-generated `pkgdown` sites, one per package, browsable offline.
-- **Python port** — see [`python/README.md`](python/README.md) for what's ported and how it's numerically verified against the R originals, [`docs/python/index.html`](docs/python/index.html) for the full Sphinx/Read the Docs-style API reference (mirrors the two R pkgdown sites above), and [`Scripts/Python/README.md`](Scripts/Python/README.md) for a real, runnable simulate → indices → ML-invert → sensor-convolution pipeline built entirely on it (scripts + a Jupyter notebook). Each Python package also has its own standalone GitHub repo -- see "Canonical repos" above.
+- **Python port** — see [`python/README.md`](python/README.md) for what's ported and how it's numerically verified against the R originals, [`docs/python/index.html`](docs/python/index.html) for the full Sphinx/Read the Docs-style API reference (mirrors the two R pkgdown sites above), and [`Scripts/Python/README.md`](Scripts/Python/README.md) for a real, runnable simulate → indices → ML-invert → sensor-convolution pipeline built entirely on it (scripts + a Jupyter notebook). Each Python package is `pip install`-able directly from this monorepo's subdirectory -- see "Canonical repos" above.
 
 ## Citation
 
