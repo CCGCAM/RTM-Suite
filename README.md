@@ -4,6 +4,12 @@
 
 ![ToolsRTM](https://img.shields.io/badge/ToolsRTM-R%20CMD%20check%3A%200%20errors-brightgreen) ![SCOPEinR](https://img.shields.io/badge/SCOPEinR-R%20CMD%20check%3A%200%20errors-brightgreen) ![ToolsRTM Python](https://img.shields.io/badge/ToolsRTM-Python-blue) ![SCOPEinPython](https://img.shields.io/badge/SCOPEinPython-Python-blue)
 
+### :globe_with_meridians: [ccgcam.github.io/RTM-Suite](https://ccgcam.github.io/RTM-Suite/)
+
+The project website — reference manuals for all four packages, 31 tutorials (R and Python side by side), runnable examples with generated figures, an interactive R-vs-Python results comparison, and the Shiny apps, all in one place.
+
+[![RTM-Suite website homepage](./assets/Website_rtm-suite.png)](https://ccgcam.github.io/RTM-Suite/)
+
 RTM-Suite brings together a collection of radiative transfer models and tools for simulating and retrieving vegetation biophysical and biochemical traits from remote sensing observations. The framework connects leaf optical properties, canopy radiative transfer, soil reflectance, fluorescence, and energy-balance modelling within a common environment, supporting applications from model sensitivity analysis to satellite data interpretation and trait retrieval.
 
 The suite builds on the **ToolsRTM** and **SCOPEinR** R packages and extends their functionality through Python implementations, including **ToolsRTM for Python** and **SCOPEinPython**.
@@ -26,7 +32,7 @@ The suite builds on the **ToolsRTM** and **SCOPEinR** R packages and extends the
 
 **Get each library directly — click a badge to open that library's own repo:**
 
-[![ToolsRTM (R)](https://img.shields.io/badge/ToolsRTM-GitLab-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/toolsrtm) [![SCOPEinR (R)](https://img.shields.io/badge/SCOPEinR-GitLab-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/scopeinr) [![toolsrtm (Python)](https://img.shields.io/badge/toolsrtm-GitHub-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/ToolsRTMinPython) [![scopeinpython (Python)](https://img.shields.io/badge/scopeinpython-GitHub-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/scopeinpython)
+[![ToolsRTM (R)](https://img.shields.io/badge/ToolsRTM-GitLab-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/toolsrtm) [![SCOPEinR (R)](https://img.shields.io/badge/SCOPEinR-GitLab-FC6D26?logo=gitlab&logoColor=white)](https://gitlab.com/caminoccg/scopeinr) [![toolsrtm (Python)](https://img.shields.io/badge/toolsrtm-GitHub-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite/tree/main/python/toolsrtm) [![scopeinpython (Python)](https://img.shields.io/badge/scopeinpython-GitHub-181717?logo=github&logoColor=white)](https://github.com/CCGCAM/RTM-Suite/tree/main/python/scopeinpython)
 
 Also in this repo: a Python port of the core models ([`python/`](python/)), narrative tutorials ([`Tutorials/`](Tutorials/)), and generated reference manuals ([`docs/`](docs/index.html)).
 
@@ -103,11 +109,11 @@ library(ToolsRTM)
 library(SCOPEinR)
 ```
 
-**Python** (from GitHub — each package also has its own standalone repo, see "Canonical repos" below):
+**Python** (from this monorepo — not yet on PyPI, see [`python/README.md`](python/README.md)):
 
 ``` bash
-pip install git+https://github.com/CCGCAM/ToolsRTMinPython.git
-pip install git+https://github.com/CCGCAM/scopeinpython.git
+pip install "git+https://github.com/CCGCAM/RTM-Suite.git#subdirectory=python/toolsrtm"
+pip install "git+https://github.com/CCGCAM/RTM-Suite.git#subdirectory=python/scopeinpython"
 ```
 
 ``` python
@@ -382,11 +388,11 @@ git clone https://gitlab.com/caminoccg/toolsrtm
 git clone https://gitlab.com/caminoccg/scopeinr
 ```
 
-The Python ports each have their own standalone GitHub repo too (lighter install than cloning this whole monorepo — course materials, both R packages, and generated docs aren't needed just to `pip install` the library):
+The Python ports (`toolsrtm`, `scopeinpython`) live inside this monorepo under [`python/`](python/) — not (yet) on PyPI, and no separate standalone GitHub repo. Install directly from the subdirectory, no full clone needed:
 
 ```         
-pip install git+https://github.com/CCGCAM/ToolsRTMinPython.git
-pip install git+https://github.com/CCGCAM/scopeinpython.git
+pip install "git+https://github.com/CCGCAM/RTM-Suite.git#subdirectory=python/toolsrtm"
+pip install "git+https://github.com/CCGCAM/RTM-Suite.git#subdirectory=python/scopeinpython"
 ```
 
 This suite repo is where the two R packages, both Python ports, their docs, and `ToolsRTM.app` are developed and demonstrated together.
