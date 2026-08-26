@@ -37,14 +37,21 @@ or any other trait actually means? See the :doc:`t02-parameters-traits` first.
    :maxdepth: 1
    :caption: LEARN -- III. From Spectra to Traits
 
-   lut_generation
-   trait_inversion
+   t11-lut-generation
+   t12-lut-inversion
+   t13-machine-learning-inversion
+   t14-deep-learning-inversion
+   t15-choosing-inversion-strategy
 
 .. toctree::
    :maxdepth: 1
    :caption: LEARN -- IV. Real Earth Observation
 
-   earth_observation
+   t16-retrieving-eo-data
+   t17-preparing-eo-observations
+   t18-applying-inversion-spatially
+   t19-trait-maps-uncertainty
+   t20-end-to-end-workflow
 
 .. toctree::
    :maxdepth: 2

@@ -128,7 +128,7 @@ Common mistakes
 Next
 --------
 
-Part III starts here: :doc:`lut_generation` -- building the training
+Part III starts here: :doc:`t11-lut-generation` -- building the training
 data every inversion method (LUT matching, ML, DL) needs.
 
 ----

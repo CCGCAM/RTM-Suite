@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>18. Applying an Inversion Model Spatially &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="19. Trait Maps &amp; Uncertainty" href="t19-trait-maps-uncertainty.html" />
+    <link rel="prev" title="17. Preparing EO Observations" href="t17-preparing-eo-observations.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#building-these-docs">Building these docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t01-getting-started.html">01. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t01-getting-started.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t02-parameters-traits.html">02. Parameters &amp; Traits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#leaf-biochemical-traits">Leaf biochemical traits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="t02-parameters-traits.html#liberty-only-structural-traits">LIBERTY-only structural traits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#canopy-structural-traits">Canopy structural traits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#viewing-illumination-geometry">Viewing / illumination geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#named-leaf-angle-distributions">Named leaf-angle distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#soil-variables">Soil variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#atmospheric-variables">Atmospheric variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#scope-physiological-energy-variables">SCOPE physiological / energy variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t02-parameters-traits.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t03-leaf-models.html">03. Leaf Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t03-leaf-models.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t04-canopy-models.html">04. Canopy Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t04-canopy-models.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t05-soil-atmosphere.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t06-scope.html">06. SCOPE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t06-scope.html#next">Next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="t07-building-workflows.html">07. Building RTM Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#prospect-foursail-canopy-reflectance">1. PROSPECT -&gt; fourSAIL -&gt; canopy reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#prospect-inform-forest-reflectance">2. PROSPECT -&gt; INFORM -&gt; forest reflectance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#marmit-foursail-spart-toa">3. MARMIT -&gt; fourSAIL -&gt; SPART -&gt; TOA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#scope-reflectance-sif-energy-balance">4. SCOPE -&gt; reflectance + SIF + energy balance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t07-building-workflows.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t08-sensor-simulation.html">08. Sensor Simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t08-sensor-simulation.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t09-spectral-indices.html">09. Spectral Indices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t09-spectral-indices.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t10-sensitivity-analysis.html">10. Sensitivity Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t10-sensitivity-analysis.html#next">Next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="t11-lut-generation.html">11. LUT Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t11-lut-generation.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t12-lut-inversion.html">12. LUT Inversion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t12-lut-inversion.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t13-machine-learning-inversion.html">13. Machine-Learning Inversion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t13-machine-learning-inversion.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t14-deep-learning-inversion.html">14. Deep-Learning Inversion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#what-happens-inside-step-by-step">What happens inside, step by step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t14-deep-learning-inversion.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t15-choosing-inversion-strategy.html">15. Choosing an Inversion Strategy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t15-choosing-inversion-strategy.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t15-choosing-inversion-strategy.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t15-choosing-inversion-strategy.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t15-choosing-inversion-strategy.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t15-choosing-inversion-strategy.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t15-choosing-inversion-strategy.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t15-choosing-inversion-strategy.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t15-choosing-inversion-strategy.html#next">Next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="t16-retrieving-eo-data.html">16. Retrieving Real EO Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t16-retrieving-eo-data.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t17-preparing-eo-observations.html">17. Preparing EO Observations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t17-preparing-eo-observations.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">18. Applying an Inversion Model Spatially</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t19-trait-maps-uncertainty.html">19. Trait Maps &amp; Uncertainty</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t19-trait-maps-uncertainty.html#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="t20-end-to-end-workflow.html">20. End-to-End Workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="t20-end-to-end-workflow.html#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t20-end-to-end-workflow.html#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t20-end-to-end-workflow.html#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t20-end-to-end-workflow.html#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t20-end-to-end-workflow.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t20-end-to-end-workflow.html#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t20-end-to-end-workflow.html#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="t20-end-to-end-workflow.html#common-mistakes">Common mistakes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html#at-a-glance">At a glance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#leaf-optical-models">Leaf optical models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#canopy-models">Canopy models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#soil">Soil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#soil-plant-atmosphere">Soil-Plant-Atmosphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#energy-balance-fluorescence-scope">Energy balance / fluorescence: SCOPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#what-s-next">What’s next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="toolsrtm/index.html">toolsrtm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/leaf.html">toolsrtm.leaf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/leaf.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/fluspect.html">toolsrtm.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/fluspect.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/liberty.html">toolsrtm.liberty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/liberty.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/canopy.html">toolsrtm.canopy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/canopy.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/inform.html">toolsrtm.inform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/inform.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/spart.html">toolsrtm.spart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/spart.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/smac.html">toolsrtm.smac</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/smac.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/srf.html">toolsrtm.srf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/srf.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/indices.html">toolsrtm.indices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/indices.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/marmit.html">toolsrtm.marmit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/marmit.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/satellite.html">toolsrtm.satellite</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/satellite.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/inversion.html">toolsrtm.inversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/inversion.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/deep_learning.html">toolsrtm.deep_learning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/deep_learning.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="toolsrtm/sensitivity.html">toolsrtm.sensitivity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="toolsrtm/sensitivity.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scopeinpython/index.html">scopeinpython</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/soil.html">scopeinpython.soil</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/soil.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/spectral.html">scopeinpython.spectral</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/spectral.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmo.html">scopeinpython.rtmo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmo.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/biochemical.html">scopeinpython.biochemical</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/biochemical.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/fluspect.html">scopeinpython.fluspect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/fluspect.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/fluspect_mscope.html">scopeinpython.fluspect_mscope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/fluspect_mscope.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmf.html">scopeinpython.rtmf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmf.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmz.html">scopeinpython.rtmz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmz.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/thermal.html">scopeinpython.thermal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/thermal.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/rtmt_sb.html">scopeinpython.rtmt_sb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/rtmt_sb.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/ebal.html">scopeinpython.ebal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/ebal.html#where-this-fits">Where this fits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/scope.html">scopeinpython.scope</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/scope.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopeinpython/utils.html">scopeinpython.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopeinpython/utils.html#quick-example">Quick example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#leaf-canopy-toolsrtm">Leaf + canopy (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#alternative-leaf-models-liberty-and-fluspect-b-toolsrtm">Alternative leaf models: Liberty and Fluspect-B (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#soil-bsm-optical-canopy-brdf-scopeinpython">Soil (BSM) + optical canopy BRDF (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#sensor-convolution-vegetation-indices-toolsrtm">Sensor convolution + vegetation indices (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#inform-explicit-forest-canopy-model-toolsrtm">INFORM: explicit forest-canopy model (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#machine-learning-trait-inversion-toolsrtm">Machine-learning trait inversion (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#spart-full-soil-plant-atmosphere-chain-toolsrtm">SPART: full soil-plant-atmosphere chain (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#deep-learning-trait-inversion-toolsrtm-optional-dl-extra">Deep-learning trait inversion (toolsrtm, optional <code class="docutils literal notranslate"><span class="pre">dl</span></code> extra)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#the-1d-cnn-on-hyperspectral-bands-toolsrtm">The 1D-CNN, on hyperspectral bands (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#marmit-soil-moisture-model-toolsrtm">MARMIT soil moisture model (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#full-scope-run-energy-balance-fluorescence-scopeinpython">Full SCOPE run: energy balance + fluorescence (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython">Real Sentinel-2 capstone: retrieving net photosynthesis (scopeinpython)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#global-sensitivity-analysis-toolsrtm">Global sensitivity analysis (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#real-sentinel-2-capstone-data-driven-spatial-index-cab-mapping-toolsrtm">Real Sentinel-2 capstone: data-driven spatial index + Cab mapping (toolsrtm)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#full-simulate-indices-ml-invert-pipeline">Full simulate -&gt; indices -&gt; ML-invert pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#what-isn-t-ported-yet">What isn’t ported yet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">18. Applying an Inversion Model Spatially</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/t18-applying-inversion-spatially.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="applying-an-inversion-model-spatially">
+<h1>18. Applying an Inversion Model Spatially<a class="headerlink" href="#applying-an-inversion-model-spatially" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>How to run a model trained entirely on simulated data
+(<a class="reference internal" href="t13-machine-learning-inversion.html"><span class="doc">13. Machine-Learning Inversion</span></a>) over every pixel of a real,
+prepared satellite scene (<a class="reference internal" href="t17-preparing-eo-observations.html"><span class="doc">17. Preparing EO Observations</span></a>).</p></li>
+<li><p>Why this needs a real, wide training domain to work at all on real
+data.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<p>Nothing new algorithmically – <code class="docutils literal notranslate"><span class="pre">.predict()</span></code> on a prepared pixel array,
+same as any other array of observations. What’s new is what the model
+was trained on: a LUT (<a class="reference internal" href="t11-lut-generation.html"><span class="doc">11. LUT Generation</span></a>) whose trait ranges
+must be wide enough, and whose sun/soil/geometry assumptions must be
+realistic enough, that real pixel spectra actually fall inside what the
+model learned. A LUT built with a narrow, unrealistic domain will
+“apply” without error and still produce meaningless output.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Prepared pixel array (n_pixels, n_bands)
+              |
+              v
+     fit.model.predict(pixels)   (fit = trained in t13-machine-learning-inversion)
+              |
+              v
+     Per-pixel trait predictions (n_pixels,)
+              |
+              v
+     Reshape back to the scene&#39;s 2D pixel grid  -&gt;  a trait map
+</pre></div>
+</div>
+</section>
+<section id="python-tools-used">
+<h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
+<p>Just <code class="docutils literal notranslate"><span class="pre">fit.model.predict</span></code> (<code class="docutils literal notranslate"><span class="pre">fit</span></code> from <a class="reference internal" href="toolsrtm/inversion.html#toolsrtm.inversion.get_inversion" title="toolsrtm.inversion.get_inversion"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_inversion()</span></code></a>,
+<a class="reference internal" href="t13-machine-learning-inversion.html"><span class="doc">13. Machine-Learning Inversion</span></a>) – the only new consideration is
+handling invalid pixels correctly.</p>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># pix: (n_pixels, n_bands) from t17-preparing-eo-observations</span>
+<span class="n">ok</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">pix</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># cloud/edge pixels can be NaN</span>
+<span class="n">trait_pixels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">pix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="n">trait_pixels</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">pix</span><span class="p">[</span><span class="n">ok</span><span class="p">])</span>   <span class="c1"># fit: a real trait model, trained on a wide LUT</span>
+<span class="n">trait_map</span> <span class="o">=</span> <span class="n">trait_pixels</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;B04&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Valid pixels predicted:&quot;</span><span class="p">,</span> <span class="n">ok</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">pix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trait map range:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">trait_map</span><span class="p">),</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">trait_map</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/t18_python_capstone.png"><img alt="Retrieved Cab map alongside an independent spectral index (REP), same real Loobos Sentinel-2 scene" src="_images/t18_python_capstone.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: a Random Forest Cab model – trained on a 500-row LUT with a deliberately wide domain (sparse-to-dense LAI, variable soil brightness, realistic geometry) – applied to every pixel of a real Sentinel-2 scene over Loobos forest, NL. The retrieved Cab map (right) and an independently-computed spectral index (REP, left, no ML involved at all) both show the exact same forest gap, entirely independently.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>The two panels agreeing spatially – the same dark gap visible in both
+the ML-retrieved Cab map and the independently-computed REP index – is
+a real, meaningful consistency check: REP was never used to train the
+Cab model, so this agreement isn’t circular. It’s evidence the retrieval
+is picking up a genuine vegetation signal (a real canopy gap) rather
+than an artifact of the model or the scene. This kind of independent
+cross-check matters more once you’re on real data than it did in
+Chapters 12-15, where held-out R2 alone was a sufficient (and
+achievable) standard – real scenes don’t come with ground-truth Cab to
+check against directly.</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Compare the Cab map’s value range against the LUT’s own training
+<code class="docutils literal notranslate"><span class="pre">Cab</span></code> range (<a class="reference internal" href="t11-lut-generation.html"><span class="doc">11. LUT Generation</span></a>) – values pushed to the very
+edge of (or beyond) the training range are a warning sign of
+extrapolation, not interpolation.</p></li>
+<li><p>Re-run with a model trained on a <em>narrow</em> LUT (e.g. <code class="docutils literal notranslate"><span class="pre">LAI</span></code> restricted
+to 2-4) and see the retrieved map degrade or flatten in areas the
+narrow LUT didn’t anticipate.</p></li>
+<li><p>Mask out the cloud-flagged pixels from <a class="reference internal" href="t17-preparing-eo-observations.html"><span class="doc">17. Preparing EO Observations</span></a>
+before predicting, and compare the resulting map’s cloud-region values
+against the unmasked version.</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Predicting on cloud-contaminated pixels (<a class="reference internal" href="t17-preparing-eo-observations.html"><span class="doc">17. Preparing EO Observations</span></a>)
+produces a confident-looking but meaningless trait value – always mask
+first, or explicitly interpret cloudy regions as unreliable.</p></li>
+<li><p>A model trained on a LUT with too narrow a trait/geometry range will
+silently extrapolate on real pixels outside it, rather than erroring –
+the map will look plausible without being trustworthy.</p></li>
+<li><p>Reshaping predictions back to the scene’s 2D grid requires the exact
+same pixel order the array was raveled in – don’t reshape into a
+transposed or differently-sized grid by mistake.</p></li>
+</ul>
+</section>
+<section id="next">
+<h2>Next<a class="headerlink" href="#next" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="t19-trait-maps-uncertainty.html"><span class="doc">19. Trait Maps &amp; Uncertainty</span></a> – reading this map properly, including
+a sense of how much to trust it.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="t17-preparing-eo-observations.html" class="btn btn-neutral float-left" title="17. Preparing EO Observations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="t19-trait-maps-uncertainty.html" class="btn btn-neutral float-right" title="19. Trait Maps &amp; Uncertainty" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

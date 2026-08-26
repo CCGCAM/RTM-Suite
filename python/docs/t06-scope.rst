@@ -147,7 +147,7 @@ Common mistakes
 - ``get_scope()`` is far more expensive per call than
   ``foursail()``/``spart_toa()`` (it iterates an energy balance) -- don't
   casually call it thousands of times in a LUT loop without a compute
-  budget in mind (:doc:`lut_generation`).
+  budget in mind (:doc:`t11-lut-generation`).
 
 Next
 --------

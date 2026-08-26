@@ -22,7 +22,7 @@ everything outside the band contributes nothing. **Spectral convolution**
 is that integration, applied to a simulated spectrum so it can be
 compared apples-to-apples with real sensor data, or used to train a
 model that will later run on real sensor bands
-(:doc:`trait_inversion`).
+(:doc:`t13-machine-learning-inversion`).
 
 Python tools used
 ----------------------
