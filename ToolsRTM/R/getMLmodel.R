@@ -155,7 +155,14 @@ getMLmodel<-function(dataset=NULL, depVar='Cab',model='CNN',optimizer='adam',
       keras::layer_dropout(rate=0.1) |>
       keras::layer_dense(units = 16, activation = 'relu') |>
       #keras::layer_dropout(rate=0.1) |>
-      keras::layer_dense(units = 1, activation = 'relu')
+      # linear, not relu: a relu output can get stuck at exactly 0 (and stay
+      # there, since its gradient is then exactly 0 too) whenever its
+      # pre-activation goes negative early in training -- a real risk for an
+      # unbounded-scale regression target like Cab, not merely redundant
+      # clipping. depVar is always non-negative physically, but the network
+      # should learn that from data, not be structurally forced into a
+      # trap that can permanently kill the single output unit's gradient.
+      keras::layer_dense(units = 1, activation = 'linear')
 
     # Compile the configuration for the model
     model.dML |> keras::compile(loss = "mse",
@@ -209,7 +216,11 @@ getMLmodel<-function(dataset=NULL, depVar='Cab',model='CNN',optimizer='adam',
       keras::layer_flatten() |>
       keras::layer_dense(units=16, activation="relu") |>
       keras::layer_dropout(rate=0.1) |>
-      keras::layer_dense(units=1, activation="relu")
+      # linear, not relu -- see the same fix/comment in the 'Hidden-layers'
+      # branch above; the risk of a permanently dead output-gradient unit is
+      # if anything higher here, given the larger (e.g. ~230-band PRISMA)
+      # input dimensionality this branch is meant for.
+      keras::layer_dense(units=1, activation="linear")
 
     # Compile the configuration for the model
 

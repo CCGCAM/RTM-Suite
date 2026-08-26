@@ -149,19 +149,23 @@ getSplitData<-function(data=NULL, depVar='Cab',inputs=NULL,
     data.Xval<-as.matrix(predict(preprocess.scalar, data.Xval_))
     
     M <- cor(data.Xtrain)
-    # tl.cex=0.5 is only legible up to a few dozen variables -- scale it down
-    # (and drop labels entirely past ~80 variables, e.g. ~230 PRISMA bands)
-    # so the correlation structure stays readable instead of a solid block
-    # of overlapping text.
+    # tl.cex=0.5 is only legible up to a few dozen variables, and past ~80
+    # variables (e.g. ~230 PRISMA bands) the tiles themselves become too
+    # small to show any visible colour/structure even with labels dropped --
+    # at that point the plot is just noise, so skip it entirely rather than
+    # render something unreadable.
     n.vars <- ncol(M)
-    tl.cex.val <- min(0.5, 15 / n.vars)
-    plot.cor<-corrplot::corrplot(M, method = 'square', order = 'FPC',
-                                 type = 'lower',
-                                 tl.cex=tl.cex.val, tl.pos = if (n.vars > 80) 'n' else 'lt',
-                                 tl.col = 'black', cl.ratio=0.4,
-                                 diag = FALSE)
+    if (n.vars <= 80) {
+      plot.cor<-corrplot::corrplot(M, method = 'square', order = 'FPC',
+                                   type = 'lower',
+                                   tl.cex=min(0.5, 15 / n.vars), tl.pos = 'lt',
+                                   tl.col = 'black', cl.ratio=0.4,
+                                   diag = FALSE)
+    } else {
+      plot.cor <- NULL
+    }
 
-    
+
     
     split.database<- list('Xtrain' = data.Xtrain,'Ytrain' =data.Ytrain,
                           'Xval' =data.Xval,'Yval' = data.Yval,

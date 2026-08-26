@@ -238,9 +238,11 @@ getMLmodel.withRetrain<-function(dataset=NULL, depVar='Cab',model='CNN',optimize
             keras::layer_dense(units = units, activation = 'relu')
         }
 
-        # Output layer
+        # Output layer -- linear, not relu: see getMLmodel.R's comment on the
+        # same fix (a relu output can get permanently stuck at 0, gradient
+        # included, if its pre-activation goes negative early in training).
         model <- model |>
-          keras::layer_dense(units = 1, activation = 'relu')
+          keras::layer_dense(units = 1, activation = 'linear')
 
         return(model)
       }

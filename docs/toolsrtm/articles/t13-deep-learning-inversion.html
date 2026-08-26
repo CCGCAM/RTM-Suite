@@ -280,8 +280,8 @@ Tutorial 12’s Random Forest<a class="anchor" aria-label="anchor" href="#indepe
 <span>      <span class="st">" RMSE="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">rmse_f</span><span class="op">(</span><span class="va">obs_test</span>, <span class="va">pred_test_dl</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>      <span class="st">" bias="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">bias_f</span><span class="op">(</span><span class="va">obs_test</span>, <span class="va">pred_test_dl</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; 19/19 - 0s - 40ms/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Dense DL, independent test set: R2= 0.081  RMSE= 15.15  bias= 1.14</span></span></code></pre></div>
+<span><span class="co">#&gt; 19/19 - 0s - 60ms/epoch - 3ms/step</span></span>
+<span><span class="co">#&gt; Dense DL, independent test set: R2= 0.034  RMSE= 15.53  bias= -2.57</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">fit_rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get.inversion.html">get.inversion</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dataset_dense</span><span class="op">[</span><span class="va">train_idx</span>, <span class="op">]</span>, depVar <span class="op">=</span> <span class="st">"Cab"</span>, inputs <span class="op">=</span> <span class="va">band_names</span>,</span>
@@ -308,8 +308,8 @@ Tutorial 12’s Random Forest<a class="anchor" aria-label="anchor" href="#indepe
 <tbody>
 <tr class="odd">
 <td align="left">Dense DL (getMLmodel)</td>
-<td align="right">0.081</td>
-<td align="right">15.15</td>
+<td align="right">0.034</td>
+<td align="right">15.53</td>
 </tr>
 <tr class="even">
 <td align="left">Random Forest (get.inversion, Tutorial 12)</td>
@@ -371,7 +371,6 @@ contiguous hyperspectral bands are a much fairer test of that idea:</p>
 <span>                   optimizer <span class="op">=</span> <span class="st">"adam"</span>, n.epochs <span class="op">=</span> <span class="fl">40</span>, batch.size <span class="op">=</span> <span class="fl">64</span>, save.model <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ok <span class="op">=</span> <span class="cn">TRUE</span>, model <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span>
 <span><span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ok <span class="op">=</span> <span class="cn">FALSE</span>, msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="t13-deep-learning-inversion_files/figure-html/cnn-prisma-1.png" class="r-plt" alt="" width="576"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">pred_test_cnn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">model</span>,</span>
@@ -380,8 +379,8 @@ contiguous hyperspectral bands are a much fairer test of that idea:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"CNN (PRISMA, "</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prisma_bands</span><span class="op">)</span>, <span class="st">"bands), independent test set: R2="</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">r2_f</span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">" RMSE="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">rmse_f</span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; 13/13 - 0s - 50ms/epoch - 4ms/step</span></span>
-<span><span class="co">#&gt; CNN (PRISMA,  234 bands), independent test set: R2= -7.726  RMSE= 49.09</span></span></code></pre></div>
+<span><span class="co">#&gt; 13/13 - 0s - 69ms/epoch - 5ms/step</span></span>
+<span><span class="co">#&gt; CNN (PRISMA,  234 bands), independent test set: R2= -0.385  RMSE= 19.56</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
