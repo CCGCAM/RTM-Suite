@@ -19,9 +19,62 @@ not *how much*, relative to every other trait, at every wavelength, when
 everything varies at once. :func:`~toolsrtm.sensitivity.spectral_sensitivity`
 runs the canopy model many times with every trait varying simultaneously
 (Uniform-sampled by default) and computes, at each wavelength, each
-trait's relative contribution to the resulting reflectance variance
-(a Johnson relative-importance index, normalized to sum to 100% per
-wavelength).
+trait's relative contribution to the resulting reflectance variance --
+reported as ``sti_pct`` (kept for backward compatibility with the "Total
+Sobol index" name this style of figure has historically used).
+
+Why Johnson, not a true Sobol total index
+------------------------------------------------
+
+Despite the ``sti_pct`` name, the number underneath is a **Johnson
+relative-importance index**
+(:func:`~toolsrtm.sensitivity.johnson_relative_weights`,
+verified to reproduce R's ``sensitivity::johnson()`` to 8 decimal
+places), not a true Sobol total-effect index. :func:`~toolsrtm.sensitivity.sobol_indices`
+(the lower-level function :func:`~toolsrtm.sensitivity.spectral_sensitivity`
+calls internally) *also* computes a simplified, two-sample-split
+Sobol-like ``sti`` -- but that estimator is a real, documented dead end:
+on a finite sample it collapses to values indistinguishable from
+numerical noise around zero, the same trait-to-trait degeneracy the R
+side of this port ran into first (every trait landing within a
+percentage point of each other, including implausibly flat behaviour
+between adjacent wavelengths with no physical reason to agree that
+closely). The fix, on both sides of this port, is the same: read
+``i_johnson``/``i_johnson_norm`` instead, a properly differentiated,
+independently-verifiable metric -- not the ``si``/``sti`` columns.
+
+.. code-block:: python
+
+   import numpy as np
+   from toolsrtm import foursail
+   from toolsrtm.sensitivity import sobol_indices
+
+   rng = np.random.default_rng(1)
+   n = 200
+   Cab, EWT, LAI = rng.uniform(10, 80, n), rng.uniform(0.005, 0.03, n), rng.uniform(0.5, 6, n)
+   refl_550 = []
+   for i in range(n):
+       lut = dict(N=1.5, Cab=Cab[i], Car=8, Anth=1, Cbrown=0, EWT=EWT[i], LMA=0.009, alpha=40,
+                  LIDFa=-0.35, LIDFb=-0.15, TypeLidf=1, LAI=LAI[i], hspot=0.01, tts=30, tto=0, psi=0)
+       s = foursail(lut, np.full(2101, 0.15), leaf_model="PROSPECT-D", spectrum_all=True)
+       refl_550.append(s.rsot[150])   # 550nm, visible -- should be Cab-dominated
+
+   res = sobol_indices(dict(Cab=Cab, EWT=EWT, LAI=LAI, refl=np.array(refl_550)),
+                        output="refl", n=100, normalize=True, seed=1)
+   print("Raw (simplified) STi:      ", dict(zip(res.parameter, res.sti.round(3))))
+   print("Johnson, normalized to 100%:", dict(zip(res.parameter, res.i_johnson_norm.round(1))))
+
+.. code-block:: text
+
+   Raw (simplified) STi:       {'Cab': -0.004, 'EWT': 0.0, 'LAI': -0.003}
+   Johnson, normalized to 100%: {'Cab': 72.9, 'EWT': 0.1, 'LAI': 27.0}
+
+The raw ``sti`` values are all near-zero and mutually indistinguishable
+-- exactly the degenerate pattern that makes them useless for a
+per-wavelength stacked-area figure. The Johnson-normalized values
+correctly show ``Cab`` dominating a visible-wavelength reflectance
+(72.9%, ``EWT`` essentially at noise level) -- physically sensible,
+reproducible, and what the heatmap below is actually built from.
 
 Python tools used
 ----------------------

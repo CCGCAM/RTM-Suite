@@ -182,6 +182,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">10. Sensitivity Analysis</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-johnson-not-a-true-sobol-total-index">Why Johnson, not a true Sobol total index</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
@@ -510,9 +511,58 @@ not <em>how much</em>, relative to every other trait, at every wavelength, when
 everything varies at once. <a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.spectral_sensitivity" title="toolsrtm.sensitivity.spectral_sensitivity"><code class="xref py py-func docutils literal notranslate"><span class="pre">spectral_sensitivity()</span></code></a>
 runs the canopy model many times with every trait varying simultaneously
 (Uniform-sampled by default) and computes, at each wavelength, each
-trait’s relative contribution to the resulting reflectance variance
-(a Johnson relative-importance index, normalized to sum to 100% per
-wavelength).</p>
+trait’s relative contribution to the resulting reflectance variance –
+reported as <code class="docutils literal notranslate"><span class="pre">sti_pct</span></code> (kept for backward compatibility with the “Total
+Sobol index” name this style of figure has historically used).</p>
+</section>
+<section id="why-johnson-not-a-true-sobol-total-index">
+<h2>Why Johnson, not a true Sobol total index<a class="headerlink" href="#why-johnson-not-a-true-sobol-total-index" title="Link to this heading"></a></h2>
+<p>Despite the <code class="docutils literal notranslate"><span class="pre">sti_pct</span></code> name, the number underneath is a <strong>Johnson
+relative-importance index</strong>
+(<a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.johnson_relative_weights" title="toolsrtm.sensitivity.johnson_relative_weights"><code class="xref py py-func docutils literal notranslate"><span class="pre">johnson_relative_weights()</span></code></a>,
+verified to reproduce R’s <code class="docutils literal notranslate"><span class="pre">sensitivity::johnson()</span></code> to 8 decimal
+places), not a true Sobol total-effect index. <a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.sobol_indices" title="toolsrtm.sensitivity.sobol_indices"><code class="xref py py-func docutils literal notranslate"><span class="pre">sobol_indices()</span></code></a>
+(the lower-level function <a class="reference internal" href="toolsrtm/sensitivity.html#toolsrtm.sensitivity.spectral_sensitivity" title="toolsrtm.sensitivity.spectral_sensitivity"><code class="xref py py-func docutils literal notranslate"><span class="pre">spectral_sensitivity()</span></code></a>
+calls internally) <em>also</em> computes a simplified, two-sample-split
+Sobol-like <code class="docutils literal notranslate"><span class="pre">sti</span></code> – but that estimator is a real, documented dead end:
+on a finite sample it collapses to values indistinguishable from
+numerical noise around zero, the same trait-to-trait degeneracy the R
+side of this port ran into first (every trait landing within a
+percentage point of each other, including implausibly flat behaviour
+between adjacent wavelengths with no physical reason to agree that
+closely). The fix, on both sides of this port, is the same: read
+<code class="docutils literal notranslate"><span class="pre">i_johnson</span></code>/<code class="docutils literal notranslate"><span class="pre">i_johnson_norm</span></code> instead, a properly differentiated,
+independently-verifiable metric – not the <code class="docutils literal notranslate"><span class="pre">si</span></code>/<code class="docutils literal notranslate"><span class="pre">sti</span></code> columns.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">foursail</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.sensitivity</span><span class="w"> </span><span class="kn">import</span> <span class="n">sobol_indices</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">Cab</span><span class="p">,</span> <span class="n">EWT</span><span class="p">,</span> <span class="n">LAI</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">refl_550</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">lut</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="n">Cab</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="n">EWT</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+               <span class="n">LIDFa</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">LIDFb</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">LAI</span><span class="o">=</span><span class="n">LAI</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hspot</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tto</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">foursail</span><span class="p">(</span><span class="n">lut</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">2101</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">),</span> <span class="n">leaf_model</span><span class="o">=</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">spectrum_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">refl_550</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">rsot</span><span class="p">[</span><span class="mi">150</span><span class="p">])</span>   <span class="c1"># 550nm, visible -- should be Cab-dominated</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">sobol_indices</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="n">Cab</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="n">EWT</span><span class="p">,</span> <span class="n">LAI</span><span class="o">=</span><span class="n">LAI</span><span class="p">,</span> <span class="n">refl</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">refl_550</span><span class="p">)),</span>
+                     <span class="n">output</span><span class="o">=</span><span class="s2">&quot;refl&quot;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Raw (simplified) STi:      &quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">sti</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Johnson, normalized to 100%:&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">parameter</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">i_johnson_norm</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">))))</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Raw (simplified) STi:       {&#39;Cab&#39;: -0.004, &#39;EWT&#39;: 0.0, &#39;LAI&#39;: -0.003}
+Johnson, normalized to 100%: {&#39;Cab&#39;: 72.9, &#39;EWT&#39;: 0.1, &#39;LAI&#39;: 27.0}
+</pre></div>
+</div>
+<p>The raw <code class="docutils literal notranslate"><span class="pre">sti</span></code> values are all near-zero and mutually indistinguishable
+– exactly the degenerate pattern that makes them useless for a
+per-wavelength stacked-area figure. The Johnson-normalized values
+correctly show <code class="docutils literal notranslate"><span class="pre">Cab</span></code> dominating a visible-wavelength reflectance
+(72.9%, <code class="docutils literal notranslate"><span class="pre">EWT</span></code> essentially at noise level) – physically sensible,
+reproducible, and what the heatmap below is actually built from.</p>
 </section>
 <section id="python-tools-used">
 <h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
