@@ -60,7 +60,12 @@ suppress_warnings = ["ref.python"]
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 html_theme_options = {
-    "collapse_navigation": False,
+    # collapse_navigation=True: only the section containing the current page
+    # expands in the sidebar (e.g. reading a LEARN chapter no longer shows
+    # all 14 toolsrtm/13 scopeinpython function pages pre-expanded under
+    # REFERENCE -- "toolsrtm"/"scopeinpython" show as single collapsed
+    # links, matching the LEARN chapters' own general-page-first pattern).
+    "collapse_navigation": True,
     "navigation_depth": 3,
 }
 

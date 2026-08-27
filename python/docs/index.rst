@@ -60,7 +60,7 @@ exact function signatures once you know which one you need.
    t20-end-to-end-workflow
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: REFERENCE
 
    models

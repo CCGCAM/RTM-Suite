@@ -114,6 +114,21 @@ Run the example
    print("At 550nm (visible):", at_550)
    print("At 1650nm (SWIR):", at_1650)
 
+   # The classic full-spectrum view: every trait's contribution stacked to
+   # 100% at each wavelength (same `result` as above, just plotted differently).
+   import matplotlib.pyplot as plt
+   trait_order = ["N", "Cab", "EWT", "LMA", "LIDFa", "LAI", "SoilCoef"]
+   colors = {"N": "#999999", "Cab": "#2E8B57", "EWT": "#2166AC", "LMA": "#8B5A2B",
+             "LIDFa": "#B2182B", "LAI": "#6A3D9A", "SoilCoef": "#E69F00"}
+   stack = np.zeros((len(trait_order), len(wls)))
+   for ti, tr in enumerate(trait_order):
+       mask = result.trait == tr
+       stack[ti, :] = result.sti_pct[mask][np.argsort(result.wavelength[mask])]
+   fig, ax = plt.subplots(figsize=(9, 4.5))
+   ax.stackplot(wls, stack, labels=trait_order, colors=[colors[t] for t in trait_order])
+   ax.set_xlabel("Wavelength (nm)"); ax.set_ylabel("Relative contribution (%)")
+   ax.set_xlim(400, 2500); ax.set_ylim(0, 100); ax.legend(loc="upper center", ncol=7, fontsize=7)
+
 Result
 ----------
 
@@ -121,6 +136,12 @@ Printed output (exact, deterministic)::
 
    At 550nm (visible): {'N': 5.1, 'Cab': 90.8, 'EWT': 0.2, 'LMA': 1.7, 'LIDFa': 0.3, 'LAI': 1.0, 'SoilCoef': 0.9}
    At 1650nm (SWIR): {'N': 4.0, 'Cab': 0.0, 'EWT': 52.5, 'LMA': 42.7, 'LIDFa': 0.0, 'LAI': 0.2, 'SoilCoef': 0.5}
+
+.. figure:: _figures/spectral_sensitivity.png
+   :alt: Stacked-area chart of each trait's relative contribution to reflectance variance, across the full spectrum, real output of the code above
+   :width: 100%
+
+   Real output: the classic full-spectrum sensitivity view -- every trait's contribution stacked to 100% at each wavelength. Cab (green) owns the visible almost completely; LMA (brown) takes over through the red-edge and much of the NIR/SWIR; EWT (blue) dominates the SWIR water-absorption region; LAI (purple) and SoilCoef (orange) show up mainly at the very start of the spectrum, where absolute reflectance is lowest and structural/background effects are relatively more visible.
 
 .. figure:: _figures/t10_sensitivity_heatmap.png
    :alt: Wavelength x trait sensitivity heatmap, real output of the code above
