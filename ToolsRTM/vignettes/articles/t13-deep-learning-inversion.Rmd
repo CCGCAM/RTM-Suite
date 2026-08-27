@@ -354,7 +354,7 @@ test.
 
 ## 8. A working CNN example, on PRISMA-resolution bands
 
-```{r cnn-prisma, results = 'hide'}
+```{r cnn-prisma, results = 'hide', fig.show = 'hide'}
 n_hyp <- 4000
 LUT_h <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_hyp, setseed = 3))
 refl_h <- t(sapply(seq_len(n_hyp), function(i) {
@@ -366,16 +366,51 @@ prisma_bands <- paste0("P", seq_len(ncol(prisma) - 1))
 names(prisma) <- c("id", prisma_bands)
 cat("PRISMA bands:", length(prisma_bands), "\n")
 
+set.seed(3)  # reproducible split -- matches the LUT's own setseed=3 above
 idx_h <- sample(seq_len(n_hyp))
 train_h <- idx_h[1:round(0.6 * n_hyp)]
 test_h  <- idx_h[(round(0.8 * n_hyp) + 1):n_hyp]
 dataset_cnn <- cbind(Cab = LUT_h$Cab, prisma[, prisma_bands])
 
+# getMLmodel() (Section 6) is a single Keras training run -- fine once you
+# already know it lands well, but R's keras/TensorFlow backend doesn't
+# respect set.seed() for weight initialization, so any single run's
+# quality varies. getMLmodel.withRetrain(n.times=3) trains 3 independent
+# random restarts and returns all of them plus each one's own validation
+# stats -- the same "best of n_times, keep the winner" pattern the Python
+# port's own get_ml_model(n_times=3) already uses for exactly this CNN
+# case, and for the same reason: without it, this section could silently
+# report whichever single unlucky initialization the last knit happened
+# to draw, not a representative CNN result.
 cnn_result <- tryCatch({
-  m <- getMLmodel(dataset = dataset_cnn[train_h, ], depVar = "Cab", model = "CNN",
-                   optimizer = "adam", n.epochs = 300, batch.size = 64, save.model = FALSE)
-  list(ok = TRUE, model = m)
+  m <- getMLmodel.withRetrain(dataset = dataset_cnn[train_h, ], depVar = "Cab", model = "CNN",
+                               optimizer = "adam", n.epochs = 300, batch.size = 64,
+                               n.times = 3, save.model = FALSE)
+  # m$stats has 2 rows PER restart -- an intermediate "Testing" row (model
+  # state right after the first fit) and a "Val.retrain" row (model state
+  # after the function's own internal second fit on a fresh 90/10 split --
+  # this is the state actually saved into m$model[[i.times]]). Selecting
+  # the best restart by raw row position over that combined table silently
+  # mixes the two and can index m$model with a row number that belongs to
+  # a *different* restart than the one being scored -- always use the
+  # "Val.retrain" rows (one per restart, keyed by i.Time) instead.
+  retrain_rows <- m$stats[m$stats$db == "Val.retrain", ]
+  retrain_rows <- retrain_rows[order(as.numeric(retrain_rows$i.Time)), ]
+  all_r2 <- as.numeric(retrain_rows$R2)
+  best_i <- as.numeric(retrain_rows$i.Time)[which.max(all_r2)]
+  list(ok = TRUE, model = list(model = m$model[[best_i]], Scalar.train = m$Scalar.train[[best_i]]),
+       all_r2 = all_r2, best_i = best_i)
 }, error = function(e) list(ok = FALSE, msg = conditionMessage(e)))
+```
+
+```{r cnn-restarts}
+if (cnn_result$ok) {
+  cat("R2 across the", length(cnn_result$all_r2), "restarts (validation, post-retrain):",
+      paste(round(cnn_result$all_r2, 3), collapse = ", "),
+      "-- keeping restart", cnn_result$best_i, "\n")
+} else {
+  cat("CNN training failed:", cnn_result$msg, "\n")
+}
 ```
 
 Same predict-correctly pattern as Section 6, applied to the CNN's own
@@ -401,7 +436,7 @@ if (cnn_result$ok) {
 }
 ```
 
-R2 around 0.83-0.85 on 234 raw PRISMA bands -- in the same range as
+R2 around 0.85-0.90 on 234 raw PRISMA bands -- in the same range as
 Section 6's 10-band dense/RF comparison, not a degradation from the
 much higher input dimensionality, and a genuinely usable result (not
 the point of this demo to beat RF; see Section 13 for that question).
@@ -413,6 +448,16 @@ dense network or RF weren't already capturing from the bands directly.
 Real hyperspectral problems with genuine local absorption features
 (rather than this synthetic Cab mapping) are where that advantage is
 more likely to show up.
+
+Notice the per-restart R2 line above the plot: it is common for one of
+the three random restarts to collapse to a degenerate, near-constant
+prediction (R2 far below the others, sometimes reported as `-Inf` when
+the predicted values end up with ~zero variance) -- an initialization
+failure, not a data or normalization bug. This is exactly why
+`getMLmodel.withRetrain(n.times = 3)` (and selecting the winner by its
+own validation R2) is used here rather than a single `getMLmodel()`
+call: a CNN section that trains only once, keeps whatever it gets, and
+never checks per-restart R2 can silently publish a collapsed run.
 
 # Troubleshooting
 

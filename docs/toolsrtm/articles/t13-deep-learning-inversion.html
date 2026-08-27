@@ -441,7 +441,7 @@ the fitted scaler both come back in the result:</p>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">dl_result</span><span class="op">$</span><span class="va">msg</span>, <span class="st">"\n"</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">").\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; Epochs actually run: 300 of 300 requested</span></span>
-<span><span class="co">#&gt; Epoch with lowest validation loss: 299</span></span></code></pre></div>
+<span><span class="co">#&gt; Epoch with lowest validation loss: 300</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="evaluate-the-model">6. Evaluate the model<a class="anchor" aria-label="anchor" href="#evaluate-the-model"></a>
@@ -484,7 +484,7 @@ it reaches the network:</p>
 <span>      <span class="st">" bias="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">bias_f</span><span class="op">(</span><span class="va">obs_test</span>, <span class="va">pred_test_dl</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; 38/38 - 0s - 53ms/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Dense DL, independent test set: R2= 0.832  RMSE= 6.36  bias= -0.16</span></span></code></pre></div>
+<span><span class="co">#&gt; Dense DL, independent test set: R2= 0.829  RMSE= 6.41  bias= 0.1</span></span></code></pre></div>
 <p>Skip that <code>predict(model$Scalar.train, ...)</code> line and pass
 raw, unscaled reflectance straight to <code>model$model</code> instead –
 an easy mistake, since it runs without error – and training and
@@ -518,8 +518,8 @@ easy to miss.</p>
 <tbody>
 <tr class="odd">
 <td align="left">Dense DL (getMLmodel)</td>
-<td align="right">0.832</td>
-<td align="right">6.36</td>
+<td align="right">0.829</td>
+<td align="right">6.41</td>
 </tr>
 <tr class="even">
 <td align="left">Random Forest (get.inversion, Tutorial 12)</td>
@@ -591,19 +591,53 @@ exploit.</strong> Contiguous hyperspectral bands are a fairer test.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">prisma</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="va">prisma_bands</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"PRISMA bands:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prisma_bands</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>  <span class="co"># reproducible split -- matches the LUT's own setseed=3 above</span></span>
 <span><span class="va">idx_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n_hyp</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">train_h</span> <span class="op">&lt;-</span> <span class="va">idx_h</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">0.6</span> <span class="op">*</span> <span class="va">n_hyp</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="va">test_h</span>  <span class="op">&lt;-</span> <span class="va">idx_h</span><span class="op">[</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">0.8</span> <span class="op">*</span> <span class="va">n_hyp</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="va">n_hyp</span><span class="op">]</span></span>
 <span><span class="va">dataset_cnn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>Cab <span class="op">=</span> <span class="va">LUT_h</span><span class="op">$</span><span class="va">Cab</span>, <span class="va">prisma</span><span class="op">[</span>, <span class="va">prisma_bands</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># getMLmodel() (Section 6) is a single Keras training run -- fine once you</span></span>
+<span><span class="co"># already know it lands well, but R's keras/TensorFlow backend doesn't</span></span>
+<span><span class="co"># respect set.seed() for weight initialization, so any single run's</span></span>
+<span><span class="co"># quality varies. getMLmodel.withRetrain(n.times=3) trains 3 independent</span></span>
+<span><span class="co"># random restarts and returns all of them plus each one's own validation</span></span>
+<span><span class="co"># stats -- the same "best of n_times, keep the winner" pattern the Python</span></span>
+<span><span class="co"># port's own get_ml_model(n_times=3) already uses for exactly this CNN</span></span>
+<span><span class="co"># case, and for the same reason: without it, this section could silently</span></span>
+<span><span class="co"># report whichever single unlucky initialization the last knit happened</span></span>
+<span><span class="co"># to draw, not a representative CNN result.</span></span>
 <span><span class="va">cnn_result</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getMLmodel.html">getMLmodel</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">dataset_cnn</span><span class="op">[</span><span class="va">train_h</span>, <span class="op">]</span>, depVar <span class="op">=</span> <span class="st">"Cab"</span>, model <span class="op">=</span> <span class="st">"CNN"</span>,</span>
-<span>                   optimizer <span class="op">=</span> <span class="st">"adam"</span>, n.epochs <span class="op">=</span> <span class="fl">300</span>, batch.size <span class="op">=</span> <span class="fl">64</span>, save.model <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ok <span class="op">=</span> <span class="cn">TRUE</span>, model <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span>
+<span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getMLmodel.withRetrain.html">getMLmodel.withRetrain</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="va">dataset_cnn</span><span class="op">[</span><span class="va">train_h</span>, <span class="op">]</span>, depVar <span class="op">=</span> <span class="st">"Cab"</span>, model <span class="op">=</span> <span class="st">"CNN"</span>,</span>
+<span>                               optimizer <span class="op">=</span> <span class="st">"adam"</span>, n.epochs <span class="op">=</span> <span class="fl">300</span>, batch.size <span class="op">=</span> <span class="fl">64</span>,</span>
+<span>                               n.times <span class="op">=</span> <span class="fl">3</span>, save.model <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="co"># m$stats has 2 rows PER restart -- an intermediate "Testing" row (model</span></span>
+<span>  <span class="co"># state right after the first fit) and a "Val.retrain" row (model state</span></span>
+<span>  <span class="co"># after the function's own internal second fit on a fresh 90/10 split --</span></span>
+<span>  <span class="co"># this is the state actually saved into m$model[[i.times]]). Selecting</span></span>
+<span>  <span class="co"># the best restart by raw row position over that combined table silently</span></span>
+<span>  <span class="co"># mixes the two and can index m$model with a row number that belongs to</span></span>
+<span>  <span class="co"># a *different* restart than the one being scored -- always use the</span></span>
+<span>  <span class="co"># "Val.retrain" rows (one per restart, keyed by i.Time) instead.</span></span>
+<span>  <span class="va">retrain_rows</span> <span class="op">&lt;-</span> <span class="va">m</span><span class="op">$</span><span class="va">stats</span><span class="op">[</span><span class="va">m</span><span class="op">$</span><span class="va">stats</span><span class="op">$</span><span class="va">db</span> <span class="op">==</span> <span class="st">"Val.retrain"</span>, <span class="op">]</span></span>
+<span>  <span class="va">retrain_rows</span> <span class="op">&lt;-</span> <span class="va">retrain_rows</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">retrain_rows</span><span class="op">$</span><span class="va">i.Time</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span>
+<span>  <span class="va">all_r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">retrain_rows</span><span class="op">$</span><span class="va">R2</span><span class="op">)</span></span>
+<span>  <span class="va">best_i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">retrain_rows</span><span class="op">$</span><span class="va">i.Time</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">all_r2</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ok <span class="op">=</span> <span class="cn">TRUE</span>, model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">m</span><span class="op">$</span><span class="va">model</span><span class="op">[[</span><span class="va">best_i</span><span class="op">]</span><span class="op">]</span>, Scalar.train <span class="op">=</span> <span class="va">m</span><span class="op">$</span><span class="va">Scalar.train</span><span class="op">[[</span><span class="va">best_i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>       all_r2 <span class="op">=</span> <span class="va">all_r2</span>, best_i <span class="op">=</span> <span class="va">best_i</span><span class="op">)</span></span>
 <span><span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ok <span class="op">=</span> <span class="cn">FALSE</span>, msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"R2 across the"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">all_r2</span><span class="op">)</span>, <span class="st">"restarts (validation, post-retrain):"</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">all_r2</span>, <span class="fl">3</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>,</span>
+<span>      <span class="st">"-- keeping restart"</span>, <span class="va">cnn_result</span><span class="op">$</span><span class="va">best_i</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"CNN training failed:"</span>, <span class="va">cnn_result</span><span class="op">$</span><span class="va">msg</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; R2 across the 3 restarts (validation, post-retrain): 0.875, 0.883, 0.896 -- keeping restart 3</span></span></code></pre></div>
 <p>Same predict-correctly pattern as Section 6, applied to the CNN’s own
 scaler:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">X_test_h_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">Scalar.train</span>, <span class="va">dataset_cnn</span><span class="op">[</span><span class="va">test_h</span>, <span class="va">prisma_bands</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">pred_test_cnn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">model</span>,</span>
@@ -612,9 +646,9 @@ scaler:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"CNN (PRISMA, "</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prisma_bands</span><span class="op">)</span>, <span class="st">"bands), independent test set: R2="</span>,</span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">r2_f</span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">" RMSE="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu">rmse_f</span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; 25/25 - 0s - 68ms/epoch - 3ms/step</span></span>
-<span><span class="co">#&gt; CNN (PRISMA,  234 bands), independent test set: R2= -0.005  RMSE= 16.23</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; 25/25 - 0s - 141ms/epoch - 6ms/step</span></span>
+<span><span class="co">#&gt; CNN (PRISMA,  234 bands), independent test set: R2= 0.889  RMSE= 5.4</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">cnn_result</span><span class="op">$</span><span class="va">ok</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">obs_test_h</span>, <span class="va">pred_test_cnn</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
 <span>       xlab <span class="op">=</span> <span class="st">"Observed Cab"</span>, ylab <span class="op">=</span> <span class="st">"Predicted Cab"</span>,</span>
@@ -622,7 +656,7 @@ scaler:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"grey40"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p><img src="t13-deep-learning-inversion_files/figure-html/cnn-true-vs-predicted-1.png" class="r-plt" alt="" width="480"></p>
-<p>R2 around 0.83-0.85 on 234 raw PRISMA bands – in the same range as
+<p>R2 around 0.85-0.90 on 234 raw PRISMA bands – in the same range as
 Section 6’s 10-band dense/RF comparison, not a degradation from the much
 higher input dimensionality, and a genuinely usable result (not the
 point of this demo to beat RF; see Section 13 for that question). That
@@ -634,6 +668,16 @@ dense network or RF weren’t already capturing from the bands directly.
 Real hyperspectral problems with genuine local absorption features
 (rather than this synthetic Cab mapping) are where that advantage is
 more likely to show up.</p>
+<p>Notice the per-restart R2 line above the plot: it is common for one
+of the three random restarts to collapse to a degenerate, near-constant
+prediction (R2 far below the others, sometimes reported as
+<code>-Inf</code> when the predicted values end up with ~zero variance)
+– an initialization failure, not a data or normalization bug. This is
+exactly why <code>getMLmodel.withRetrain(n.times = 3)</code> (and
+selecting the winner by its own validation R2) is used here rather than
+a single <code><a href="../reference/getMLmodel.html">getMLmodel()</a></code> call: a CNN section that trains only
+once, keeps whatever it gets, and never checks per-restart R2 can
+silently publish a collapsed run.</p>
 </div>
 </div>
 <div class="section level2">
@@ -721,7 +765,7 @@ Forest: a compact core of physically relevant bands, plus a small,
 <em>per-trait</em> selection of the most correlated spectral indices
 (Tutorial 09). Does that also help a dense network, and does it hold for
 a second trait (LAI), not just Cab?</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Real Sentinel-2A band names (getIndicesSE2.ML()'s formulas look up</span></span>
 <span><span class="co"># specific bands like B8A/B11/B12 by name) -- a second, separate naming of</span></span>
 <span><span class="co"># the same se2a convolution from Section 2; band_names/dataset_dense above</span></span>
@@ -760,7 +804,7 @@ CR.red.nir</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">run_trait</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">trait</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">feat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">core_bands</span>, <span class="va">selected</span><span class="op">[[</span><span class="va">trait</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">LUT</span><span class="op">[</span><span class="va">trait</span><span class="op">]</span>, <span class="va">se2a_real</span><span class="op">[</span><span class="va">core_bands</span><span class="op">]</span>, <span class="va">idx_ml</span><span class="op">[</span><span class="va">selected</span><span class="op">[[</span><span class="va">trait</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -790,7 +834,7 @@ CR.red.nir</td>
 <span><span class="op">}</span></span>
 <span><span class="va">trait_runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"LAI"</span><span class="op">)</span>, <span class="va">run_trait</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"LAI"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">feature_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">trait_runs</span>, <span class="va">`[[`</span>, <span class="st">"summary"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">feature_results</span>, digits <span class="op">=</span> <span class="fl">3</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -803,18 +847,18 @@ CR.red.nir</td>
 <tr class="odd">
 <td align="left">Cab</td>
 <td align="right">9</td>
-<td align="right">0.842</td>
+<td align="right">0.847</td>
 <td align="right">0.853</td>
 </tr>
 <tr class="even">
 <td align="left">LAI</td>
 <td align="right">9</td>
-<td align="right">0.696</td>
+<td align="right">0.677</td>
 <td align="right">0.685</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">trait</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cab"</span>, <span class="st">"LAI"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">r</span> <span class="op">&lt;-</span> <span class="va">trait_runs</span><span class="op">[[</span><span class="va">trait</span><span class="op">]</span><span class="op">]</span></span>
@@ -829,7 +873,7 @@ CR.red.nir</td>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"grey40"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p><img src="t13-deep-learning-inversion_files/figure-html/feature-select-plot-1.png" class="r-plt" alt="" width="864"></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
 <p>Fewer, better-chosen features help both models. On Cab, dense and RF
 land close together (both around 0.83-0.86), essentially tied. On LAI –
