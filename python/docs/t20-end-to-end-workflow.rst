@@ -132,7 +132,7 @@ day)::
    :alt: REP index map and RF-retrieved Cab map over the real Loobos Sentinel-2 scene, real output of the code above
    :width: 100%
 
-   Real output: the complete pipeline's final products -- the winning independent index (REP, red-edge position) and the RF-retrieved Cab, both mapped over the same real Loobos scene, both showing the same forest gap despite being computed by entirely different methods.
+   Real output: the complete pipeline's final products -- the winning independent index (REP, red-edge position) and the RF-retrieved Cab, both mapped over the same real Loobos scene, agreeing spatially (including a small shared patch near a visible track junction, top-left) despite being computed by entirely different methods.
 
 Interpretation
 -------------------
@@ -152,6 +152,20 @@ pieces is new -- what's new is seeing them chained into one script that
 starts at "what does a leaf's chlorophyll content do to reflectance" and
 ends at "here is a chlorophyll map of a real forest, cross-checked
 against an independent signal computed a completely different way."
+
+One honest caveat about step 5, learned the hard way while building this
+exact page: this bbox/month only had 3 usable Sentinel-2 scenes, and one
+of them turned out to have a real cloud sitting over part of the site --
+its *whole-scene* cloud cover was actually the lowest of the three,
+which is exactly why a tile-wide ``cloud_threshold`` alone doesn't catch
+everything for a small area. The figure above uses the two genuinely
+clean dates; re-running the code verbatim can land on a different mix
+of dates depending on what STAC returns that day, and isn't guaranteed
+to be cloud-free by construction. :doc:`t17-preparing-eo-observations`'s
+brightness-based flag (or inspecting individual dates' true-colour crops
+before compositing, which is what actually caught this) is the real
+mitigation, not something this step's simple three-line retrieval does
+for you automatically.
 
 Try it yourself
 --------------------

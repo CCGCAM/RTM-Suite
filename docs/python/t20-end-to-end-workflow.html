@@ -260,7 +260,7 @@ day):</p>
 <a class="reference internal image-reference" href="_images/t18_python_capstone.png"><img alt="REP index map and RF-retrieved Cab map over the real Loobos Sentinel-2 scene, real output of the code above" src="_images/t18_python_capstone.png" style="width: 100%;" />
 </a>
 <figcaption>
-<p><span class="caption-text">Real output: the complete pipeline’s final products – the winning independent index (REP, red-edge position) and the RF-retrieved Cab, both mapped over the same real Loobos scene, both showing the same forest gap despite being computed by entirely different methods.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+<p><span class="caption-text">Real output: the complete pipeline’s final products – the winning independent index (REP, red-edge position) and the RF-retrieved Cab, both mapped over the same real Loobos scene, agreeing spatially (including a small shared patch near a visible track junction, top-left) despite being computed by entirely different methods.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
@@ -281,6 +281,19 @@ pieces is new – what’s new is seeing them chained into one script that
 starts at “what does a leaf’s chlorophyll content do to reflectance” and
 ends at “here is a chlorophyll map of a real forest, cross-checked
 against an independent signal computed a completely different way.”</p>
+<p>One honest caveat about step 5, learned the hard way while building this
+exact page: this bbox/month only had 3 usable Sentinel-2 scenes, and one
+of them turned out to have a real cloud sitting over part of the site –
+its <em>whole-scene</em> cloud cover was actually the lowest of the three,
+which is exactly why a tile-wide <code class="docutils literal notranslate"><span class="pre">cloud_threshold</span></code> alone doesn’t catch
+everything for a small area. The figure above uses the two genuinely
+clean dates; re-running the code verbatim can land on a different mix
+of dates depending on what STAC returns that day, and isn’t guaranteed
+to be cloud-free by construction. <a class="reference internal" href="t17-preparing-eo-observations.html"><span class="doc">17. Preparing EO Observations</span></a>’s
+brightness-based flag (or inspecting individual dates’ true-colour crops
+before compositing, which is what actually caught this) is the real
+mitigation, not something this step’s simple three-line retrieval does
+for you automatically.</p>
 </section>
 <section id="try-it-yourself">
 <h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>

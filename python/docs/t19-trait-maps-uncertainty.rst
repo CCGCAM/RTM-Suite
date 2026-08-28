@@ -82,9 +82,11 @@ Try it yourself
 
 - Compute ``pixel_std`` (ensemble spread) for the Cab map in
   :doc:`t18-applying-inversion-spatially` and check whether the
-  highest-spread pixels cluster near the same forest gap the map itself
-  highlighted -- genuine model uncertainty often concentrates at
-  land-cover transitions.
+  highest-spread pixels cluster near land-cover transitions (the track
+  junction visible in that chapter's own figure is a real candidate) --
+  genuine model uncertainty often concentrates there, which is also a
+  useful independent check on whether a suspicious-looking patch is a
+  real feature or an artifact.
 - Plot ``pixel_std`` as its own map, alongside the trait map itself, and
   see whether high-uncertainty regions correspond to visually unusual
   areas in the true-color image (shadow, mixed pixels, edges).

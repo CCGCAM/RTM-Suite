@@ -73,11 +73,19 @@ are stable for this bbox/resolution)::
    (138, 88)
    ['B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B11', 'B12', 'SCL']
 
-.. figure:: _figures/t11_python_capstone.png
-   :alt: True color Sentinel-2 image retrieved via STAC (top-left panel), part of the full real-EO capstone built across this Part
-   :width: 100%
+.. figure:: _figures/t16_loobos_truecolor.png
+   :alt: True color Sentinel-2 image retrieved via STAC, real output of the code above
+   :width: 60%
 
-   Real output (top-left panel -- the rest of this figure is built up across the following chapters): a true-color composite of a real, live-retrieved Sentinel-2 scene over Speulderbos forest, NL, July 2024. Getting from nothing to this image is exactly the two-function call above.
+   Real output: the true-color composite this exact code produces, over Loobos forest, NL, July 2024 -- getting from nothing to this image is exactly the two-function call above. The visible cloud (bottom-left) is genuine, not edited out -- :doc:`t17-preparing-eo-observations` deals with it directly.
+
+.. note::
+   The other Part IV chapters (:doc:`t18-applying-inversion-spatially`
+   onward) mostly work with this same Loobos scene. One exception:
+   :doc:`t19-trait-maps-uncertainty`'s own result figure uses a
+   *different* real site (Speulderbos, NL) and a longer, multi-month time
+   series -- a different, complementary real-EO example, not this
+   chapter's scene.
 
 Interpretation
 -------------------
