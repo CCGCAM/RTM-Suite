@@ -222,9 +222,6 @@ img.zoomable { cursor: zoom-in; }
         <button class="btn-primary" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'});">Explore the packages</button>
         <button class="btn-ghost" onclick="document.getElementById('docs').scrollIntoView({behavior:'smooth'});">Browse reference manuals</button>
       </div>
-      <p style="margin-top: 14px;">
-        <a href="https://doi.org/10.5281/zenodo.22134140" target="_blank"><img src="https://zenodo.org/badge/1321341046.svg" alt="DOI"></a>
-      </p>
     </div>
     <div class="hero-figure">
       <img src="assets/compare_grid_canopy_x_leaf.png" alt="fourSAIL, foursail2 and INFORM canopy models compared across 5 leaf models">
@@ -296,7 +293,10 @@ img.zoomable { cursor: zoom-in; }
 
     </div>
 
-    <h3 style="font-size: 18px; color: var(--brand); margin: 40px 0 4px;">Same models, both languages — do they agree?</h3>
+    <p style="margin: 40px 0 4px;">
+      <a href="https://doi.org/10.5281/zenodo.22134140" target="_blank"><img src="https://zenodo.org/badge/1321341046.svg" alt="DOI"></a>
+    </p>
+    <h3 style="font-size: 18px; color: var(--brand); margin: 4px 0 4px;">Same models, both languages — do they agree?</h3>
     <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python.</p>
     <div class="shot-grid">
       <div class="shot-card">
