@@ -58,6 +58,11 @@ section { padding: 64px 24px; scroll-margin-top: 70px; }
 .section-kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--brand-light); font-weight: 600; margin-bottom: 8px; }
 .section-title { font-size: 26px; color: var(--brand); font-weight: 700; margin-bottom: 10px; }
 .section-subtitle { font-size: 15px; color: var(--text-muted); max-width: 760px; margin-bottom: 30px; }
+.logo-grid { display: grid; grid-template-columns: repeat(3, minmax(150px, 1fr)); gap: 40px; align-items: center; justify-items: center; }
+.logo-grid img { max-height: 100px; width: auto; max-width: 100%; }
+.logo-item { text-align: center; }
+.logo-item .logo-caption { font-size: 11.5px; color: var(--text-muted); margin-top: 8px; }
+@media (max-width: 640px) { .logo-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); } }
 
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
 .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
@@ -919,14 +924,58 @@ for cab in np.linspace(10, 80, 20):
   </div>
 </section>
 
-<section id="partners" class="section-bg-light">
+<section id="development" style="padding-bottom: 28px;">
   <div class="section-inner">
-    <div class="section-kicker">Partners</div>
-    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 60px; margin-top: 20px;">
-      <img src="assets/logo_WUR.svg" alt="Wageningen University &amp; Research" style="height: 100px; width: auto;">
-      <img src="assets/logo_CNR.png" alt="National Research Council of Italy (CNR), Institute of BioEconomy" style="height: 150px; width: auto;">
+    <div class="section-kicker">Development</div>
+    <p class="section-subtitle" style="max-width: none; margin: 6px 0 24px;">Wageningen University &amp; Research (WUR) &middot; CNR-IBE, National Research Council of Italy &middot; QuantaLab, IAS-CSIC</p>
+    <div class="logo-grid">
+      <div class="logo-item">
+        <img src="assets/logo_WUR.svg" alt="Wageningen University &amp; Research" style="height: 90px;">
+      </div>
+      <div class="logo-item">
+        <img src="assets/logo_CNR.png" alt="CNR-IBE, National Research Council of Italy" style="height: 100px;">
+      </div>
+      <div class="logo-item">
+        <img src="assets/logo_Quantalab.png" alt="QuantaLab, IAS-CSIC" style="height: 34px;">
+      </div>
     </div>
-    <p class="section-subtitle" style="max-width: none; margin-top: 20px;">These tools are developed thanks to the collaboration between <strong>CNR-IBE</strong> (Florence, Italy) and <strong>Wageningen University</strong>, building tools for the use of physically-based radiative transfer models in vegetation trait retrieval through model inversion, and adapting them to a range of sensors -- with a particular focus on upcoming ESA missions such as FLEX and CHIME.</p>
+    <p class="section-subtitle" style="max-width: none; margin-top: 26px;">These tools are developed thanks to the collaboration between <strong>CNR-IBE</strong> (Florence, Italy) and <strong>Wageningen University</strong>, building tools for the use of physically-based radiative transfer models in vegetation trait retrieval through model inversion, and adapting them to a range of sensors -- with a particular focus on upcoming ESA missions such as FLEX and CHIME. <strong>QuantaLab</strong>, from IAS-CSIC (Spain), also contributes its expertise in developing RTM applications.</p>
+  </div>
+</section>
+
+<section id="collaborators" style="padding-top: 28px; padding-bottom: 28px;">
+  <div class="section-inner">
+    <div class="section-kicker">Research Collaborators &amp; Users</div>
+    <div class="logo-grid" style="margin-top: 20px;">
+      <div class="logo-item">
+        <img src="assets/UQ-QAAFI-wordmark-DAF-2019.jpg" alt="QAAFI, University of Queensland" style="max-height: 140px; width: auto;">
+        <div class="logo-caption">QAAFI &mdash; University of Queensland</div>
+      </div>
+      <div class="logo-item">
+        <img src="assets/logo_IAS-CSIC.jpg" alt="IAS-CSIC" style="max-height: 140px; width: auto;">
+        <div class="logo-caption">IAS-CSIC, C&oacute;rdoba, Spain</div>
+      </div>
+    </div>
+    <p class="section-subtitle" style="max-width: none; margin-top: 26px;">Research groups collaborating in, testing, or applying RTM-Suite tools for radiative transfer modelling, model inversion and vegetation trait retrieval.</p>
+  </div>
+</section>
+
+<section id="funding" style="padding-top: 28px;">
+  <div class="section-inner">
+    <div class="section-kicker">Funding &amp; Project Support</div>
+    <div class="logo-grid" style="margin-top: 20px;">
+      <div class="logo-item">
+        <img src="assets/logo_ESA.jpg" alt="European Space Agency (ESA)" style="height: 110px; max-height: none;">
+        <div class="logo-caption">European Space Agency (ESA)</div>
+      </div>
+    </div>
+    <p class="section-subtitle" style="max-width: none; margin-top: 26px;">Development and extension of RTM-Suite are supported by the ESA-funded <strong>HYDRA-EO</strong> project, where these tools are being developed, tested and adapted for physically based and hybrid retrieval approaches across multiple Earth observation sensors.</p>
+    <p style="font-size: 13.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.7;">
+      <strong>HYDRA-EO</strong> &mdash; Hybrid ML &amp; Earth Observation for multi-stressor crop disease detection<br>
+      Funded by the European Space Agency (ESA) under the EXPRO+ Tender &ldquo;Crop Multiple Stressors, Pests and Diseases&rdquo;, Action 1-12684.<br>
+      <a href="https://hydra-eo.eu/" target="_blank" style="color: var(--brand-light); font-weight: 600;">&rarr; Visit the HYDRA-EO project website</a>
+    </p>
+    <p style="font-size: 12px; color: var(--text-muted); margin-top: 16px; font-style: italic;">The tools and content presented here are developed by the participating research institutions and do not imply endorsement by ESA.</p>
   </div>
 </section>
 
