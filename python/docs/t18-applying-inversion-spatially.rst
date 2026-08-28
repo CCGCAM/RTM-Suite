@@ -63,21 +63,43 @@ Result
    :alt: Retrieved Cab map alongside an independent spectral index (REP), same real Loobos Sentinel-2 scene
    :width: 100%
 
-   Real output: a Random Forest Cab model -- trained on a 500-row LUT with a deliberately wide domain (sparse-to-dense LAI, variable soil brightness, realistic geometry) -- applied to every pixel of a real Sentinel-2 scene over Loobos forest, NL. The retrieved Cab map (right) and an independently-computed spectral index (REP, left, no ML involved at all) both show the exact same forest gap, entirely independently.
+   Real output: a Random Forest Cab model -- trained on a 500-row LUT with a deliberately wide domain (sparse-to-dense LAI, variable soil brightness, realistic geometry) -- applied to every pixel of a real Sentinel-2 scene over Loobos forest, NL. The retrieved Cab map (right) and an independently-computed spectral index (REP, left, no ML involved at all) both show the same sandy track crossing the site, and a small, subtle low-REP/low-Cab patch near the track junction (top-left).
 
 Interpretation
 -------------------
 
-The two panels agreeing spatially -- the same dark gap visible in both
-the ML-retrieved Cab map and the independently-computed REP index -- is
-a real, meaningful consistency check: REP was never used to train the
-Cab model, so this agreement isn't circular. It's evidence the retrieval
-is picking up a genuine vegetation signal (a real canopy gap) rather
-than an artifact of the model or the scene. This kind of independent
-cross-check matters more once you're on real data than it did in
-Chapters 12-15, where held-out R2 alone was a sufficient (and
-achievable) standard -- real scenes don't come with ground-truth Cab to
-check against directly.
+**This exact figure caught a real cloud-contamination bug while this
+page was being written -- worth recounting, because it's a more useful
+lesson than a clean figure would have been.** The July composite this
+site's imagery draws from only had 3 usable dates; an earlier version
+of this figure averaged in a date with a real cloud sitting directly
+over part of the scene. That date's whole-scene cloud cover (14%) was
+actually the *lowest* of the three -- a tile-wide percentage says
+nothing about whether *this specific small area* was covered, and it
+wasn't obvious from the trait map alone. The cloud-contaminated pixel
+produced a confident-looking, smoothly-shaped dark patch that both
+panels "agreed" on, which is exactly the kind of independent-agreement
+argument this section originally (wrongly) made in its own defense.
+Comparing each date's true-colour crop individually caught it. The
+figure above uses only the two genuinely clean dates.
+
+What's left after that fix is much more modest: a small low-REP/low-Cab
+patch coincides with the visible unpaved track junction in the top-left
+corner, consistent across both remaining dates -- plausibly real (less
+canopy cover right at a track crossing is physically reasonable, and
+:doc:`t17-preparing-eo-observations` already documents that this
+scene's bright, unpaved forest tracks are a known false-positive for a
+simple brightness-based cloud check, i.e. they really are locally
+brighter/different than the surrounding canopy). It is **not** possible
+to fully rule out thin residual cloud or haze from a figure like this
+alone, and this page won't claim more certainty than that. The broader
+point -- that REP (a plain band-ratio index, no ML) and the ML-retrieved
+Cab map agree spatially at all, and that this agreement isn't circular
+since REP was never used to train the Cab model -- is still a real,
+useful cross-check once you're on real data, where (unlike Chapters
+12-15's held-out R2) there's no ground-truth Cab to check against
+directly. It just isn't, on its own, proof of what a matching patch
+*is*.
 
 Try it yourself
 --------------------
