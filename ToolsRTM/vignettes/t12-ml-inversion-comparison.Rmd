@@ -26,7 +26,7 @@ same LUT/train-test split, so the comparison is apples-to-apples.
 ## 1. Same LUT, same split as Tutorial 11
 
 ```{r simulate}
-n_samples <- 150
+n_samples <- 700
 LUT <- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = n_samples, setseed = 1))
 wl <- 400:2500
 rsoil <- rep(0.15, length(wl))
@@ -52,7 +52,7 @@ rmse_f <- function(obs, pred) sqrt(mean((obs - pred)^2))
 matplot(wl, t(refl[sample(seq_len(n_samples), 30), ]), type = "l", lty = 1,
         col = adjustcolor("#0072B2", alpha.f = 0.3),
         xlab = "Wavelength (nm)", ylab = "TOC reflectance (rsot)",
-        main = "30 of the 150 simulated spectra behind this LUT")
+        main = "30 of the 700 simulated spectra behind this LUT")
 ```
 
 ## 2. Fit several algorithms, predict Cab on the held-out test set
@@ -60,8 +60,8 @@ matplot(wl, t(refl[sample(seq_len(n_samples), 30), ]), type = "l", lty = 1,
 `get.inversion()` supports 12 algorithms: `"PLSR"`, `"SVM"`, `"RF"`,
 `"GB"`, `"NN"`, `"Bayesian"`, `"AdaBag"`, `"BRNN"`, `"xGB"`, `"RVM"`,
 `"qLASSO"`, `"Ensemble"`. `"NN"` (caret's `nnet` tuning grid) is skipped
-here -- impractically slow against this many predictors at only 105
-training rows, the same reason this package's own course pipeline scripts
+here -- impractically slow against this many predictors at caret's default
+tuning grid, the same reason this package's own course pipeline scripts
 (`Scripts/R/*/2-inversion_ML.R`) skip it too. A representative subset run
 for real below; the rest of the call is identical for any of the others.
 
@@ -147,10 +147,13 @@ comparison <- rbind(metrics[, c("algorithm", "R2", "RMSE")],
 knitr::kable(comparison[order(-comparison$R2), ], digits = 3, row.names = FALSE)
 ```
 
-At this LUT size (150 rows, 105 training), a fitted ML model and pure
-LUT-search inversion are often close -- the gap widens in the ML model's
-favour with more training data, and in `get.inversionOpt()`'s favour when
-too little data is available to fit a model reliably (Tutorial 11's
+At this LUT size (700 rows, 490 training), the fitted ML models already
+have a clear edge over pure LUT-search -- every algorithm here beats
+`get.inversionOpt()`'s R2 of 0.573 by a real margin (0.79-0.82). A fitted
+model extracts more from the same reference set than nearest-match
+search alone; that gap tends to widen further with more training data,
+and narrows (or reverses) in `get.inversionOpt()`'s favour only when too
+little data is available to fit a model reliably (Tutorial 11's
 discussion of when to use which).
 
 ## 4. Multiple traits: do spectral indices actually help?
@@ -228,18 +231,24 @@ barplot(rbind(trait_results$R2_bands_only[ord], trait_results$R2_bands_plus_indi
 legend("topleft", c("Bands only", "+ indices"), fill = c("#999999", "#0072B2"), bty = "n")
 ```
 
-**Adding indices helps every single trait here, but by very different
-amounts.** `EWT` and `Cbrown` gain the most -- unsurprising, since
-water- and senescence-sensitive indices (built from SWIR bands the raw
-per-band RF split has to rediscover on its own) target exactly that
-signal directly. `Cab`/`Car`/`LAI` gain a real but more modest amount --
-RF was already extracting a fair fraction of the available structure
-from the bands alone. `Anth` stays the weakest predictor of the six
-even with indices added, consistent with anthocyanin's famously subtle
-spectral footprint (Tutorial 09) -- indices help, but they don't turn a
-physically hard retrieval into an easy one. The lesson generalises
-past this specific LUT: *which* indices to add, computed and selected
-per trait, matters more than adding indices in general.
+**Adding indices helps most traits here, but not universally, and by
+very different amounts.** `EWT` and `Cbrown` gain the most --
+unsurprising, since water- and senescence-sensitive indices (built from
+SWIR bands the raw per-band RF split has to rediscover on its own)
+target exactly that signal directly. `Cab`/`Car`/`LAI` gain a real but
+more modest amount -- RF was already extracting a fair fraction of the
+available structure from the bands alone. `Anth` is the one exception:
+adding its top-5 correlated indices actually *hurts* accuracy here (R2
+0.527 -> 0.447). `Anth` is already the weakest bands-only predictor of
+the six, consistent with anthocyanin's famously subtle spectral
+footprint (Tutorial 09); the indices most correlated with it on the
+training split look like they're picking up incidental correlation
+rather than real signal, handing RF extra noisy predictors instead of
+useful ones. The lesson generalises past this specific LUT, and cuts
+sharper than before: *which* indices to add, computed and selected per
+trait, matters more than adding indices in general -- and for a trait
+with a weak physical signal to begin with, "most correlated on the
+training set" is not automatically the same as "actually useful."
 
 ## What's next
 
