@@ -2,7 +2,7 @@
 
 **An integrated R and Python framework for radiative transfer modelling, simulation, inversion, and Earth observation applications.**
 
-![ToolsRTM](https://img.shields.io/badge/ToolsRTM-R%20CMD%20check%3A%200%20errors-brightgreen) ![SCOPEinR](https://img.shields.io/badge/SCOPEinR-R%20CMD%20check%3A%200%20errors-brightgreen) ![ToolsRTM Python](https://img.shields.io/badge/ToolsRTM-Python-blue) ![SCOPEinPython](https://img.shields.io/badge/SCOPEinPython-Python-blue)
+![ToolsRTM](https://img.shields.io/badge/ToolsRTM-R%20CMD%20check%3A%200%20errors-brightgreen) ![SCOPEinR](https://img.shields.io/badge/SCOPEinR-R%20CMD%20check%3A%200%20errors-brightgreen) ![ToolsRTM Python](https://img.shields.io/badge/ToolsRTM-Python-blue) ![SCOPEinPython](https://img.shields.io/badge/SCOPEinPython-Python-blue) [![DOI](https://zenodo.org/badge/1321341046.svg)](https://doi.org/10.5281/zenodo.22134140)
 
 ### :globe_with_meridians: [ccgcam.github.io/RTM-Suite](https://ccgcam.github.io/RTM-Suite/)
 
