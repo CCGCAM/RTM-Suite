@@ -338,7 +338,7 @@ plt.close(fig)
 print("wrote spectral_sensitivity.png")
 
 # ---------------------------------------------------------------- 13. Real Sentinel-2 capstone (Loobos, t18 port)
-from toolsrtm.satellite import get_satellite_collection, get_sentinel2_cube
+from toolsrtm.satellite import get_satellite_collection, get_sentinel2_cube, SatelliteCollection
 
 rng2 = np.random.default_rng(1)
 n_cap = 500
@@ -371,6 +371,21 @@ lat_cap, lon_cap, d_cap = 52.166447, 5.74355, 0.006
 bbox_cap = (lon_cap - d_cap, lat_cap - d_cap, lon_cap + d_cap, lat_cap + d_cap)
 coll_cap = get_satellite_collection(bbox_cap, collection="sentinel-2-l2a", date_range=("2024-07-01", "2024-07-31"),
                                      cloud_server="microsoft", n_limit=20, cloud_threshold=40)
+# Only 3 scenes match this tiny bbox/date window. Whole-scene cloud_cover (the
+# only filter applied above) is a tile-wide average and misses localized
+# clouds inside this small bbox: the 2024-07-28 scene has the LOWEST
+# whole-scene cloud_cover of the three (14.1% vs 28.0%/20.5%) but visibly
+# has a real cloud sitting directly over this bbox (confirmed by inspecting
+# each date's true-colour crop individually) -- averaging it in produced a
+# cloud-contaminated pixel that a downstream ML model turned into a
+# confident-looking but meaningless low Cab value, not a real forest gap.
+# Dropped explicitly rather than by tightening cloud_threshold, since a
+# tighter global threshold would drop the two genuinely clean scenes first.
+_bad_id = "S2A_MSIL2A_20240728T105031_R051_T31UFT_20240728T183146"
+_keep_items = [it for it in coll_cap.items if it.id != _bad_id]
+coll_cap = SatelliteCollection(items=_keep_items, collection=coll_cap.collection,
+                                cloud_server=coll_cap.cloud_server, asset_names=coll_cap.asset_names,
+                                metadata=coll_cap.metadata[coll_cap.metadata["id"] != _bad_id])
 cube_cap = get_sentinel2_cube(coll_cap, bbox_cap, resolution=10.0, crs="EPSG:32631", aggregation_method="mean")
 r_cap = {b: cube_cap[b].values.astype(float) / 10000 for b in real_names_cap}
 
