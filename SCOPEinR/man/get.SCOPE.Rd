@@ -13,7 +13,8 @@ get.SCOPE(
   leaf.model = "fluspect-CX",
   canopy.model = "fourSAIL",
   get.outputs,
-  get.plots = T
+  get.plots = T,
+  rsoil = NULL
 )
 }
 \arguments{
@@ -36,6 +37,13 @@ correction and whether to correct the total irradiance if a specific value is pr
 By default SCOPE uses get.outputs = 'ALL', for processiong huge LUT is recommended get.outputs = 'Main'.}
 
 \item{get.plots}{is true plot the intermediate plots}
+
+\item{rsoil}{Optional externally-supplied soil reflectance spectrum, length matching
+\code{data.spectral$reg1} (400-2400nm, 1nm steps, 2001 values) -- e.g. from
+\code{ToolsRTM::get.marmit.rsoil()} driven by \code{STEMMUS-R::get.stemmus()}'s simulated
+soil moisture. When supplied, bypasses the file-lookup/BSM soil branches entirely (whichever
+\code{options.SCOPE} would otherwise select) and uses this spectrum directly. Defaults to
+\code{NULL}, preserving the original file/BSM-resolved behaviour.}
 }
 \description{
 Main module for calling the SCOPE model

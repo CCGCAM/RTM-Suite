@@ -11,6 +11,12 @@
 #' @param get.outputs  if get.outputs = 'ALL' all variables were retrieved; if get.outputs = 'Main' the main variables were retrieved.
 #' By default SCOPE uses get.outputs = 'ALL', for processiong huge LUT is recommended get.outputs = 'Main'.
 #' @param get.plots  is true plot the intermediate plots
+#' @param rsoil Optional externally-supplied soil reflectance spectrum, length matching
+#' \code{data.spectral$reg1} (400-2400nm, 1nm steps, 2001 values) -- e.g. from
+#' \code{ToolsRTM::get.marmit.rsoil()} driven by \code{STEMMUS-R::get.stemmus()}'s simulated
+#' soil moisture. When supplied, bypasses the file-lookup/BSM soil branches entirely (whichever
+#' \code{options.SCOPE} would otherwise select) and uses this spectrum directly. Defaults to
+#' \code{NULL}, preserving the original file/BSM-resolved behaviour.
 #' @description
 #' Main module for calling the SCOPE model
 #'
@@ -38,8 +44,12 @@ get.SCOPE<-function(LUT, n.LUT=10,options.SCOPE,
                     optipar,path.out,
                     leaf.model='fluspect-CX',canopy.model='fourSAIL',
                     get.outputs,
-                    get.plots = T)  {
+                    get.plots = T, rsoil = NULL)  {
 
+  # Alias immediately: the function body below reuses the name `rsoil` internally
+  # (a local data.frame from the file-based soil branch) which would otherwise
+  # shadow this parameter before the override check runs.
+  rsoil.external <- rsoil
 
   message('SCOPE 2.1. version will be executed .............')
 
@@ -699,6 +709,20 @@ get.SCOPE<-function(LUT, n.LUT=10,options.SCOPE,
         print(p.soil)
       }
 
+    }
+
+    ######################################################################################
+    # 4.2b. optional externally-supplied soil reflectance (e.g. STEMMUS+MARMIT), bypassing
+    # the file-lookup/BSM branches above entirely when supplied
+    ######################################################################################
+
+    if (!is.null(rsoil.external)) {
+      n_reg1 <- length(data.spectral[['reg1']])
+      if (length(rsoil.external) != n_reg1) {
+        stop("get.SCOPE(): rsoil must have length ", n_reg1,
+             " (data.spectral$reg1, 400-2400nm at 1nm steps), got length ", length(rsoil.external), ".")
+      }
+      data.soil[['rfl.soil']] <- rsoil.external
     }
 
 
