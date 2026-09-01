@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STEMMUS + SCOPE Function Explorer (In Development)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b3d59; --navy2:#082c40; --cyan:#2bb3a3; --mint:#7fe0d0;
+  --blue:#1587b5; --ink:#26313a; --muted:#5c6b76; --line:#e1e7ea;
+  --bg:#ffffff; --bg2:#f5f8fa; --card-bg:#ffffff; --card-shadow:0 14px 34px rgba(11,61,89,.10);
+  --badge-bg:#ffffff; --badge-line:#d3e3ea; --badge-fg:#0b3d59;
+  --code-bg:#eef3f6; --code-line:#d7e3e9; --code-fg:#0b3d59;
+  --amber:#b8791a; --amber-bg:#fff6e8; --amber-line:#f0dcb0;
+}
+*{box-sizing:border-box}
+img{max-width:100%;height:auto;}
+html{overflow-x:hidden;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+.wrap{max-width:min(95vw,1100px);margin:0 auto;padding:0 20px 60px;}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;color:var(--code-fg);background:var(--code-bg);border:1px solid var(--code-line);border-radius:6px;padding:1px 6px;font-size:.88em;}
+a{color:inherit;text-decoration:none;}
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);border-radius:0 0 28px 28px;padding:44px 0 30px;border-bottom:1px solid var(--line);}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.18em;font-weight:700;color:var(--blue);text-transform:uppercase;}
+.hero h1{font-size:clamp(26px,4.2vw,38px);line-height:1.18;letter-spacing:-.02em;margin:13px 0 14px;color:var(--ink);}
+.hero h1 .accent{color:var(--blue);}
+.hero p.lead{color:var(--muted);font-size:15.5px;line-height:1.62;max-width:640px;}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 8px;}
+.badge{border:1px solid var(--badge-line);color:var(--badge-fg);background:var(--badge-bg);padding:7px 13px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+.progress-banner{display:flex;gap:12px;align-items:flex-start;background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:16px;padding:16px 18px;margin:28px 0;color:#5a3f0c;}
+.progress-banner .dot{width:10px;height:10px;border-radius:50%;background:var(--amber);margin-top:5px;flex:none;animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.progress-banner b{color:#8a5c0f;}
+.section-title{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--blue);margin:36px 0 6px;}
+.section-desc{color:var(--muted);font-size:13.5px;margin-bottom:16px;max-width:720px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:12px;margin-bottom:8px;}
+.card{display:block;border:1px solid var(--line);border-radius:15px;background:var(--card-bg);padding:16px;text-decoration:none;color:inherit;box-shadow:var(--card-shadow);transition:transform .16s,box-shadow .16s,border-color .16s;}
+.card:hover{transform:translateY(-2px);border-color:var(--blue);box-shadow:0 18px 40px rgba(11,61,89,.14);}
+.card .num{font-family:"JetBrains Mono",monospace;font-weight:700;color:var(--blue);font-size:12px;margin-bottom:6px;}
+.card h4{margin:0 0 5px;font-size:13.5px;color:var(--ink);}
+.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5;}
+.logo-grid{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:8px 0;}
+.stagepreview{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 4px;}
+.stagechip{border:1px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:12.5px;color:var(--muted);background:var(--bg2);}
+.stagechip b{display:block;color:var(--ink);font-size:13px;margin-bottom:2px;}
+.navbar { position: sticky; top: 0; z-index: 999; background: var(--navy); color: #fff; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+.nav-container { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.nav-logo { font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+.nav-logo span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; }
+.nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
+.nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
+.nav-links a:hover, .nav-links a.active { opacity: 1; }
+.nav-links a.active { border-bottom: 2px solid #fff; }
+.nav-toggle { display: none; background: none; border: 1px solid rgba(255,255,255,0.5); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 18px; line-height: 1; cursor: pointer; }
+@media (max-width: 900px) {
+  .nav-toggle { display: block; }
+  .nav-links { display: none; width: 100%; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 0 16px; }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 8px 4px; width: 100%; }
+  .nav-container { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<header class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">&larr; RTM-Suite</a>
+      <a href="index.html#docs">Documentation</a>
+      <a href="index.html#tutorials">Tutorials</a>
+      <a href="function-universe-toolsrtm.html">ToolsRTM Explorer</a>
+      <a href="function-universe-scopeinr.html">SCOPE Explorer</a>
+      <a href="function-universe-stemmus-inprogress.html" class="active">STEMMUS + SCOPE</a>
+    </nav>
+  </div>
+</header>
+<script>
+(function () {
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+  toggle.addEventListener('click', function () {
+    var open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+})();
+</script>
+<div class="wrap">
+<section class="hero">
+  <div class="eyebrow">STEMMUS + SCOPE &middot; PACKAGE FUNCTION EXPLORER</div>
+  <h1>Coupling <span class="accent">soil water, heat &amp; air transfer</span><br>to canopy radiative transfer.</h1>
+  <p class="lead">STEMMUS is a time-stepping soil water&ndash;heat&ndash;air transport model (the Richards equation for matric potential, plus coupled heat and soil-air pressure, across many soil layers and hourly time steps) &mdash; a fundamentally different kind of model from the per-simulation leaf/canopy radiative-transfer LUTs in ToolsRTM and SCOPEinR. STEMMUS + SCOPE couples that dynamic soil column to SCOPE&rsquo;s canopy energy-balance, photosynthesis and fluorescence model, so the canopy&rsquo;s lower boundary condition (soil temperature and moisture) comes from a real simulated soil profile instead of a static input.</p>
+  <div class="badges">
+    <span class="badge">Soil water transport (Richards)</span><span class="badge">Coupled heat &amp; soil-air pressure</span><span class="badge">Time-stepping, not per-simulation</span><span class="badge">R &amp; Python</span>
+  </div>
+</section>
+
+<div class="progress-banner">
+  <div class="dot"></div>
+  <div><b>This function explorer is still in development.</b> STEMMUS and STEMMUS + SCOPE aren&rsquo;t released R/Python packages yet, alongside ToolsRTM and SCOPEinR &mdash; their exact package boundaries are still being decided. This page will get the same interactive function map treatment once that settles. In the meantime, the R-vs-Python numerical cross-verification of STEMMUS itself is already done and real, below.</div>
+</div>
+
+<div class="section-title">What's already real</div>
+<div class="section-desc">Not a mockup &mdash; this is verified, working cross-language code, just not yet packaged as a public API:</div>
+<div class="grid">
+  <div class="card" style="cursor:default;"><div class="num">R vs Python</div><h4>STEMMUS Verification</h4><p>We ran the same real 2013 simulation independently in R and Python &mdash; 90 hours of simulated soil behaviour across 37 layers &mdash; and compared soil moisture, temperature and air pressure at every layer, every hour. They agree. (This comparison is itself still a draft, not yet linked publicly.)</p></div>
+</div>
+
+<div class="section-title" style="margin-top:30px">Planned scope (not yet an API)</div>
+<div class="section-desc">The rough shape this explorer will map once STEMMUS + SCOPE is packaged &mdash; shown here only as a preview, not a committed function list:</div>
+<div class="stagepreview">
+  <div class="stagechip"><b>Soil column state</b>Richards equation solver: matric potential, soil temperature, soil-air pressure per layer per time step</div>
+  <div class="stagechip"><b>Land-surface coupling</b>Soil-atmosphere boundary fluxes feeding into the canopy energy balance</div>
+  <div class="stagechip"><b>Coupled SCOPE run</b>Canopy RTM + energy balance + fluorescence, driven by the STEMMUS soil state instead of a static soil input</div>
+  <div class="stagechip"><b>Time-series output</b>Multi-day/multi-season simulated soil and canopy state, not a single static run</div>
+</div>
+
+<div class="section-title" style="margin-top:30px">Explore what's ready now</div>
+<div class="section-desc">Two packages already have a full interactive function explorer:</div>
+<div class="grid">
+  <a class="card" href="function-universe-toolsrtm.html"><div class="num">ToolsRTM</div><h4>ToolsRTM Explorer</h4><p>Leaf, canopy, soil &amp; sensor models, LUTs, vegetation indices and inversion &mdash; the full per-simulation RTM toolbox, R and Python.</p></a>
+  <a class="card" href="function-universe-scopeinr.html"><div class="num">SCOPEinR</div><h4>SCOPE Explorer</h4><p>The coupled SCOPE forward model &mdash; leaf optics, energy balance, photosynthesis and fluorescence &mdash; R and Python.</p></a>
+</div>
+
+<div class="section-title" style="margin-top:30px">Development</div>
+<div class="logo-grid">
+  <img src="assets/logo_WUR.svg" alt="Wageningen University &amp; Research" style="height:60px;">
+  <img src="assets/logo_CNR.png" alt="CNR-IBE, National Research Council of Italy" style="height:66px;">
+  <img src="assets/logo_Quantalab.png" alt="QuantaLab, IAS-CSIC" style="height:24px;">
+</div>
+</div>
+</body>
+</html>

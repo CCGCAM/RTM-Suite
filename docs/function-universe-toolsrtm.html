@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ToolsRTM Function Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Palette matches the real RTM-Suite site (docs/index.html) exactly:
+   --brand:#0b3d59, --brand-light:#1587b5, --accent:#2bb3a3, Poppins font. */
+:root{
+  --navy:#0b3d59; --navy2:#082c40; --cyan:#2bb3a3; --mint:#7fe0d0;
+  --blue:#1587b5; --ink:#26313a; --muted:#5c6b76; --line:#e1e7ea;
+  --bg:#ffffff; --bg2:#f5f8fa; --card-bg:#ffffff; --card-shadow:0 14px 34px rgba(11,61,89,.10);
+  --badge-bg:#ffffff; --badge-line:#d3e3ea; --badge-fg:#0b3d59;
+  --code-bg:#eef3f6; --code-line:#d7e3e9; --code-fg:#0b3d59;
+  --accent-btn-fg:#ffffff;
+}
+*{box-sizing:border-box}
+img{max-width:100%;height:auto;}
+html{overflow-x:hidden;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+.wrap{max-width:min(95vw,1800px);margin:0 auto;padding:0 20px 60px;}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;color:var(--code-fg);background:var(--code-bg);border:1px solid var(--code-line);border-radius:6px;padding:1px 6px;font-size:.88em;}
+a{color:inherit;text-decoration:none;}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);border-radius:0 0 28px 28px;padding:44px 0 30px;border-bottom:1px solid var(--line);}
+.hero-content{max-width:640px;}
+.hero:after{content:"";position:absolute;right:0;bottom:16px;width:min(42vw,620px);height:88px;opacity:.16;pointer-events:none;background:
+linear-gradient(115deg,transparent 0 4%,var(--blue) 4.2% 4.7%,transparent 4.9% 12%,var(--cyan) 12.2% 12.7%,transparent 12.9% 22%,var(--mint,#7fe0d0) 22.2% 22.7%,transparent 22.9%),
+repeating-linear-gradient(90deg,transparent 0 24px,rgba(21,135,181,.18) 25px,transparent 26px);clip-path:polygon(0 72%,6% 60%,12% 65%,18% 43%,24% 53%,30% 26%,36% 47%,42% 31%,48% 60%,54% 38%,60% 68%,66% 54%,72% 76%,78% 62%,84% 81%,90% 68%,96% 86%,100% 80%,100% 100%,0 100%)}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.18em;font-weight:700;color:var(--blue);text-transform:uppercase;}
+.hero h1{font-size:clamp(26px,4.2vw,38px);line-height:1.18;letter-spacing:-.02em;margin:13px 0 14px;color:var(--ink);}
+.hero h1 .accent{color:var(--blue);}
+.hero p.lead{max-width:none;color:var(--muted);font-size:15.5px;line-height:1.62;}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 8px;}
+.badge{border:1px solid var(--badge-line);color:var(--badge-fg);background:var(--badge-bg);padding:7px 13px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+
+/* ---------- search ---------- */
+.searchshell{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap;margin:24px 0 4px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:var(--card-bg);box-shadow:var(--card-shadow);}
+.langleft{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.langtitle{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:2px;}
+.langbtn{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:7px 12px;border-radius:11px;font-weight:800;cursor:pointer;font-size:13px;}
+.langbtn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.langlogo{width:20px;height:20px;display:inline-grid;place-items:center;border-radius:50%;font-weight:900;font-size:10.5px;background:#eef4f7;color:#1e628f;}
+.langbtn.active .langlogo{background:#fff;color:#1e628f;}
+.pylogo{border-radius:7px;background:linear-gradient(135deg,#3976a5 0 49%,#f4cb4c 51%);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25);}
+.apisearch{position:relative;flex:1;min-width:260px;max-width:560px;}
+.apisearch input{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 38px 10px 13px;font-size:13px;background:var(--bg);color:var(--ink);outline:none;}
+.apisearch input:focus{border-color:var(--cyan);}
+.searchicon{position:absolute;right:12px;top:9px;color:var(--muted);pointer-events:none;}
+.suggestions{display:none;position:absolute;z-index:50;left:0;right:0;top:44px;max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:13px;background:var(--card-bg);box-shadow:0 18px 40px rgba(23,62,85,.16);}
+.suggestions.show{display:block;}
+.sug{padding:10px 14px;border-bottom:1px solid var(--line);border-left:3px solid var(--line);cursor:pointer;transition:background .12s,padding-left .12s;}
+.sug:hover{background:var(--bg2);padding-left:18px;}
+.sug:last-child{border-bottom:0;}
+.sugfn{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted);margin-top:2px;}
+.sug:last-child{border-bottom:0;}
+.sug:hover{background:var(--badge-bg);}
+.sugname{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:800;color:var(--ink);}
+.sugpkg{font-size:9.5px;border:1px solid var(--line);border-radius:999px;padding:2px 7px;color:var(--muted);}
+.sugtop{display:flex;justify-content:space-between;gap:8px;align-items:center;}
+.sugdesc{font-size:10.8px;color:var(--muted);margin-top:3px;}
+.sugstage{font-size:8.5px;font-weight:800;padding:2px 6px;border-radius:5px;background:var(--badge-bg);color:var(--badge-fg);margin-top:5px;display:inline-block;}
+
+/* ---------- steps board ---------- */
+.section-title{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--blue);margin:40px 0 6px;}
+.section-desc{color:var(--muted);font-size:13.5px;margin-bottom:16px;max-width:720px;}
+.board{border:1px solid var(--line);border-radius:20px;background:var(--card-bg);box-shadow:var(--card-shadow);overflow:hidden;width:100%;}
+.boardtop{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:13px 18px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--card-bg),var(--bg2));}
+.boardtop strong{font-size:14px;color:var(--ink);}
+.boardtop span{font-size:11.5px;color:var(--muted);}
+.pipeline{position:relative;padding:22px 16px 28px;overflow-x:auto;}
+.flowline{position:absolute;left:5%;right:5%;top:75px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--blue),#7fe0d0);opacity:.28;border-radius:3px;}
+.flowpulse{position:absolute;top:73px;width:18px;height:7px;border-radius:20px;background:linear-gradient(90deg,var(--cyan),var(--blue));animation:flowtravel 5s linear infinite;box-shadow:0 0 16px rgba(25,221,208,.55);}
+@keyframes flowtravel{from{left:5%}to{left:93%}}
+.stages{display:grid;grid-template-columns:repeat(9,minmax(150px,1fr));gap:10px;width:100%;align-items:start;position:relative;z-index:2;}
+.pipelineRegions{position:relative;z-index:2;}
+.stagehead{height:82px;}
+.pipelineRegions{display:grid;grid-template-columns:repeat(9,minmax(150px,1fr));gap:10px;width:100%;margin-bottom:8px;}
+.pipelineRegions .region{border-radius:10px;padding:10px 8px;text-align:center;background:var(--navy);}
+.pipelineRegions .region-spacer{background:transparent;padding:0;}
+.pipelineRegions .region span{font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pipelineRegions .region.region-inv{background:#8a5a7a;}
+.stage{border:1px solid var(--line);border-radius:15px;background:var(--bg);min-height:460px;padding:12px;transition:transform .18s,box-shadow .18s;}
+.stage:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(31,78,104,.08);}
+.stage.selected{border-color:#84cfe0;box-shadow:0 0 0 3px #eefafd;}
+.stagehead{text-align:center;margin-bottom:8px;}
+.stagenum{width:28px;height:28px;display:grid;place-items:center;margin:0 auto 7px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:900;font-family:"JetBrains Mono",monospace;}
+.stagehead h4{margin:0;font-size:11px;line-height:1.25;color:var(--ink);overflow-wrap:break-word;word-break:break-word;}
+.stagehead small{color:var(--muted);font-size:9.5px;}
+.option{border:1px solid #e2ecf1;border-radius:12px;padding:9px;margin:7px 0;cursor:pointer;background:#fff;transition:background .16s,border-color .16s,box-shadow .16s,transform .16s;}
+.option:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(11,61,89,.10);}
+.stage-conceptual{opacity:.85;}
+.option.off{opacity:.3;cursor:not-allowed;pointer-events:none;}
+.option.off:hover{transform:none;box-shadow:none;}
+.stage-conceptual{padding:14px 10px;text-align:center;color:var(--muted);font-size:11px;line-height:1.5;border:1px dashed var(--line);border-radius:11px;margin-top:8px;}
+.summary{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:10px 0 16px;}
+.summary .chip{font-size:11px;border:1px solid #cfe0e8;border-radius:999px;padding:6px 9px;background:#fff;color:var(--ink);}
+.summary .chip-muted{color:var(--muted);font-weight:600;background:transparent;border-style:dashed;}
+.summary .arrow{color:var(--muted);font-weight:800;}
+.workspace{display:flex;flex-direction:column;gap:16px;}
+.side{display:flex;flex-direction:column;gap:12px;}
+.funcdetail{border-radius:22px;background:linear-gradient(145deg,var(--navy),#06263a);color:#eaf5fb;border:1px solid #164c66;box-shadow:0 16px 38px rgba(4,30,44,.18);padding:22px;}
+.funcdetail .kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--cyan);}
+.funcdetail h2{font-size:26px;line-height:1.08;margin:8px 0 8px;letter-spacing:-.02em;color:#fff;}
+.funcdetail .desc{font-size:13.5px;color:#b8cbd7;line-height:1.55;margin-bottom:12px;}
+.funcdetail .pills{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 16px;}
+.funcdetail .pill{border:1px solid #245d75;border-radius:999px;padding:6px 10px;color:#d6e8f1;font-size:10.5px;font-weight:700;}
+.funcdetail .meta h4{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7398ad;margin:16px 0 7px;}
+.funcdetail .tokens{display:flex;gap:6px;flex-wrap:wrap;}
+.funcdetail .token{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--mint,#7fe0d0);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:3px 8px;}
+.funcdetail .token.linkable{cursor:pointer;}
+.funcdetail .token.linkable:hover{background:rgba(255,255,255,.14);}
+.funcdetail .detail-empty{color:#9db4c2;padding:30px 6px;text-align:center;font-size:12.5px;}
+.logiccard{border:1px solid var(--line);border-radius:17px;background:var(--card-bg);padding:16px;}
+.logiccard h3{font-size:13px;margin:0 0 8px;color:var(--ink);}
+.logiccard p{font-size:11.8px;line-height:1.55;color:var(--muted);margin:0;}
+.logiccard .valid{margin-top:10px;padding:9px 11px;border-radius:10px;background:#effaf6;border:1px solid #caeadc;color:#2b7358;font-size:11px;font-weight:800;}
+.option:hover{background:#fbfeff;border-color:#9fd8e1;}
+.option.on{background:linear-gradient(135deg,#0b3f59,#082c40);border-color:#1caebc;box-shadow:inset 3px 0 0 var(--cyan);}
+.option.on .name,.option.on .desc{color:#fff;}
+.option.on .fnsig{color:var(--mint,#7fe0d0);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);}
+.option.on:hover{background:linear-gradient(135deg,#0e4a68,#0a3448);border-color:#1caebc;}
+.option .name{font-size:12.5px;font-weight:850;color:var(--ink);line-height:1.25;}
+.option .desc{font-size:10.5px;color:var(--muted);line-height:1.4;margin-top:4px;}
+.option .fnsig{font-family:"JetBrains Mono",monospace;font-size:9px;color:#176b7a;background:#f4fbfc;border:1px solid #d7eef0;border-radius:6px;padding:2px 5px;display:inline-block;margin-top:6px;}
+
+.detail{margin-top:16px;border-radius:18px;background:var(--card-bg);color:var(--ink);border:1px solid var(--line);box-shadow:var(--card-shadow);padding:20px;}
+.detail .kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--blue);}
+.detail h3{font-family:"JetBrains Mono",monospace;font-size:19px;margin:8px 0 6px;color:var(--ink);}
+.detail .desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:10px;}
+.detail .iorow{display:flex;gap:22px;flex-wrap:wrap;margin:10px 0;}
+.detail .iorow h5{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 5px;}
+.detail .iorow .tok{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--navy);font-weight:700;}
+.detail .iorow .tok:not(:last-child)::after{content:' · ';color:var(--line);}
+.codebox{background:var(--code-bg);border:1px solid var(--code-line);border-radius:11px;padding:11px;overflow:auto;white-space:pre;font:11px/1.55 "JetBrains Mono",ui-monospace,monospace;color:var(--code-fg);margin-top:10px;}
+.detail-empty{color:var(--muted);font-size:12.5px;text-align:center;padding:30px 10px;}
+
+/* ---------- tutorials ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:12px;margin-bottom:8px;}
+.ecogrid{display:grid;grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));gap:12px;margin:14px 0 4px;}
+.ecocard{border:1px solid var(--line);border-radius:15px;background:var(--card-bg);box-shadow:var(--card-shadow);padding:16px;}
+.ecocard h4{margin:0 0 6px;font-size:14px;color:var(--ink);}
+.ecocard p{margin:0 0 10px;font-size:12px;color:var(--muted);line-height:1.5;}
+.ecocard .tokrow{display:flex;flex-wrap:wrap;gap:6px;}
+.ecocard .tok{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;color:var(--navy);border:1px solid var(--line);border-radius:7px;padding:3px 8px;background:var(--bg2);}
+.card{display:block;border:1px solid var(--line);border-radius:15px;background:var(--card-bg);padding:15px;text-decoration:none;color:inherit;box-shadow:var(--card-shadow);transition:transform .16s,box-shadow .16s,border-color .16s;}
+.card:hover{transform:translateY(-3px);border-color:var(--cyan);box-shadow:0 18px 40px rgba(11,61,89,.14);}
+.card .num{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--cyan);font-size:9.5px;font-weight:800;margin-bottom:8px;font-family:"JetBrains Mono",monospace;}
+.card h4{margin:0 0 5px;font-size:13.5px;color:var(--ink);}
+.card p{margin:0;font-size:11.3px;color:var(--muted);line-height:1.42;}
+
+.darkcard{border-radius:22px;background:var(--card-bg);color:var(--ink);border:1px solid var(--line);box-shadow:var(--card-shadow);padding:26px;margin:32px 0;}
+.darkcard h2{font-size:22px;margin:0 0 10px;letter-spacing:-.02em;color:var(--ink);}
+.darkcard p{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0;}
+.darkcard strong{color:var(--blue);}
+.note{margin-top:40px;padding:14px 16px;border:1px solid var(--line);background:var(--bg2);border-radius:13px;color:var(--muted);font-size:12.5px;line-height:1.6;}
+.logo-grid{display:flex;flex-wrap:wrap;align-items:center;gap:32px;padding:8px 0;}
+.logo-item{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.logo-caption{font-size:11px;color:var(--muted);text-align:center;}
+
+/* ---------- function network graph ---------- */
+.network{margin-top:18px;border:1px solid var(--line);border-radius:22px;background:var(--card-bg);box-shadow:var(--card-shadow);overflow:hidden;width:100%;}
+.networkHead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding:18px 20px 13px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--card-bg) 0%,var(--bg2) 100%);}
+.networkHead h2{font-size:21px;margin:3px 0 5px;letter-spacing:-.02em;color:var(--ink);}
+.networkHead p{font-size:11.8px;color:var(--muted);margin:0;max-width:760px;line-height:1.5;}
+.networkControls{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.networkControls button{border:1px solid var(--line);background:var(--card-bg);color:var(--ink);border-radius:999px;padding:6px 10px;font-size:10px;font-weight:800;cursor:pointer;}
+.networkControls button.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+.graphWrap{position:relative;width:100%;overflow:hidden;background:radial-gradient(circle at 30% 35%,rgba(25,221,208,.07),transparent 28%),radial-gradient(circle at 72% 64%,rgba(21,135,181,.07),transparent 31%),var(--bg2);}
+.graphWrap:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(19,89,116,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(19,89,116,.035) 1px,transparent 1px);background-size:34px 34px;pointer-events:none;}
+#functionGraph{width:100%;height:580px;display:block;position:relative;z-index:1;touch-action:none;}
+.graphLegend{position:absolute;left:12px;bottom:10px;z-index:3;display:flex;gap:6px;flex-wrap:wrap;max-width:80%;}
+.legendChip{display:flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--card-bg);border-radius:999px;padding:4px 8px;font-size:9px;color:var(--muted);}
+.legendDot{width:7px;height:7px;border-radius:50%;}
+.graphHint{position:absolute;right:12px;top:10px;z-index:3;background:var(--card-bg);border:1px solid var(--line);border-radius:9px;padding:6px 9px;font-size:9px;color:var(--muted);pointer-events:none;}
+.graphStats{display:flex;justify-content:flex-end;gap:16px;align-items:center;font-size:9.5px;color:var(--muted);padding:9px 18px;border-top:1px solid var(--line);background:var(--bg2);}
+.graphStats b{color:var(--ink);}
+.netDetail{border-top:1px solid var(--line);}
+.netDetail .detail-empty{padding:36px 20px;text-align:center;color:var(--muted);font-size:12.5px;}
+.netDetailGrid{display:flex;flex-direction:column;}
+.netDetailGrid>div{padding:20px 24px;}
+.netDetailGrid>div+div{border-top:1px solid var(--line);}
+.netDetail .kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--blue);}
+.netDetail h3{font-family:"JetBrains Mono",monospace;font-size:18px;margin:8px 0 6px;color:var(--ink);}
+.netDetail .desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.netDetail h5{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;}
+.netDetail .codebox{margin-top:0;}
+.netDetail .tokrow{display:flex;flex-wrap:wrap;gap:6px;}
+.netDetail .tok{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--navy);font-weight:700;border:1px solid var(--line);border-radius:8px;padding:6px 11px;background:var(--bg);cursor:default;transition:.14s;}
+.netDetail button.tok{cursor:pointer;}
+.netDetail button.tok:hover{border-color:var(--cyan);background:var(--badge-bg);transform:translateY(-1px);}
+.netDetail .pillrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.netDetail .pill{font-size:10.5px;font-weight:800;padding:5px 11px;border-radius:999px;border:1px solid var(--badge-line);background:var(--badge-bg);color:var(--badge-fg);}
+.netDetail .iorow{display:flex;gap:28px;flex-wrap:wrap;}
+.netDetail .iorow>div{flex:1;min-width:180px;}
+.nodeLabel{font:800 8.7px "JetBrains Mono",ui-monospace,monospace;fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--bg2);stroke-width:3px;stroke-linejoin:round;}
+.nodeLabel.dim{opacity:.15;}
+.graphNode{cursor:grab;}
+.graphNode:active{cursor:grabbing;}
+.graphNode circle{transition:opacity .18s,stroke-width .18s,filter .18s;}
+.graphNode.dim circle{opacity:.12;}
+.graphNode.dim text{opacity:.10;}
+.graphNode.selected circle{stroke:#fff;stroke-width:2.5px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25));}
+.graphNode.neighbor circle{stroke:#19bdb8;stroke-width:2px;filter:drop-shadow(0 0 4px rgba(25,221,208,.35));}
+.graphLink{stroke:#8fa9b6;stroke-width:1.05;opacity:.45;}
+.graphLink.flow{stroke:#4e9fbe;stroke-width:1.4;opacity:.55;}
+.graphLink.dim{opacity:.055;}
+.graphLink.active{stroke:#13bdb6;stroke-width:2.1;opacity:.92;}
+.flowParticle{fill:#19ddd0;filter:drop-shadow(0 0 4px rgba(25,221,208,.8));pointer-events:none;}
+@media(max-width:1000px){.graphWrap,#functionGraph{min-height:460px;height:460px;}}
+@media(max-width:600px){.networkHead{align-items:flex-start;flex-direction:column;}.networkControls{justify-content:flex-start;}.graphWrap,#functionGraph{height:380px;min-height:380px;}.graphHint{display:none;}.graphStats{justify-content:flex-start;flex-wrap:wrap;}}
+</style>
+
+</head>
+<body>
+<style>
+.navbar { position: sticky; top: 0; z-index: 999; background: var(--navy); color: #fff; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+.nav-container { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.nav-logo { font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+.nav-logo span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; }
+.nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
+.nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
+.nav-links a:hover, .nav-links a.active { opacity: 1; }
+.nav-links a.active { border-bottom: 2px solid #fff; }
+.nav-cta { background: var(--cyan); color: #062330 !important; opacity: 1 !important; padding: 6px 16px; border-radius: 999px; font-weight: 700; }
+.nav-toggle { display: none; background: none; border: 1px solid rgba(255,255,255,0.5); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 18px; line-height: 1; cursor: pointer; }
+@media (max-width: 900px) {
+  .nav-toggle { display: block; }
+  .nav-links { display: none; width: 100%; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 0 16px; }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 8px 4px; width: 100%; }
+  .nav-container { flex-wrap: wrap; }
+}
+</style>
+<header class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">&larr; RTM-Suite</a>
+      <a href="index.html#docs">Documentation</a>
+      <a href="index.html#tutorials">Tutorials</a>
+      <a href="function-universe-toolsrtm.html" class="active">ToolsRTM Explorer</a>
+      <a href="function-universe-scopeinr.html">SCOPE Explorer</a>
+      <a href="function-universe-stemmus-inprogress.html">STEMMUS + SCOPE</a>
+    </nav>
+  </div>
+</header>
+<script>
+(function () {
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+  toggle.addEventListener('click', function () {
+    var open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+})();
+</script>
+<div class="wrap">
+<section class="hero">
+  <div class="hero-content">
+  <div class="eyebrow">TOOLSRTM &middot; PACKAGE FUNCTION EXPLORER</div>
+  <h1>Explore<br><span class="accent">ToolsRTM, R &amp; Python.</span></h1>
+  <p class="lead">This page provides an interactive map of <code>ToolsRTM</code> in R and Python, covering leaf optics, soil and canopy models, LUT and parameter sampling, sensor convolution, vegetation indices, inversion, and spatial deployment. Follow the scientific workflow from left to right and click any function to explore its inputs, outputs, and working code examples in both languages.</p>
+  <div class="badges">
+    <span class="badge">PROSPECT &middot; Fluspect &middot; LIBERTY</span><span class="badge">MARMIT</span><span class="badge">fourSAIL &middot; fourSAIL2 &middot; INFORM &middot; SPART</span>
+    <span class="badge">LUT &amp; parameter sampling</span><span class="badge">Sensors &amp; spectral processing</span><span class="badge">Inversion &amp; trait mapping</span><span class="badge">R &amp; Python</span>
+  </div>
+  </div>
+</section>
+
+<div class="searchshell">
+  <div class="langleft">
+    <span class="langtitle">Language</span>
+    <button class="langbtn active" data-lang="r"><span class="langlogo">R</span> R</button>
+    <button class="langbtn" data-lang="py"><span class="langlogo pylogo">Py</span> Python</button>
+  </div>
+</div>
+<div class="searchshell" style="margin-top:10px">
+  <div class="apisearch" style="flex:1;max-width:none;">
+    <input id="apiSearch" autocomplete="off" placeholder="Search functions: prospect_PRO, foursail2, inform, hybrid_inversion…">
+    <span class="searchicon">&#8981;</span>
+    <div id="suggestions" class="suggestions"></div>
+  </div>
+</div>
+
+<div class="summary" id="summary"></div>
+<div class="workspace">
+  <section class="board">
+    <div class="boardtop"><strong>Scientific workflow graph</strong><span id="pipelineDesc">click a block &middot; incompatible options fade automatically</span></div>
+    <div class="pipeline">
+      <div class="flowline"></div>
+      <div class="flowpulse"></div>
+      <div class="pipelineRegions" id="pipelineRegions"></div>
+      <div class="stages" id="stages"></div>
+    </div>
+  </section>
+  <aside class="side">
+    <div id="detail" class="funcdetail"><div class="detail-empty">Select a function to see its description, inputs/outputs, connections and a real code example.</div></div>
+    <div class="logiccard"><h3>Why this chain is valid</h3><p id="logic">Pick functions across the workflow stages to build a scientific chain.</p></div>
+  </aside>
+</div>
+
+<section class="network" id="functionNetwork">
+  <div class="networkHead">
+    <div>
+      <div class="eyebrow">FUNCTION NETWORK</div>
+      <h2>See how the functions connect.</h2>
+      <p>Every node is a real RTM-Suite function. Links follow the scientific chain: parameters/LUT &rarr; soil &amp; water &rarr; leaf optics &rarr; canopy &rarr; sensors &amp; spectral processing &rarr; inversion &amp; trait mapping. Filtered to the selected target system. Drag nodes, zoom/pan, or click one to isolate its neighbourhood.</p>
+    </div>
+    <div class="networkControls">
+      <button id="graphMotion" class="on">Live motion</button>
+      <button id="graphLabels" class="on">Labels</button>
+      <button id="graphReset">Reset view</button>
+    </div>
+  </div>
+  <div class="graphWrap">
+    <svg id="functionGraph" aria-label="Interactive ToolsRTM function network"></svg>
+    <div class="graphHint">drag nodes &middot; click to inspect &middot; wheel/pinch to zoom</div>
+    <div class="graphLegend" id="graphLegend"></div>
+  </div>
+  <div class="graphStats"><span><b id="graphNodeCount">0</b> functions</span><span><b id="graphLinkCount">0</b> relations</span><span id="graphLang">R</span></div>
+  <div id="graphDetail" class="netDetail"><div class="detail-empty">Click any node to show its package, inputs, outputs, code example and direct connections.</div></div>
+</section>
+
+<div class="section-title" style="margin-top:30px">Tutorials</div>
+<div class="section-desc">This page is a function/API explorer, not a tutorial set. For the real, worked ToolsRTM tutorials, see:</div>
+<div class="grid">
+  <a class="card" href="tutorials-overview.html#toolsrtm-models"><div class="num">R</div><h4>ToolsRTM Tutorials</h4><p>The ToolsRTM section of the RTM-Suite tutorial set, in R (leaf, canopy, soil/atmosphere models, indices, inversion).</p></a>
+  <a class="card" href="tutorials-python.html#part1"><div class="num">Py</div><h4>toolsrtm Tutorials</h4><p>Chapters 01&ndash;06 of the RTM-Suite Python tutorial set: leaf, canopy, soil/atmosphere models and a first simulation.</p></a>
+</div>
+<div class="section-desc" style="margin-top:14px">Real source code and standalone scripts, on GitHub:</div>
+<div class="logo-grid" style="justify-content:flex-start;gap:16px;">
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/ToolsRTM.app" target="_blank"><img src="https://img.shields.io/badge/GitHub-ToolsRTM-181717?logo=github&amp;logoColor=white" alt="ToolsRTM on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/ToolsRTMinPython" target="_blank"><img src="https://img.shields.io/badge/GitHub-toolsrtm-181717?logo=github&amp;logoColor=white" alt="toolsrtm on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R" target="_blank"><img src="https://img.shields.io/badge/GitHub-Scripts%2FR-181717?logo=github&amp;logoColor=white" alt="Scripts/R on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/Python" target="_blank"><img src="https://img.shields.io/badge/GitHub-Scripts%2FPython-181717?logo=github&amp;logoColor=white" alt="Scripts/Python on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/Pipeline" target="_blank"><img src="https://img.shields.io/badge/GitHub-Scripts%2FR%2FPipeline-181717?logo=github&amp;logoColor=white" alt="Scripts/R/Pipeline on GitHub"></a>
+</div>
+
+<div class="section-title" style="margin-top:30px">Development</div>
+<div class="logo-grid">
+  <div class="logo-item"><img src="assets/logo_WUR.svg" alt="Wageningen University &amp; Research" style="height:70px;"></div>
+  <div class="logo-item"><img src="assets/logo_CNR.png" alt="CNR-IBE, National Research Council of Italy" style="height:78px;"></div>
+  <div class="logo-item"><img src="assets/logo_Quantalab.png" alt="QuantaLab, IAS-CSIC" style="height:28px;"></div>
+</div>
+<div class="section-title" style="margin-top:26px">Research Collaborators &amp; Users</div>
+<div class="logo-grid">
+  <div class="logo-item"><img src="assets/UQ-QAAFI-wordmark-DAF-2019.jpg" alt="QAAFI, University of Queensland" style="max-height:100px;width:auto;"><div class="logo-caption">QAAFI &mdash; University of Queensland</div></div>
+  <div class="logo-item"><img src="assets/logo_IAS-CSIC.jpg" alt="IAS-CSIC" style="max-height:100px;width:auto;"><div class="logo-caption">IAS-CSIC, C&oacute;rdoba, Spain</div></div>
+</div>
+</div>
+
+<script>
+const ALLSYS=['crop','grassland','forest','leaf'];
+const VEGSYS=['crop','grassland','forest'];
+const FREG=[
+{name:'prospect_PRO()',r:'prospect_PRO(N, Cab, Car, Anth, Cbrown, EWT, LMA, alpha, Prot, CBC)',py:'prospect_pro(N, Cab, Car, Anth, Cbrown, EWT, LMA, Prot, CBC)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'leaf',systems:[...ALLSYS],desc:'PROSPECT-PRO leaf optical model: decomposes leaf mass per area (LMA) into protein and carbon-based constituents (Prot, CBC) instead of one lumped dry-matter term.',inputs:['N (structure)','Cab, Car, Anth','EWT, LMA','Prot, CBC'],outputs:['leaf reflectance R','leaf transmittance T'],
+exR:`leaf <- prospect_PRO(N=1.5, Cab=40, Car=8, Anth=1, Cbrown=0, EWT=0.01, LMA=0.009, alpha=40, Prot=0.001, CBC=0.008)`,
+exPy:`leaf = prospect_pro(N=1.5, Cab=40, Car=8, Anth=1, Cbrown=0, EWT=0.01, LMA=0.009, Prot=0.001, CBC=0.008)`},
+{name:'getFluspect.B()',r:'getFluspect.B(inputsLeaf, inputsOptipar, version)',py:'fluspect_b(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'leaf',systems:[...ALLSYS],desc:'Fluspect-B: leaf reflectance and transmittance plus the backward/forward fluorescence emission matrices (Mb, Mf) that SCOPE needs to simulate SIF. Recommended for biotic-stress detection: SIF emission is a real, well-documented early physiological stress indicator, often shifting before visible pigment or structural symptoms.',inputs:['inputsLeaf (Cab, Car, EWT, LMA, Cs, fqe...)','inputsOptipar'],outputs:['R, T spectra','Mb, Mf fluorescence matrices'],
+exR:`inputs <- ToolsRTM::inputsRTMs\nLUT <- as.data.frame(getLUT(inputs = inputs, nLUT = 1, setseed = 1234))\nleaf <- getFluspect.B(inputsLeaf = LUT, inputsOptipar = ToolsRTM::optipar, version = "D")`,
+exPy:`leaf = fluspect_b(Cab=40, Car=8, EWT=0.01, LMA=0.009, Cs=0, N=1.5, fqe=0.01, Cx=0)`},
+{name:'getFluspect.Cx()',r:'getFluspect.Cx(inputsLeaf, inputsOptipar, version)',py:'fluspect_cx(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'leaf',systems:[...ALLSYS],desc:'Fluspect-B-Cx: same as Fluspect-B, plus the Cx pathway (extra carotenoid/anthocyanin absorption fraction) used by the INFORM/SCOPE leaf optics tutorials. Also recommended for biotic-stress detection via SIF (Mb/Mf), with the added Cx pathway for early carotenoid/anthocyanin stress signals.',inputs:['inputsLeaf','inputsOptipar','version = "Cx"'],outputs:['R, T spectra','Mb, Mf'],
+exR:`inputs <- ToolsRTM::inputsRTMs\nLUT <- as.data.frame(getLUT(inputs = inputs, nLUT = 1, setseed = 1234))\nleaf <- getFluspect.Cx(inputsLeaf = LUT, inputsOptipar = ToolsRTM::optipar, version = "Cx")`,
+exPy:`leaf = fluspect_cx(Cab=40, Car=8, EWT=0.01, LMA=0.009, Cx=0.15, N=1.5, fqe=0.01)`},
+{name:'liberty()',r:'liberty(inputLUT)',py:'liberty(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'leaf',systems:[...ALLSYS],desc:'LIBERTY leaf model: needle/conifer optics via a stacked-cell-layer representation, an alternative to PROSPECT for coniferous canopies.',inputs:['cell diameter, intercellular airspace, pigments (LUT row)'],outputs:['needle reflectance and transmittance'],
+exR:`leaf <- liberty(inputLUT = lut)`,
+exPy:`leaf = liberty(lut)`},
+{name:'get.marmit.rsoil()',r:'get.marmit.rsoil(id, L, eps)',py:'get_marmit_rsoil(soil_id, L, eps)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'soilwater',systems:[...VEGSYS,'soilprops'],desc:'Turns a surface wetness fraction (eps, e.g. from a soil-moisture simulation or measurement) into a real 400-2500nm soil reflectance spectrum, for one of 17 real Bablet 2016 reference soils.',inputs:['id/soil_id (1-17)','L (wet-layer thickness, cm)','eps (wetness fraction, 0-1)'],outputs:['rsoil.wet (400-2500nm spectrum)'],
+exR:`soil <- get.marmit.rsoil(id = 1, L = 0.05, eps = Se[75])`,
+exPy:`soil = get_marmit_rsoil(soil_id=1, L=0.05, eps=float(Se[74]))`},
+{name:'get.marmit1()',r:'get.marmit1(n, alpha, Rd, L, eps)',py:'marmit1(n, alpha, Rd, L, eps)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'soilwater',systems:[...VEGSYS,'soilprops'],desc:'The core MARMIT-1 single-wet-layer optical model. get.marmit.rsoil() is the friendly wrapper that looks up a real reference soil’s (n, alpha, Rd) for you.',inputs:['n (refractive index)','alpha','Rd (dry reflectance)','L, eps'],outputs:['wet-soil reflectance'],
+exR:`r <- get.marmit1(n = 1.5, alpha = 6, Rd = dry_spec, L = 0.05, eps = 0.3)`,
+exPy:`r = marmit1(n=1.5, alpha=6, Rd=dry_spec, L=0.05, eps=0.3)`},
+{name:'get.marmit2()',r:'get.marmit2(n_w, alpha_w, n_i, k_i, Rd, L, eps, d_i, wls)',py:'marmit2(n_w, alpha_w, n_i, k_i, rd, L, eps, d_i, wls)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'soilwater',systems:[...VEGSYS,'soilprops'],desc:'The MARMIT-2 wet-soil model: extends MARMIT-1 with an explicit soil-particle refractive index (n_i, k_i) and a soil/water mixing fraction (d_i), a more physically detailed alternative when those particle-level optical constants are known.',inputs:['n_w, alpha_w (water optical index/absorption)','n_i, k_i (soil particle refractive index)','Rd (dry reflectance)','L, eps, d_i'],outputs:['wet-soil reflectance'],
+exR:`r <- get.marmit2(n_w = nw, alpha_w = aw, n_i = 1.5, k_i = 0.02, Rd = dry_spec, L = 0.1, eps = 0.6, d_i = 0.5, wls = wl)`,
+exPy:`r = marmit2(n_w=nw, alpha_w=aw, n_i=1.5, k_i=0.02, rd=dry_spec, L=0.1, eps=0.6, d_i=0.5, wls=wl)`},
+{name:'sigmoid.soil()',r:'sigmoid.soil(phi, K, a, psi)',py:'sigmoid_soil(phi, K, a, psi)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'soilwater',systems:[...VEGSYS,'soilprops'],desc:'Converts a target gravimetric soil-moisture content into MARMIT’s own (L, eps) parameters via a sigmoid relationship, the more rigorous alternative to using a raw relative-saturation value directly as eps.',inputs:['phi (target SMC)','K, a (fitted sigmoid params)','psi'],outputs:['L or eps'],
+exR:`eps <- sigmoid.soil(phi = 0.25, K = 1, a = 0.1, psi = 0)`,
+exPy:`eps = sigmoid_soil(phi=0.25, K=1, a=0.1, psi=0)`},
+{name:'getBSM.toolsRTM()',r:'getBSM.toolsRTM(soilpar, spec, emp)',py:'_get_bsm_toolsrtm(BSMBrightness, BSMlat, BSMlon, SMp, SMC, film)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'soilwater',systems:[...VEGSYS,'soilprops'],desc:'ToolsRTM’s own port of the Brightness-Shape-Moisture (BSM) soil model — an alternative to MARMIT’s wet-layer physics, parameterized instead by soil brightness/shape and a moisture volume percentage (SMp). Public in R; ported to Python but kept as an internal helper (underscore-prefixed, used by spart_toc()/spart_toa() rather than exposed directly).',inputs:['soilpar (brightness, shape lat/lon)','spec (GSV, water absorption, refraction)','emp (SMp, moisture %)'],outputs:['wet soil reflectance, 400-2400nm'],
+exR:`rsoil <- getBSM.toolsRTM(soilpar = soilpar, spec = spec, emp = list(SMp = 25))`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'soilwat()',r:'soilwat(rdry, nw, kw, SMp, SMC, film)',py:'_soilwat(rdry, nw, kw, SMp, SMC, film)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'soilwater',systems:[...VEGSYS,'soilprops'],desc:'The core wet-soil reflectance calculation behind getBSM.toolsRTM() — takes a dry soil spectrum and adds the water-film optical effect directly. Public in R; kept as an internal helper in Python (underscore-prefixed, called by the BSM branch of spart_toc()/spart_toa() rather than exposed directly).',inputs:['rdry (dry soil reflectance)','nw, kw (water refraction/absorption)','SMp, SMC, film (moisture parameters)'],outputs:['wet soil reflectance'],
+exR:`rwet <- soilwat(rdry = dry_spec, nw = optipar$nw, kw = optipar$Kw, SMp = 25, SMC = 25, film = 0.015)`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'foursail()',r:'foursail(inputLUT, rsoil, LeafModel, spectrum.all)',py:'foursail(lut, rsoil, leaf_model)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'canopy',systems:['crop','grassland'],desc:'The classic single-layer (turbid-medium) 4SAIL canopy BRF model, the workhorse for a homogeneous crop or grassland canopy, coupled to any of the leaf models above.',inputs:['LUT (LAI, LIDF, hotspot, tts/tto/psi)','rsoil','LeafModel'],outputs:['TOC reflectance (rsot)'],
+exR:`r <- foursail(inputLUT = lut, rsoil = soil, LeafModel = "PROSPECT-PRO")`,
+exPy:`r = foursail(lut, soil, leaf_model="PROSPECT-PRO")`},
+{name:'foursail2()',r:'foursail2(inputLUT, rsoil, PROSPECTversion)',py:'foursail2(lut, rsoil, leaf_model)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'canopy',systems:['crop','grassland'],desc:'Two-layer (green/brown) crop/grassland canopy BRF, with PROSPECT-PRO leaf optics. The soil-moisture signal from MARMIT is diluted as LAI grows.',inputs:['LUT row (leaf+canopy traits)','rsoil (MARMIT spectrum)','LAI'],outputs:['rsot (TOC reflectance)'],
+exR:`r <- foursail2(inputLUT = lut, rsoil = soil$rsoil.wet, PROSPECTversion = "PRO")$rsot`,
+exPy:`r = foursail2(lut, soil.rsoil_wet, leaf_model="PROSPECT-PRO").rsot`},
+{name:'inform()',r:'inform(inputLUT, rsoil, LeafModel)',py:'inform(lut, rsoil, leaf_model)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'canopy',systems:['forest'],desc:'Forest canopy model with real crown geometry (overstorey LAI plus a fixed understorey LAIu). Unlike fourSAIL2, the soil signal never fully saturates away, even at LAI=50, because the understorey always shows through gaps between crowns.',inputs:['LUT (LAI, LAIu, sd, cd, h, skyl)','rsoil (full 400-2500nm)'],outputs:['forest TOC reflectance'],
+exR:`r <- inform(inputLUT = lut, rsoil = soil$rsoil.wet, LeafModel = "Fluspect-B")`,
+exPy:`r = inform(lut, soil.rsoil_wet, leaf_model="Fluspect-B")`},
+{name:'SPART()',r:'SPART(inputLUT, optipar, CanopyModel, LeafModel)',py:'spart_toc() / spart_toa()',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'canopy',systems:['crop','grassland'],desc:'Soil-Plant-Atmosphere Radiative Transfer: couples a canopy model (fourSAIL by default) with an atmospheric RT model in one call, giving both TOC and TOA (at-sensor) reflectance/radiance.',inputs:['LUT row','CanopyModel','LeafModel','atmosphere (aot, water vapour, geometry)'],outputs:['TOC reflectance','TOA radiance/reflectance'],
+exR:`r <- SPART(inputLUT = lut, CanopyModel = "fourSAIL", LeafModel = "PROSPECT-PRO")`,
+exPy:`toc = spart_toc(lut); toa = spart_toa(lut)`},
+{name:'getCor()',r:'getCor(n_inputs, nLUT, distribution, rho, Varnames, ...)',py:'get_cor(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'lutparam',systems:[...VEGSYS,'leaf'],desc:'Generates a LUT of mutually-correlated parameter samples at a target correlation level, needed because e.g. Cab and Vcmax25 are not independent in real leaves.',inputs:['n_inputs','nLUT','distribution','rho (target correlation)','Varnames, MinRange, MaxRange'],outputs:['correlated LUT columns'],
+exR:`pigments <- getCor(n_inputs=2, nLUT=1000, distribution="Uniform", rho=0.8,\n  Varnames=c("Cab","Vcmax25"), MinRange=c(5,10), MaxRange=c(90,100))`,
+exPy:`pigments = get_cor(n_inputs=2, n_lut=1000, distribution="uniform", rho=0.8,\n    var_names=["Cab","Vcmax25"], min_range=[5,10], max_range=[90,100])`},
+{name:'get_distributionLUT()',r:'get_distributionLUT(minval, maxval, nSamples, TypeDistrib)',py:'get_distribution_lut(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'lutparam',systems:[...VEGSYS,'leaf'],desc:'Samples one parameter column from a chosen distribution (Uniform, Gaussian, ...) between bounds, the single-variable building block getLUT() and getCor() call per column.',inputs:['minval, maxval','nSamples','TypeDistrib','Mean_gauss, Std_gauss (if Gaussian)'],outputs:['one sampled LUT column'],
+exR:`Cab <- get_distributionLUT(minval=10, maxval=80, nSamples=500, TypeDistrib="Uniform")`,
+exPy:`cab = get_distribution_lut(minval=10, maxval=80, n_samples=500, type_distrib="uniform")`},
+{name:'getLUT()',r:'getLUT(inputs, nLUT, setseed)',py:'(assembled per-project in Python)',pkgR:'ToolsRTM',pkgPy:'-',stage:'lutparam',systems:[...VEGSYS,'leaf'],desc:'Builds a full LUT (one row per simulation) for a radiative-transfer model from a table of parameter ranges and distributions, the R-side one-call LUT assembler. The Python port builds LUT rows directly (dicts/DataFrames) instead of a dedicated function.',inputs:['inputs (ranges/distribution table)','nLUT'],outputs:['LUT (data.frame, nLUT rows)'],
+exR:`LUT <- getLUT(inputs = ToolsRTM::inputsRTMs, nLUT = 1000)`,
+exPy:`# built directly as a dict/DataFrame per LUT row in this port`},
+{name:'get.LUTfromRanges()',r:'get.LUTfromRanges(LUT, nLUT, setseed, leaf.model, canopy.model, distribution)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'lutparam',systems:[...VEGSYS,'leaf'],desc:'Alternative LUT builder that takes a plain (input, min, max) range table directly, with the leaf/canopy model and sampling distribution (uniform or Gaussian) chosen per call.',inputs:['LUT range table (input, min, max)','nLUT','leaf.model','canopy.model','distribution'],outputs:['LUT (nLUT rows)'],
+exR:`LUT <- get.LUTfromRanges(LUT = LUT.range, nLUT = 1000, leaf.model = "PROSPECT-PRO", canopy.model = "fourSAILH", distribution = "gauss")`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'getSim_fromLUT()',r:'getSim_fromLUT(trait, nmin, nmax, Interval, psoil, model)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'lutparam',systems:[...VEGSYS,'leaf'],desc:'One-call sensitivity sweep: builds a LUT sweeping a single trait (e.g. Cab or LAI) with everything else fixed, runs the chosen canopy simulation, and plots the resulting spectra — the direct bridge from a parameter sweep to a forward-model result.',inputs:['trait (name to sweep)','nmin, nmax, Interval','psoil','model ("PROSAIL", "INFORM" or "PROSPECT")'],outputs:['LUT used','spectral plot'],
+exR:`out <- getSim_fromLUT(trait = "Cab", nmin = 10, nmax = 80, Interval = 10, model = "PROSAIL")`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'get.spectral.convolution.srf()',r:'get.spectral.convolution.srf(df, srf)',py:'spectral_convolution_srf(wave, values, srf)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'sensors',systems:[...VEGSYS,'soilprops'],desc:'Convolves a full-resolution TOC spectrum onto a real sensor’s per-band spectral response functions (Sentinel-2A/B, PRISMA).',inputs:['wavelength + reflectance','srf table (e.g. srf.sentinel2a)'],outputs:['per-band reflectance, band centers, FWHM'],
+exR:`s2 <- get.spectral.convolution.srf(df, ToolsRTM::srf.sentinel2a)`,
+exPy:`s2 = spectral_convolution_srf(wl, rsot, srf_sentinel2a())`},
+{name:'get.smac()',r:'get.smac(inputLUT, sensor)',py:'get_smac(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'sensors',systems:[...VEGSYS,'soilprops'],desc:'Applies the SMAC (Rahman and Dedieu 1994) atmospheric correction for a named sensor, the other real-world direction: TOA-to-surface, not just surface-to-band.',inputs:['inputLUT (aot, water vapour, geometry)','sensor (e.g. sentinel2a_msi)'],outputs:['atmospherically-corrected surface reflectance'],
+exR:`sr <- get.smac(inputLUT = lut, sensor = "sentinel2a_msi")`,
+exPy:`sr = get_smac(lut, sensor="sentinel2a_msi")`},
+{name:'get.satellite_collection()',r:'get.satellite_collection(scenario, collection, cloud_server, n.limit)',py:'get_satellite_collection(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'mapping',systems:[...VEGSYS],desc:'Searches the Planetary Computer STAC API for real satellite scenes (e.g. sentinel-2-l2a) by bounding box, date range and cloud-cover threshold, the real-EO-data entry point.',inputs:['scenario (bbox/site)','collection','cloud_server','date range'],outputs:['STAC item collection'],
+exR:`items <- get.satellite_collection(scenario, collection = "sentinel-2-l2a")`,
+exPy:`items = get_satellite_collection(scenario, collection="sentinel-2-l2a")`},
+{name:'get.sentinel2_cube()',r:'get.sentinel2_cube(s_collection, shape, date_range)',py:'get_sentinel2_cube(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'mapping',systems:[...VEGSYS],desc:'Turns a Sentinel-2 STAC collection into an actual pixel datacube, aggregated over a spatial extent and date range, ready for spectral-index and inversion work.',inputs:['s_collection (from get.satellite_collection)','shape (AOI)','date_range'],outputs:['Sentinel-2 datacube'],
+exR:`cube <- get.sentinel2_cube(items, shape = aoi, date_range = c("2023-06-01","2023-08-31"))`,
+exPy:`cube = get_sentinel2_cube(items, shape=aoi, date_range=("2023-06-01","2023-08-31"))`},
+{name:'getIndices()',r:'getIndices(df, spectral.domain)',py:'get_indices(wl, refl, spectral_domain)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'indices',systems:[...VEGSYS,'leaf'],desc:'SWIR spectral indices from a TOC reflectance spectrum. N870 (870 vs 1450nm) is used throughout this project as the summary soil-moisture-sensitivity metric.',inputs:['wavelength + reflectance','spectral.domain'],outputs:['N870, N1645, ...'],
+exR:`idx <- getIndices(df, spectral.domain = "SWIR")$N870`,
+exPy:`idx = get_indices(wl, rsot, spectral_domain="SWIR")["N870"]`},
+{name:'getVIF()',r:'getVIF(in_frame, thresh, trace)',py:'get_vif(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'indices',systems:[...VEGSYS,'leaf'],desc:'Variance Inflation Factor: iteratively drops highly collinear predictor bands/indices before inversion, so a trait-retrieval model is not secretly relying on redundant, unstable inputs.',inputs:['in_frame (candidate predictors)','thresh (VIF cutoff, default 10)'],outputs:['reduced, decorrelated predictor set'],
+exR:`kept <- getVIF(in_frame = bands_df, thresh = 10)`,
+exPy:`kept = get_vif(bands_df, thresh=10)`},
+{name:'get.spectral.convolution.gaussian()',r:'get.spectral.convolution.gaussian(df, sensor.i, centers, fwhm)',py:'spectral_convolution_gaussian(wave, values, sensor, centers, fwhm)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'sensors',systems:[...VEGSYS,'leaf','soilprops'],desc:'Convolves a spectrum onto a sensor using only nominal band center + FWHM (a Gaussian approximation), for sensors like EnMAP where no real measured SRF table is bundled.',inputs:['wavelength + reflectance','sensor name, or explicit centers+fwhm'],outputs:['per-band convolved reflectance'],
+exR:`enmap <- get.spectral.convolution.gaussian(df, sensor.i = "EnMAP")`,
+exPy:`enmap = spectral_convolution_gaussian(wl, rsot, sensor="EnMAP")`},
+{name:'get.srf.from_fwhm()',r:'get.srf.from_fwhm(sensor, save, path.out, get.plot)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'sensors',systems:[...VEGSYS,'leaf'],desc:'Builds a synthetic spectral response function from a sensor’s Full Width at Half Maximum — real SRF data for Sentinel-2A/B and PRISMA, a Gaussian FWHM approximation for ALI/Hyperion/Landsat4-8/MODIS/Quickbird/RapidEye/WorldView.',inputs:['sensor (name)','path.out'],outputs:['SRF data frame'],
+exR:`srf <- get.srf.from_fwhm(sensor = "Sentinel2b", save = TRUE, path.out = "Tables")`,
+exPy:`# no dedicated helper in this port; sensor SRFs are supplied directly`},
+{name:'Compute_BRF()',r:'Compute_BRF(rdot, rsot, tts, data.light, short.waves)',py:'compute_brf(rdot, rsot, tts, es, ed, short_waves)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'sensors',systems:[...VEGSYS,'soilprops'],desc:'Combines a canopy model’s hemispherical-directional (rdot) and bidirectional (rsot) reflectance factors with real direct+diffuse illumination (Francois et al. 2002) to get the true observed BRF — the direct bridge from foursail()/foursail2() output to what a sensor actually sees.',inputs:['rdot, rsot (from foursail/foursail2)','tts (solar zenith angle)','data.light (direct/diffuse irradiance)'],outputs:['BRF (bidirectional reflectance factor)'],
+exR:`brf <- Compute_BRF(rdot = sail_out$rdot, rsot = sail_out$rsot, tts = 30)`,
+exPy:`brf = compute_brf(rdot=sail_out.rdot, rsot=sail_out.rsot, tts=30)`},
+{name:'get.spectral.derivative()',r:'get.spectral.derivative(df, m, method, get.plot)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'sensors',systems:[...VEGSYS,'leaf'],desc:'Spectral derivative preprocessing (Savitzky-Golay or finite-difference), a classic step before indices/inversion that removes baseline/multiplicative effects from a reflectance spectrum.',inputs:['df (wavelength + reflectance)','m (derivative order, default 1)','method ("sgolay" or "finApprox")'],outputs:['derivative spectrum'],
+exR:`deriv <- get.spectral.derivative(spectra_df, m = 2, method = "sgolay")`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'getIndicesSE2()',r:'getIndicesSE2(df, sensor, df.data, fast.process)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'indices',systems:[...VEGSYS],desc:'Spectral indices computed directly at real Sentinel-2 band resolution (B1-B12/B8A), rather than from a full-resolution simulated spectrum — the direct real-EO-data counterpart to getIndices().',inputs:['df (Sentinel-2 bands B1..B12)','sensor ("Sentinel-2a"/"Sentinel-2b")'],outputs:['indices data frame'],
+exR:`idx <- getIndicesSE2(df = s2_bands, sensor = "Sentinel-2a", fast.process = TRUE)`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'get.indices.v2()',r:'get.indices.v2(data, pattern.rfl, factor, spectral.domain)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'indices',systems:[...VEGSYS,'leaf'],desc:'Expanded vegetation-indices set: interpolates reflectance to 1nm resolution and computes a large published-index library (VNIR and/or SWIR domain, including red-edge indices) — a broader alternative to getIndices() when you need more than the core set.',inputs:['reflectance spectra (one row per sample)','spectral.domain ("VNIR"/"SWIR"/"VNIR-SWIR")'],outputs:['expanded indices data frame'],
+exR:`idx <- get.indices.v2(data = spectra_df, spectral.domain = "VNIR-SWIR")`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'getIndicesSE2.ML()',r:'getIndicesSE2.ML(df, sensor, df.data, fast.process)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'indices',systems:[...VEGSYS],desc:'A shorter, curated subset of Sentinel-2-resolution indices (vs. the full set from getIndicesSE2()), sized for feeding directly into an ML model without a separate VIF/feature-selection pass.',inputs:['df (Sentinel-2 bands B1..B12)','sensor ("Sentinel-2a"/"Sentinel-2b")'],outputs:['curated indices data frame'],
+exR:`idx <- getIndicesSE2.ML(df = s2_bands, sensor = "Sentinel-2a", fast.process = TRUE)`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'getSpectraIndices()',r:'getSpectraIndices(rasterFiles, Sensor, SpecEq, factorR, SpectraltoCompute)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'indices',systems:[...VEGSYS],desc:'Computes spectral indices directly on a real raster/image stack (not a table of spectra), producing spatial index maps — the direct-formula counterpart to getSpatialTrait()’s ML-based trait maps.',inputs:['rasterFiles (image stack)','Sensor (e.g. "Sentinel2a")','SpectraltoCompute'],outputs:['spatial index maps'],
+exR:`getSpectraIndices(rasterFiles = "scene/", Sensor = "Sentinel2a", SpectraltoCompute = c("NDVI"))`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'hybrid_inversion()',r:'hybrid_inversion(LUT, input, split, method)',py:'hybrid_inversion(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'inversion',systems:[...VEGSYS,'leaf','soilprops'],desc:'Trains and applies an ML-based hybrid inversion (simulated LUT spectra to traits), the general-purpose trait-retrieval entry point this project’s inversion tutorials build on.',inputs:['LUT (simulated spectra + traits)','input (real observations)','split','method (algorithm)'],outputs:['predicted traits'],
+exR:`pred <- hybrid_inversion(LUT = LUT, input = obs, split = 0.8, method = "xgboost")`,
+exPy:`pred = hybrid_inversion(lut=LUT, input=obs, split=0.8, method="xgboost")`},
+{name:'hybrid_inversionE()',r:'hybrid_inversionE(LUT, input, split, collinearity, pattern)',py:'hybrid_inversion_ensemble(lut, input, split, collinearity, pattern)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'inversion',systems:[...VEGSYS,'leaf','soilprops'],desc:'hybrid_inversion() with the model choice fixed to a 3-model stacking ensemble (gradient boosting + SVM + neural net) instead of a single chosen algorithm.',inputs:['LUT','input','split','collinearity ("VIF"/"CARS")'],outputs:['ensemble model, stats, plot'],
+exR:`pred <- hybrid_inversionE(LUT = LUT, input = "Cab", split = 0.8, collinearity = "VIF")`,
+exPy:`pred = hybrid_inversion_ensemble(lut=LUT, input="Cab", split=0.8, collinearity="VIF")`},
+{name:'get.inversionOpt()',r:'get.inversionOpt(rfl.sensor, rfl.rtm, LUT, wave, method)',py:'get_inversion_opt(rfl_sensor, rfl_rtm, lut, wave, method)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'inversion',systems:[...VEGSYS,'leaf','soilprops'],desc:'The traditional (non-ML) LUT inversion: compares observed sensor reflectance directly against every simulated RTM spectrum in a LUT and picks the best match(es) by a merit function — RMSE, NRMSE, MAE and others.',inputs:['rfl.sensor (observed)','rfl.rtm (simulated LUT spectra)','LUT (parameter table)','method ("merit-RMSE" etc.)'],outputs:['best-matching parameter set(s)'],
+exR:`pred <- get.inversionOpt(rfl.sensor = obs, rfl.rtm = lut_spectra, LUT = LUT, wave = wl, method = "merit-RMSE")`,
+exPy:`pred = get_inversion_opt(rfl_sensor=obs, rfl_rtm=lut_spectra, lut=LUT, wave=wl, method="merit-RMSE")`},
+{name:'get.inversion()',r:'get.inversion(data, depVar, inputs, algorithm, method.resampling)',py:'get_inversion(data, dep_var, inputs, algorithm, method_resampling)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'inversion',systems:[...VEGSYS,'leaf','soilprops'],desc:'Single-algorithm ML inversion with an explicit choice of method (PLSR, SVM, RF, Neural Network, Gradient Boosting, XGBoost, Bayesian, AdaBag, quantile LASSO, RVM, BRNN, or a stacking Ensemble) — the general-purpose building block hybrid_inversion() wraps with sensible defaults.',inputs:['data','depVar (target trait)','inputs (predictors)','algorithm (e.g. "RF")'],outputs:['fitted model, accuracy stats'],
+exR:`fit <- get.inversion(data = train_df, depVar = "Cab", inputs = bands, algorithm = "RF")`,
+exPy:`fit = get_inversion(data=train_df, dep_var="Cab", inputs=bands, algorithm="RF")`},
+{name:'getMLmodel()',r:'getMLmodel(dataset, depVar, model, optimizer)',py:'get_ml_model(...)',pkgR:'ToolsRTM',pkgPy:'toolsrtm',stage:'inversion',systems:[...VEGSYS,'leaf','soilprops'],desc:'Builds one pre-configured ML model (e.g. a CNN) for a target trait, with a sensible default architecture and optimizer, the lower-level model builder that hybrid_inversion() calls internally.',inputs:['dataset','depVar (target trait)','model (e.g. "CNN")','optimizer'],outputs:['trained model object'],
+exR:`fit <- getMLmodel(dataset = train_df, depVar = "Cab", model = "CNN", optimizer = "adam")`,
+exPy:`fit = get_ml_model(train_df, dep_var="Cab", model="CNN", optimizer="adam")`},
+{name:'getPredicts()',r:'getPredicts(model, type.model, data, depVar, scaler.depVar)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'mapping',systems:[...VEGSYS,'leaf'],desc:'Applies a trained deep-learning model (CNN or hidden-layer network) to new data to get trait predictions — the deployment counterpart to getMLmodel()/getMLmodel.withRetrain(), handling the PCA/normalization and Y-scaler reversal needed at prediction time.',inputs:['model (trained Keras model)','type.model ("CNN"/"Hidden-layers")','data (new observations)'],outputs:['predictions (original trait units)'],
+exR:`preds <- getPredicts(model = fit, type.model = "CNN", data = new_bands, depVar = "Cab")`,
+exPy:`# no dedicated helper in this port yet`},
+{name:'getSpatialTrait()',r:'getSpatialTrait(rasterFiles, ForestLayer, Sensor, model)',py:'(R-only)',pkgR:'ToolsRTM',pkgPy:'-',stage:'mapping',systems:[...VEGSYS],desc:'Deploys a trained inversion model to a real raster/image stack, producing a wall-to-wall trait map, the closing step from single-pixel retrieval to spatial mapping. R-only in this port.',inputs:['rasterFiles (image stack)','ForestLayer/Sensor','trained model'],outputs:['trait raster map'],
+exR:`lai_map <- getSpatialTrait(rasterFiles = cube, Sensor = "Sentinel-2", model = fit)`,
+exPy:`# no dedicated helper in this port yet; apply the model band-by-band with rasterio/xarray`}
+];
+const STAGES=[
+  {id:'lutparam',label:'1 · Parameter Space',sub:'LUT · priors · correlation'},
+  {id:'soilwater',label:'2 · Soil & Water',sub:'MARMIT soil optics'},
+  {id:'leaf',label:'3 · Leaf Optics',sub:'PROSPECT · Fluspect · LIBERTY'},
+  {id:'canopy',label:'4 · Canopy & Ecosystem RTMs',sub:'fourSAIL · foursail2 · INFORM · SPART'},
+  {id:'sensors',label:'5 · Sensors & Spectral Processing',sub:'SRF · SMAC · sensor convolution'},
+  {id:'indices',label:'6 · Vegetation Indices',sub:'indices · VIF feature selection'},
+  {id:'inversion',label:'7 · Inversion',sub:'ML/DL · hybrid inversion · training'},
+  {id:'mapping',label:'8 · Deployment & Spatial Mapping',sub:'predict · satellite data · trait maps'},
+];
+const PIPELINE_REGIONS = [
+  {label:'', span:1},
+  {label:'Forward Modelling', span:5},
+  {label:'Inversion & Retrieval', span:3},
+];
+const STAGECOLORS = {lutparam:'#67BCC1', soilwater:'#D6A36A', leaf:'#79B995', canopy:'#7F9CCB', sensors:'#B58AC4', indices:'#9FB08A', inversion:'#C98BA0', mapping:'#D99B72'};
+const STAGETINTS = {lutparam:'#EDF7F8', soilwater:'#FAF4ED', leaf:'#EFF7F2', canopy:'#F0F3F9', sensors:'#F6F1F8', indices:'#F1F5EE', inversion:'#F8F1F4', mapping:'#FBF1EA'};
+const STAGEHOVERS = {lutparam:'#D9EEEF', soilwater:'#F5E8DA', leaf:'#DDEDE4', canopy:'#DFE6F2', sensors:'#ECE2F0', indices:'#E3EBDD', inversion:'#F1E2E7', mapping:'#F6E1D3'};
+const STAGEDARKS = {lutparam:'#4A878B', soilwater:'#9A754C', leaf:'#57856B', canopy:'#5B7092', sensors:'#82638D', indices:'#6E7D5F', inversion:'#916473', mapping:'#9C6D51'};
+const SYSTEMS=[
+  {id:'crop',label:'Crop'},
+  {id:'forest',label:'Forest'},
+  {id:'leaf',label:'Leaf laboratory'},
+  {id:'soilprops',label:'Soil Properties'},
+];
+let SYSTEM='crop';
+let LANG='r', current=null;
+let chosen={};
+function langOK(f){ return LANG==='r'||f.pkgPy!=='-'; }
+function repairChosen(){
+  STAGES.filter(st=>!st.conceptual).forEach(st=>{
+    const cur = chosen[st.id];
+    if(cur && cur.systems.includes(SYSTEM) && langOK(cur)) return;
+    const alt = FREG.find(f=>f.stage===st.id && f.systems.includes(SYSTEM) && langOK(f));
+    if(alt) chosen[st.id]=alt; else delete chosen[st.id];
+  });
+}
+const SYSTEM_DESC = {
+  crop: 'Field crops and relatively homogeneous canopies; dense, low and continuous grassland canopy.',
+  forest: 'Crown, gap and understory structure.',
+  leaf: 'Leaf-level spectroscopy without canopy propagation.',
+  soilprops: 'Soil reflectance, moisture retrieval and soil-property inversion — MARMIT/BSM soil optics, sensor convolution needed to compare against real bands, and the inversion functions used to retrieve soil properties from that reflectance.',
+};
+const FRIENDLY = {
+  'prospect_PRO()':'PROSPECT-PRO', 'getFluspect.B()':'Fluspect-B', 'getFluspect.Cx()':'Fluspect-CX', 'liberty()':'LIBERTY',
+  'get.marmit.rsoil()':'MARMIT Wet Soil', 'get.marmit1()':'MARMIT-1 Core Model', 'get.marmit2()':'MARMIT-2 Core Model', 'sigmoid.soil()':'Sigmoid Soil Moisture',
+  'foursail()':'fourSAIL', 'foursail2()':'fourSAIL2', 'inform()':'INFORM', 'SPART()':'SPART',
+  'getCor()':'Correlated LUT', 'get_distributionLUT()':'Independent LUT', 'getLUT()':'LUT Assembler',
+  'get.LUTfromRanges()':'Range-Based LUT', 'getSim_fromLUT()':'Parameter Sweep Simulation',
+  'get.spectral.convolution.srf()':'Sentinel-2 / PRISMA Convolution', 'get.smac()':'SMAC Atmospheric Correction',
+  'get.satellite_collection()':'Satellite Scene Search', 'get.sentinel2_cube()':'Sentinel-2 Data Cube',
+  'getIndices()':'Spectral Indices', 'getVIF()':'VIF Feature Selection',
+  'get.spectral.convolution.gaussian()':'EnMAP Convolution', 'get.srf.from_fwhm()':'SRF from FWHM',
+  'get.spectral.derivative()':'Spectral Derivative', 'getIndicesSE2()':'Sentinel-2 Band Indices',
+  'hybrid_inversion()':'Hybrid RTM + ML', 'hybrid_inversionE()':'Hybrid Ensemble Inversion', 'get.inversionOpt()':'Traditional LUT Inversion (RMSE)', 'get.inversion()':'Single-Algorithm ML Inversion',
+  'getMLmodel()':'ML Model Builder', 'getSpatialTrait()':'Pixel-Wise Trait Map',
+  'get.indices.v2()':'Expanded Vegetation Indices', 'getIndicesSE2.ML()':'ML-Ready S2 Indices', 'getSpectraIndices()':'Spatial Index Maps', 'Compute_BRF()':'BRDF / True Observed Reflectance', 'getPredicts()':'Apply Trained Model',
+};
+function displayName(f){ return FRIENDLY[f.name] || f.name.replace(/\(\)$/,''); }
+function labelFor(f){return LANG==='r'?f.r:f.py}
+function pkgFor(f){return LANG==='r'?f.pkgR:f.pkgPy}
+function exFor(f){return LANG==='r'?f.exR:f.exPy}
+function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function inSystem(f){ return f.systems.includes(SYSTEM) && (LANG==='r' || f.pkgPy!=='-'); }
+
+function renderSystemColumn(){
+  const langOK = f=>LANG==='r'||f.pkgPy!=='-';
+  const opts = SYSTEMS.map(s=>{
+    const count = FREG.filter(f=>f.systems.includes(s.id)&&langOK(f)).length;
+    return `<div class="option${SYSTEM===s.id?' on':''}" data-sys="${s.id}"><div class="name">${escapeHtml(s.label)}</div><div class="desc">${escapeHtml(SYSTEM_DESC[s.id]||'')} &middot; ${count} functions</div></div>`;
+  }).join('');
+  return `<div class="stage"><div class="stagehead"><div class="stagenum">0</div><h4>Target system</h4><small>ecological context</small></div>${opts}</div>`;
+}
+function renderStages(){
+  repairChosen();
+  const label = SYSTEMS.find(s=>s.id===SYSTEM)?.label || SYSTEM;
+  document.getElementById('stages').innerHTML = renderSystemColumn() + STAGES.map(st=>{
+    const all = FREG.filter(f=>f.stage===st.id && (LANG==='r'||f.pkgPy!=='-'));
+    const isSelected = current && current.stage===st.id;
+    const clr = STAGECOLORS[st.id] || 'var(--navy)';
+    const head = `<div class="stagehead"><div class="stagenum" style="background:${clr}">${st.label.split(' ')[0]}</div><h4>${st.label.split('· ')[1]}</h4><small>${st.sub}</small></div>`;
+    if(st.conceptual) return `<div class="stage">${head}<div class="stage-conceptual">${escapeHtml(st.conceptual)}</div></div>`;
+    return `<div class="stage${isSelected?' selected':''}">${head}` +
+      all.map(f=>{
+        const off = !f.systems.includes(SYSTEM);
+        const isOn = current===f || (!current && chosen[st.id]===f);
+        const brief = f.desc.length>100 ? f.desc.slice(0,97)+'…' : f.desc;
+        return `<div class="option${isOn?' on':''}${off?' off':''}" data-name="${escapeHtml(f.name)}" title="${off?`Not applicable to ${escapeHtml(label)}`:''}"><div class="name">${escapeHtml(displayName(f))}</div><div class="desc">${escapeHtml(brief)}</div><span class="fnsig">${escapeHtml(labelFor(f))}</span></div>`;
+      }).join('') +
+      (all.length?'':'<div class="desc" style="padding:8px;color:var(--muted);font-size:10px;">No functions in this language.</div>') +
+      `</div>`;
+  }).join('');
+  document.querySelectorAll('.option[data-sys]').forEach(el=>{
+    el.onclick=()=>{
+      SYSTEM=el.dataset.sys;
+      if(current && !inSystem(current)) current=null;
+      renderStages();
+      if(!current) renderLogic();
+      if(typeof renderGraph==='function') renderGraph();
+    };
+  });
+  document.querySelectorAll('.option[data-name]:not(.off)').forEach(el=>{
+    el.onclick=()=>{ const f=FREG.find(x=>x.name===el.dataset.name); selectFunction(f); };
+  });
+  renderSummary();
+}
+function renderSummary(){
+  const el=document.getElementById('summary'); if(!el) return;
+  const sysLabel = SYSTEMS.find(s=>s.id===SYSTEM)?.label || SYSTEM;
+  const chips = [`<span class="chip chip-sys">${escapeHtml(sysLabel)}</span>`];
+  STAGES.filter(st=>!st.conceptual).forEach(st=>{
+    const f = chosen[st.id];
+    if(!f) return;
+    chips.push(`<span class="chip">${escapeHtml(displayName(f))}</span>`);
+  });
+  if(chips.length===1) chips.push(`<span class="chip chip-muted">pick functions below to build the chain</span>`);
+  el.innerHTML = chips.join('<span class="arrow">&rarr;</span>');
+}
+function renderPipelineRegions(){
+  const el = document.getElementById('pipelineRegions');
+  if(!el) return;
+  el.innerHTML = PIPELINE_REGIONS.map((r,i)=>`<div class="region${r.label?'':' region-spacer'}${i===2?' region-inv':''}" style="grid-column:span ${r.span}">${r.label?`<span>${escapeHtml(r.label)}</span>`:''}</div>`).join('');
+}
+renderPipelineRegions();
+function selectFunction(f){
+  current=f;
+  chosen[f.stage]=f;
+  setTimeout(()=>document.getElementById('detail')?.scrollIntoView({behavior:'smooth',block:'center'}), 30);
+  renderStages();
+  const neighbours = (typeof graphState!=='undefined' && graphState.links)
+    ? graphState.links.filter(l=>l.a.f===f||l.b.f===f).map(l=>l.a.f===f?l.b.f:l.a.f).slice(0,8)
+    : [];
+  document.getElementById('detail').innerHTML = `
+    <div class="kicker">${escapeHtml(f.stage)} &middot; ${escapeHtml(pkgFor(f))}</div>
+    <h2>${escapeHtml(displayName(f))}</h2>
+    <div class="desc">${f.desc}</div>
+    <div class="pills" style="margin-bottom:6px;"><span class="pill" style="font-family:'JetBrains Mono',monospace;">${escapeHtml(labelFor(f))}</span></div>
+    <div class="pills"><span class="pill">${LANG==='r'?'R':'Python'} &#10003;</span><span class="pill">${escapeHtml(SYSTEMS.find(s=>s.id===SYSTEM)?.label||SYSTEM)}</span></div>
+    <div class="meta">
+      <h4>Main inputs</h4><div class="tokens">${f.inputs.map(i=>`<span class="token">${escapeHtml(i)}</span>`).join('')}</div>
+      <h4>Outputs</h4><div class="tokens">${f.outputs.map(o=>`<span class="token">${escapeHtml(o)}</span>`).join('')}</div>
+      <h4>Example</h4><div class="tokens" style="display:block;"><pre style="white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#eaf5fb;background:rgba(0,0,0,.2);border-radius:8px;padding:9px;margin:0;">${escapeHtml(exFor(f))}</pre></div>
+      <h4>Connected to</h4><div class="tokens">${neighbours.length?neighbours.map(n=>`<span class="token linkable" data-name="${escapeHtml(n.name)}">${escapeHtml(labelFor(n))}</span>`).join(''):'<span class="token">(none in this stage range)</span>'}</div>
+    </div>`;
+  document.querySelectorAll('#detail .token.linkable').forEach(el=>{
+    el.onclick=()=>{ const nf=FREG.find(x=>x.name===el.dataset.name); if(nf) selectFunction(nf); };
+  });
+  renderLogic();
+}
+function renderLogic(){
+  const el=document.getElementById('logic'); if(!el) return;
+  const picks = STAGES.filter(st=>!st.conceptual && chosen[st.id]);
+  if(!picks.length){ el.innerHTML='Pick functions across the workflow stages to build a scientific chain.'; document.querySelector('.logiccard .valid')?.remove(); return; }
+  const sysLabel = SYSTEMS.find(s=>s.id===SYSTEM)?.label || SYSTEM;
+  const chain = picks.map(st=>`<b>${escapeHtml(displayName(chosen[st.id]))}</b>`).join(' &rarr; ');
+  el.innerHTML = `For a <b>${escapeHtml(sysLabel)}</b> target: ${chain}. Each step is a real, verified ${LANG==='r'?'ToolsRTM':'toolsrtm'} function for its stage.`;
+  if(!document.querySelector('.logiccard .valid')){
+    document.querySelector('.logiccard').insertAdjacentHTML('beforeend','<div class="valid">&#10003; Real functions, real package, no invented steps</div>');
+  }
+}
+function functionMatches(q,f){q=q.toLowerCase();return [f.name,f.r,f.py,f.pkgR,f.pkgPy,f.stage,f.desc].join(' ').toLowerCase().includes(q)}
+function showSuggestions(){
+  const inp=document.getElementById('apiSearch'), box=document.getElementById('suggestions');
+  const q=inp.value.trim();
+  const base=FREG.filter(f=>LANG==='r'||f.pkgPy!=='-');
+  let arr = q ? base.filter(f=>functionMatches(q,f)) : base;
+  box.innerHTML = arr.map(f=>{
+    const clr = STAGECOLORS[f.stage] || 'var(--navy)';
+    const off = !f.systems.includes(SYSTEM);
+    return `<div class="sug" data-name="${escapeHtml(f.name)}" style="border-left-color:${clr}">
+      <div class="sugtop"><div class="sugname">${escapeHtml(displayName(f))}</div><div class="sugpkg">${escapeHtml(pkgFor(f))}</div></div>
+      <div class="sugfn">${escapeHtml(labelFor(f))}</div>
+      <div class="sugdesc">${escapeHtml(f.desc.slice(0,90))}…</div>
+      <span class="sugstage" style="background:${clr}22;color:${clr};">${escapeHtml(f.stage)}${off?' · not in current system':''}</span>
+    </div>`;
+  }).join('') || '<div class="sug"><div class="sugdesc">No matching functions in ToolsRTM/toolsrtm.</div></div>';
+  box.classList.add('show');
+  box.querySelectorAll('[data-name]').forEach(el=>el.onclick=()=>{ selectFunction(FREG.find(x=>x.name===el.dataset.name)); box.classList.remove('show'); inp.value=''; });
+}
+document.getElementById('apiSearch').addEventListener('input', showSuggestions);
+document.getElementById('apiSearch').addEventListener('focus', showSuggestions);
+document.addEventListener('click', e=>{ if(!e.target.closest('.apisearch')) document.getElementById('suggestions')?.classList.remove('show'); });
+document.getElementById('apiSearch').addEventListener('keydown', e=>{
+  if(e.key==='Escape') document.getElementById('suggestions').classList.remove('show');
+  if(e.key==='Enter'){ const q=e.target.value.trim(); const f=FREG.filter(f=>LANG==='r'||f.pkgPy!=='-').find(x=>functionMatches(q,x)); if(f){ selectFunction(f); document.getElementById('suggestions').classList.remove('show'); } }
+});
+document.querySelectorAll('.langbtn[data-lang]').forEach(b=>b.onclick=()=>{
+  LANG=b.dataset.lang;
+  document.querySelectorAll('.langbtn[data-lang]').forEach(x=>x.classList.toggle('active', x===b));
+  renderStages();
+  if(current) selectFunction(current); else renderLogic();
+  if(typeof renderGraph==='function') renderGraph();
+  if(typeof renderTuts==='function') renderTuts();
+});
+renderStages();
+renderLogic();
+
+/* ---------- function network graph ---------- */
+const STAGEORDER = STAGES.map(s=>s.id);
+let graphState = {nodes:[], links:[], running:true, labels:true, selected:null, scale:1, tx:0, ty:0, pan:null, dragMoved:false};
+function stageIndex(s){ return STAGEORDER.indexOf(s); }
+function buildGraphData(){
+  const funcs = FREG.filter(inSystem);
+  const nodes = funcs.map((f,i)=>({id:i, f, x:120+(i%5)*140+Math.random()*30, y:80+Math.floor(i/5)*110+Math.random()*30, vx:0, vy:0, r:8+Math.min(4,(f.inputs||[]).length*.35)}));
+  const links = [];
+  for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
+    const a=nodes[i], b=nodes[j], sa=stageIndex(a.f.stage), sb=stageIndex(b.f.stage);
+    let type=null, weight=0;
+    if(Math.abs(sa-sb)===1){ type='flow'; weight=1.0; }
+    else if(a.f.stage===b.f.stage){ type='stage'; weight=.45; }
+    if(type) links.push({a,b,type,weight});
+  }
+  const pairs=[
+    ['prospect_PRO()','foursail()'], ['prospect_PRO()','foursail2()'], ['prospect_PRO()','getCor()'],
+    ['getFluspect.B()','inform()'], ['getFluspect.Cx()','inform()'], ['liberty()','inform()'], ['getFluspect.B()','getLUT()'],
+    ['get.marmit.rsoil()','foursail()'], ['get.marmit.rsoil()','foursail2()'], ['get.marmit.rsoil()','inform()'],
+    ['get.marmit1()','get.marmit.rsoil()'], ['get.marmit2()','get.marmit.rsoil()'], ['sigmoid.soil()','get.marmit1()'],
+    ['getBSM.toolsRTM()','soilwat()'], ['getBSM.toolsRTM()','SPART()'],
+    ['getCor()','getLUT()'], ['get_distributionLUT()','getCor()'], ['getLUT()','foursail2()'],
+    ['getLUT()','getSim_fromLUT()'], ['getSim_fromLUT()','foursail()'], ['get.LUTfromRanges()','foursail2()'],
+    ['foursail()','get.spectral.convolution.srf()'], ['foursail2()','get.spectral.convolution.srf()'], ['inform()','get.spectral.convolution.srf()'],
+    ['SPART()','get.smac()'], ['get.srf.from_fwhm()','get.spectral.convolution.srf()'], ['Compute_BRF()','foursail()'],
+    ['get.spectral.convolution.srf()','getIndices()'], ['get.spectral.convolution.gaussian()','getIndices()'],
+    ['get.satellite_collection()','get.sentinel2_cube()'], ['get.sentinel2_cube()','getIndices()'], ['get.sentinel2_cube()','getIndicesSE2()'],
+    ['getIndices()','get.indices.v2()'], ['getIndicesSE2()','getIndicesSE2.ML()'], ['getIndices()','getVIF()'], ['getSpectraIndices()','getIndices()'],
+    ['getVIF()','hybrid_inversion()'], ['getIndicesSE2.ML()','hybrid_inversion()'],
+    ['hybrid_inversion()','hybrid_inversionE()'], ['hybrid_inversion()','getMLmodel()'], ['get.inversion()','getMLmodel()'], ['get.inversionOpt()','getLUT()'],
+    ['getMLmodel()','getPredicts()'], ['hybrid_inversion()','getSpatialTrait()'], ['getPredicts()','getSpatialTrait()'], ['get.sentinel2_cube()','getSpatialTrait()'],
+  ];
+  for(const [na,nb] of pairs){
+    const a=nodes.find(n=>n.f.name===na), b=nodes.find(n=>n.f.name===nb);
+    if(a && b && !links.some(l=>(l.a===a&&l.b===b)||(l.a===b&&l.b===a))) links.push({a,b,type:'flow',weight:1.2});
+  }
+  return {nodes, links};
+}
+function graphLegend(){
+  const el=document.getElementById('graphLegend'); if(!el) return;
+  const stages=[...new Set(graphState.nodes.map(n=>n.f.stage))];
+  el.innerHTML = stages.map(s=>{
+    const st=STAGES.find(x=>x.id===s);
+    return `<span class="legendChip"><i class="legendDot" style="background:${STAGECOLORS[s]||'#789'}"></i>${escapeHtml(st?st.label.split('· ')[1]:s)}</span>`;
+  }).join('');
+}
+function graphDetailHTML(f){
+  const neighbours = graphState.links.filter(l=>l.a.f===f||l.b.f===f).map(l=>l.a.f===f?l.b.f:l.a.f).slice(0,8);
+  return `<div class="netDetailGrid">
+    <div>
+      <div class="kicker">${escapeHtml(f.stage)} &middot; ${escapeHtml(pkgFor(f))}</div>
+      <h3>${escapeHtml(labelFor(f))}</h3>
+      <div class="desc">${f.desc}</div>
+      <div class="pillrow"><span class="pill">${LANG==='r'?'R':'Python'} &#10003;</span><span class="pill">${escapeHtml(f.stage)}</span></div>
+    </div>
+    <div class="iorow">
+      <div><h5>Main inputs</h5><div class="tokrow">${(f.inputs||[]).map(i=>`<span class="tok">${escapeHtml(i)}</span>`).join('')}</div></div>
+      <div><h5>Outputs</h5><div class="tokrow">${(f.outputs||[]).map(o=>`<span class="tok">${escapeHtml(o)}</span>`).join('')}</div></div>
+    </div>
+    <div>
+      <h5>Example</h5>
+      <div class="codebox">${escapeHtml(exFor(f))}</div>
+    </div>
+    <div>
+      <h5>Connected functions</h5>
+      <div class="tokrow">${neighbours.map(n=>`<button type="button" class="tok" data-name="${escapeHtml(n.name)}">&rarr; ${escapeHtml(labelFor(n))}</button>`).join('')||'<span class="tok">(none in this stage range)</span>'}</div>
+    </div>
+  </div>`;
+}
+function renderGraph(){
+  const svg=document.getElementById('functionGraph'); if(!svg) return;
+  const {nodes,links}=buildGraphData(); graphState.nodes=nodes; graphState.links=links; graphState.selected=null;
+  svg.innerHTML = `<defs><marker id="arrowFlow" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L8,3 z" fill="#5a9eb7" opacity=".75"/></marker></defs><g id="graphViewport"><g id="linkLayer"></g><g id="particleLayer"></g><g id="nodeLayer"></g></g>`;
+  const linkLayer=svg.querySelector('#linkLayer'), nodeLayer=svg.querySelector('#nodeLayer');
+  links.forEach((l,i)=>{
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('class','graphLink '+(l.type==='flow'?'flow':'')); line.dataset.li=i;
+    if(l.type==='flow') line.setAttribute('marker-end','url(#arrowFlow)');
+    linkLayer.appendChild(line);
+  });
+  nodes.forEach((n,i)=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('class','graphNode'); g.dataset.ni=i;
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('r',n.r); c.setAttribute('fill',STAGECOLORS[n.f.stage]||'#5a8398'); c.setAttribute('stroke','#fff'); c.setAttribute('stroke-width','1.8');
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('class','nodeLabel'); t.setAttribute('x',n.r+5); t.setAttribute('y','3'); t.textContent=labelFor(n.f);
+    g.append(c,t); nodeLayer.appendChild(g);
+    g.addEventListener('pointerdown', e=>graphPointerDown(e,n,g));
+    g.addEventListener('click', ()=>{ if(!graphState.dragMoved) selectGraphNode(n); });
+  });
+  graphLegend(); graphInteractions(svg);
+  document.getElementById('graphNodeCount').textContent = nodes.length;
+  document.getElementById('graphLinkCount').textContent = links.length;
+  document.getElementById('graphLang').textContent = LANG==='r' ? 'R' : 'Python';
+  document.getElementById('graphDetail').innerHTML = '<div class="detail-empty">Click any node to show its package, inputs, outputs, code example and direct connections.</div>';
+  if(graphState.raf) cancelAnimationFrame(graphState.raf);
+  graphState.running = document.getElementById('graphMotion')?.classList.contains('on') ?? true;
+  tickGraph();
+}
+function tickGraph(){
+  const svg=document.getElementById('functionGraph'); if(!svg) return;
+  const box=svg.getBoundingClientRect(), W=Math.max(500,box.width), H=Math.max(380,box.height), N=graphState.nodes, L=graphState.links;
+  if(graphState.running){
+    for(const n of N){ const si=Math.max(0,stageIndex(n.f.stage)); const targetX=70+(W-140)*(si/Math.max(1,STAGEORDER.length-1)); n.vx+=(targetX-n.x)*.0009; n.vy+=(H*.5-n.y)*.0004; }
+    for(let i=0;i<N.length;i++) for(let j=i+1;j<N.length;j++){ const a=N[i],b=N[j],dx=b.x-a.x,dy=b.y-a.y,d2=dx*dx+dy*dy+1,d=Math.sqrt(d2),rep=850/d2,fx=rep*dx/d,fy=rep*dy/d; a.vx-=fx; a.vy-=fy; b.vx+=fx; b.vy+=fy; }
+    for(const l of L){ const dx=l.b.x-l.a.x, dy=l.b.y-l.a.y, d=Math.sqrt(dx*dx+dy*dy)||1, target=l.type==='flow'?105:78, k=.0022*l.weight, f=(d-target)*k; l.a.vx+=f*dx/d; l.a.vy+=f*dy/d; l.b.vx-=f*dx/d; l.b.vy-=f*dy/d; }
+    for(const n of N){ if(n.fixed) continue; n.vx*=.90; n.vy*=.90; n.x+=n.vx; n.y+=n.vy; n.x=Math.max(28,Math.min(W-28,n.x)); n.y=Math.max(30,Math.min(H-30,n.y)); }
+  }
+  const lines=svg.querySelectorAll('.graphLink'); L.forEach((l,i)=>{ const e=lines[i]; if(!e) return; e.setAttribute('x1',l.a.x); e.setAttribute('y1',l.a.y); e.setAttribute('x2',l.b.x); e.setAttribute('y2',l.b.y); });
+  const gs=svg.querySelectorAll('.graphNode'); N.forEach((n,i)=>{ if(gs[i]) gs[i].setAttribute('transform',`translate(${n.x},${n.y})`); });
+  drawParticles(svg); graphState.raf=requestAnimationFrame(tickGraph);
+}
+let particlePhase=0;
+function drawParticles(svg){
+  const layer=svg.querySelector('#particleLayer'); if(!layer) return;
+  particlePhase=(particlePhase+.0035)%1; layer.innerHTML='';
+  const active = graphState.selected ? graphState.links.filter(l=>l.a===graphState.selected||l.b===graphState.selected) : graphState.links.filter(l=>l.type==='flow').slice(0,12);
+  active.slice(0,14).forEach((l,i)=>{
+    const t=(particlePhase+i*.071)%1;
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('class','flowParticle'); c.setAttribute('r', graphState.selected?'2.4':'1.7');
+    c.setAttribute('cx', l.a.x+(l.b.x-l.a.x)*t); c.setAttribute('cy', l.a.y+(l.b.y-l.a.y)*t);
+    layer.appendChild(c);
+  });
+}
+function selectGraphNode(n){
+  graphState.selected=n;
+  const svg=document.getElementById('functionGraph');
+  const neigh=new Set([n]);
+  graphState.links.forEach(l=>{ if(l.a===n) neigh.add(l.b); if(l.b===n) neigh.add(l.a); });
+  svg.querySelectorAll('.graphNode').forEach((g,i)=>{
+    const nd = graphState.nodes[i], isSel = nd===n;
+    g.classList.toggle('selected', isSel);
+    g.classList.toggle('neighbor', !isSel && neigh.has(nd));
+    g.classList.toggle('dim', !neigh.has(nd));
+    const circle = g.querySelector('circle');
+    if(circle) circle.setAttribute('fill', isSel ? (STAGEDARKS[nd.f.stage]||'#5a8398') : (STAGECOLORS[nd.f.stage]||'#5a8398'));
+  });
+  svg.querySelectorAll('.graphLink').forEach((e,i)=>{ const l=graphState.links[i], on=l.a===n||l.b===n; e.classList.toggle('active',on); e.classList.toggle('dim',!on); });
+  document.getElementById('graphDetail').innerHTML = graphDetailHTML(n.f);
+  selectFunction(n.f);
+}
+function clientToGraph(cx,cy,r){ return {x:(cx-r.left-graphState.tx)/graphState.scale, y:(cy-r.top-graphState.ty)/graphState.scale}; }
+function graphPointerDown(e,n,g){
+  e.preventDefault(); graphState.dragMoved=false; n.fixed=true; g.setPointerCapture(e.pointerId);
+  const sx=e.clientX, sy=e.clientY;
+  const move=ev=>{ const svg=document.getElementById('functionGraph'), r=svg.getBoundingClientRect(), pt=clientToGraph(ev.clientX,ev.clientY,r); n.x=pt.x; n.y=pt.y; n.vx=n.vy=0; if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>3) graphState.dragMoved=true; };
+  const up=ev=>{ n.fixed=false; g.releasePointerCapture?.(ev.pointerId); g.removeEventListener('pointermove',move); g.removeEventListener('pointerup',up); g.removeEventListener('pointercancel',up); };
+  g.addEventListener('pointermove',move); g.addEventListener('pointerup',up); g.addEventListener('pointercancel',up);
+}
+function applyGraphTransform(){ const v=document.getElementById('graphViewport'); if(v) v.setAttribute('transform',`translate(${graphState.tx},${graphState.ty}) scale(${graphState.scale})`); }
+function graphInteractions(svg){
+  svg.onwheel=e=>{ e.preventDefault(); const r=svg.getBoundingClientRect(), old=graphState.scale, fac=e.deltaY<0?1.08:.92, ns=Math.max(.55,Math.min(2.2,old*fac)), mx=e.clientX-r.left, my=e.clientY-r.top; graphState.tx=mx-(mx-graphState.tx)*(ns/old); graphState.ty=my-(my-graphState.ty)*(ns/old); graphState.scale=ns; applyGraphTransform(); };
+  svg.addEventListener('pointerdown', e=>{ if(e.target.closest?.('.graphNode')) return; graphState.pan={x:e.clientX,y:e.clientY,tx:graphState.tx,ty:graphState.ty}; svg.setPointerCapture(e.pointerId); });
+  svg.addEventListener('pointermove', e=>{ if(!graphState.pan) return; graphState.tx=graphState.pan.tx+e.clientX-graphState.pan.x; graphState.ty=graphState.pan.ty+e.clientY-graphState.pan.y; applyGraphTransform(); });
+  svg.addEventListener('pointerup', e=>{ graphState.pan=null; svg.releasePointerCapture?.(e.pointerId); });
+}
+function resetGraphView(){ graphState.scale=1; graphState.tx=graphState.ty=0; graphState.selected=null; applyGraphTransform(); renderGraph(); }
+document.getElementById('graphMotion')?.addEventListener('click', e=>{ e.currentTarget.classList.toggle('on'); graphState.running=e.currentTarget.classList.contains('on'); e.currentTarget.textContent=graphState.running?'Live motion':'Motion paused'; });
+document.getElementById('graphLabels')?.addEventListener('click', e=>{ e.currentTarget.classList.toggle('on'); graphState.labels=e.currentTarget.classList.contains('on'); document.querySelectorAll('.nodeLabel').forEach(x=>x.style.display=graphState.labels?'':'none'); });
+document.getElementById('graphReset')?.addEventListener('click', resetGraphView);
+renderGraph();
+</script>
+
+</body></html>

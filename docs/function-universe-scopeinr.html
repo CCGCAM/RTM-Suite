@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCOPEinR Function Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Palette matches the real RTM-Suite site (docs/index.html) exactly:
+   --brand:#0b3d59, --brand-light:#1587b5, --accent:#2bb3a3, Poppins font. */
+:root{
+  --navy:#0b3d59; --navy2:#082c40; --cyan:#2bb3a3; --mint:#7fe0d0;
+  --blue:#1587b5; --ink:#26313a; --muted:#5c6b76; --line:#e1e7ea;
+  --bg:#ffffff; --bg2:#f5f8fa; --card-bg:#ffffff; --card-shadow:0 14px 34px rgba(11,61,89,.10);
+  --badge-bg:#ffffff; --badge-line:#d3e3ea; --badge-fg:#0b3d59;
+  --code-bg:#eef3f6; --code-line:#d7e3e9; --code-fg:#0b3d59;
+  --accent-btn-fg:#ffffff;
+}
+*{box-sizing:border-box}
+img{max-width:100%;height:auto;}
+html{overflow-x:hidden;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+.wrap{max-width:min(95vw,1800px);margin:0 auto;padding:0 20px 60px;}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;color:var(--code-fg);background:var(--code-bg);border:1px solid var(--code-line);border-radius:6px;padding:1px 6px;font-size:.88em;}
+a{color:inherit;text-decoration:none;}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);border-radius:0 0 28px 28px;padding:44px 0 30px;border-bottom:1px solid var(--line);}
+.hero-content{max-width:640px;}
+.hero:after{content:"";position:absolute;right:0;bottom:16px;width:min(42vw,620px);height:88px;opacity:.16;pointer-events:none;background:
+linear-gradient(115deg,transparent 0 4%,var(--blue) 4.2% 4.7%,transparent 4.9% 12%,var(--cyan) 12.2% 12.7%,transparent 12.9% 22%,var(--mint,#7fe0d0) 22.2% 22.7%,transparent 22.9%),
+repeating-linear-gradient(90deg,transparent 0 24px,rgba(21,135,181,.18) 25px,transparent 26px);clip-path:polygon(0 72%,6% 60%,12% 65%,18% 43%,24% 53%,30% 26%,36% 47%,42% 31%,48% 60%,54% 38%,60% 68%,66% 54%,72% 76%,78% 62%,84% 81%,90% 68%,96% 86%,100% 80%,100% 100%,0 100%)}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.18em;font-weight:700;color:var(--blue);text-transform:uppercase;}
+.hero h1{font-size:clamp(26px,4.2vw,38px);line-height:1.18;letter-spacing:-.02em;margin:13px 0 14px;color:var(--ink);}
+.hero h1 .accent{color:var(--blue);}
+.hero p.lead{max-width:none;color:var(--muted);font-size:15.5px;line-height:1.62;}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 8px;}
+.badge{border:1px solid var(--badge-line);color:var(--badge-fg);background:var(--badge-bg);padding:7px 13px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+
+/* ---------- search ---------- */
+.searchshell{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap;margin:24px 0 4px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:var(--card-bg);box-shadow:var(--card-shadow);}
+.langleft{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.langtitle{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:2px;}
+.langbtn{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:7px 12px;border-radius:11px;font-weight:800;cursor:pointer;font-size:13px;}
+.langbtn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.langlogo{width:20px;height:20px;display:inline-grid;place-items:center;border-radius:50%;font-weight:900;font-size:10.5px;background:#eef4f7;color:#1e628f;}
+.langbtn.active .langlogo{background:#fff;color:#1e628f;}
+.pylogo{border-radius:7px;background:linear-gradient(135deg,#3976a5 0 49%,#f4cb4c 51%);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25);}
+.apisearch{position:relative;flex:1;min-width:260px;max-width:560px;}
+.apisearch input{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 38px 10px 13px;font-size:13px;background:var(--bg);color:var(--ink);outline:none;}
+.apisearch input:focus{border-color:var(--cyan);}
+.searchicon{position:absolute;right:12px;top:9px;color:var(--muted);pointer-events:none;}
+.suggestions{display:none;position:absolute;z-index:50;left:0;right:0;top:44px;max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:13px;background:var(--card-bg);box-shadow:0 18px 40px rgba(23,62,85,.16);}
+.suggestions.show{display:block;}
+.sug{padding:10px 14px;border-bottom:1px solid var(--line);border-left:3px solid var(--line);cursor:pointer;transition:background .12s,padding-left .12s;}
+.sug:hover{background:var(--bg2);padding-left:18px;}
+.sug:last-child{border-bottom:0;}
+.sugfn{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted);margin-top:2px;}
+.sug:last-child{border-bottom:0;}
+.sug:hover{background:var(--badge-bg);}
+.sugname{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:800;color:var(--ink);}
+.sugpkg{font-size:9.5px;border:1px solid var(--line);border-radius:999px;padding:2px 7px;color:var(--muted);}
+.sugtop{display:flex;justify-content:space-between;gap:8px;align-items:center;}
+.sugdesc{font-size:10.8px;color:var(--muted);margin-top:3px;}
+.sugstage{font-size:8.5px;font-weight:800;padding:2px 6px;border-radius:5px;background:var(--badge-bg);color:var(--badge-fg);margin-top:5px;display:inline-block;}
+
+/* ---------- steps board ---------- */
+.section-title{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--blue);margin:40px 0 6px;}
+.section-desc{color:var(--muted);font-size:13.5px;margin-bottom:16px;max-width:720px;}
+.board{border:1px solid var(--line);border-radius:20px;background:var(--card-bg);box-shadow:var(--card-shadow);overflow:hidden;width:100%;}
+.boardtop{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:13px 18px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--card-bg),var(--bg2));}
+.boardtop strong{font-size:14px;color:var(--ink);}
+.boardtop span{font-size:11.5px;color:var(--muted);}
+.pipeline{position:relative;padding:22px 16px 28px;overflow-x:auto;}
+.flowline{position:absolute;left:5%;right:5%;top:75px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--blue),#7fe0d0);opacity:.28;border-radius:3px;}
+.flowpulse{position:absolute;top:73px;width:18px;height:7px;border-radius:20px;background:linear-gradient(90deg,var(--cyan),var(--blue));animation:flowtravel 5s linear infinite;box-shadow:0 0 16px rgba(25,221,208,.55);}
+@keyframes flowtravel{from{left:5%}to{left:93%}}
+.stages{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;width:100%;align-items:start;position:relative;z-index:2;}
+.pipelineRegions{position:relative;z-index:2;}
+.stagehead{height:82px;}
+.pipelineRegions{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;width:100%;margin-bottom:8px;}
+.pipelineRegions .region{border-radius:10px;padding:10px 8px;text-align:center;background:var(--navy);}
+.pipelineRegions .region-spacer{background:transparent;padding:0;}
+.pipelineRegions .region span{font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.pipelineRegions .region.region-inv{background:#8a5a7a;}
+.stage{border:1px solid var(--line);border-radius:15px;background:var(--bg);min-height:460px;padding:12px;transition:transform .18s,box-shadow .18s;}
+.stage:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(31,78,104,.08);}
+.stage.selected{border-color:#84cfe0;box-shadow:0 0 0 3px #eefafd;}
+.stagehead{text-align:center;margin-bottom:8px;}
+.stagenum{width:28px;height:28px;display:grid;place-items:center;margin:0 auto 7px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:900;font-family:"JetBrains Mono",monospace;}
+.stagehead h4{margin:0;font-size:11px;line-height:1.25;color:var(--ink);overflow-wrap:break-word;word-break:break-word;}
+.stagehead small{color:var(--muted);font-size:9.5px;}
+.option{border:1px solid #e2ecf1;border-radius:12px;padding:9px;margin:7px 0;cursor:pointer;background:#fff;transition:background .16s,border-color .16s,box-shadow .16s,transform .16s;}
+.option:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(11,61,89,.10);}
+.stage-conceptual{opacity:.85;}
+.option.off{opacity:.3;cursor:not-allowed;pointer-events:none;}
+.option.off:hover{transform:none;box-shadow:none;}
+.stage-conceptual{padding:14px 10px;text-align:center;color:var(--muted);font-size:11px;line-height:1.5;border:1px dashed var(--line);border-radius:11px;margin-top:8px;}
+.summary{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:10px 0 16px;}
+.summary .chip{font-size:11px;border:1px solid #cfe0e8;border-radius:999px;padding:6px 9px;background:#fff;color:var(--ink);}
+.summary .chip-muted{color:var(--muted);font-weight:600;background:transparent;border-style:dashed;}
+.summary .arrow{color:var(--muted);font-weight:800;}
+.workspace{display:flex;flex-direction:column;gap:16px;}
+.side{display:flex;flex-direction:column;gap:12px;}
+.funcdetail{border-radius:22px;background:linear-gradient(145deg,var(--navy),#06263a);color:#eaf5fb;border:1px solid #164c66;box-shadow:0 16px 38px rgba(4,30,44,.18);padding:22px;}
+.funcdetail .kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--cyan);}
+.funcdetail h2{font-size:26px;line-height:1.08;margin:8px 0 8px;letter-spacing:-.02em;color:#fff;}
+.funcdetail .desc{font-size:13.5px;color:#b8cbd7;line-height:1.55;margin-bottom:12px;}
+.funcdetail .pills{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 16px;}
+.funcdetail .pill{border:1px solid #245d75;border-radius:999px;padding:6px 10px;color:#d6e8f1;font-size:10.5px;font-weight:700;}
+.funcdetail .meta h4{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7398ad;margin:16px 0 7px;}
+.funcdetail .tokens{display:flex;gap:6px;flex-wrap:wrap;}
+.funcdetail .token{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--mint,#7fe0d0);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:3px 8px;}
+.funcdetail .token.linkable{cursor:pointer;}
+.funcdetail .token.linkable:hover{background:rgba(255,255,255,.14);}
+.funcdetail .detail-empty{color:#9db4c2;padding:30px 6px;text-align:center;font-size:12.5px;}
+.logiccard{border:1px solid var(--line);border-radius:17px;background:var(--card-bg);padding:16px;}
+.logiccard h3{font-size:13px;margin:0 0 8px;color:var(--ink);}
+.logiccard p{font-size:11.8px;line-height:1.55;color:var(--muted);margin:0;}
+.logiccard .valid{margin-top:10px;padding:9px 11px;border-radius:10px;background:#effaf6;border:1px solid #caeadc;color:#2b7358;font-size:11px;font-weight:800;}
+.option:hover{background:#fbfeff;border-color:#9fd8e1;}
+.option.on{background:linear-gradient(135deg,#0b3f59,#082c40);border-color:#1caebc;box-shadow:inset 3px 0 0 var(--cyan);}
+.option.on .name,.option.on .desc{color:#fff;}
+.option.on .fnsig{color:var(--mint,#7fe0d0);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);}
+.option.on:hover{background:linear-gradient(135deg,#0e4a68,#0a3448);border-color:#1caebc;}
+.option .name{font-size:12.5px;font-weight:850;color:var(--ink);line-height:1.25;}
+.option .desc{font-size:10.5px;color:var(--muted);line-height:1.4;margin-top:4px;}
+.option .fnsig{font-family:"JetBrains Mono",monospace;font-size:9px;color:#176b7a;background:#f4fbfc;border:1px solid #d7eef0;border-radius:6px;padding:2px 5px;display:inline-block;margin-top:6px;}
+
+.detail{margin-top:16px;border-radius:18px;background:var(--card-bg);color:var(--ink);border:1px solid var(--line);box-shadow:var(--card-shadow);padding:20px;}
+.detail .kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--blue);}
+.detail h3{font-family:"JetBrains Mono",monospace;font-size:19px;margin:8px 0 6px;color:var(--ink);}
+.detail .desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:10px;}
+.detail .iorow{display:flex;gap:22px;flex-wrap:wrap;margin:10px 0;}
+.detail .iorow h5{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 5px;}
+.detail .iorow .tok{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--navy);font-weight:700;}
+.detail .iorow .tok:not(:last-child)::after{content:' · ';color:var(--line);}
+.codebox{background:var(--code-bg);border:1px solid var(--code-line);border-radius:11px;padding:11px;overflow:auto;white-space:pre;font:11px/1.55 "JetBrains Mono",ui-monospace,monospace;color:var(--code-fg);margin-top:10px;}
+.detail-empty{color:var(--muted);font-size:12.5px;text-align:center;padding:30px 10px;}
+
+/* ---------- tutorials ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:12px;margin-bottom:8px;}
+.ecogrid{display:grid;grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));gap:12px;margin:14px 0 4px;}
+.ecocard{border:1px solid var(--line);border-radius:15px;background:var(--card-bg);box-shadow:var(--card-shadow);padding:16px;}
+.ecocard h4{margin:0 0 6px;font-size:14px;color:var(--ink);}
+.ecocard p{margin:0 0 10px;font-size:12px;color:var(--muted);line-height:1.5;}
+.ecocard .tokrow{display:flex;flex-wrap:wrap;gap:6px;}
+.ecocard .tok{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;color:var(--navy);border:1px solid var(--line);border-radius:7px;padding:3px 8px;background:var(--bg2);}
+.card{display:block;border:1px solid var(--line);border-radius:15px;background:var(--card-bg);padding:15px;text-decoration:none;color:inherit;box-shadow:var(--card-shadow);transition:transform .16s,box-shadow .16s,border-color .16s;}
+.card:hover{transform:translateY(-3px);border-color:var(--cyan);box-shadow:0 18px 40px rgba(11,61,89,.14);}
+.card .num{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--cyan);font-size:9.5px;font-weight:800;margin-bottom:8px;font-family:"JetBrains Mono",monospace;}
+.card h4{margin:0 0 5px;font-size:13.5px;color:var(--ink);}
+.card p{margin:0;font-size:11.3px;color:var(--muted);line-height:1.42;}
+
+.darkcard{border-radius:22px;background:var(--card-bg);color:var(--ink);border:1px solid var(--line);box-shadow:var(--card-shadow);padding:26px;margin:32px 0;}
+.darkcard h2{font-size:22px;margin:0 0 10px;letter-spacing:-.02em;color:var(--ink);}
+.darkcard p{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0;}
+.darkcard strong{color:var(--blue);}
+.note{margin-top:40px;padding:14px 16px;border:1px solid var(--line);background:var(--bg2);border-radius:13px;color:var(--muted);font-size:12.5px;line-height:1.6;}
+.logo-grid{display:flex;flex-wrap:wrap;align-items:center;gap:32px;padding:8px 0;}
+.logo-item{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.logo-caption{font-size:11px;color:var(--muted);text-align:center;}
+
+/* ---------- function network graph ---------- */
+.network{margin-top:18px;border:1px solid var(--line);border-radius:22px;background:var(--card-bg);box-shadow:var(--card-shadow);overflow:hidden;width:100%;}
+.networkHead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding:18px 20px 13px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,var(--card-bg) 0%,var(--bg2) 100%);}
+.networkHead h2{font-size:21px;margin:3px 0 5px;letter-spacing:-.02em;color:var(--ink);}
+.networkHead p{font-size:11.8px;color:var(--muted);margin:0;max-width:760px;line-height:1.5;}
+.networkControls{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.networkControls button{border:1px solid var(--line);background:var(--card-bg);color:var(--ink);border-radius:999px;padding:6px 10px;font-size:10px;font-weight:800;cursor:pointer;}
+.networkControls button.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+.graphWrap{position:relative;width:100%;overflow:hidden;background:radial-gradient(circle at 30% 35%,rgba(25,221,208,.07),transparent 28%),radial-gradient(circle at 72% 64%,rgba(21,135,181,.07),transparent 31%),var(--bg2);}
+.graphWrap:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(19,89,116,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(19,89,116,.035) 1px,transparent 1px);background-size:34px 34px;pointer-events:none;}
+#functionGraph{width:100%;height:580px;display:block;position:relative;z-index:1;touch-action:none;}
+.graphLegend{position:absolute;left:12px;bottom:10px;z-index:3;display:flex;gap:6px;flex-wrap:wrap;max-width:80%;}
+.legendChip{display:flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--card-bg);border-radius:999px;padding:4px 8px;font-size:9px;color:var(--muted);}
+.legendDot{width:7px;height:7px;border-radius:50%;}
+.graphHint{position:absolute;right:12px;top:10px;z-index:3;background:var(--card-bg);border:1px solid var(--line);border-radius:9px;padding:6px 9px;font-size:9px;color:var(--muted);pointer-events:none;}
+.graphStats{display:flex;justify-content:flex-end;gap:16px;align-items:center;font-size:9.5px;color:var(--muted);padding:9px 18px;border-top:1px solid var(--line);background:var(--bg2);}
+.graphStats b{color:var(--ink);}
+.netDetail{border-top:1px solid var(--line);}
+.netDetail .detail-empty{padding:36px 20px;text-align:center;color:var(--muted);font-size:12.5px;}
+.netDetailGrid{display:flex;flex-direction:column;}
+.netDetailGrid>div{padding:20px 24px;}
+.netDetailGrid>div+div{border-top:1px solid var(--line);}
+.netDetail .kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--blue);}
+.netDetail h3{font-family:"JetBrains Mono",monospace;font-size:18px;margin:8px 0 6px;color:var(--ink);}
+.netDetail .desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.netDetail h5{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;}
+.netDetail .codebox{margin-top:0;}
+.netDetail .tokrow{display:flex;flex-wrap:wrap;gap:6px;}
+.netDetail .tok{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--navy);font-weight:700;border:1px solid var(--line);border-radius:8px;padding:6px 11px;background:var(--bg);cursor:default;transition:.14s;}
+.netDetail button.tok{cursor:pointer;}
+.netDetail button.tok:hover{border-color:var(--cyan);background:var(--badge-bg);transform:translateY(-1px);}
+.netDetail .pillrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.netDetail .pill{font-size:10.5px;font-weight:800;padding:5px 11px;border-radius:999px;border:1px solid var(--badge-line);background:var(--badge-bg);color:var(--badge-fg);}
+.netDetail .iorow{display:flex;gap:28px;flex-wrap:wrap;}
+.netDetail .iorow>div{flex:1;min-width:180px;}
+.nodeLabel{font:800 8.7px "JetBrains Mono",ui-monospace,monospace;fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--bg2);stroke-width:3px;stroke-linejoin:round;}
+.nodeLabel.dim{opacity:.15;}
+.graphNode{cursor:grab;}
+.graphNode:active{cursor:grabbing;}
+.graphNode circle{transition:opacity .18s,stroke-width .18s,filter .18s;}
+.graphNode.dim circle{opacity:.12;}
+.graphNode.dim text{opacity:.10;}
+.graphNode.selected circle{stroke:#fff;stroke-width:2.5px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25));}
+.graphNode.neighbor circle{stroke:#19bdb8;stroke-width:2px;filter:drop-shadow(0 0 4px rgba(25,221,208,.35));}
+.graphLink{stroke:#8fa9b6;stroke-width:1.05;opacity:.45;}
+.graphLink.flow{stroke:#4e9fbe;stroke-width:1.4;opacity:.55;}
+.graphLink.dim{opacity:.055;}
+.graphLink.active{stroke:#13bdb6;stroke-width:2.1;opacity:.92;}
+.flowParticle{fill:#19ddd0;filter:drop-shadow(0 0 4px rgba(25,221,208,.8));pointer-events:none;}
+@media(max-width:1000px){.graphWrap,#functionGraph{min-height:460px;height:460px;}}
+@media(max-width:600px){.networkHead{align-items:flex-start;flex-direction:column;}.networkControls{justify-content:flex-start;}.graphWrap,#functionGraph{height:380px;min-height:380px;}.graphHint{display:none;}.graphStats{justify-content:flex-start;flex-wrap:wrap;}}
+</style>
+
+</head>
+<body>
+<style>
+.navbar { position: sticky; top: 0; z-index: 999; background: var(--navy); color: #fff; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+.nav-container { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.nav-logo { font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+.nav-logo span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; }
+.nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
+.nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
+.nav-links a:hover, .nav-links a.active { opacity: 1; }
+.nav-links a.active { border-bottom: 2px solid #fff; }
+.nav-cta { background: var(--cyan); color: #062330 !important; opacity: 1 !important; padding: 6px 16px; border-radius: 999px; font-weight: 700; }
+.nav-toggle { display: none; background: none; border: 1px solid rgba(255,255,255,0.5); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 18px; line-height: 1; cursor: pointer; }
+@media (max-width: 900px) {
+  .nav-toggle { display: block; }
+  .nav-links { display: none; width: 100%; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 0 16px; }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 8px 4px; width: 100%; }
+  .nav-container { flex-wrap: wrap; }
+}
+</style>
+<header class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">&larr; RTM-Suite</a>
+      <a href="index.html#docs">Documentation</a>
+      <a href="index.html#tutorials">Tutorials</a>
+      <a href="function-universe-toolsrtm.html">ToolsRTM Explorer</a>
+      <a href="function-universe-scopeinr.html" class="active">SCOPE Explorer</a>
+      <a href="function-universe-stemmus-inprogress.html">STEMMUS + SCOPE</a>
+    </nav>
+  </div>
+</header>
+<script>
+(function () {
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+  toggle.addEventListener('click', function () {
+    var open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+})();
+</script>
+<div class="wrap">
+<section class="hero">
+  <div class="hero-content">
+  <div class="eyebrow">SCOPEINR &middot; PACKAGE FUNCTION EXPLORER</div>
+  <h1>Explore<br><span class="accent">SCOPE, in R and Python.</span></h1>
+  <p class="lead">This page provides an interactive map of <code>SCOPEinR</code> in R and Python, covering the full SCOPE 2.1 forward model &mdash; SCOPE-specific LUT construction, the coupled leaf-canopy-energy balance-fluorescence run itself, its internal energy-balance and fluorescence components, and output export. Follow the scientific workflow from left to right and click any function to explore its inputs, outputs, and working code examples.</p>
+  <div class="badges">
+    <span class="badge">SCOPE LUT construction</span><span class="badge">Coupled forward model</span><span class="badge">Energy balance &amp; photosynthesis</span><span class="badge">Fluorescence (SIF)</span><span class="badge">Output export</span><span class="badge">R &amp; Python</span>
+  </div>
+  </div>
+</section>
+
+<div class="searchshell">
+  <div class="langleft">
+    <span class="langtitle">Language</span>
+    <button class="langbtn active" data-lang="r"><span class="langlogo">R</span> R</button>
+    <button class="langbtn" data-lang="py"><span class="langlogo pylogo">Py</span> Python</button>
+  </div>
+</div>
+<div class="searchshell" style="margin-top:10px">
+  <div class="apisearch" style="flex:1;max-width:none;">
+    <input id="apiSearch" autocomplete="off" placeholder="Search functions: get.SCOPE, get.ebal, get.RTMf, getLUT.SCOPE…">
+    <span class="searchicon">&#8981;</span>
+    <div id="suggestions" class="suggestions"></div>
+  </div>
+</div>
+
+<div class="summary" id="summary"></div>
+<div class="workspace">
+  <section class="board">
+    <div class="boardtop"><strong>Scientific workflow graph</strong><span id="pipelineDesc">click a block &middot; incompatible options fade automatically</span></div>
+    <div class="pipeline">
+      <div class="flowline"></div>
+      <div class="flowpulse"></div>
+      <div class="pipelineRegions" id="pipelineRegions"></div>
+      <div class="stages" id="stages"></div>
+    </div>
+  </section>
+  <aside class="side">
+    <div id="detail" class="funcdetail"><div class="detail-empty">Select a function to see its description, inputs/outputs, connections and a real code example.</div></div>
+    <div class="logiccard"><h3>Why this chain is valid</h3><p id="logic">Pick functions across the workflow stages to build a scientific chain.</p></div>
+  </aside>
+</div>
+
+<div class="section-title" style="margin-top:30px">Integrates with ToolsRTM</div>
+<div class="section-desc">SCOPEinR doesn&rsquo;t sample correlated priors, invert reflectance, or retrieve traits on its own &mdash; those steps live in <a href="function-universe-toolsrtm.html">ToolsRTM</a>. Three real hand-offs between the two packages:</div>
+<div class="grid">
+  <a class="card" href="function-universe-toolsrtm.html"><div class="num">1</div><h4>Correlated parameter sampling</h4><p><code>getLUT.SCOPE()</code> samples each parameter independently. For correlated priors (e.g. Cab&ndash;N, LAI&ndash;fCover) build the table first with <code>ToolsRTM::getCor()</code> / <code>get_distributionLUT()</code>, then pass it in as <code>inputLUT</code>.</p><img src="https://img.shields.io/badge/Package-ToolsRTM-2d6a4f" alt="ToolsRTM" style="margin-top:8px;height:20px;"></a>
+  <a class="card" href="function-universe-toolsrtm.html"><div class="num">2</div><h4>External soil reflectance</h4><p><code>get.SCOPE()</code>&rsquo;s <code>rsoil</code> argument accepts a real measured spectrum instead of the built-in <code>getBSM()</code> model &mdash; typically <code>ToolsRTM::get.marmit.rsoil()</code>, <code>get.marmit1()</code>/<code>get.marmit2()</code> or <code>sigmoid.soil()</code>.</p><img src="https://img.shields.io/badge/Package-ToolsRTM-2d6a4f" alt="ToolsRTM" style="margin-top:8px;height:20px;"></a>
+  <a class="card" href="function-universe-toolsrtm.html"><div class="num">3</div><h4>Trait retrieval from SCOPE output</h4><p>The reflectance/SIF database from <code>get.SCOPE.parallel()</code> or <code>get.merge.SCOPE()</code> feeds <code>ToolsRTM::hybrid_inversion()</code>, <code>get.inversionOpt()</code> or <code>getMLmodel()</code> to retrieve traits, then <code>getSpatialTrait()</code> to map them.</p><img src="https://img.shields.io/badge/Package-ToolsRTM-2d6a4f" alt="ToolsRTM" style="margin-top:8px;height:20px;"></a>
+</div>
+
+<section class="network" id="functionNetwork">
+  <div class="networkHead">
+    <div>
+      <div class="eyebrow">FUNCTION NETWORK</div>
+      <h2>See how the functions connect.</h2>
+      <p>Every node is a real SCOPEinR function. Links follow the scientific chain: SCOPE parameter/LUT construction &rarr; the coupled forward model &rarr; its internal energy-balance and fluorescence components &rarr; output export. Filtered to the selected target system. Drag nodes, zoom/pan, or click one to isolate its neighbourhood.</p>
+    </div>
+    <div class="networkControls">
+      <button id="graphMotion" class="on">Live motion</button>
+      <button id="graphLabels" class="on">Labels</button>
+      <button id="graphReset">Reset view</button>
+    </div>
+  </div>
+  <div class="graphWrap">
+    <svg id="functionGraph" aria-label="Interactive SCOPEinR function network"></svg>
+    <div class="graphHint">drag nodes &middot; click to inspect &middot; wheel/pinch to zoom</div>
+    <div class="graphLegend" id="graphLegend"></div>
+  </div>
+  <div class="graphStats"><span><b id="graphNodeCount">0</b> functions</span><span><b id="graphLinkCount">0</b> relations</span><span id="graphLang">R</span></div>
+  <div id="graphDetail" class="netDetail"><div class="detail-empty">Click any node to show its package, inputs, outputs, code example and direct connections.</div></div>
+</section>
+
+<div class="section-title" style="margin-top:30px">Tutorials</div>
+<div class="section-desc">This page is a function/API explorer, not a tutorial set. For the real, worked SCOPE tutorials, see:</div>
+<div class="grid">
+  <a class="card" href="tutorials-overview.html#scope"><div class="num">R</div><h4>SCOPEinR Tutorials</h4><p>The SCOPE section of the RTM-Suite tutorial set, in R (LUTs, parallel runs, hybrid inversion, SIF vs. photosynthesis).</p></a>
+  <a class="card" href="python/t06-scope.html"><div class="num">Py</div><h4>scopeinpython Tutorial</h4><p>The SCOPE chapter of the RTM-Suite Python tutorial set: one coupled simulation, reflectance and SIF together.</p></a>
+</div>
+<div class="section-desc" style="margin-top:14px">Real source code and standalone scripts, on GitHub:</div>
+<div class="logo-grid" style="justify-content:flex-start;gap:16px;">
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/SCOPEinR" target="_blank"><img src="https://img.shields.io/badge/GitHub-SCOPEinR-181717?logo=github&amp;logoColor=white" alt="SCOPEinR on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/scopeinpython" target="_blank"><img src="https://img.shields.io/badge/GitHub-scopeinpython-181717?logo=github&amp;logoColor=white" alt="scopeinpython on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/SCOPE" target="_blank"><img src="https://img.shields.io/badge/GitHub-Apps%2FSCOPE-181717?logo=github&amp;logoColor=white" alt="Apps/SCOPE on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/ForSCOPE" target="_blank"><img src="https://img.shields.io/badge/GitHub-Scripts%2FR%2FForSCOPE-181717?logo=github&amp;logoColor=white" alt="Scripts/R/ForSCOPE on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/Pipeline" target="_blank"><img src="https://img.shields.io/badge/GitHub-Scripts%2FR%2FPipeline-181717?logo=github&amp;logoColor=white" alt="Scripts/R/Pipeline on GitHub"></a>
+  <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/Python/ForSCOPE_Python" target="_blank"><img src="https://img.shields.io/badge/GitHub-Scripts%2FPython%2FForSCOPE-181717?logo=github&amp;logoColor=white" alt="Scripts/Python/ForSCOPE_Python on GitHub"></a>
+</div>
+
+<div class="section-title" style="margin-top:30px">Development</div>
+<div class="logo-grid">
+  <div class="logo-item"><img src="assets/logo_WUR.svg" alt="Wageningen University &amp; Research" style="height:70px;"></div>
+  <div class="logo-item"><img src="assets/logo_CNR.png" alt="CNR-IBE, National Research Council of Italy" style="height:78px;"></div>
+  <div class="logo-item"><img src="assets/logo_Quantalab.png" alt="QuantaLab, IAS-CSIC" style="height:28px;"></div>
+</div>
+<div class="section-title" style="margin-top:26px">Research Collaborators &amp; Users</div>
+<div class="logo-grid">
+  <div class="logo-item"><img src="assets/UQ-QAAFI-wordmark-DAF-2019.jpg" alt="QAAFI, University of Queensland" style="max-height:100px;width:auto;"><div class="logo-caption">QAAFI &mdash; University of Queensland</div></div>
+  <div class="logo-item"><img src="assets/logo_IAS-CSIC.jpg" alt="IAS-CSIC" style="max-height:100px;width:auto;"><div class="logo-caption">IAS-CSIC, C&oacute;rdoba, Spain</div></div>
+</div>
+</div>
+
+<script>
+const ALLSYS=['crop','grassland','forest','leaf'];
+const VEGSYS=['crop','grassland','forest'];
+const FREG=[
+{name:'getLUT.SCOPE()',r:'getLUT.SCOPE(inputLUT, nLUT, setseed)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'lutparam',systems:VEGSYS,desc:'SCOPE-specific LUT builder — samples a full SCOPE input table (leaf, canopy, meteo, soil parameters together) rather than a generic leaf/canopy-only LUT, ready to feed get.SCOPE() row by row. Samples each parameter independently; for correlated priors (e.g. Cab-N, LAI-fCover) build the table with ToolsRTM::getCor() first and pass it in as inputLUT.',inputs:['inputLUT (SCOPE input ranges)','nLUT'],outputs:['SCOPE-ready LUT'],related:[{name:'getCor()',sig:'getCor(inputs, nLUT, setseed)'},{name:'get_distributionLUT()',sig:'get_distributionLUT(inputs, nLUT)'}],
+exR:`LUT <- getLUT.SCOPE(inputLUT = SCOPEinR::inputsSCOPE, nLUT = 1000)`,
+exPy:`# no dedicated helper in this port; LUT rows built directly for get_scope()`},
+{name:'getinputLUT()',r:'getinputLUT(inputLUT, dataset, calc.heat, calc.rss_rbs)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'lutparam',systems:VEGSYS,desc:'Splits one row (or many rows) of a SCOPE LUT into the named list structures the rest of SCOPEinR expects (leafbio, meteo, canopy, angles, soil, timeseries, or the mSCOPE multilayer profile). For dataset==soil it also derives soil thermal inertia and, optionally, soil/canopy resistances.',inputs:['inputLUT (data.frame/matrix, one row per simulation)','dataset (leafbio, meteo, canopy, angles, soil, mly, timeseries)'],outputs:['named list ready for get.ebal()/get.RTMf()/etc.'],related:[{name:'getCor()',sig:'getCor(inputs, nLUT, setseed)'},{name:'get_distributionLUT()',sig:'get_distributionLUT(inputs, nLUT)'}],
+exR:`data.leafbio <- getinputLUT(inputLUT = LUT[1,], dataset = "leafbio")`,
+exPy:`# get_scope() builds these structures internally from the LUT row`},
+{name:'leafangles()',r:'leafangles(a, b)',py:'dladgen(a, b)',pkgR:'SCOPEinR',pkgPy:'toolsrtm',stage:'lutparam',systems:VEGSYS,desc:'Computes the leaf inclination distribution function (LIDF) across the 13 standard leaf-angle classes from the two Verhoef ellipsoidal shape parameters LIDFa/LIDFb — this is exactly the canopy-structure knob that differentiates a crop, grassland or forest run in the Target system filter above. Ported as toolsrtm.dladgen() (shared canopy-structure code, same function ToolsRTM’s own fourSAIL/foursail2 use), not under scopeinpython.',inputs:['a (LIDFa, average leaf slope)','b (LIDFb, bimodality/spread)'],outputs:['lidf (13 angle-class fractions)','litab (13 angle-class centres, degrees)'],
+exR:`lidf <- leafangles(a = -0.35, b = -0.15)  # planophile crop canopy`,
+exPy:`from toolsrtm import dladgen\nlidf = dladgen(a=-0.35, b=-0.15)`},
+{name:'get.spectra.SCOPE()',r:'get.spectra.SCOPE(getSpectral)',py:'get_spectra_scope()',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'lutparam',systems:VEGSYS,desc:'Defines the spectral regions and wavelength grids (400-2400 nm optical, plus the fluorescence and thermal sub-ranges) used throughout every RTM in the pipeline — the foundational spectral setup every other SCOPE function is built on.',inputs:['getSpectral (TRUE to build the full spectral object)'],outputs:['spectral: wavelength grids and region boundaries (reg1/reg2/reg3, wlS, wlF, wlT...)'],
+exR:`spectral <- get.spectra.SCOPE(getSpectral = TRUE)`,
+exPy:`from scopeinpython import get_spectra_scope\nspectral = get_spectra_scope()`},
+{name:'getLUT_time()',r:'getLUT_time(inputs, dataICOS, timeStart, timeEnd, freq.hour, nLUT)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'lutparam',systems:VEGSYS,desc:'Builds a time-resolved SCOPE LUT directly from a flux-tower/ICOS meteorological record (radiation, air temperature, etc.) instead of static parameter ranges — the entry point for running SCOPE diurnally or over a real observation period rather than one static condition.',inputs:['inputs (parameter ranges)','dataICOS (flux-tower meteo record)','timeStart / timeEnd','freq.hour (diurnal or hourly)'],outputs:['time-indexed SCOPE LUT'],
+exR:`LUT <- getLUT_time(inputs = ranges, dataICOS = icos_data, timeStart = "2018-06-01", timeEnd = "2018-06-02", freq.hour = "hourly")`,
+exPy:`# no dedicated helper in this port`},
+{name:'getFluspect.B.SCOPE()',r:'getFluspect.B.SCOPE(inputsLeaf, inputsOptipar, version)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'leafsoil',systems:VEGSYS,desc:'SCOPE’s own Fluspect-B leaf model (PROSPECT-D-based): reflectance, transmittance and the four excitation-fluorescence matrices (Mb/Mf for PSI and PSII) that get.RTMf() later scales and propagates through the canopy. get.SCOPE() calls this internally when version D is selected.',inputs:['inputsLeaf (Cab, Car, EWT, LMA, N, fqe...)','inputsOptipar','version (D)'],outputs:['refl, tran','Mb, Mf (fluorescence matrices)'],
+exR:`leaf <- getFluspect.B.SCOPE(inputsLeaf = LUT[1,], inputsOptipar = SCOPEinR::optipar2021.Pro.CX, version = "D")`,
+exPy:`# get_fluspect_cx_scope() covers the Cx variant only; Fluspect-B (D) is R-only here`},
+{name:'getFluspect.Cx.SCOPE()',r:'getFluspect.Cx.SCOPE(inputsLeaf, inputsOptipar, version, step)',py:'get_fluspect_cx_scope(Cab, Car, EWT, LMA, Cs, N, fqe, Cx, Prot, CBC, Anth, step)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'leafsoil',systems:VEGSYS,desc:'SCOPE’s Fluspect-B-Cx leaf model, adding the Cx carotenoid-conversion state (violaxanthin to zeaxanthin) on top of Fluspect-B — this is the leaf-optics variant get.SCOPE() uses for the xanthophyll/NPQ-sensitive get.RTMz() correction.',inputs:['inputsLeaf (Cab, Car, EWT, LMA, N, fqe, Cx...)','inputsOptipar','step'],outputs:['refl, tran','Mb, Mf (fluorescence matrices)','kChlrel, kCarrel'],
+exR:`leaf <- getFluspect.Cx.SCOPE(inputsLeaf = LUT[1,], inputsOptipar = SCOPEinR::optipar2021.Pro.CX, version = "Cx", step = 1)`,
+exPy:`leaf = get_fluspect_cx_scope(Cab=40, Car=8, EWT=0.01, LMA=0.005, Cs=0, N=1.5, fqe=0.01, Cx=0, Prot=0, CBC=0, Anth=0)`},
+{name:'get.fluspect_mSCOPE()',r:'get.fluspect_mSCOPE(mly, spectral, leafbio, soil, optipar, nl, step)',py:'fluspect_mscope(mly, spectral, nl, Cx, fqe)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'leafsoil',systems:VEGSYS,desc:'The multi-layer (mSCOPE) leaf-optics variant: computes leaf reflectance/transmittance/fluorescence matrices once per distinct leaf-biochemistry layer (a vertical Cab/EWT/LMA profile through the canopy, e.g. senescing lower leaves), then replicates them across canopy layers weighted by each profile layer’s LAI fraction — for canopies where leaf traits change with depth, unlike the single-layer Fluspect-B/Cx above.',inputs:['mly (per-layer Cab/EWT/Car/LMA/Cs/N profile, LAI fraction per layer)','spectral, leafbio, optipar','nl (canopy layers to replicate across)'],outputs:['per-layer refl/tran and Mb/Mf, replicated across canopy layers'],
+exR:`leafopt_mly <- get.fluspect_mSCOPE(mly, spectral, leafbio, soil, optipar, nl = 60, step = 5)`,
+exPy:`from scopeinpython import fluspect_mscope\nout = fluspect_mscope(mly, spectral, nl=60, Cx=0, fqe=0.01)`},
+{name:'getBSM()',r:'getBSM(soilpar, spec, emp)',py:'get_bsm(soilpar, emp, optipar)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'leafsoil',systems:VEGSYS,desc:'SCOPE’s own Brightness-Shape-Moisture (BSM) dry+wet soil reflectance model, driven by brightness/shape/moisture parameters rather than an external measured spectrum. Use this for a fully parametric soil, or pass a real spectrum (e.g. ToolsRTM::get.marmit.rsoil()) via get.SCOPE()’s rsoil argument instead.',inputs:['soilpar (BSMBrightness, BSMlat, BSMlon)','spec (GSV, Kw, nw)','emp (SMp, SMC, film)'],outputs:['wet soil reflectance, 400-2400 nm'],
+exR:`rsoil <- getBSM(soilpar = list(BSMBrightness=0.5, BSMlat=30, BSMlon=55), spec = SCOPEinR::soilspec, emp = list(SMp=25, SMC=0.25, film=0.015))`,
+exPy:`rsoil = get_bsm(soilpar, emp)`},
+{name:'soilwat()',r:'soilwat(rdry, nw, kw, SMp, SMC, film)',py:'soilwat(rdry, nw, kw, SMp, SMC, film)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'leafsoil',systems:VEGSYS,desc:'The wetting sub-model inside getBSM()/get.SCOPE(): darkens a dry soil spectrum as a function of soil moisture percentage (SMp), following the thin-film water-absorption model. Exposed separately for anyone wetting a custom dry soil spectrum outside the full BSM call.',inputs:['rdry (dry soil reflectance)','nw, kw (water refractive/absorption index)','SMp, SMC, film'],outputs:['wet soil reflectance'],
+exR:`rwet <- soilwat(rdry = rsoil_dry, nw = SCOPEinR::soilspec$nw, kw = SCOPEinR::soilspec$Kw, SMp = 25, SMC = 0.25, film = 0.015)`,
+exPy:`rwet = soilwat(rdry, nw, kw, SMp=25, SMC=0.25, film=0.015)`},
+{name:'get.SCOPE()',r:'get.SCOPE(LUT, options.SCOPE, rsoil)',py:'get_scope(lut, options, rsoil)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'forward',systems:VEGSYS,desc:'The full SCOPE pipeline: leaf optics, energy balance, photosynthesis and fluorescence in one call. rsoil accepts an external soil-reflectance spectrum directly (e.g. from ToolsRTM::get.marmit.rsoil()) instead of the built-in getBSM() soil model.',inputs:['LUT row','options.SCOPE','rsoil (optional external spectrum)','stressfactor'],outputs:['data.rad$rso / refl / LoF_ / F740','data.fluxes$Actot (GPP)'],
+exR:`res <- get.SCOPE(LUT = lut, options.SCOPE = opts,
+  optipar = SCOPEinR::optipar2021.Pro.CX,
+  rsoil = soil$rsoil.wet[1:2001])[[1]]`,
+exPy:`res = get_scope(lut, options=ScopeOptions(), rsoil=soil.rsoil_wet)
+res.rtmf.F740; res.ebal.Actot`},
+{name:'get.SCOPE.parallel()',r:'get.SCOPE.parallel(LUT, options.SCOPE, n.cores)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'forward',systems:VEGSYS,desc:'Runs get.SCOPE() across every row of a LUT in parallel — how this project ran its 600-simulation R-vs-Python cross-checks. No standalone Python equivalent in this port (loop or pool over get_scope() rows instead). The resulting reflectance/SIF database is exactly what feeds ToolsRTM’s hybrid_inversion()/getMLmodel() for trait retrieval.',inputs:['LUT (many rows)','options.SCOPE','n.cores'],outputs:['list of per-row SCOPE results'],related:[{name:'hybrid_inversion()',sig:'hybrid_inversion(...)'},{name:'get.inversionOpt()',sig:'get.inversionOpt(...)'},{name:'getMLmodel()',sig:'getMLmodel(...)'}],
+exR:`db <- get.SCOPE.parallel(LUT = LUT, options.SCOPE = opts,
+  leaf.model = "fluspect-CX", canopy.model = "fourSAIL", n.cores = 4)
+# db$refl / db$F740 feed ToolsRTM::hybrid_inversion() or ToolsRTM::getMLmodel() to retrieve traits`,
+exPy:`# no dedicated helper; loop/pool over get_scope() rows in this port`},
+{name:'get.ebal()',r:'get.ebal(data.rad, data.gap, data.meteo, data.soil, data.canopy, data.leafbio, data.leafopt)',py:'ebal(spectral, rtmo, canopy, meteo, soil, ...)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'components',systems:VEGSYS,desc:'The energy-balance and photosynthesis solver at the heart of SCOPE, iterating leaf/soil temperature and stomatal conductance to a converged solution via get.biochemical(), get.resistances() and get.heatfluxes(). get.SCOPE() calls this internally; exposed separately for anyone building a custom SCOPE-like pipeline.',inputs:['radiation, gap fraction, meteo, soil, canopy, leaf bio/optics'],outputs:['converged Tc/Ts, fluxes, Actot (GPP)'],
+exR:`out <- get.ebal(data.rad, data.gap, data.meteo, data.soil, data.canopy, data.leafbio, data.leafopt)`,
+exPy:`out = ebal(spectral, rtmo, canopy, ebal_canopy, meteo, soil, rho_thermal, tau_thermal, leaf_refl, leaf_tran, rsoil, kChlrel, leafbio, leaf_emis)`},
+{name:'get.biochemical()',r:'get.biochemical(data.leafbio, data.meteo, data.opts, fV, get.plots)',py:'get_biochemical(leafbio, meteo, temp_correction, fV)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'components',systems:VEGSYS,desc:'The photosynthesis and stomatal-conductance model called inside get.ebal()’s iteration: net CO2 assimilation A, stomatal resistance and fluorescence yield from absorbed PAR, CO2 and leaf temperature (Ball-Berry stomatal model plus Farquhar-type biochemistry). This is where SCOPE’s Actot (GPP) actually comes from.',inputs:['data.leafbio (Vcmax25, BallBerry params, Type C3/C4...)','data.meteo (Q, Cs, Temp, eb, Oa, p)','fV (Vcmax canopy profile factor)'],outputs:['A (net assimilation)','stomatal resistance','fluorescence yield'],
+exR:`bio <- get.biochemical(data.leafbio, data.meteo, data.opts, fV = 1, get.plots = FALSE)`,
+exPy:`bio = get_biochemical(leafbio, meteo, temp_correction=True, fV=1.0)`},
+{name:'get.biochemical.MD12()',r:'get.biochemical.MD12(data.leafbio, data.meteo, fV, get.plots)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'components',systems:VEGSYS,desc:'Alternative photosynthesis/fluorescence formulation (Magnani D12-style) to get.biochemical(), selectable in options.SCOPE. Not ported to Python in this project — scopeinpython’s get_biochemical() only implements the primary formulation.',inputs:['data.leafbio','data.meteo (incl. Monin-Obukhov length L)','fV'],outputs:['Ci, net photosynthesis, fluorescence yield (C3/C4)'],
+exR:`bio <- get.biochemical.MD12(data.leafbio, data.meteo, fV = 1, get.plots = FALSE)`,
+exPy:`# not ported; scopeinpython always uses the get_biochemical() formulation`},
+{name:'get.RTMf()',r:'get.RTMf(data.spectral, data.rad, data.soil, data.leafopt, data.canopy, data.gap, data.angles, data.etau, data.etah)',py:'rtmf(spectral, rtmo, canopy, tts, tto, psi, rsoil, Mb, Mf, etau, etah)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'components',systems:VEGSYS,desc:'The fluorescence radiative transfer submodel: propagates leaf-level SIF (Fluspect’s Mb/Mf matrices, scaled by etau/etah fluorescence-emission efficiency from the biochemical model) through the canopy to top-of-canopy fluorescence. Not standalone — it needs data.rad/data.gap already computed by the optical RTM first, so in practice you get SIF by running get.SCOPE() with fluorescence enabled and reading its F740 output, not by calling this alone.',inputs:['data.rad, data.gap (from the optical RTM)','Mb, Mf (leaf fluorescence matrices, from Fluspect-Cx)','etau, etah (fluorescence emission efficiency, from the biochemical model)','view/illumination angles'],outputs:['top-of-canopy SIF (e.g. F740)'],
+exR:`data.rad <- get.RTMf(data.spectral, data.rad, data.soil, data.leafopt, data.canopy, data.gap,
+  data.angles, data.etau, data.etah)  # called inside get.SCOPE(); use its F740 output directly`,
+exPy:`res = rtmf(spectral, rtmo, canopy, tts, tto, psi, rsoil, Mb, Mf, etau, etah)`},
+{name:'get.RTMz()',r:'get.RTMz(data.spectral, data.rad, data.soil, data.leafopt, data.canopy, data.gap, data.angles, data.Knu, data.Knh)',py:'rtmz(...)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'components',systems:VEGSYS,desc:'Small correction to top-of-canopy outgoing radiance from the violaxanthin-to-zeaxanthin conversion (the xanthophyll/NPQ cycle) in sunlit vs. shaded leaves — a fast physiological signal SCOPE can simulate that pure reflectance models have no mechanism for.',inputs:['canopy radiative fluxes, Kn (NPQ) for sunlit/shaded leaves'],outputs:['small reflectance correction linked to photoprotection state'],
+exR:`data.rad <- get.RTMz(data.spectral, data.rad, data.soil, data.leafopt, data.canopy, data.gap, data.angles, data.Knu, data.Knh)`,
+exPy:`out = rtmz(spectral, rtmo, canopy, gap, angles, Kn_u, Kn_h, ...)`},
+{name:'get.RTMt.sb()',r:'get.RTMt.sb(data.rad, data.soil, data.leafbio, data.canopy, data.leafopt, data.gap, Tcu, Tch, Tsu, Tsh)',py:'rtmt_sb(...)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'thermal',systems:VEGSYS,desc:'Thermal radiative transfer using the Stefan-Boltzmann shortcut: total outgoing hemispherical and absorbed thermal radiation per leaf/soil component, integrated over the whole thermal spectrum in one step (faster, less precise than get.RTMt.planck()). Uses the converged Tc/Ts from get.ebal().',inputs:['data.rad, data.soil, data.canopy, data.leafopt','Tcu, Tch, Tsu, Tsh (converged sunlit/shaded leaf and soil temperatures)'],outputs:['outgoing thermal radiance, absorbed thermal flux per component'],
+exR:`out <- get.RTMt.sb(data.rad, data.soil, data.leafbio, data.canopy, data.leafopt, data.gap, Tcu, Tch, Tsu, Tsh, obsdir = TRUE, data.spectral, data.opts)`,
+exPy:`out = rtmt_sb(rad, soil, leafbio, canopy, leafopt, gap, Tcu, Tch, Tsu, Tsh)`},
+{name:'get.RTMt.planck()',r:'get.RTMt.planck(data.spectral, data.rad, data.soil, data.leafbio, data.leafopt, data.canopy, data.gap, Tcu, Tch)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'thermal',systems:VEGSYS,desc:'The full per-wavelength thermal radiative transfer using Planck’s law — the higher-precision analogue of get.RTMt.sb(), at higher computational cost. Not ported to Python in this project (scopeinpython only implements the Stefan-Boltzmann shortcut, rtmt_sb()).',inputs:['data.spectral, data.rad, data.soil, data.leafbio, data.leafopt, data.canopy, data.gap','Tcu, Tch (sunlit/shaded leaf temperature)'],outputs:['per-wavelength thermal emission spectrum'],
+exR:`out <- get.RTMt.planck(data.spectral, data.rad, data.soil, data.leafbio, data.leafopt, data.canopy, data.gap, Tcu, Tch)`,
+exPy:`# not ported; scopeinpython only implements the Stefan-Boltzmann shortcut (rtmt_sb)`},
+{name:'get.brdf()',r:'get.brdf(data.spectral, data.angles, data.rad, data.directional, atmo, data.soil, data.leafopt, data.leafbio, data.canopy, data.gap, data.meteo, data.thermal, data.bcu, data.bch, data.opts)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'thermal',systems:VEGSYS,desc:'Simulates the full bidirectional reflectance — and optionally directional thermal, fluorescence and xanthophyll radiance — of the canopy over a large set of viewing angles, by repeatedly calling the optical/thermal/fluorescence RTMs for each angle (with hot-spot and principal-plane oversampling). Not ported to Python; scopeinpython’s optical BRDF path (in rtmo.py) covers a single geometry, not this full multi-angle sweep.',inputs:['data.directional (requested viewing angles)','converged radiation, thermal, fluorescence and xanthophyll state'],outputs:['BRDF: reflectance (and optionally thermal/SIF/xanthophyll) across all requested angles'],
+exR:`brdf <- get.brdf(data.spectral, data.angles, data.rad, data.directional, atmo, data.soil, data.leafopt, data.leafbio, data.canopy, data.gap, data.meteo, data.thermal, data.bcu, data.bch, data.opts)`,
+exPy:`# not ported; scopeinpython's optical BRDF (rtmo.py) covers one geometry at a time`},
+{name:'get.zo_and_d()',r:'get.zo_and_d(inputLUT, constants, calc.heat, calc.rss_rbs)',py:'get_zo_and_d(CR, CSSOIL, CD1, Psicor, LAI, hc, kappa)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'thermal',systems:VEGSYS,desc:'Roughness length for momentum and zero-plane displacement height from canopy height and LAI (Verhoef, McNaughton & Jacobs 1997) — the canopy-aerodynamics inputs get.resistances() needs. The Python port fixes an undefined-variable bug in the R source’s degenerate-canopy branch (LAI/hc = 0), so results can differ there.',inputs:['LAI, hc (canopy height)','CR, CSSOIL, CD1, Psicor, kappa (empirical/physical constants)'],outputs:['zom (roughness length)','d (zero-plane displacement height)'],
+exR:`zd <- get.zo_and_d(inputLUT = LUT[1,], constants = SCOPEinR::constants, calc.heat = 2, calc.rss_rbs = 0)`,
+exPy:`from scopeinpython import get_zo_and_d\nzom, d = get_zo_and_d(CR=0.35, CSSOIL=0.01, CD1=20.6, Psicor=0.2, LAI=3, hc=1, kappa=0.4)`},
+{name:'get.resistances()',r:'get.resistances(data.soil, data.canopy, data.meteo)',py:'get_resistances(p)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'thermal',systems:VEGSYS,desc:'Aerodynamic and boundary-layer resistances between soil, canopy and reference height (Wallace and Verhoef two-layer scheme, with a Monin-Obukhov stability correction) — feeds directly into get.heatfluxes() inside the get.ebal() iteration.',inputs:['data.soil (rbs)','data.canopy (Cd, LAI, rwc, zo, d, hc, leafwidth)','data.meteo (z, u, L)'],outputs:['ustar, uz0, raa, rawc, raws (resistance terms)'],
+exR:`resist <- get.resistances(data.soil, data.canopy, data.meteo)`,
+exPy:`resist = get_resistances(p)`},
+{name:'get.heatfluxes()',r:'get.heatfluxes(ra, rs, Tc, ea, Ta, e_to_q, Ca, Ci)',py:'get_heatfluxes(...)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'thermal',systems:VEGSYS,desc:'Latent and sensible heat flux of a leaf from its resistances, temperature and vapour pressure gradient — the last step of each get.ebal() iteration before checking energy-balance convergence.',inputs:['ra, rs (aerodynamic, stomatal resistance)','Tc, Ta (leaf, air temperature)','ea (vapour pressure)','Ca, Ci (ambient, intercellular CO2)'],outputs:['lEc (latent heat flux)','sensible heat flux'],
+exR:`flux <- get.heatfluxes(ra, rs, Tc, ea, Ta, e_to_q, Ca, Ci)`,
+exPy:`flux = get_heatfluxes(ra, rs, Tc, ea, Ta, e_to_q, Ca, Ci)`},
+{name:'get.Monin.Obukhov()',r:'get.Monin.Obukhov(data.meteo, H)',py:'monin_obukhov(ustar, Ta, H)',pkgR:'SCOPEinR',pkgPy:'scopeinpython',stage:'thermal',systems:VEGSYS,desc:'Computes the Monin-Obukhov length, the atmospheric-stability parameter used to correct get.resistances()’ aerodynamic resistances for non-neutral conditions — part of the iterative loop inside get.ebal().',inputs:['data.meteo (ustar, Ta)','H (sensible heat flux)'],outputs:['L (Monin-Obukhov length, m)'],
+exR:`L <- get.Monin.Obukhov(data.meteo, H = sensible_heat)`,
+exPy:`L = monin_obukhov(ustar, Ta, H)`},
+{name:'get.SCOPE.outputs()',r:'get.SCOPE.outputs(data.sim, N.sims, LUT, path.out, get.outputs)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'output',systems:VEGSYS,desc:'Extracts and writes out a chosen set of variables from one or many finished SCOPE runs (get.SCOPE()/get.SCOPE.parallel() results) to CSV/plots, rather than digging through the raw nested result list by hand.',inputs:['data.sim (SCOPE run results)','N.sims','LUT','get.outputs (which variables)'],outputs:['CSV files / summary plots'],
+exR:`get.SCOPE.outputs(data.sim = db, N.sims = nrow(LUT), LUT = LUT, path.out = "outputs", get.outputs = c("refl","F740"))`,
+exPy:`# no dedicated helper in this port; access result fields directly`},
+{name:'get.merge.SCOPE()',r:'get.merge.SCOPE(paths.sims, inputs, options, spectra.data)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'output',systems:VEGSYS,desc:'Rebuilds a full LUT from a finished SCOPE simulation folder, appending the apparent reflectance/radiance/fluorescence outputs as extra columns next to the original input parameters — the table that then feeds ToolsRTM::hybrid_inversion() or ToolsRTM::getMLmodel() for trait retrieval.',inputs:['paths.sims (SCOPE run output folder)','inputs (which input columns to keep)','spectra.data (rfl, sif, Lo, ...)'],outputs:['merged LUT: inputs + simulated spectra/SIF'],related:[{name:'hybrid_inversion()',sig:'hybrid_inversion(...)'},{name:'getMLmodel()',sig:'getMLmodel(...)'},{name:'getSpatialTrait()',sig:'getSpatialTrait(...)'}],
+exR:`lut_merged <- get.merge.SCOPE(paths.sims = "outputs/sim1/", inputs = c("Cab","LAI","LIDFa"), spectra.data = "rfl")
+# lut_merged feeds ToolsRTM::hybrid_inversion() to retrieve Cab/LAI from rfl`,
+exPy:`# no dedicated helper in this port`},
+{name:'getCSV()',r:'getCSV(path.out, n.folders, files.names)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'output',systems:VEGSYS,desc:'Reads and row-binds the CSV outputs (and matching Parameters/inputLUT.csv) from multiple SCOPE run folders into one combined list — for collecting a batch of get.SCOPE.parallel()-style runs that were written to disk across separate folders.',inputs:['path.out (root folder)','n.folders','files.names (Fluorescence, Reflectance, Radiance)'],outputs:['list: data, names, lut (combined across folders)'],
+exR:`combined <- getCSV(path.out = "outputs", n.folders = 4, files.names = "Reflectance")`,
+exPy:`# no dedicated helper in this port`},
+{name:'get.SCOPE.plots()',r:'get.SCOPE.plots(path.files, plant.trait, get.plots)',py:'(R-only)',pkgR:'SCOPEinR',pkgPy:'-',stage:'output',systems:VEGSYS,desc:'Quick diagnostic plots (reflectance, radiance or fluorescence vs. a chosen plant trait) straight from a finished SCOPE run’s output folder — for a fast visual check before handing the results to ToolsRTM for inversion.',inputs:['path.files (SCOPE output folder)','plant.trait (e.g. Cab)','get.plots (reflectance, radiance, fluorescence)'],outputs:['diagnostic plot'],
+exR:`get.SCOPE.plots(path.files = "outputs", plant.trait = "Cab", get.plots = "reflectance")`,
+exPy:`# no dedicated helper in this port`},
+];
+const STAGES=[
+  {id:'lutparam',label:'1 · Parameter Space',sub:'SCOPE input table · LUT sampling · LIDF · spectral setup'},
+  {id:'leafsoil',label:'2 · Leaf & Soil Optics',sub:'Fluspect-B/Cx · mSCOPE multi-layer · BSM soil model'},
+  {id:'forward',label:'3 · Forward Model',sub:'coupled leaf-canopy-energy balance run'},
+  {id:'components',label:'4 · Photosynthesis & Fluorescence',sub:'energy balance · biochemistry · SIF · xanthophyll'},
+  {id:'thermal',label:'5 · Thermal, BRDF & Energy Exchange',sub:'thermal RTMs · multi-angle BRDF · resistances'},
+  {id:'output',label:'6 · Output Export',sub:'extract, merge & plot run results'},
+];
+const PIPELINE_REGIONS = [
+  {label:'', span:1},
+  {label:'Forward Modelling', span:6},
+];
+const STAGECOLORS = {lutparam:'#67BCC1', leafsoil:'#79B995', forward:'#7F9CCB', components:'#C98BA0', thermal:'#BF7E63', output:'#D99B72'};
+const STAGETINTS = {lutparam:'#EDF7F8', leafsoil:'#EFF7F2', forward:'#F0F3F9', components:'#F8F1F4', thermal:'#FBF0EC', output:'#FBF1EA'};
+const STAGEHOVERS = {lutparam:'#D9EEEF', leafsoil:'#DDEDE4', forward:'#DFE6F2', components:'#F1E2E7', thermal:'#F5DDD2', output:'#F6E1D3'};
+const STAGEDARKS = {lutparam:'#4A878B', leafsoil:'#57856B', forward:'#5B7092', components:'#916473', thermal:'#8C5A45', output:'#9C6D51'};
+const SYSTEMS=[
+  {id:'crop',label:'Crop'},
+  {id:'grassland',label:'Grassland'},
+  {id:'forest',label:'Forest'},
+];
+let SYSTEM='crop';
+let LANG='r', current=null;
+let chosen={};
+function langOK(f){ return LANG==='r'||f.pkgPy!=='-'; }
+function repairChosen(){
+  STAGES.filter(st=>!st.conceptual).forEach(st=>{
+    const cur = chosen[st.id];
+    if(cur && cur.systems.includes(SYSTEM) && langOK(cur)) return;
+    const alt = FREG.find(f=>f.stage===st.id && f.systems.includes(SYSTEM) && langOK(f));
+    if(alt) chosen[st.id]=alt; else delete chosen[st.id];
+  });
+}
+const SYSTEM_DESC = {
+  crop: 'Field crops and relatively homogeneous canopies — SCOPE run with crop-typical LAI, leaf angle distribution and row/canopy structure.',
+  grassland: 'Dense, low and continuous grassland canopy — SCOPE run with grassland-typical structural parameters.',
+  forest: 'Taller, more clumped canopy structure — SCOPE run with forest-typical LAI, height and leaf angle distribution.',
+};
+const FRIENDLY = {
+  'getLUT.SCOPE()':'SCOPE LUT', 'getinputLUT()':'LUT Row → Model Inputs', 'leafangles()':'Leaf Angle Distribution (LIDF)', 'getLUT_time()':'Flux-Tower Time-Series LUT', 'get.spectra.SCOPE()':'Spectral Band Setup',
+  'getFluspect.B.SCOPE()':'Fluspect-B (SCOPE)', 'getFluspect.Cx.SCOPE()':'Fluspect-B-Cx (SCOPE)', 'get.fluspect_mSCOPE()':'Fluspect (Multi-Layer mSCOPE)', 'getBSM()':'BSM Soil Model', 'soilwat()':'Soil Wetting Model',
+  'get.SCOPE()':'SCOPE Forward Model', 'get.SCOPE.parallel()':'Batch LUT Simulation',
+  'get.ebal()':'Energy Balance Solver', 'get.biochemical()':'Photosynthesis Model', 'get.biochemical.MD12()':'Photosynthesis (MD12 variant)',
+  'get.RTMf()':'Canopy Fluorescence RTM (SIF)', 'get.RTMz()':'Xanthophyll/NPQ Correction', 'get.RTMt.sb()':'Thermal RTM (Stefan-Boltzmann)', 'get.RTMt.planck()':'Thermal RTM (Planck)',
+  'get.brdf()':'Multi-Angle BRDF', 'get.zo_and_d()':'Roughness Length & Displacement Height', 'get.resistances()':'Aerodynamic Resistances', 'get.heatfluxes()':'Sensible/Latent Heat Flux', 'get.Monin.Obukhov()':'Atmospheric Stability',
+  'get.SCOPE.outputs()':'SCOPE Output Export', 'get.merge.SCOPE()':'Merge Runs Into LUT', 'getCSV()':'Batch CSV Reader', 'get.SCOPE.plots()':'Quick Diagnostic Plots',
+};
+function displayName(f){ return FRIENDLY[f.name] || f.name.replace(/\(\)$/,''); }
+function labelFor(f){return LANG==='r'?f.r:f.py}
+function pkgFor(f){return LANG==='r'?f.pkgR:f.pkgPy}
+function exFor(f){return LANG==='r'?f.exR:f.exPy}
+function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function inSystem(f){ return f.systems.includes(SYSTEM) && (LANG==='r' || f.pkgPy!=='-'); }
+
+function renderSystemColumn(){
+  const langOK = f=>LANG==='r'||f.pkgPy!=='-';
+  const opts = SYSTEMS.map(s=>{
+    const count = FREG.filter(f=>f.systems.includes(s.id)&&langOK(f)).length;
+    return `<div class="option${SYSTEM===s.id?' on':''}" data-sys="${s.id}"><div class="name">${escapeHtml(s.label)}</div><div class="desc">${escapeHtml(SYSTEM_DESC[s.id]||'')} &middot; ${count} functions</div></div>`;
+  }).join('');
+  return `<div class="stage"><div class="stagehead"><div class="stagenum">0</div><h4>Target system</h4><small>ecological context</small></div>${opts}</div>`;
+}
+function renderStages(){
+  repairChosen();
+  const label = SYSTEMS.find(s=>s.id===SYSTEM)?.label || SYSTEM;
+  document.getElementById('stages').innerHTML = renderSystemColumn() + STAGES.map(st=>{
+    const all = FREG.filter(f=>f.stage===st.id && (LANG==='r'||f.pkgPy!=='-'));
+    const isSelected = current && current.stage===st.id;
+    const clr = STAGECOLORS[st.id] || 'var(--navy)';
+    const head = `<div class="stagehead"><div class="stagenum" style="background:${clr}">${st.label.split(' ')[0]}</div><h4>${st.label.split('· ')[1]}</h4><small>${st.sub}</small></div>`;
+    if(st.conceptual) return `<div class="stage">${head}<div class="stage-conceptual">${escapeHtml(st.conceptual)}</div></div>`;
+    let emptyNote = '';
+    if(!all.length && LANG==='py'){
+      const rOnly = FREG.filter(f=>f.stage===st.id);
+      const names = rOnly.map(f=>displayName(f)).join(', ');
+      const altRaw = (rOnly[0]?.exPy||'').replace(/^#\s*/,'').split('\n')[0];
+      emptyNote = `<div class="desc" style="padding:8px;color:var(--muted);font-size:10.5px;line-height:1.5;">R-only: <b>${escapeHtml(names)}</b>. ${escapeHtml(altRaw)}</div>`;
+    }
+    return `<div class="stage${isSelected?' selected':''}">${head}` +
+      all.map(f=>{
+        const off = !f.systems.includes(SYSTEM);
+        const isOn = current===f || (!current && chosen[st.id]===f);
+        const brief = f.desc.length>100 ? f.desc.slice(0,97)+'…' : f.desc;
+        return `<div class="option${isOn?' on':''}${off?' off':''}" data-name="${escapeHtml(f.name)}" title="${off?`Not applicable to ${escapeHtml(label)}`:''}"><div class="name">${escapeHtml(displayName(f))}</div><div class="desc">${escapeHtml(brief)}</div><span class="fnsig">${escapeHtml(labelFor(f))}</span></div>`;
+      }).join('') +
+      (all.length?'':emptyNote) +
+      `</div>`;
+  }).join('');
+  document.querySelectorAll('.option[data-sys]').forEach(el=>{
+    el.onclick=()=>{
+      SYSTEM=el.dataset.sys;
+      if(current && !inSystem(current)) current=null;
+      renderStages();
+      if(!current) renderLogic();
+      if(typeof renderGraph==='function') renderGraph();
+    };
+  });
+  document.querySelectorAll('.option[data-name]:not(.off)').forEach(el=>{
+    el.onclick=()=>{ const f=FREG.find(x=>x.name===el.dataset.name); selectFunction(f); };
+  });
+  renderSummary();
+}
+function renderSummary(){
+  const el=document.getElementById('summary'); if(!el) return;
+  const sysLabel = SYSTEMS.find(s=>s.id===SYSTEM)?.label || SYSTEM;
+  const chips = [`<span class="chip chip-sys">${escapeHtml(sysLabel)}</span>`];
+  STAGES.filter(st=>!st.conceptual).forEach(st=>{
+    const f = chosen[st.id];
+    if(!f) return;
+    chips.push(`<span class="chip">${escapeHtml(displayName(f))}</span>`);
+  });
+  if(chips.length===1) chips.push(`<span class="chip chip-muted">pick functions below to build the chain</span>`);
+  el.innerHTML = chips.join('<span class="arrow">&rarr;</span>');
+}
+function renderPipelineRegions(){
+  const el = document.getElementById('pipelineRegions');
+  if(!el) return;
+  el.innerHTML = PIPELINE_REGIONS.map((r,i)=>`<div class="region${r.label?'':' region-spacer'}${i===2?' region-inv':''}" style="grid-column:span ${r.span}">${r.label?`<span>${escapeHtml(r.label)}</span>`:''}</div>`).join('');
+}
+renderPipelineRegions();
+function selectFunction(f){
+  current=f;
+  chosen[f.stage]=f;
+  setTimeout(()=>document.getElementById('detail')?.scrollIntoView({behavior:'smooth',block:'center'}), 30);
+  renderStages();
+  const neighbours = (typeof graphState!=='undefined' && graphState.links)
+    ? graphState.links.filter(l=>l.a.f===f||l.b.f===f).map(l=>l.a.f===f?l.b.f:l.a.f).slice(0,8)
+    : [];
+  document.getElementById('detail').innerHTML = `
+    <div class="kicker">${escapeHtml(f.stage)} &middot; ${escapeHtml(pkgFor(f))}</div>
+    <h2>${escapeHtml(displayName(f))}</h2>
+    <div class="desc">${f.desc}</div>
+    <div class="pills" style="margin-bottom:6px;"><span class="pill" style="font-family:'JetBrains Mono',monospace;">${escapeHtml(labelFor(f))}</span></div>
+    <div class="pills"><span class="pill">${LANG==='r'?'R':'Python'} &#10003;</span><span class="pill">${escapeHtml(SYSTEMS.find(s=>s.id===SYSTEM)?.label||SYSTEM)}</span></div>
+    <div class="meta">
+      <h4>Main inputs</h4><div class="tokens">${f.inputs.map(i=>`<span class="token">${escapeHtml(i)}</span>`).join('')}</div>
+      <h4>Outputs</h4><div class="tokens">${f.outputs.map(o=>`<span class="token">${escapeHtml(o)}</span>`).join('')}</div>
+      <h4>Example</h4><div class="tokens" style="display:block;"><pre style="white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#eaf5fb;background:rgba(0,0,0,.2);border-radius:8px;padding:9px;margin:0;">${escapeHtml(exFor(f))}</pre></div>
+      <h4>Connected to</h4><div class="tokens">${neighbours.length?neighbours.map(n=>`<span class="token linkable" data-name="${escapeHtml(n.name)}">${escapeHtml(labelFor(n))}</span>`).join(''):'<span class="token">(none in this stage range)</span>'}</div>
+      ${f.related && f.related.length ? `<h4>Related in ToolsRTM</h4><div class="tokens">${f.related.map(r=>`<a class="token" href="function-universe-toolsrtm.html" style="text-decoration:none;">${escapeHtml(r.name)}</a>`).join('')}</div>` : ''}
+    </div>`;
+  document.querySelectorAll('#detail .token.linkable').forEach(el=>{
+    el.onclick=()=>{ const nf=FREG.find(x=>x.name===el.dataset.name); if(nf) selectFunction(nf); };
+  });
+  renderLogic();
+}
+function renderLogic(){
+  const el=document.getElementById('logic'); if(!el) return;
+  const picks = STAGES.filter(st=>!st.conceptual && chosen[st.id]);
+  if(!picks.length){ el.innerHTML='Pick functions across the workflow stages to build a scientific chain.'; document.querySelector('.logiccard .valid')?.remove(); return; }
+  const sysLabel = SYSTEMS.find(s=>s.id===SYSTEM)?.label || SYSTEM;
+  const chain = picks.map(st=>`<b>${escapeHtml(displayName(chosen[st.id]))}</b>`).join(' &rarr; ');
+  el.innerHTML = `For a <b>${escapeHtml(sysLabel)}</b> target: ${chain}. Each step is a real, verified ${LANG==='r'?'SCOPEinR':'scopeinpython'} function for its stage.`;
+  if(!document.querySelector('.logiccard .valid')){
+    document.querySelector('.logiccard').insertAdjacentHTML('beforeend','<div class="valid">&#10003; Real functions, real package, no invented steps</div>');
+  }
+}
+function functionMatches(q,f){q=q.toLowerCase();return [f.name,f.r,f.py,f.pkgR,f.pkgPy,f.stage,f.desc].join(' ').toLowerCase().includes(q)}
+function showSuggestions(){
+  const inp=document.getElementById('apiSearch'), box=document.getElementById('suggestions');
+  const q=inp.value.trim();
+  const base=FREG.filter(f=>LANG==='r'||f.pkgPy!=='-');
+  let arr = q ? base.filter(f=>functionMatches(q,f)) : base;
+  box.innerHTML = arr.map(f=>{
+    const clr = STAGECOLORS[f.stage] || 'var(--navy)';
+    const off = !f.systems.includes(SYSTEM);
+    return `<div class="sug" data-name="${escapeHtml(f.name)}" style="border-left-color:${clr}">
+      <div class="sugtop"><div class="sugname">${escapeHtml(displayName(f))}</div><div class="sugpkg">${escapeHtml(pkgFor(f))}</div></div>
+      <div class="sugfn">${escapeHtml(labelFor(f))}</div>
+      <div class="sugdesc">${escapeHtml(f.desc.slice(0,90))}…</div>
+      <span class="sugstage" style="background:${clr}22;color:${clr};">${escapeHtml(f.stage)}${off?' · not in current system':''}</span>
+    </div>`;
+  }).join('') || '<div class="sug"><div class="sugdesc">No matching functions in SCOPEinR/scopeinpython.</div></div>';
+  box.classList.add('show');
+  box.querySelectorAll('[data-name]').forEach(el=>el.onclick=()=>{ selectFunction(FREG.find(x=>x.name===el.dataset.name)); box.classList.remove('show'); inp.value=''; });
+}
+document.getElementById('apiSearch').addEventListener('input', showSuggestions);
+document.getElementById('apiSearch').addEventListener('focus', showSuggestions);
+document.addEventListener('click', e=>{ if(!e.target.closest('.apisearch')) document.getElementById('suggestions')?.classList.remove('show'); });
+document.getElementById('apiSearch').addEventListener('keydown', e=>{
+  if(e.key==='Escape') document.getElementById('suggestions').classList.remove('show');
+  if(e.key==='Enter'){ const q=e.target.value.trim(); const f=FREG.filter(f=>LANG==='r'||f.pkgPy!=='-').find(x=>functionMatches(q,x)); if(f){ selectFunction(f); document.getElementById('suggestions').classList.remove('show'); } }
+});
+document.querySelectorAll('.langbtn[data-lang]').forEach(b=>b.onclick=()=>{
+  LANG=b.dataset.lang;
+  document.querySelectorAll('.langbtn[data-lang]').forEach(x=>x.classList.toggle('active', x===b));
+  renderStages();
+  if(current) selectFunction(current); else renderLogic();
+  if(typeof renderGraph==='function') renderGraph();
+  if(typeof renderTuts==='function') renderTuts();
+});
+renderStages();
+renderLogic();
+
+/* ---------- function network graph ---------- */
+const STAGEORDER = STAGES.map(s=>s.id);
+let graphState = {nodes:[], links:[], running:true, labels:true, selected:null, scale:1, tx:0, ty:0, pan:null, dragMoved:false};
+function stageIndex(s){ return STAGEORDER.indexOf(s); }
+function buildGraphData(){
+  const funcs = FREG.filter(inSystem);
+  const nodes = funcs.map((f,i)=>({id:i, f, x:120+(i%5)*140+Math.random()*30, y:80+Math.floor(i/5)*110+Math.random()*30, vx:0, vy:0, r:8+Math.min(4,(f.inputs||[]).length*.35)}));
+  const links = [];
+  for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){
+    const a=nodes[i], b=nodes[j], sa=stageIndex(a.f.stage), sb=stageIndex(b.f.stage);
+    let type=null, weight=0;
+    if(Math.abs(sa-sb)===1){ type='flow'; weight=1.0; }
+    else if(a.f.stage===b.f.stage){ type='stage'; weight=.45; }
+    if(type) links.push({a,b,type,weight});
+  }
+  const pairs=[
+    ['get.spectra.SCOPE()','getLUT.SCOPE()'], ['getLUT.SCOPE()','getinputLUT()'], ['getinputLUT()','leafangles()'], ['getLUT_time()','getLUT.SCOPE()'],
+    ['getinputLUT()','getFluspect.B.SCOPE()'], ['getinputLUT()','getFluspect.Cx.SCOPE()'], ['getinputLUT()','getBSM()'],
+    ['getFluspect.Cx.SCOPE()','get.fluspect_mSCOPE()'], ['getBSM()','soilwat()'],
+    ['getFluspect.B.SCOPE()','get.SCOPE()'], ['getFluspect.Cx.SCOPE()','get.SCOPE()'], ['get.fluspect_mSCOPE()','get.SCOPE()'], ['getBSM()','get.SCOPE()'],
+    ['getLUT.SCOPE()','get.SCOPE()'], ['getLUT.SCOPE()','get.SCOPE.parallel()'],
+    ['get.SCOPE()','get.ebal()'], ['get.SCOPE()','get.RTMf()'], ['get.SCOPE()','get.RTMz()'],
+    ['get.SCOPE()','get.RTMt.sb()'], ['get.SCOPE()','get.RTMt.planck()'], ['get.SCOPE()','get.brdf()'],
+    ['get.ebal()','get.biochemical()'], ['get.ebal()','get.biochemical.MD12()'], ['get.ebal()','get.resistances()'],
+    ['get.zo_and_d()','get.resistances()'], ['get.resistances()','get.heatfluxes()'], ['get.resistances()','get.Monin.Obukhov()'], ['get.ebal()','get.heatfluxes()'],
+    ['get.ebal()','get.RTMf()'], ['get.RTMf()','get.RTMz()'], ['get.RTMt.sb()','get.RTMt.planck()'], ['get.brdf()','get.RTMf()'],
+    ['get.SCOPE()','get.SCOPE.outputs()'], ['get.SCOPE.parallel()','get.SCOPE.outputs()'],
+    ['get.SCOPE.outputs()','get.merge.SCOPE()'], ['get.merge.SCOPE()','getCSV()'], ['getCSV()','get.SCOPE.plots()'], ['get.SCOPE.outputs()','get.SCOPE.plots()'],
+  ];
+  for(const [na,nb] of pairs){
+    const a=nodes.find(n=>n.f.name===na), b=nodes.find(n=>n.f.name===nb);
+    if(a && b && !links.some(l=>(l.a===a&&l.b===b)||(l.a===b&&l.b===a))) links.push({a,b,type:'flow',weight:1.2});
+  }
+  return {nodes, links};
+}
+function graphLegend(){
+  const el=document.getElementById('graphLegend'); if(!el) return;
+  const stages=[...new Set(graphState.nodes.map(n=>n.f.stage))];
+  el.innerHTML = stages.map(s=>{
+    const st=STAGES.find(x=>x.id===s);
+    return `<span class="legendChip"><i class="legendDot" style="background:${STAGECOLORS[s]||'#789'}"></i>${escapeHtml(st?st.label.split('· ')[1]:s)}</span>`;
+  }).join('');
+}
+function graphDetailHTML(f){
+  const neighbours = graphState.links.filter(l=>l.a.f===f||l.b.f===f).map(l=>l.a.f===f?l.b.f:l.a.f).slice(0,8);
+  return `<div class="netDetailGrid">
+    <div>
+      <div class="kicker">${escapeHtml(f.stage)} &middot; ${escapeHtml(pkgFor(f))}</div>
+      <h3>${escapeHtml(labelFor(f))}</h3>
+      <div class="desc">${f.desc}</div>
+      <div class="pillrow"><span class="pill">${LANG==='r'?'R':'Python'} &#10003;</span><span class="pill">${escapeHtml(f.stage)}</span></div>
+    </div>
+    <div class="iorow">
+      <div><h5>Main inputs</h5><div class="tokrow">${(f.inputs||[]).map(i=>`<span class="tok">${escapeHtml(i)}</span>`).join('')}</div></div>
+      <div><h5>Outputs</h5><div class="tokrow">${(f.outputs||[]).map(o=>`<span class="tok">${escapeHtml(o)}</span>`).join('')}</div></div>
+    </div>
+    <div>
+      <h5>Example</h5>
+      <div class="codebox">${escapeHtml(exFor(f))}</div>
+    </div>
+    <div>
+      <h5>Connected functions</h5>
+      <div class="tokrow">${neighbours.map(n=>`<button type="button" class="tok" data-name="${escapeHtml(n.name)}">&rarr; ${escapeHtml(labelFor(n))}</button>`).join('')||'<span class="tok">(none in this stage range)</span>'}</div>
+    </div>
+  </div>`;
+}
+function renderGraph(){
+  const svg=document.getElementById('functionGraph'); if(!svg) return;
+  const {nodes,links}=buildGraphData(); graphState.nodes=nodes; graphState.links=links; graphState.selected=null;
+  svg.innerHTML = `<defs><marker id="arrowFlow" markerWidth="8" markerHeight="8" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L8,3 z" fill="#5a9eb7" opacity=".75"/></marker></defs><g id="graphViewport"><g id="linkLayer"></g><g id="particleLayer"></g><g id="nodeLayer"></g></g>`;
+  const linkLayer=svg.querySelector('#linkLayer'), nodeLayer=svg.querySelector('#nodeLayer');
+  links.forEach((l,i)=>{
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('class','graphLink '+(l.type==='flow'?'flow':'')); line.dataset.li=i;
+    if(l.type==='flow') line.setAttribute('marker-end','url(#arrowFlow)');
+    linkLayer.appendChild(line);
+  });
+  nodes.forEach((n,i)=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('class','graphNode'); g.dataset.ni=i;
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('r',n.r); c.setAttribute('fill',STAGECOLORS[n.f.stage]||'#5a8398'); c.setAttribute('stroke','#fff'); c.setAttribute('stroke-width','1.8');
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('class','nodeLabel'); t.setAttribute('x',n.r+5); t.setAttribute('y','3'); t.textContent=labelFor(n.f);
+    g.append(c,t); nodeLayer.appendChild(g);
+    g.addEventListener('pointerdown', e=>graphPointerDown(e,n,g));
+    g.addEventListener('click', ()=>{ if(!graphState.dragMoved) selectGraphNode(n); });
+  });
+  graphLegend(); graphInteractions(svg);
+  document.getElementById('graphNodeCount').textContent = nodes.length;
+  document.getElementById('graphLinkCount').textContent = links.length;
+  document.getElementById('graphLang').textContent = LANG==='r' ? 'R' : 'Python';
+  document.getElementById('graphDetail').innerHTML = '<div class="detail-empty">Click any node to show its package, inputs, outputs, code example and direct connections.</div>';
+  if(graphState.raf) cancelAnimationFrame(graphState.raf);
+  graphState.running = document.getElementById('graphMotion')?.classList.contains('on') ?? true;
+  tickGraph();
+}
+function tickGraph(){
+  const svg=document.getElementById('functionGraph'); if(!svg) return;
+  const box=svg.getBoundingClientRect(), W=Math.max(500,box.width), H=Math.max(380,box.height), N=graphState.nodes, L=graphState.links;
+  if(graphState.running){
+    for(const n of N){ const si=Math.max(0,stageIndex(n.f.stage)); const targetX=70+(W-140)*(si/Math.max(1,STAGEORDER.length-1)); n.vx+=(targetX-n.x)*.0009; n.vy+=(H*.5-n.y)*.0004; }
+    for(let i=0;i<N.length;i++) for(let j=i+1;j<N.length;j++){ const a=N[i],b=N[j],dx=b.x-a.x,dy=b.y-a.y,d2=dx*dx+dy*dy+1,d=Math.sqrt(d2),rep=850/d2,fx=rep*dx/d,fy=rep*dy/d; a.vx-=fx; a.vy-=fy; b.vx+=fx; b.vy+=fy; }
+    for(const l of L){ const dx=l.b.x-l.a.x, dy=l.b.y-l.a.y, d=Math.sqrt(dx*dx+dy*dy)||1, target=l.type==='flow'?105:78, k=.0022*l.weight, f=(d-target)*k; l.a.vx+=f*dx/d; l.a.vy+=f*dy/d; l.b.vx-=f*dx/d; l.b.vy-=f*dy/d; }
+    for(const n of N){ if(n.fixed) continue; n.vx*=.90; n.vy*=.90; n.x+=n.vx; n.y+=n.vy; n.x=Math.max(28,Math.min(W-28,n.x)); n.y=Math.max(30,Math.min(H-30,n.y)); }
+  }
+  const lines=svg.querySelectorAll('.graphLink'); L.forEach((l,i)=>{ const e=lines[i]; if(!e) return; e.setAttribute('x1',l.a.x); e.setAttribute('y1',l.a.y); e.setAttribute('x2',l.b.x); e.setAttribute('y2',l.b.y); });
+  const gs=svg.querySelectorAll('.graphNode'); N.forEach((n,i)=>{ if(gs[i]) gs[i].setAttribute('transform',`translate(${n.x},${n.y})`); });
+  drawParticles(svg); graphState.raf=requestAnimationFrame(tickGraph);
+}
+let particlePhase=0;
+function drawParticles(svg){
+  const layer=svg.querySelector('#particleLayer'); if(!layer) return;
+  particlePhase=(particlePhase+.0035)%1; layer.innerHTML='';
+  const active = graphState.selected ? graphState.links.filter(l=>l.a===graphState.selected||l.b===graphState.selected) : graphState.links.filter(l=>l.type==='flow').slice(0,12);
+  active.slice(0,14).forEach((l,i)=>{
+    const t=(particlePhase+i*.071)%1;
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('class','flowParticle'); c.setAttribute('r', graphState.selected?'2.4':'1.7');
+    c.setAttribute('cx', l.a.x+(l.b.x-l.a.x)*t); c.setAttribute('cy', l.a.y+(l.b.y-l.a.y)*t);
+    layer.appendChild(c);
+  });
+}
+function selectGraphNode(n){
+  graphState.selected=n;
+  const svg=document.getElementById('functionGraph');
+  const neigh=new Set([n]);
+  graphState.links.forEach(l=>{ if(l.a===n) neigh.add(l.b); if(l.b===n) neigh.add(l.a); });
+  svg.querySelectorAll('.graphNode').forEach((g,i)=>{
+    const nd = graphState.nodes[i], isSel = nd===n;
+    g.classList.toggle('selected', isSel);
+    g.classList.toggle('neighbor', !isSel && neigh.has(nd));
+    g.classList.toggle('dim', !neigh.has(nd));
+    const circle = g.querySelector('circle');
+    if(circle) circle.setAttribute('fill', isSel ? (STAGEDARKS[nd.f.stage]||'#5a8398') : (STAGECOLORS[nd.f.stage]||'#5a8398'));
+  });
+  svg.querySelectorAll('.graphLink').forEach((e,i)=>{ const l=graphState.links[i], on=l.a===n||l.b===n; e.classList.toggle('active',on); e.classList.toggle('dim',!on); });
+  document.getElementById('graphDetail').innerHTML = graphDetailHTML(n.f);
+  selectFunction(n.f);
+}
+function clientToGraph(cx,cy,r){ return {x:(cx-r.left-graphState.tx)/graphState.scale, y:(cy-r.top-graphState.ty)/graphState.scale}; }
+function graphPointerDown(e,n,g){
+  e.preventDefault(); graphState.dragMoved=false; n.fixed=true; g.setPointerCapture(e.pointerId);
+  const sx=e.clientX, sy=e.clientY;
+  const move=ev=>{ const svg=document.getElementById('functionGraph'), r=svg.getBoundingClientRect(), pt=clientToGraph(ev.clientX,ev.clientY,r); n.x=pt.x; n.y=pt.y; n.vx=n.vy=0; if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>3) graphState.dragMoved=true; };
+  const up=ev=>{ n.fixed=false; g.releasePointerCapture?.(ev.pointerId); g.removeEventListener('pointermove',move); g.removeEventListener('pointerup',up); g.removeEventListener('pointercancel',up); };
+  g.addEventListener('pointermove',move); g.addEventListener('pointerup',up); g.addEventListener('pointercancel',up);
+}
+function applyGraphTransform(){ const v=document.getElementById('graphViewport'); if(v) v.setAttribute('transform',`translate(${graphState.tx},${graphState.ty}) scale(${graphState.scale})`); }
+function graphInteractions(svg){
+  svg.onwheel=e=>{ e.preventDefault(); const r=svg.getBoundingClientRect(), old=graphState.scale, fac=e.deltaY<0?1.08:.92, ns=Math.max(.55,Math.min(2.2,old*fac)), mx=e.clientX-r.left, my=e.clientY-r.top; graphState.tx=mx-(mx-graphState.tx)*(ns/old); graphState.ty=my-(my-graphState.ty)*(ns/old); graphState.scale=ns; applyGraphTransform(); };
+  svg.addEventListener('pointerdown', e=>{ if(e.target.closest?.('.graphNode')) return; graphState.pan={x:e.clientX,y:e.clientY,tx:graphState.tx,ty:graphState.ty}; svg.setPointerCapture(e.pointerId); });
+  svg.addEventListener('pointermove', e=>{ if(!graphState.pan) return; graphState.tx=graphState.pan.tx+e.clientX-graphState.pan.x; graphState.ty=graphState.pan.ty+e.clientY-graphState.pan.y; applyGraphTransform(); });
+  svg.addEventListener('pointerup', e=>{ graphState.pan=null; svg.releasePointerCapture?.(e.pointerId); });
+}
+function resetGraphView(){ graphState.scale=1; graphState.tx=graphState.ty=0; graphState.selected=null; applyGraphTransform(); renderGraph(); }
+document.getElementById('graphMotion')?.addEventListener('click', e=>{ e.currentTarget.classList.toggle('on'); graphState.running=e.currentTarget.classList.contains('on'); e.currentTarget.textContent=graphState.running?'Live motion':'Motion paused'; });
+document.getElementById('graphLabels')?.addEventListener('click', e=>{ e.currentTarget.classList.toggle('on'); graphState.labels=e.currentTarget.classList.contains('on'); document.querySelectorAll('.nodeLabel').forEach(x=>x.style.display=graphState.labels?'':'none'); });
+document.getElementById('graphReset')?.addEventListener('click', resetGraphView);
+renderGraph();
+</script>
+
+</body></html>

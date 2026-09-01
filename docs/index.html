@@ -48,6 +48,8 @@ code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 0.
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(11,61,89,0.32); }
 .btn-ghost { background: transparent; border-radius: 999px; border: 1px solid var(--border-soft); padding: 10px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); transition: all 0.2s; }
 .btn-ghost:hover { border-color: var(--brand-light); color: var(--brand); background: var(--bg-light); }
+.btn-accent { display: inline-block; background: linear-gradient(135deg, var(--accent), #1587b5); color: #fff; border-radius: 999px; border: none; padding: 11px 22px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; text-decoration: none; box-shadow: 0 10px 24px rgba(43,179,163,0.32); transition: transform 0.2s, box-shadow 0.2s; }
+.btn-accent:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(43,179,163,0.4); }
 .hero-figure { background: #fff; border-radius: var(--radius-lg); padding: 14px; border: 1px solid var(--border-soft); box-shadow: var(--card-shadow); }
 .hero-figure img { width: 100%; border-radius: 12px; display: block; }
 .hero-figure-caption { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 8px; }
@@ -221,6 +223,7 @@ img.zoomable { cursor: zoom-in; }
       <div class="hero-actions">
         <button class="btn-primary" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'});">Explore the packages</button>
         <button class="btn-ghost" onclick="document.getElementById('docs').scrollIntoView({behavior:'smooth'});">Browse reference manuals</button>
+        <a class="btn-accent" href="function-universe-toolsrtm.html">Explore the functions</a>
       </div>
     </div>
     <div class="hero-figure">
@@ -297,7 +300,7 @@ img.zoomable { cursor: zoom-in; }
       <a href="https://doi.org/10.5281/zenodo.22134140" target="_blank"><img src="https://zenodo.org/badge/1321341046.svg" alt="DOI"></a>
     </p>
     <h3 style="font-size: 18px; color: var(--brand); margin: 4px 0 4px;">Same models, both languages — do they agree?</h3>
-    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python.</p>
+    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python. <a href="stemmus-verification.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">STEMMUS R vs Python verification (draft preview) &rarr;</a></p>
     <div class="shot-grid">
       <div class="shot-card">
         <img src="assets/comparison_allmodels_spectra_grid.png" alt="15-panel grid of simulated reflectance spectra, R (black) vs Python (red dashed) fully overlapping, one panel per leaf x canopy model combination">
@@ -406,6 +409,13 @@ pip install git+https://github.com/CCGCAM/scopeinpython.git  # depends on toolsr
     </div>
 
     <p class="section-subtitle" style="margin-top: 22px; margin-bottom: 0;">Both Python libraries also share a <a href="python/index.html">combined landing page</a>, with the numeric verification-against-R table and the "what's not ported" list. For large-sample checks (shared LUTs, R vs Python) rather than single hand-picked examples — all 15 leaf&times;canopy combinations, SPART, MARMIT, full SCOPE 2.1, plus real-measured-leaf validation — see <a href="comparison.html"><strong>R vs Python: model comparison &amp; verification</strong></a>.</p>
+
+    <p class="section-subtitle" style="margin-top: 22px; margin-bottom: 10px;">Prefer an interactive function map to a reference manual?</p>
+    <div class="hero-actions">
+      <a class="btn-accent" href="function-universe-toolsrtm.html">Explore ToolsRTM functions</a>
+      <a class="btn-accent" href="function-universe-scopeinr.html">Explore SCOPEinR functions</a>
+      <a class="btn-accent" href="function-universe-stemmus-inprogress.html">Explore STEMMUS functions</a>
+    </div>
   </div>
 </section>
 
@@ -514,6 +524,7 @@ get.simulator("STAC")</code></pre>
           <div class="tut-links">
             <a href="Tutorials/How-in-R.html">R (rendered)</a>
             <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python.ipynb" target="_blank">Python (notebook)</a>
+            <a href="function-universe-toolsrtm.html">Explore the functions &rarr;</a>
           </div>
         </div>
         <details class="tut-shots-toggle">
@@ -532,6 +543,7 @@ get.simulator("STAC")</code></pre>
           <div class="tut-links">
             <a href="Tutorials/How-in-R-SCOPEinR.html">R (rendered)</a>
             <a href="https://github.com/CCGCAM/RTM-Suite/blob/main/Tutorials/How-in-Python-SCOPEinR.ipynb" target="_blank">Python (notebook)</a>
+            <a href="function-universe-scopeinr.html">Explore the functions &rarr;</a>
           </div>
         </div>
         <details class="tut-shots-toggle">
@@ -542,6 +554,15 @@ get.simulator("STAC")</code></pre>
             <div class="tut-shot-frame"><img src="Tutorials/images/scope_lai_inversion.png" alt="LAI retrieved from Sentinel-2A bands, SCOPE apparent reflectance"></div>
           </div>
         </details>
+      </div>
+
+      <div class="tut-row">
+        <div class="tut-row-header">
+          <div><div class="tut-name">STEMMUS + SCOPE</div><div class="tut-desc">Soil water/heat/air transport coupled to SCOPE&rsquo;s canopy energy balance and fluorescence &mdash; still in development, not yet a released package.</div></div>
+          <div class="tut-links">
+            <a href="function-universe-stemmus-inprogress.html">Explore the functions &rarr;</a>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -563,6 +584,12 @@ get.simulator("STAC")</code></pre>
           <a class="badge-link" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/Python" target="_blank"><img src="https://img.shields.io/badge/GitHub-Scripts%2FPython-181717?logo=github&logoColor=white" alt="Scripts/Python on GitHub"></a>
         </div>
       </div>
+    </div>
+
+    <p class="section-subtitle" style="max-width: none; margin-bottom: 14px;">Or browse each package's tutorials as a dedicated hub site, organized by theme:</p>
+    <div class="hero-actions" style="margin-bottom: 26px;">
+      <a class="btn-accent" href="quarto-hub-toolsrtm/_site/index.html">ToolsRTM Tutorial Hub</a>
+      <a class="btn-accent" href="quarto-hub-scopeinr/_site/index.html">SCOPEinR Tutorial Hub</a>
     </div>
 
     <details class="tut-shots-toggle tut-full-list-toggle" style="margin-bottom: 26px;">
