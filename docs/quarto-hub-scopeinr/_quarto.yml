@@ -1,0 +1,38 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - "tutorials/r/**"
+    - "tutorials/python/**"
+
+website:
+  title: "SCOPEinR"
+  site-url: ""
+  navbar:
+    background: "#061c2a"
+    foreground: "#eaf5fb"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: tutorials-r.qmd
+        text: R Tutorials
+      - href: tutorials-python.qmd
+        text: Python Tutorials
+    right:
+      - href: ../../index.html
+        text: "&larr; Back to RTM-Suite"
+
+  page-footer:
+    background: "#061c2a"
+    foreground: "#8497a2"
+    left: "RTM-Suite &middot; SCOPEinR tutorials &amp; docs"
+    right: "R and Python kept numerically in sync"
+
+format:
+  html:
+    theme: [cosmo, styles.scss]
+    css: styles.css
+    toc: true
+    embed-resources: true
+    grid:
+      body-width: 900px

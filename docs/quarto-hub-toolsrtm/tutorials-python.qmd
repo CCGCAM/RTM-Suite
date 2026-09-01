@@ -1,0 +1,78 @@
+---
+title: "Python Tutorials"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+```{=html}
+<section class="hub-hero" style="padding-top:20px;">
+  <div class="hub-eyebrow">TOOLSRTM &middot; PYTHON</div>
+  <h1>Python Tutorials</h1>
+  <p class="lead">
+    <code>toolsrtm</code> and <code>scopeinpython</code> share one continuous 20-chapter
+    learning path rather than two separate ones &mdash; almost every chapter here is ToolsRTM
+    material (only Chapter 06 is SCOPE-specific, covered on the <a href="../../quarto-hub-scopeinr/_site/tutorials-python.html">SCOPEinR hub</a>).
+    Below: the ToolsRTM-relevant chapters, grouped the same way as the full path, plus the
+    package-tagged runnable code examples.
+  </p>
+</section>
+
+<div class="hub-section-title">I. Fundamentals &amp; RTM simulation &middot; ch01&ndash;05</div>
+<div class="hub-section-desc">A first simulation, what every trait means, then leaf, canopy and soil/atmosphere model families, each run and interpreted on real output.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/python/t01-getting-started.html"><div class="num">01</div><h4>Getting Started</h4><p>A first simulation in minutes.</p></a>
+  <a class="hub-card" href="tutorials/python/t02-parameters-traits.html"><div class="num">02</div><h4>Parameters &amp; Traits</h4><p>What every trait means, physically.</p></a>
+  <a class="hub-card" href="tutorials/python/t03-leaf-models.html"><div class="num">03</div><h4>Leaf Radiative Transfer Models</h4><p>PROSPECT-D/PRO agree; LIBERTY (needle) diverges.</p></a>
+  <a class="hub-card" href="tutorials/python/t04-canopy-models.html"><div class="num">04</div><h4>Canopy Radiative Transfer Models</h4><p>fourSAIL vs. fourSAIL2 vs. INFORM, same leaf and LAI.</p></a>
+  <a class="hub-card" href="tutorials/python/t05-soil-atmosphere.html"><div class="num">05</div><h4>Soil &amp; Atmosphere</h4><p>BSM, MARMIT, and the SPART chain to top-of-atmosphere.</p></a>
+</div>
+
+<div class="hub-section-title">II. Simulation to observations &middot; ch07&ndash;10</div>
+<div class="hub-section-desc">Chaining models into pipelines, resampling onto real sensor bands, spectral indices, and sensitivity.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/python/t07-building-workflows.html"><div class="num">07</div><h4>Building RTM Workflows</h4><p>How the models chain together into real pipelines.</p></a>
+  <a class="hub-card" href="tutorials/python/t08-sensor-simulation.html"><div class="num">08</div><h4>Sensor Simulation</h4><p>Real, measured Sentinel-2A response curves, not idealized shapes.</p></a>
+  <a class="hub-card" href="tutorials/python/t09-spectral-indices.html"><div class="num">09</div><h4>Spectral Indices</h4><p>NDVI's real saturation above LAI~4, vs. MSAVI's gentler response.</p></a>
+  <a class="hub-card" href="tutorials/python/t10-sensitivity-analysis.html"><div class="num">10</div><h4>Sensitivity Analysis</h4><p>Which trait dominates at each wavelength.</p></a>
+</div>
+
+<div class="hub-section-title">III. Spectra to traits &middot; ch11&ndash;15</div>
+<div class="hub-section-desc">A realistic training LUT, then three genuinely different inversion strategies.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/python/t11-lut-generation.html"><div class="num">11</div><h4>LUT Generation</h4><p>Realistic trait sampling, including real trait co-variation.</p></a>
+  <a class="hub-card" href="tutorials/python/t12-lut-inversion.html"><div class="num">12</div><h4>LUT Inversion</h4><p>Observed spectrum against its best-matching neighbours.</p></a>
+  <a class="hub-card" href="tutorials/python/t13-machine-learning-inversion.html"><div class="num">13</div><h4>Machine-Learning Inversion</h4><p>Random Forest and friends, trained on the LUT.</p></a>
+  <a class="hub-card" href="tutorials/python/t14-deep-learning-inversion.html"><div class="num">14</div><h4>Deep-Learning Inversion</h4><p>A dense network that genuinely learns: real loss curve, R&sup2;=0.95.</p></a>
+  <a class="hub-card" href="tutorials/python/t15-choosing-inversion-strategy.html"><div class="num">15</div><h4>Choosing an Inversion Strategy</h4><p>LUT matching vs. ML vs. deep learning: when to use which.</p></a>
+</div>
+
+<div class="hub-section-title">IV. Real Earth observation &middot; ch16&ndash;20</div>
+<div class="hub-section-desc">A live Sentinel-2 scene via STAC, prepared, inverted spatially, and a flagship end-to-end script.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/python/t16-retrieving-eo-data.html"><div class="num">16</div><h4>Retrieving Real EO Data</h4><p>Pulling a real Sentinel-2 scene via STAC.</p></a>
+  <a class="hub-card" href="tutorials/python/t17-preparing-eo-observations.html"><div class="num">17</div><h4>Preparing EO Observations</h4><p>A real case where naive cloud masking fails, and a working fix.</p></a>
+  <a class="hub-card" href="tutorials/python/t18-applying-inversion-spatially.html"><div class="num">18</div><h4>Applying an Inversion Model Spatially</h4><p>From a trained model to a pixel-by-pixel trait map.</p></a>
+  <a class="hub-card" href="tutorials/python/t19-trait-maps-uncertainty.html"><div class="num">19</div><h4>Trait Maps &amp; Uncertainty</h4><p>Not just a map &mdash; how confident is it?</p></a>
+  <a class="hub-card" href="tutorials/python/t20-end-to-end-workflow.html"><div class="num">20</div><h4>End-to-End Workflow <em>(flagship)</em></h4><p>Raw RTM parameters to a real, cross-checked trait map.</p></a>
+</div>
+
+<div class="hub-section-title">Runnable code examples, by topic</div>
+<div class="hub-section-desc">Short, package-tagged examples from the Python API reference &mdash; each one runnable on its own.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../python/examples.html#leaf-canopy-toolsrtm"><div class="num">Ex</div><h4>Leaf &rarr; Canopy</h4><p>PROSPECT + fourSAIL, chained.</p></a>
+  <a class="hub-card" href="../../python/examples.html#alternative-leaf-models-liberty-and-fluspect-b-toolsrtm"><div class="num">Ex</div><h4>Alternative Leaf Models</h4><p>LIBERTY and Fluspect-B.</p></a>
+  <a class="hub-card" href="../../python/examples.html#inform-explicit-forest-canopy-model-toolsrtm"><div class="num">Ex</div><h4>INFORM</h4><p>Explicit forest canopy model.</p></a>
+  <a class="hub-card" href="../../python/examples.html#spart-full-soil-plant-atmosphere-chain-toolsrtm"><div class="num">Ex</div><h4>SPART</h4><p>Full soil-plant-atmosphere chain.</p></a>
+  <a class="hub-card" href="../../python/examples.html#marmit-soil-moisture-model-toolsrtm"><div class="num">Ex</div><h4>MARMIT</h4><p>Soil moisture model.</p></a>
+  <a class="hub-card" href="../../python/examples.html#sensor-convolution-vegetation-indices-toolsrtm"><div class="num">Ex</div><h4>Sensor Convolution &amp; Indices</h4><p>Native spectrum to real bands to NDVI.</p></a>
+  <a class="hub-card" href="../../python/examples.html#global-sensitivity-analysis-toolsrtm"><div class="num">Ex</div><h4>Global Sensitivity Analysis</h4><p>Sobol indices, in code.</p></a>
+  <a class="hub-card" href="../../python/examples.html#machine-learning-trait-inversion-toolsrtm"><div class="num">Ex</div><h4>Machine-Learning Trait Inversion</h4><p>Training and applying an inversion model.</p></a>
+  <a class="hub-card" href="../../python/examples.html#deep-learning-trait-inversion-toolsrtm-optional-dl-extra"><div class="num">Ex</div><h4>Deep-Learning Trait Inversion</h4><p>Dense network, minimal example.</p></a>
+  <a class="hub-card" href="../../python/examples.html#the-1d-cnn-on-hyperspectral-bands-toolsrtm"><div class="num">Ex</div><h4>1D-CNN on Hyperspectral Bands</h4><p>PRISMA-resolution spectra, direct.</p></a>
+  <a class="hub-card" href="../../python/examples.html#real-sentinel-2-capstone-data-driven-spatial-index-cab-mapping-toolsrtm"><div class="num">Ex</div><h4>Real Sentinel-2 Capstone</h4><p>Data-driven spatial index &amp; Cab mapping.</p></a>
+</div>
+
+<div class="hub-section-desc" style="margin-top:30px;">The full 20-chapter path in context lives on the <a href="../../tutorials-python.html">RTM-Suite Python tutorials overview</a>; the complete API reference is the <a href="../../python/toolsrtm/index.html">toolsrtm Sphinx site</a>.</div>
+```

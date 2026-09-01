@@ -1,0 +1,53 @@
+---
+title: "R Tutorials"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+```{=html}
+<section class="hub-hero" style="padding-top:20px;">
+  <div class="hub-eyebrow">SCOPEINR &middot; R PKGDOWN ARTICLES</div>
+  <h1>R Tutorials</h1>
+  <p class="lead">
+    Twelve rendered R vignettes, grouped by theme: getting started and the input structure,
+    energy balance and fluorescence, LUTs and large-scale runs, then sensitivity, inversion
+    and a real-Sentinel-2 capstone. Every number and figure is real output from an actual run.
+  </p>
+</section>
+
+<div class="hub-section-title">Getting started &amp; the input structure &middot; t00&ndash;t02</div>
+<div class="hub-section-desc">SCOPE's options table, a first run, and the soil/canopy/BRDF input structure underneath it.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/r/t00-scope-options.html"><div class="num">00</div><h4>SCOPE's Options Table</h4><p>Every switch that changes what a run computes.</p></a>
+  <a class="hub-card" href="tutorials/r/t01-getting-started.html"><div class="num">01</div><h4>Getting Started with SCOPEinR</h4><p>A first coupled simulation, start to finish.</p></a>
+  <a class="hub-card" href="tutorials/r/t02-soil-canopy-brdf.html"><div class="num">02</div><h4>Soil, Canopy BRDF, and the SCOPE Input Structure</h4><p>What every input table actually feeds.</p></a>
+</div>
+
+<div class="hub-section-title">Energy balance &amp; fluorescence &middot; t03&ndash;t04</div>
+<div class="hub-section-desc">The two things that make SCOPE more than a reflectance model.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/r/t03-energy-balance.html"><div class="num">03</div><h4>Energy Balance Basics</h4><p>Leaf/soil temperature and stomatal conductance, converged.</p></a>
+  <a class="hub-card" href="tutorials/r/t04-fluorescence.html"><div class="num">04</div><h4>Fluorescence (SIF)</h4><p>Where the emitted SIF spectrum comes from.</p></a>
+</div>
+
+<div class="hub-section-title">LUTs &amp; large-scale runs &middot; t05&ndash;t06, t10</div>
+<div class="hub-section-desc">Building a SCOPE parameter table and running it at scale.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/r/t05-building-scope-luts.html"><div class="num">05</div><h4>Building SCOPE LUTs</h4><p>SCOPE-specific parameter sampling.</p></a>
+  <a class="hub-card" href="tutorials/r/t06-parallel-scope-runs.html"><div class="num">06</div><h4>Large-Scale and Parallel SCOPE Runs</h4><p>A LUT run across many cores.</p></a>
+  <a class="hub-card" href="tutorials/r/t10-end-to-end-pipeline.html"><div class="num">10</div><h4>End-to-End SCOPE Pipeline</h4><p>LUT to output, as one pipeline.</p></a>
+</div>
+
+<div class="hub-section-title">Sensitivity, inversion &amp; the real-Sentinel-2 capstone &middot; t07&ndash;t09, t11</div>
+<div class="hub-section-desc">Which traits move SCOPE's signal, whether SIF adds information, and a real satellite scene.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/r/t07-sensitivity.html"><div class="num">07</div><h4>Sensitivity: Direct vs. Indirect Trait Effects</h4><p>Reflectance sensitivity to Vcmax25.</p></a>
+  <a class="hub-card" href="tutorials/r/t08-hybrid-inversion.html"><div class="num">08</div><h4>Hybrid Inversion from SCOPE Reflectance</h4><p>Retrieving traits from SCOPE-simulated reflectance.</p></a>
+  <a class="hub-card" href="tutorials/r/t09-sif-photosynthesis.html"><div class="num">09</div><h4>Does SIF Add Information About Photosynthesis?</h4><p>Testing SIF as a GPP proxy.</p></a>
+  <a class="hub-card" href="tutorials/r/t11-photosynthesis-capstone.html"><div class="num">11</div><h4>Capstone: ML Inversion of Net Photosynthesis, Real Sentinel-2</h4><p>Real Sentinel-2 imagery over Speulderbos.</p></a>
+</div>
+
+<div class="hub-section-desc" style="margin-top:30px;">The full package reference (every function, every argument) lives at the <a href="../../scopeinr/index.html">SCOPEinR pkgdown site</a>; the complete numbered tutorial index is on the <a href="../../tutorials-overview.html">RTM-Suite tutorials overview</a>.</div>
+```

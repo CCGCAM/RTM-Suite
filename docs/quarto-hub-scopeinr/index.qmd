@@ -1,0 +1,112 @@
+---
+title: "SCOPEinR"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+```{=html}
+<section class="hub-hero">
+  <div class="hub-eyebrow">RTM-SUITE &middot; SCOPEINR</div>
+  <h1>The full coupled model:<br><span class="accent">reflectance, SIF and photosynthetic capacity.</span></h1>
+  <p class="lead">
+    SCOPEinR runs the full SCOPE 2.1 forward model in one simulation: leaf optics, canopy
+    radiative transfer, energy balance, photosynthesis and chlorophyll fluorescence, coupled
+    together rather than run separately. Ported line-for-line to Python
+    (<code>scopeinpython</code>) and cross-checked against the R original.
+  </p>
+  <div class="hub-badges">
+    <span class="hub-badge">SCOPE LUT construction</span>
+    <span class="hub-badge">Coupled forward model</span>
+    <span class="hub-badge">Energy balance &amp; photosynthesis</span>
+    <span class="hub-badge">Fluorescence (SIF)</span>
+    <span class="hub-badge">Output export</span>
+    <span class="hub-badge">R &amp; Python</span>
+  </div>
+  <div class="hub-actions">
+    <a class="hub-btn primary" href="tutorials-r.qmd">Explore R Tutorials</a>
+    <a class="hub-btn primary" href="tutorials-python.qmd">Explore Python Tutorials</a>
+    <a class="hub-btn ghost" href="../../function-universe-scopeinr.html">Interactive Function Explorer &rarr;</a>
+  </div>
+</section>
+
+<div class="hub-darkcard">
+  <h2>Twelve R tutorials, plus SCOPE's slice of the shared Python path</h2>
+  <p>
+    The R side is twelve standalone <code>SCOPEinR</code> pkgdown articles (t00&ndash;t11),
+    grouped below by theme: getting started and the input structure, energy balance and
+    fluorescence, LUTs and parallel runs, then inversion, sensitivity and the real-Sentinel-2
+    capstone. The Python side is different &mdash; <code>toolsrtm</code> and
+    <code>scopeinpython</code> share one continuous 20-chapter learning path, and SCOPE gets
+    one dedicated chapter (06) plus its own package-tagged code examples and real-EO capstone;
+    the rest of that shared path (leaf/canopy/soil models, inversion, spatial application) is
+    mostly ToolsRTM material, covered on the <a href="../../quarto-hub-toolsrtm/_site/index.html">ToolsRTM hub</a>.
+  </p>
+</div>
+
+<div class="hub-section-title">Two ways in</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials-r.qmd">
+    <div class="num">R</div>
+    <h4>R Tutorials</h4>
+    <p>12 rendered pkgdown articles: getting started, energy balance, fluorescence, LUTs, inversion.</p>
+    <span class="tag">12 tutorials</span>
+  </a>
+  <a class="hub-card" href="tutorials-python.qmd">
+    <div class="num">Py</div>
+    <h4>Python Tutorials</h4>
+    <p>SCOPE's chapter of the shared Python path, plus package-tagged code examples and the real-EO capstone.</p>
+    <span class="tag">1 chapter + examples</span>
+  </a>
+  <a class="hub-card" href="../../function-universe-scopeinr.html">
+    <div class="num">API</div>
+    <h4>Function Explorer</h4>
+    <p>Interactive map of every real SCOPEinR/scopeinpython function &mdash; workflow, network graph, code examples.</p>
+    <span class="tag">25 functions</span>
+  </a>
+</div>
+
+<div class="hub-section-title">Getting started &amp; the input structure &middot; t00&ndash;t02</div>
+<div class="hub-section-desc">SCOPE's options table, a first run, and the soil/canopy/BRDF input structure underneath it.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../scopeinr/articles/t00-scope-options.html"><div class="num">00</div><h4>SCOPE's Options Table</h4><p>Every switch that changes what a run computes.</p></a>
+  <a class="hub-card" href="../../scopeinr/articles/t01-getting-started.html"><div class="num">01</div><h4>Getting Started with SCOPEinR</h4><p>A first coupled simulation, start to finish.</p></a>
+  <a class="hub-card" href="../../scopeinr/articles/t02-soil-canopy-brdf.html"><div class="num">02</div><h4>Soil, Canopy BRDF, and the SCOPE Input Structure</h4><p>What every input table actually feeds.</p></a>
+</div>
+
+<div class="hub-section-title">Energy balance &amp; fluorescence &middot; t03&ndash;t04</div>
+<div class="hub-section-desc">The two things that make SCOPE more than a reflectance model.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../scopeinr/articles/t03-energy-balance.html"><div class="num">03</div><h4>Energy Balance Basics</h4><p>Leaf/soil temperature and stomatal conductance, converged.</p></a>
+  <a class="hub-card" href="../../scopeinr/articles/t04-fluorescence.html"><div class="num">04</div><h4>Fluorescence (SIF)</h4><p>Where the emitted SIF spectrum comes from.</p></a>
+</div>
+
+<div class="hub-section-title">LUTs &amp; large-scale runs &middot; t05&ndash;t06, t10</div>
+<div class="hub-section-desc">Building a SCOPE parameter table and running it at scale.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../scopeinr/articles/t05-building-scope-luts.html"><div class="num">05</div><h4>Building SCOPE LUTs</h4><p>SCOPE-specific parameter sampling.</p></a>
+  <a class="hub-card" href="../../scopeinr/articles/t06-parallel-scope-runs.html"><div class="num">06</div><h4>Large-Scale and Parallel SCOPE Runs</h4><p>A LUT run across many cores.</p></a>
+  <a class="hub-card" href="../../scopeinr/articles/t10-end-to-end-pipeline.html"><div class="num">10</div><h4>End-to-End SCOPE Pipeline</h4><p>LUT to output, as one pipeline.</p></a>
+</div>
+
+<div class="hub-section-title">Sensitivity, inversion &amp; the real-Sentinel-2 capstone &middot; t07&ndash;t09, t11</div>
+<div class="hub-section-desc">Which traits move SCOPE's signal, whether SIF adds information, and a real satellite scene.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../scopeinr/articles/t07-sensitivity.html"><div class="num">07</div><h4>Sensitivity: Direct vs. Indirect Trait Effects</h4><p>Reflectance sensitivity to Vcmax25.</p></a>
+  <a class="hub-card" href="../../scopeinr/articles/t08-hybrid-inversion.html"><div class="num">08</div><h4>Hybrid Inversion from SCOPE Reflectance</h4><p>Retrieving traits from SCOPE-simulated reflectance.</p></a>
+  <a class="hub-card" href="../../scopeinr/articles/t09-sif-photosynthesis.html"><div class="num">09</div><h4>Does SIF Add Information About Photosynthesis?</h4><p>Testing SIF as a GPP proxy.</p></a>
+  <a class="hub-card" href="../../scopeinr/articles/t11-photosynthesis-capstone.html"><div class="num">11</div><h4>Capstone: ML Inversion of Net Photosynthesis, Real Sentinel-2</h4><p>Real Sentinel-2 imagery over Speulderbos.</p></a>
+</div>
+
+<div class="hub-section-title">Source code, on GitHub</div>
+<div class="hub-section-desc">Real, runnable code &mdash; the package itself and the standalone scripts.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/SCOPEinR" target="_blank"><div class="num">R</div><h4>SCOPEinR (R package)</h4><p>Source of the R package itself.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/scopeinpython" target="_blank"><div class="num">Py</div><h4>scopeinpython (Python package)</h4><p>Source of the Python port.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Apps/SCOPE" target="_blank"><div class="num">App</div><h4>Apps/SCOPE</h4><p>Standalone Shiny app: full SCOPE reflectance, fluorescence and radiance simulator.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/ForSCOPE" target="_blank"><div class="num">R</div><h4>Scripts/R/ForSCOPE</h4><p>Standalone SCOPE scripts.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/Pipeline" target="_blank"><div class="num">R</div><h4>Scripts/R/Pipeline</h4><p>SCOPE simulate &rarr; ML/DL inversion pipeline.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/Python/ForSCOPE_Python" target="_blank"><div class="num">Py</div><h4>Scripts/Python/ForSCOPE_Python</h4><p>The same scripts, in Python.</p></a>
+</div>
+```

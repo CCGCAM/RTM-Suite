@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>01. Getting Started &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../python/_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../python/_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../python/_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../python/_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../python/_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../python/_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../python/genindex.html" />
+    <link rel="search" title="Search" href="../../../../python/search.html" />
+    <link rel="next" title="02. Parameters &amp; Traits" href="../../../../python/t02-parameters-traits.html" />
+    <link rel="prev" title="Installation" href="../../../../python/install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../../../python/index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">01. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t02-parameters-traits.html">02. Parameters &amp; Traits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t03-leaf-models.html">03. Leaf Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t04-canopy-models.html">04. Canopy Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t06-scope.html">06. SCOPE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t07-building-workflows.html">07. Building RTM Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t08-sensor-simulation.html">08. Sensor Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t09-spectral-indices.html">09. Spectral Indices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t10-sensitivity-analysis.html">10. Sensitivity Analysis</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t11-lut-generation.html">11. LUT Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t12-lut-inversion.html">12. LUT Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html">13. Machine-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t14-deep-learning-inversion.html">14. Deep-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t15-choosing-inversion-strategy.html">15. Choosing an Inversion Strategy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html">16. Retrieving Real EO Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t17-preparing-eo-observations.html">17. Preparing EO Observations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html">18. Applying an Inversion Model Spatially</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html">19. Trait Maps &amp; Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t20-end-to-end-workflow.html">20. End-to-End Workflow</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/models.html">Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/toolsrtm/index.html">toolsrtm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/scopeinpython/index.html">scopeinpython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../python/index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../python/index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">01. Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../python/_sources/t01-getting-started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<h1>01. Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Install and import <code class="docutils literal notranslate"><span class="pre">toolsrtm</span></code>.</p></li>
+<li><p>Run the simplest scientifically meaningful RTM simulation: a leaf
+model feeding a canopy model.</p></li>
+<li><p>Plot the result.</p></li>
+<li><p>Understand exactly what the returned objects contain.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<p>Every simulation on this site follows the same two-step shape: a <strong>leaf
+model</strong> turns leaf traits (pigments, water, dry matter) into a
+reflectance/transmittance spectrum, and a <strong>canopy model</strong> turns that
+leaf spectrum plus canopy structure (leaf area, leaf angle, viewing
+geometry) into a top-of-canopy (TOC) reflectance spectrum – what a
+sensor above the canopy would see. This chapter runs that chain once,
+end to end, with <a class="reference internal" href="../../../../python/toolsrtm/leaf.html#toolsrtm.leaf.prospect_d" title="toolsrtm.leaf.prospect_d"><code class="xref py py-func docutils literal notranslate"><span class="pre">prospect_d()</span></code></a> (PROSPECT-D) and
+<a class="reference internal" href="../../../../python/toolsrtm/canopy.html#toolsrtm.canopy.foursail" title="toolsrtm.canopy.foursail"><code class="xref py py-func docutils literal notranslate"><span class="pre">foursail()</span></code></a> (fourSAIL) – the two most widely used
+models in the package, and the baseline every later chapter builds on.</p>
+</section>
+<section id="python-tools-used">
+<h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>What it does</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../../../../python/toolsrtm/leaf.html#toolsrtm.leaf.prospect_d" title="toolsrtm.leaf.prospect_d"><code class="xref py py-func docutils literal notranslate"><span class="pre">prospect_d()</span></code></a></p></td>
+<td><p>Leaf reflectance/transmittance from pigment/water/dry-matter
+traits. Returns a <a class="reference internal" href="../../../../python/toolsrtm/leaf.html#toolsrtm.leaf.LeafOptics" title="toolsrtm.leaf.LeafOptics"><code class="xref py py-class docutils literal notranslate"><span class="pre">LeafOptics</span></code></a> object with
+<code class="docutils literal notranslate"><span class="pre">lambda_</span></code> (wavelength, nm), <code class="docutils literal notranslate"><span class="pre">refl</span></code>, <code class="docutils literal notranslate"><span class="pre">tran</span></code> – each a
+2101-element array, 400-2500nm at 1nm steps.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../../../python/toolsrtm/canopy.html#toolsrtm.canopy.foursail" title="toolsrtm.canopy.foursail"><code class="xref py py-func docutils literal notranslate"><span class="pre">foursail()</span></code></a></p></td>
+<td><p>Canopy top-of-canopy BRDF from leaf optics + canopy structure +
+soil background. Takes a trait dict, a soil reflectance array,
+and <code class="docutils literal notranslate"><span class="pre">leaf_model</span></code> (which leaf model to run internally). Returns
+an object whose <code class="docutils literal notranslate"><span class="pre">rsot</span></code> field is the TOC bidirectional
+reflectance factor, same 2101-element wavelength grid.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">prospect_d</span><span class="p">,</span> <span class="n">foursail</span>
+
+<span class="c1"># 1. Leaf optics: pigments, water, dry matter, leaf structure</span>
+<span class="n">leaf</span> <span class="o">=</span> <span class="n">prospect_d</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">leaf</span><span class="o">.</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">leaf</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">150</span><span class="p">])</span>   <span class="c1"># reflectance at 550nm</span>
+
+<span class="c1"># 2. Canopy: same leaf traits + structure + geometry + soil background</span>
+<span class="n">inputLUT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+    <span class="n">LIDFa</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">LIDFb</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>   <span class="c1"># leaf angle distribution (spherical)</span>
+    <span class="n">LAI</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hspot</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tto</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>  <span class="c1"># leaf area, hot-spot, sun/view geometry</span>
+<span class="p">)</span>
+<span class="n">rsoil</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">2101</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>   <span class="c1"># flat soil background, 400-2500nm</span>
+<span class="n">sail</span> <span class="o">=</span> <span class="n">foursail</span><span class="p">(</span><span class="n">inputLUT</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">leaf_model</span><span class="o">=</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">spectrum_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">[</span><span class="mi">150</span><span class="p">])</span>   <span class="c1"># TOC reflectance at 550nm</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">wl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">2501</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wl</span><span class="p">,</span> <span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Wavelength (nm)&quot;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;TOC reflectance&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Your first simulation: PROSPECT-D leaf -&gt; fourSAIL canopy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../../python/_images/t01_first_simulation.png"><img alt="Top-of-canopy reflectance spectrum from PROSPECT-D + fourSAIL, real output of the code above" src="../../../../python/_images/t01_first_simulation.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output of the code above.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>Printed output (your own run will match exactly – both calls are
+deterministic, no random seed involved):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">2101</span><span class="p">,)</span> <span class="mf">0.13359835005159199</span>   <span class="c1"># leaf.refl[150], leaf reflectance at 550nm</span>
+<span class="p">(</span><span class="mi">2101</span><span class="p">,)</span> <span class="mf">0.05584955522593193</span>   <span class="c1"># sail.rsot[150], TOC reflectance at 550nm</span>
+</pre></div>
+</div>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>The curve has the classic vegetation shape: low reflectance in the
+visible (400-700nm, chlorophyll absorption, with a small local “green
+peak” around 550nm – exactly where we just sampled), a sharp rise at
+the “red edge” (~700-750nm), a high, fairly flat NIR plateau
+(750-1300nm, multiple scattering between leaf layers – the reason
+healthy vegetation looks so bright in the near-infrared), and two SWIR
+water-absorption dips (~1450nm, ~1940nm).</p>
+<p>The leaf-level (0.134) and canopy-level (0.056) values at 550nm are
+<em>not</em> close, and that gap is itself informative: the green peak is a
+sharp, narrow leaf-level feature, and at a canopy scale it gets diluted
+by everything a single leaf spectrum doesn’t capture – the soil
+background showing through gaps between leaves, shading between leaf
+layers, and the sun/view geometry (<code class="docutils literal notranslate"><span class="pre">tts=30</span></code>, <code class="docutils literal notranslate"><span class="pre">tto=0</span></code>) all pull the
+canopy-level value down from the pure single-leaf value. A leaf
+spectrum is not a scaled-down canopy spectrum; that’s exactly why a
+separate canopy model exists. Chapter 04 makes the soil/LAI side of
+that gap an explicit experiment.</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">rsoil</span></code> to a much darker (<code class="docutils literal notranslate"><span class="pre">0.03</span></code>) or brighter (<code class="docutils literal notranslate"><span class="pre">0.30</span></code>) flat
+value and see how much the visible/SWIR bands shift.</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">Cab</span></code> from 40 to 10 (stressed/senescent) or 70 (very healthy)
+and watch the visible/red-edge region respond.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">LAI</span></code> to <code class="docutils literal notranslate"><span class="pre">0.3</span></code> (sparse canopy) and compare against the <code class="docutils literal notranslate"><span class="pre">LAI=3</span></code>
+result – the canopy value should move much closer to the bare-soil
+value.</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rsoil</span></code> must be a 2101-element array (400-2500nm, 1nm step) matching
+the leaf/canopy wavelength grid – a scalar or wrong-length array will
+error or silently broadcast incorrectly.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">leaf_model=&quot;PROSPECT-D&quot;</span></code> inside <code class="docutils literal notranslate"><span class="pre">foursail()</span></code> re-runs the leaf
+model internally from the same <code class="docutils literal notranslate"><span class="pre">inputLUT</span></code> dict – the separate
+<code class="docutils literal notranslate"><span class="pre">prospect_d()</span></code> call above is only there to show the leaf-level step
+explicitly; <code class="docutils literal notranslate"><span class="pre">foursail()</span></code> alone is enough for a normal simulation.</p></li>
+<li><p>Angles (<code class="docutils literal notranslate"><span class="pre">tts</span></code>, <code class="docutils literal notranslate"><span class="pre">tto</span></code>, <code class="docutils literal notranslate"><span class="pre">psi</span></code>, and <code class="docutils literal notranslate"><span class="pre">LIDFa</span></code> under
+<code class="docutils literal notranslate"><span class="pre">TypeLidf=2</span></code>) are in <strong>degrees</strong>, not radians.</p></li>
+</ul>
+</section>
+<section id="next">
+<h2>Next<a class="headerlink" href="#next" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../../../../python/t02-parameters-traits.html"><span class="doc">02. Parameters &amp; Traits</span></a> – what every trait above (<code class="docutils literal notranslate"><span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">Cab</span></code>,
+<code class="docutils literal notranslate"><span class="pre">LIDFa</span></code>, …) actually means, its unit, and its realistic range.</p>
+<hr class="docutils" />
+<p>Using R? -&gt; <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/t01-getting-started.html">ToolsRTM Tutorial 01: Getting Started</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../../python/install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../../python/t02-parameters-traits.html" class="btn btn-neutral float-right" title="02. Parameters &amp; Traits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

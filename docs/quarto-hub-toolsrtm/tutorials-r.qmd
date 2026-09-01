@@ -1,0 +1,60 @@
+---
+title: "R Tutorials"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+```{=html}
+<section class="hub-hero" style="padding-top:20px;">
+  <div class="hub-eyebrow">TOOLSRTM &middot; R PKGDOWN ARTICLES</div>
+  <h1>R Tutorials</h1>
+  <p class="lead">
+    Nineteen rendered R vignettes, grouped by theme: the models themselves, trait inversion
+    (classical ML and deep learning), sensitivity analysis, and satellite/spatial applications.
+    Every number and figure is real output from an actual run.
+  </p>
+</section>
+
+<div class="hub-section-title">Leaf, canopy, soil &amp; atmosphere models &middot; t01&ndash;t09, t16</div>
+<div class="hub-section-desc">Five leaf models &times; three canopy models &times; two soil models &times; SPART for the full soil-canopy-atmosphere chain.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/r/t01-getting-started.html"><div class="num">01</div><h4>Getting Started with ToolsRTM</h4><p>A first simulation, start to finish.</p></a>
+  <a class="hub-card" href="tutorials/r/t02-leaf-to-canopy.html"><div class="num">02</div><h4>From Leaf to Canopy Reflectance</h4><p>Chaining a leaf model into a canopy model.</p></a>
+  <a class="hub-card" href="tutorials/r/t03-spart.html"><div class="num">03</div><h4>SPART: Soil-Plant-Atmosphere RT</h4><p>Top-of-canopy vs. top-of-atmosphere reflectance.</p></a>
+  <a class="hub-card" href="tutorials/r/t04-comparing-models.html"><div class="num">04</div><h4>Comparing Radiative Transfer Models</h4><p>All 15 leaf&times;canopy combinations, side by side.</p></a>
+  <a class="hub-card" href="tutorials/r/t05-building-luts.html"><div class="num">05</div><h4>Building Look-Up Tables</h4><p>Parameter sampling for a simulation LUT.</p></a>
+  <a class="hub-card" href="tutorials/r/t06-parallel-simulation.html"><div class="num">06</div><h4>Large-Scale and Parallel RTM Simulation</h4><p>Running a LUT across many cores.</p></a>
+  <a class="hub-card" href="tutorials/r/t07-sensor-convolution.html"><div class="num">07</div><h4>Sensor Convolution</h4><p>Native spectrum &rarr; real sensor bands.</p></a>
+  <a class="hub-card" href="tutorials/r/t08-hyperspectral-sensors.html"><div class="num">08</div><h4>Hyperspectral and VNIR Sensor Convolution</h4><p>PRISMA and other hyperspectral sensors.</p></a>
+  <a class="hub-card" href="tutorials/r/t09-vegetation-indices.html"><div class="num">09</div><h4>Vegetation Indices and Spectral Features</h4><p>NDVI, red-edge and friends, from simulated bands.</p></a>
+  <a class="hub-card" href="tutorials/r/t16-marmit-soil-in-canopy.html"><div class="num">16</div><h4>MARMIT + fourSAIL + SPART</h4><p>Realistic, moisture-dependent soil reflectance inside a full canopy run.</p></a>
+</div>
+
+<div class="hub-section-title">Trait inversion &amp; machine learning &middot; t11&ndash;t14</div>
+<div class="hub-section-desc">Going backwards: from a reflectance spectrum to the vegetation trait that produced it.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/r/t11-hybrid-inversion.html"><div class="num">11</div><h4>From Physics to Vegetation Traits: Hybrid Inversion</h4><p>LUT-trained models applied to real and synthetic spectra.</p></a>
+  <a class="hub-card" href="tutorials/r/t12-ml-inversion-comparison.html"><div class="num">12</div><h4>Comparing ML Algorithms for RTM Inversion</h4><p>Random Forest, SVM, PLSR and ensembles, head-to-head.</p></a>
+  <a class="hub-card" href="tutorials/r/t13-deep-learning-inversion.html"><div class="num">13</div><h4>Deep Learning for RTM Inversion</h4><p>Dense networks and a 1D-CNN on hyperspectral bands, vs. Random Forest.</p></a>
+  <a class="hub-card" href="tutorials/r/t14-end-to-end-pipeline.html"><div class="num">14</div><h4>End-to-End RTM Inversion Pipeline</h4><p>Simulate &rarr; convolve &rarr; invert, as one pipeline.</p></a>
+</div>
+
+<div class="hub-section-title">Sensitivity analysis &middot; t10</div>
+<div class="hub-section-desc">Which trait actually moves the signal, and where in the spectrum.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/r/t10-sensitivity.html"><div class="num">10</div><h4>Understanding RTM Sensitivity</h4><p>One-at-a-time sweeps, Sobol indices, and Johnson relative weights.</p></a>
+</div>
+
+<div class="hub-section-title">Satellite &amp; spatial applications &middot; t15, t17&ndash;t19</div>
+<div class="hub-section-desc">Real pixels: actual Sentinel-2 scenes via STAC, pixel-by-pixel inversion, and FLEX sub-pixel heterogeneity.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/r/t15-real-eo-application.html"><div class="num">15</div><h4>From Satellite Reflectance to Traits: Real EO Application</h4><p>Inverting a real, not simulated, scene.</p></a>
+  <a class="hub-card" href="tutorials/r/t17-forest-time-series.html"><div class="num">17</div><h4>Monitoring a Forest Site Through Time</h4><p>A real forest site, tracked across a time series.</p></a>
+  <a class="hub-card" href="tutorials/r/t18-spatial-index-mapping.html"><div class="num">18</div><h4>Data-Driven Spatial Index Mapping</h4><p>Trait maps from real Sentinel-2 imagery.</p></a>
+  <a class="hub-card" href="tutorials/r/t19-flex-esu-heterogeneity.html"><div class="num">19</div><h4>FLEX Cal/Val: ESU Heterogeneity Mapping</h4><p>Scaling up to FLEX's coarser footprint with sub-pixel heterogeneity.</p></a>
+</div>
+
+<div class="hub-section-desc" style="margin-top:30px;">The full package reference (every function, every argument) lives at the <a href="../../toolsrtm/index.html">ToolsRTM pkgdown site</a>; the complete numbered tutorial index is on the <a href="../../tutorials-overview.html">RTM-Suite tutorials overview</a>.</div>
+```

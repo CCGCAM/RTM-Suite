@@ -1,0 +1,123 @@
+---
+title: "ToolsRTM"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+```{=html}
+<section class="hub-hero">
+  <div class="hub-eyebrow">RTM-SUITE &middot; TOOLSRTM</div>
+  <h1>Leaf, canopy, soil &amp; atmosphere,<br><span class="accent">in R and Python.</span></h1>
+  <p class="lead">
+    ToolsRTM covers leaf optics (PROSPECT-D, PROSPECT-PRO, Fluspect-B, Fluspect-B-Cx, LIBERTY),
+    canopy models (fourSAIL, foursail2, INFORM), soil optics (BSM, MARMIT) and the full
+    soil&ndash;canopy&ndash;atmosphere chain (SPART) &mdash; plus LUT/parameter sampling, sensor
+    convolution, vegetation indices, and trait inversion (classical ML and deep learning), in R
+    and Python, kept numerically in sync and verified against each other.
+  </p>
+  <div class="hub-badges">
+    <span class="hub-badge">PROSPECT &middot; Fluspect &middot; LIBERTY</span>
+    <span class="hub-badge">fourSAIL &middot; fourSAIL2 &middot; INFORM &middot; SPART</span>
+    <span class="hub-badge">MARMIT</span>
+    <span class="hub-badge">LUTs &amp; sensor convolution</span>
+    <span class="hub-badge">ML &amp; deep-learning inversion</span>
+    <span class="hub-badge">R &amp; Python</span>
+  </div>
+  <div class="hub-actions">
+    <a class="hub-btn primary" href="tutorials-r.qmd">Explore R Tutorials</a>
+    <a class="hub-btn primary" href="tutorials-python.qmd">Explore Python Tutorials</a>
+    <a class="hub-btn ghost" href="../../function-universe-toolsrtm.html">Interactive Function Explorer &rarr;</a>
+  </div>
+</section>
+
+<div class="hub-darkcard">
+  <h2>Nineteen R tutorials, one shared 20-chapter Python path</h2>
+  <p>
+    The R side is nineteen standalone <code>ToolsRTM</code> pkgdown articles (t01&ndash;t19),
+    grouped below by theme: models themselves, then trait inversion (ML and deep learning),
+    sensitivity analysis, and satellite/spatial applications. The Python side is organised
+    differently &mdash; <code>toolsrtm</code> and <code>scopeinpython</code> share one continuous
+    20-chapter learning path, so almost every chapter is ToolsRTM material (only Chapter 06 is
+    SCOPE-specific); this page links the ToolsRTM-relevant chapters and the package-tagged code
+    examples directly, and points to the full path for the complete narrative.
+  </p>
+</div>
+
+<div class="hub-section-title">Two ways in</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials-r.qmd">
+    <div class="num">R</div>
+    <h4>R Tutorials</h4>
+    <p>19 rendered pkgdown articles: models, LUTs, sensor convolution, indices, inversion, spatial mapping.</p>
+    <span class="tag">19 tutorials</span>
+  </a>
+  <a class="hub-card" href="tutorials-python.qmd">
+    <div class="num">Py</div>
+    <h4>Python Tutorials</h4>
+    <p>The ToolsRTM-relevant chapters of the shared 20-chapter Python path, plus package-tagged code examples.</p>
+    <span class="tag">18 chapters + examples</span>
+  </a>
+  <a class="hub-card" href="../../function-universe-toolsrtm.html">
+    <div class="num">API</div>
+    <h4>Function Explorer</h4>
+    <p>Interactive map of every real ToolsRTM/toolsrtm function &mdash; workflow, network graph, code examples.</p>
+    <span class="tag">40 functions</span>
+  </a>
+</div>
+
+<div class="hub-section-title">Leaf, canopy, soil &amp; atmosphere models &middot; t01&ndash;t09, t16</div>
+<div class="hub-section-desc">Five leaf models &times; three canopy models &times; two soil models &times; SPART for the full chain to top-of-atmosphere.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../toolsrtm/articles/t01-getting-started.html"><div class="num">01</div><h4>Getting Started with ToolsRTM</h4><p>A first simulation, start to finish.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t02-leaf-to-canopy.html"><div class="num">02</div><h4>From Leaf to Canopy Reflectance</h4><p>Chaining a leaf model into a canopy model.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t03-spart.html"><div class="num">03</div><h4>SPART: Soil-Plant-Atmosphere RT</h4><p>Top-of-canopy vs. top-of-atmosphere reflectance.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t04-comparing-models.html"><div class="num">04</div><h4>Comparing Radiative Transfer Models</h4><p>All 15 leaf&times;canopy combinations, side by side.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t05-building-luts.html"><div class="num">05</div><h4>Building Look-Up Tables</h4><p>Parameter sampling for a simulation LUT.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t06-parallel-simulation.html"><div class="num">06</div><h4>Large-Scale and Parallel RTM Simulation</h4><p>Running a LUT across many cores.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t07-sensor-convolution.html"><div class="num">07</div><h4>Sensor Convolution</h4><p>Native spectrum &rarr; real sensor bands.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t08-hyperspectral-sensors.html"><div class="num">08</div><h4>Hyperspectral and VNIR Sensor Convolution</h4><p>PRISMA and other hyperspectral sensors.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t09-vegetation-indices.html"><div class="num">09</div><h4>Vegetation Indices and Spectral Features</h4><p>NDVI, red-edge and friends, from simulated bands.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t16-marmit-soil-in-canopy.html"><div class="num">16</div><h4>MARMIT + fourSAIL + SPART</h4><p>Realistic, moisture-dependent soil reflectance inside a full canopy run.</p></a>
+</div>
+
+<div class="hub-section-title">Trait inversion &amp; machine learning &middot; t11, t12, t13, t14</div>
+<div class="hub-section-desc">Going backwards: from a reflectance spectrum to the vegetation trait that produced it.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../toolsrtm/articles/t11-hybrid-inversion.html"><div class="num">11</div><h4>From Physics to Vegetation Traits: Hybrid Inversion</h4><p>LUT-trained models applied to real and synthetic spectra.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t12-ml-inversion-comparison.html"><div class="num">12</div><h4>Comparing ML Algorithms for RTM Inversion</h4><p>Random Forest, SVM, PLSR and ensembles, head-to-head.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t13-deep-learning-inversion.html"><div class="num">13</div><h4>Deep Learning for RTM Inversion</h4><p>Dense networks and a 1D-CNN on hyperspectral bands, vs. Random Forest.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t14-end-to-end-pipeline.html"><div class="num">14</div><h4>End-to-End RTM Inversion Pipeline</h4><p>Simulate &rarr; convolve &rarr; invert, as one pipeline.</p></a>
+</div>
+
+<div class="hub-section-title">Sensitivity analysis &middot; t10</div>
+<div class="hub-section-desc">Which trait actually moves the signal, and where in the spectrum.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../toolsrtm/articles/t10-sensitivity.html"><div class="num">10</div><h4>Understanding RTM Sensitivity</h4><p>One-at-a-time sweeps, Sobol indices, and Johnson relative weights.</p></a>
+</div>
+
+<div class="hub-section-title">Satellite &amp; spatial applications &middot; t15, t17, t18, t19</div>
+<div class="hub-section-desc">Real pixels: actual Sentinel-2 scenes via STAC, pixel-by-pixel inversion, and FLEX sub-pixel heterogeneity.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../toolsrtm/articles/t15-real-eo-application.html"><div class="num">15</div><h4>From Satellite Reflectance to Traits: Real EO Application</h4><p>Inverting a real, not simulated, scene.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t17-forest-time-series.html"><div class="num">17</div><h4>Monitoring a Forest Site Through Time</h4><p>A real forest site, tracked across a time series.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t18-spatial-index-mapping.html"><div class="num">18</div><h4>Data-Driven Spatial Index Mapping</h4><p>Trait maps from real Sentinel-2 imagery.</p></a>
+  <a class="hub-card" href="../../toolsrtm/articles/t19-flex-esu-heterogeneity.html"><div class="num">19</div><h4>FLEX Cal/Val: ESU Heterogeneity Mapping</h4><p>Scaling up to FLEX's coarser footprint with sub-pixel heterogeneity.</p></a>
+</div>
+
+<div class="hub-section-title">Source code, on GitHub</div>
+<div class="hub-section-desc">Real, runnable code &mdash; the packages themselves and the standalone scripts each tutorial theme grew from.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/ToolsRTM.app" target="_blank"><div class="num">R</div><h4>ToolsRTM (R package)</h4><p>Source of the R package itself.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/ToolsRTMinPython" target="_blank"><div class="num">Py</div><h4>toolsrtm (Python package)</h4><p>Source of the Python port.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/ForPROSAIL" target="_blank"><div class="num">R</div><h4>Scripts/R/ForPROSAIL</h4><p>Standalone leaf-model scripts.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/ForFoursail2" target="_blank"><div class="num">R</div><h4>Scripts/R/ForFoursail2</h4><p>Standalone canopy-model scripts.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/ForINFORM" target="_blank"><div class="num">R</div><h4>Scripts/R/ForINFORM</h4><p>Standalone forest-canopy scripts.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/ForMARMIT" target="_blank"><div class="num">R</div><h4>Scripts/R/ForMARMIT</h4><p>Standalone soil-optics scripts.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/ForSPART" target="_blank"><div class="num">R</div><h4>Scripts/R/ForSPART</h4><p>Standalone soil-plant-atmosphere scripts.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/Pipeline" target="_blank"><div class="num">R</div><h4>Scripts/R/Pipeline</h4><p>Simulate &rarr; convolve &rarr; invert, end to end.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/R/Sensibility" target="_blank"><div class="num">R</div><h4>Scripts/R/Sensibility</h4><p>Standalone sensitivity-analysis scripts.</p></a>
+  <a class="hub-card" href="https://github.com/CCGCAM/RTM-Suite/tree/main/Scripts/Python" target="_blank"><div class="num">Py</div><h4>Scripts/Python</h4><p>The same script themes, in Python.</p></a>
+</div>
+```

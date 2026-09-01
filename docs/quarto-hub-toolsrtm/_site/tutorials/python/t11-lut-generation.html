@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>11. LUT Generation &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../python/_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../python/_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../python/_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../python/_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../python/_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../python/_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../python/genindex.html" />
+    <link rel="search" title="Search" href="../../../../python/search.html" />
+    <link rel="next" title="12. LUT Inversion" href="../../../../python/t12-lut-inversion.html" />
+    <link rel="prev" title="10. Sensitivity Analysis" href="../../../../python/t10-sensitivity-analysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../../../python/index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t01-getting-started.html">01. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t02-parameters-traits.html">02. Parameters &amp; Traits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t03-leaf-models.html">03. Leaf Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t04-canopy-models.html">04. Canopy Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t06-scope.html">06. SCOPE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t07-building-workflows.html">07. Building RTM Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t08-sensor-simulation.html">08. Sensor Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t09-spectral-indices.html">09. Spectral Indices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t10-sensitivity-analysis.html">10. Sensitivity Analysis</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">11. LUT Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t12-lut-inversion.html">12. LUT Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html">13. Machine-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t14-deep-learning-inversion.html">14. Deep-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t15-choosing-inversion-strategy.html">15. Choosing an Inversion Strategy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html">16. Retrieving Real EO Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t17-preparing-eo-observations.html">17. Preparing EO Observations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html">18. Applying an Inversion Model Spatially</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html">19. Trait Maps &amp; Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t20-end-to-end-workflow.html">20. End-to-End Workflow</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/models.html">Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/toolsrtm/index.html">toolsrtm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/scopeinpython/index.html">scopeinpython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../python/index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../python/index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">11. LUT Generation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../python/_sources/t11-lut-generation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lut-generation">
+<h1>11. LUT Generation<a class="headerlink" href="#lut-generation" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>What a look-up table (LUT) is, and why building one well is mostly
+about sampling, not the RTM call itself.</p></li>
+<li><p>How to sample realistic trait distributions, including real
+trait-to-trait covariance instead of full independence.</p></li>
+<li><p>How to add sensor-realistic noise, and split into train/validation/
+test before any inversion method touches the data.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<p>A look-up table (LUT) is a set of RTM simulations, each row a different
+combination of trait values and its resulting reflectance spectrum – the
+raw material every inversion method in Part III needs: rank spectral
+indices by correlation with a trait, train an ML/DL model, or match a
+real observation against simulated neighbours. This chapter builds one
+properly, at a realistic size (1000 rows – large enough that the
+inversion chapters that follow produce genuinely meaningful results, not
+an artifact of too little training data).</p>
+</section>
+<section id="python-tools-used">
+<h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Key arguments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../../../../python/toolsrtm/sensitivity.html#toolsrtm.sensitivity.get_distribution_lut" title="toolsrtm.sensitivity.get_distribution_lut"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_distribution_lut()</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">minval</span></code>/<code class="docutils literal notranslate"><span class="pre">maxval</span></code> (per-trait bounds, dicts), <code class="docutils literal notranslate"><span class="pre">n_samples</span></code>,
+<code class="docutils literal notranslate"><span class="pre">type_distrib</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;Uniform&quot;</span></code>/<code class="docutils literal notranslate"><span class="pre">&quot;Gaussian&quot;</span></code> per trait),
+<code class="docutils literal notranslate"><span class="pre">mean_gauss</span></code>/<code class="docutils literal notranslate"><span class="pre">std_gauss</span></code> (only read for <code class="docutils literal notranslate"><span class="pre">&quot;Gaussian&quot;</span></code>
+traits), <code class="docutils literal notranslate"><span class="pre">dep_cab</span></code> (tie <code class="docutils literal notranslate"><span class="pre">Car</span></code> to <code class="docutils literal notranslate"><span class="pre">Cab</span></code>, see below). Returns
+a dict of trait name -&gt; array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../../../python/toolsrtm/sensitivity.html#toolsrtm.sensitivity.get_cor" title="toolsrtm.sensitivity.get_cor"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_cor()</span></code></a></p></td>
+<td><p>General-purpose version: correlate any two named traits at any
+target correlation (<code class="docutils literal notranslate"><span class="pre">rho</span></code>), not just the built-in Cab-Car tie.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.sensitivity</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_distribution_lut</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">foursail</span>
+
+<span class="n">N_SAMPLES</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c1"># 1. Realistic per-trait distributions</span>
+<span class="n">lut</span> <span class="o">=</span> <span class="n">get_distribution_lut</span><span class="p">(</span>
+    <span class="n">minval</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">LAI</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">maxval</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">LAI</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+    <span class="n">n_samples</span><span class="o">=</span><span class="n">N_SAMPLES</span><span class="p">,</span> <span class="n">type_distrib</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="s2">&quot;Gaussian&quot;</span><span class="p">,</span> <span class="n">LAI</span><span class="o">=</span><span class="s2">&quot;Uniform&quot;</span><span class="p">),</span>
+    <span class="n">mean_gauss</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="mi">45</span><span class="p">),</span> <span class="n">std_gauss</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cab: mean=</span><span class="si">%.2f</span><span class="s2"> std=</span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lut</span><span class="p">[</span><span class="s2">&quot;Cab&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">lut</span><span class="p">[</span><span class="s2">&quot;Cab&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LAI: min=</span><span class="si">%.2f</span><span class="s2"> max=</span><span class="si">%.2f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lut</span><span class="p">[</span><span class="s2">&quot;LAI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">lut</span><span class="p">[</span><span class="s2">&quot;LAI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+
+<span class="c1"># 2. Real trait co-variation: Car tied to Cab (a real empirical leaf-pigment relationship)</span>
+<span class="n">lut2</span> <span class="o">=</span> <span class="n">get_distribution_lut</span><span class="p">(</span>
+    <span class="n">minval</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">maxval</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">25</span><span class="p">),</span>
+    <span class="n">n_samples</span><span class="o">=</span><span class="n">N_SAMPLES</span><span class="p">,</span> <span class="n">type_distrib</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">Cab</span><span class="o">=</span><span class="s2">&quot;Uniform&quot;</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="s2">&quot;Uniform&quot;</span><span class="p">),</span>
+    <span class="n">dep_cab</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Realized Cab-Car correlation:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">lut2</span><span class="p">[</span><span class="s2">&quot;Cab&quot;</span><span class="p">],</span> <span class="n">lut2</span><span class="p">[</span><span class="s2">&quot;Car&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># 3. RTM simulation: one row -&gt; one spectrum, 1000 times</span>
+<span class="n">rsoil</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">2101</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_SAMPLES</span><span class="p">):</span>
+    <span class="n">row_lut</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="n">lut</span><span class="p">[</span><span class="s2">&quot;Cab&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">LIDFa</span><span class="o">=-</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">LIDFb</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">LAI</span><span class="o">=</span><span class="n">lut</span><span class="p">[</span><span class="s2">&quot;LAI&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">hspot</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">tts</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">tto</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">sail</span> <span class="o">=</span> <span class="n">foursail</span><span class="p">(</span><span class="n">row_lut</span><span class="p">,</span> <span class="n">rsoil</span><span class="p">,</span> <span class="n">leaf_model</span><span class="o">=</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">spectrum_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sail</span><span class="o">.</span><span class="n">rsot</span><span class="p">)</span>
+<span class="n">spectral_lut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>   <span class="c1"># (1000, 2101)</span>
+
+<span class="c1"># 4. Adding noise: simulated reflectance is noise-free, real sensor data never is</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">noisy_lut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">spectral_lut</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">spectral_lut</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 5. Train / validation / test -- never evaluate an inversion on rows it trained on</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N_SAMPLES</span><span class="p">)</span>
+<span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Train rows:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_idx</span><span class="p">),</span> <span class="s2">&quot; Test rows:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_idx</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<p>Printed output (exact, deterministic):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Cab</span><span class="p">:</span> <span class="n">mean</span><span class="o">=</span><span class="mf">44.98</span> <span class="n">std</span><span class="o">=</span><span class="mf">13.90</span>
+<span class="n">LAI</span><span class="p">:</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.20</span> <span class="nb">max</span><span class="o">=</span><span class="mf">7.00</span>
+<span class="n">Realized</span> <span class="n">Cab</span><span class="o">-</span><span class="n">Car</span> <span class="n">correlation</span><span class="p">:</span> <span class="mf">0.9900876992344007</span>
+<span class="n">Train</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">700</span>  <span class="n">Test</span> <span class="n">rows</span><span class="p">:</span> <span class="mi">300</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../../python/_images/t11_lut_distributions.png"><img alt="Cab (Gaussian), LAI (Uniform), and Cab-vs-Car constrained distributions, real output of the code above" src="../../../../python/_images/t11_lut_distributions.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: <code class="docutils literal notranslate"><span class="pre">Cab</span></code> sampled Gaussian (visibly bell-shaped, clipped to <code class="docutils literal notranslate"><span class="pre">[10,</span> <span class="pre">80]</span></code>), <code class="docutils literal notranslate"><span class="pre">LAI</span></code> sampled Uniform (flat), and <code class="docutils literal notranslate"><span class="pre">Car</span></code> tied to <code class="docutils literal notranslate"><span class="pre">Cab</span></code> via <code class="docutils literal notranslate"><span class="pre">dep_cab=True</span></code> – a real, strong (r=0.99) linear relationship, not independent sampling.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../../../../python/_images/t11_lut_spectra_noise.png"><img alt="A sample of 40 simulated LUT spectra colored by Cab, and one spectrum before/after adding noise, real output of the code above" src="../../../../python/_images/t11_lut_spectra_noise.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: 40 of the 1000 simulated spectra (left, colour = Cab – most of the visible spread is actually driven by the co-varying LAI, not Cab alone), and one spectrum before/after adding a 1% Gaussian noise proxy (right).</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">dep_cab=True</span></code> constraint produces a real, strong relationship
+(r=0.99) between <code class="docutils literal notranslate"><span class="pre">Cab</span></code> and <code class="docutils literal notranslate"><span class="pre">Car</span></code> – deliberately much tighter than
+“somewhat correlated,” reflecting how tightly co-regulated chlorophyll
+and carotenoid pools actually are in healthy leaf tissue. Sampling them
+fully independently instead (the default) would let an inversion method
+implicitly learn a Cab-Car relationship that doesn’t exist in real
+leaves, and then fail on real data where it does. In the spectra sample,
+most of the visible NIR-plateau spread by eye traces back to LAI (not
+color-coded here) rather than Cab – exactly the kind of thing Chapter
+10’s sensitivity heatmap already predicts: Cab dominates the visible,
+not the NIR, so coloring NIR-plateau spread by Cab alone won’t explain
+much of it. The noise panel shows a physically reasonable proxy: real
+sensor noise is neither perfectly smooth nor overwhelming – 1% Gaussian
+noise visibly roughens the curve without destroying its shape, which is
+the point (<a class="reference internal" href="../../../../python/t12-lut-inversion.html"><span class="doc">12. LUT Inversion</span></a> and <a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html"><span class="doc">13. Machine-Learning Inversion</span></a>
+train on data like this, not the noise-free ideal).</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Use <a class="reference internal" href="../../../../python/toolsrtm/sensitivity.html#toolsrtm.sensitivity.get_cor" title="toolsrtm.sensitivity.get_cor"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_cor()</span></code></a> to tie <code class="docutils literal notranslate"><span class="pre">Cab</span></code> and a
+physiological trait like <code class="docutils literal notranslate"><span class="pre">Vcmax25</span></code> at a <em>moderate</em> target
+correlation (<code class="docutils literal notranslate"><span class="pre">rho=0.6</span></code>) instead of the strong built-in Cab-Car tie,
+and check the realized correlation matches roughly.</p></li>
+<li><p>Switch the noise model from additive (<code class="docutils literal notranslate"><span class="pre">+</span></code>) to multiplicative
+(<code class="docutils literal notranslate"><span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">noise)</span></code>) and compare how much more the SWIR (already lower
+reflectance) is affected relative to the NIR plateau.</p></li>
+<li><p>Reduce <code class="docutils literal notranslate"><span class="pre">N_SAMPLES</span></code> to 50 and re-run <a class="reference internal" href="../../../../python/t12-lut-inversion.html"><span class="doc">12. LUT Inversion</span></a>’s
+retrieval on it – compare the result’s stability against the
+1000-row version here.</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>A LUT too small for the trait space it’s meant to cover gives
+inversion methods too few realistic “neighbours” to match against or
+learn from – 1000 rows is a reasonable floor for a 2-3 trait problem,
+not an arbitrary nice-looking number.</p></li>
+<li><p>Sampling every trait independently when real ones co-vary
+(<code class="docutils literal notranslate"><span class="pre">Cab</span></code>/<code class="docutils literal notranslate"><span class="pre">Car</span></code>, <code class="docutils literal notranslate"><span class="pre">Cab</span></code>/<code class="docutils literal notranslate"><span class="pre">Vcmax25</span></code>) teaches an inversion method
+relationships that don’t exist in nature.</p></li>
+<li><p>Adding noise <em>after</em> the train/test split (fit any noise-parameter
+choice using only the training rows) avoids leaking test-set
+information into modelling decisions – the same train/test discipline
+Chapter 14 applies to normalization.</p></li>
+</ul>
+</section>
+<section id="next">
+<h2>Next<a class="headerlink" href="#next" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../../../../python/t12-lut-inversion.html"><span class="doc">12. LUT Inversion</span></a> – the simplest way to go from an observed
+spectrum back to a trait: matching it against this LUT directly.</p>
+<hr class="docutils" />
+<p>Using R? -&gt; <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/t05-building-luts.html">ToolsRTM Tutorial 05: Building LUTs</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../../python/t10-sensitivity-analysis.html" class="btn btn-neutral float-left" title="10. Sensitivity Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../../python/t12-lut-inversion.html" class="btn btn-neutral float-right" title="12. LUT Inversion" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

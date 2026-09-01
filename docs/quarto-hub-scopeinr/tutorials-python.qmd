@@ -1,0 +1,38 @@
+---
+title: "Python Tutorials"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+```{=html}
+<section class="hub-hero" style="padding-top:20px;">
+  <div class="hub-eyebrow">SCOPEINR &middot; PYTHON</div>
+  <h1>Python Tutorials</h1>
+  <p class="lead">
+    <code>scopeinpython</code> and <code>toolsrtm</code> share one continuous 20-chapter
+    learning path rather than two separate ones. SCOPE gets one dedicated chapter (06) in
+    that path, plus its own package-tagged runnable code examples and a real-Sentinel-2
+    capstone below. The rest of the shared path (leaf/canopy/soil models, inversion, spatial
+    application) is mostly ToolsRTM material, covered on the
+    <a href="../../quarto-hub-toolsrtm/_site/tutorials-python.html">ToolsRTM hub</a>.
+  </p>
+</section>
+
+<div class="hub-section-title">The SCOPE chapter &middot; ch06</div>
+<div class="hub-section-desc">One coupled simulation: reflectance and emitted SIF together.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="tutorials/python/t06-scope.html"><div class="num">06</div><h4>SCOPE</h4><p>Full SCOPE TOC reflectance and emitted SIF spectrum, from one coupled simulation.</p></a>
+</div>
+
+<div class="hub-section-title">Runnable code examples, by topic</div>
+<div class="hub-section-desc">Short, package-tagged examples from the Python API reference &mdash; each one runnable on its own.</div>
+<div class="hub-grid">
+  <a class="hub-card" href="../../python/examples.html#soil-bsm-optical-canopy-brdf-scopeinpython"><div class="num">Ex</div><h4>Soil (BSM) &amp; Optical Canopy BRDF</h4><p>The BSM soil model and the optical BRDF pipeline that feeds SCOPE.</p></a>
+  <a class="hub-card" href="../../python/examples.html#full-scope-run-energy-balance-fluorescence-scopeinpython"><div class="num">Ex</div><h4>Full SCOPE Run</h4><p>Energy balance and fluorescence, end to end via <code>get_scope()</code>.</p></a>
+  <a class="hub-card" href="../../python/examples.html#real-sentinel-2-capstone-retrieving-net-photosynthesis-scopeinpython"><div class="num">Ex</div><h4>Real Sentinel-2 Capstone</h4><p>Retrieving net photosynthesis (Actot/GPP) from a real scene.</p></a>
+</div>
+
+<div class="hub-section-desc" style="margin-top:30px;">The full 20-chapter path in context lives on the <a href="../../tutorials-python.html">RTM-Suite Python tutorials overview</a>; the complete API reference is the <a href="../../python/scopeinpython/index.html">scopeinpython Sphinx site</a>. Both Python libraries also share a <a href="../../python/index.html">combined landing page</a> with the numeric R-vs-Python verification table.</div>
+```

@@ -1,0 +1,24 @@
+/*-- scss:defaults --*/
+$navy: #061c2a;
+$navy2: #0a2e42;
+$cyan: #19ddd0;
+$mint: #8bf1d1;
+$blue: #2878b5;
+$ink: #183246;
+$muted: #6d8190;
+$line: #dce8ef;
+
+$body-bg: #ffffff;
+$body-color: $ink;
+$link-color: $blue;
+$font-family-sans-serif: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+$font-family-monospace: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+$navbar-bg: $navy;
+$navbar-fg: #eaf5fb;
+$navbar-hl: $cyan;
+
+/*-- scss:rules --*/
+h1, h2, h3 { letter-spacing: -0.02em; }
+code { color: #176b7a; background: #f4fbfc; border: 1px solid #d7eef0; border-radius: 6px; padding: 1px 5px; }
+pre code { background: transparent; border: none; padding: 0; }

@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>17. Preparing EO Observations &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../python/_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../python/_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../python/_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../python/_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../python/_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../python/_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../python/genindex.html" />
+    <link rel="search" title="Search" href="../../../../python/search.html" />
+    <link rel="next" title="18. Applying an Inversion Model Spatially" href="../../../../python/t18-applying-inversion-spatially.html" />
+    <link rel="prev" title="16. Retrieving Real EO Data" href="../../../../python/t16-retrieving-eo-data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../../../python/index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t01-getting-started.html">01. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t02-parameters-traits.html">02. Parameters &amp; Traits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t03-leaf-models.html">03. Leaf Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t04-canopy-models.html">04. Canopy Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t06-scope.html">06. SCOPE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t07-building-workflows.html">07. Building RTM Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t08-sensor-simulation.html">08. Sensor Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t09-spectral-indices.html">09. Spectral Indices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t10-sensitivity-analysis.html">10. Sensitivity Analysis</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t11-lut-generation.html">11. LUT Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t12-lut-inversion.html">12. LUT Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html">13. Machine-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t14-deep-learning-inversion.html">14. Deep-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t15-choosing-inversion-strategy.html">15. Choosing an Inversion Strategy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html">16. Retrieving Real EO Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">17. Preparing EO Observations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html">18. Applying an Inversion Model Spatially</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html">19. Trait Maps &amp; Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t20-end-to-end-workflow.html">20. End-to-End Workflow</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/models.html">Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/toolsrtm/index.html">toolsrtm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/scopeinpython/index.html">scopeinpython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../python/index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../python/index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">17. Preparing EO Observations</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../python/_sources/t17-preparing-eo-observations.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="preparing-eo-observations">
+<h1>17. Preparing EO Observations<a class="headerlink" href="#preparing-eo-observations" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Why real Sentinel-2 reflectance needs rescaling before it matches
+anything trained on simulated reflectance.</p></li>
+<li><p>How to line up real band names/order with a trained model’s expected
+predictor columns.</p></li>
+<li><p>Why cloud masking is harder than it looks – and a real, verified
+demonstration of a naive approach failing.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<p>The cube retrieved in <a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html"><span class="doc">16. Retrieving Real EO Data</span></a> isn’t ready for an
+inversion model yet: its reflectance is integer-scaled, its bands may
+not be named/ordered the way the model expects, and some pixels are
+cloud-contaminated. All three need fixing before prediction.</p>
+</section>
+<section id="python-tools-used">
+<h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
+<p>No new package functions here – this chapter is plain NumPy/xarray
+manipulation of the cube from Chapter 16, since the “preparation” step
+is inherently about matching your own trained model’s expectations, not
+a one-size-fits-all library call.</p>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">real_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;B02&quot;</span><span class="p">,</span> <span class="s2">&quot;B03&quot;</span><span class="p">,</span> <span class="s2">&quot;B04&quot;</span><span class="p">,</span> <span class="s2">&quot;B05&quot;</span><span class="p">,</span> <span class="s2">&quot;B06&quot;</span><span class="p">,</span> <span class="s2">&quot;B07&quot;</span><span class="p">,</span> <span class="s2">&quot;B08&quot;</span><span class="p">,</span> <span class="s2">&quot;B8A&quot;</span><span class="p">,</span> <span class="s2">&quot;B11&quot;</span><span class="p">,</span> <span class="s2">&quot;B12&quot;</span><span class="p">]</span>
+
+<span class="c1"># 1. Reflectance scaling: Sentinel-2 L2A stores reflectance x10000 (integer storage)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="p">{</span><span class="n">b</span><span class="p">:</span> <span class="n">cube</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">real_names</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;B04 raw range:&quot;</span><span class="p">,</span> <span class="n">cube</span><span class="p">[</span><span class="s2">&quot;B04&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">cube</span><span class="p">[</span><span class="s2">&quot;B04&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;B04 scaled range:&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;B04&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;B04&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+<span class="c1"># 2. Band naming/order: match the exact column order the trained model expects</span>
+<span class="c1">#    (e.g. t13-machine-learning-inversion&#39;s band_cols, built the same way)</span>
+<span class="n">pix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">r</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">real_names</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Pixel array shape:&quot;</span><span class="p">,</span> <span class="n">pix</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>   <span class="c1"># (n_pixels, n_bands)</span>
+
+<span class="c1"># 3. A simple brightness-based cloud flag -- vegetation blue reflectance is</span>
+<span class="c1">#    usually low (&lt;0.1); clouds are bright across every band.</span>
+<span class="n">cloud_like</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;B02&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.15</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Flagged fraction:&quot;</span><span class="p">,</span> <span class="n">cloud_like</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<p>Printed output (from the real cube retrieved in Chapter 16):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">B04</span> <span class="n">raw</span> <span class="nb">range</span><span class="p">:</span> <span class="mf">1204.6666</span> <span class="mf">3073.0</span>
+<span class="n">B04</span> <span class="n">scaled</span> <span class="nb">range</span><span class="p">:</span> <span class="mf">0.12046666259765625</span> <span class="mf">0.3073</span>
+<span class="n">Pixel</span> <span class="n">array</span> <span class="n">shape</span><span class="p">:</span> <span class="p">(</span><span class="mi">12144</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">Flagged</span> <span class="n">fraction</span><span class="p">:</span> <span class="mf">0.14443346508563897</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../../python/_images/t17_masking.png"><img alt="True color Sentinel-2 image and a simple B02 brightness-based cloud flag, real output of the code above" src="../../../../python/_images/t17_masking.png" style="width: 90%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: the true-color image (left, with a visible bright cloud) and the same scene with pixels where <code class="docutils literal notranslate"><span class="pre">B02</span> <span class="pre">&gt;</span> <span class="pre">0.15</span></code> highlighted (right) – the simple brightness heuristic catches the real cloud well, but also flags some of the bright unpaved forest track, a real false-positive worth knowing about, not hidden here.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>The scene’s own bundled <code class="docutils literal notranslate"><span class="pre">SCL</span></code> (Scene Classification Layer, Sentinel-2’s
+own per-pixel cloud/shadow/vegetation classification) is included in the
+cube, but is <strong>not usable directly</strong> here: <a class="reference internal" href="../../../../python/toolsrtm/satellite.html#toolsrtm.satellite.get_sentinel2_cube" title="toolsrtm.satellite.get_sentinel2_cube"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_sentinel2_cube()</span></code></a>
+was called with <code class="docutils literal notranslate"><span class="pre">aggregation_method=&quot;mean&quot;</span></code>, which averages <code class="docutils literal notranslate"><span class="pre">SCL</span></code>’s
+categorical class codes across the whole date range the same way it
+averages continuous reflectance – producing meaningless fractional
+values (e.g. 5.6) instead of a real class label. This is a genuine,
+verified limitation, not a hypothetical warning: proper cloud masking
+needs either a different (non-mean) aggregation for <code class="docutils literal notranslate"><span class="pre">SCL</span></code>
+specifically, or per-date masking <em>before</em> compositing – not something
+this chapter’s simple call does for you. The brightness-based fallback
+used above is a reasonable, honest substitute for a quick composite like
+this one, but it’s a heuristic, not a substitute for real per-pixel
+classification.</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Raise the <code class="docutils literal notranslate"><span class="pre">B02</span></code> threshold from 0.15 to 0.20 and see how much less of
+the forest track gets falsely flagged, at the cost of possibly missing
+thinner cloud edges.</p></li>
+<li><p>Check whether <em>every</em> band’s minimum value across the whole scene is
+higher than you’d expect for a “clear” composite (the code above
+already shows <code class="docutils literal notranslate"><span class="pre">B02</span></code>’s overall minimum is 0.124, not near-zero) –
+evidence that <code class="docutils literal notranslate"><span class="pre">aggregation_method=&quot;mean&quot;</span></code> can leave residual
+contamination everywhere, not just in obviously cloudy pixels.</p></li>
+<li><p>Combine the brightness flag with a simple NDVI threshold (very low
+NDVI can also indicate cloud/shadow/water) for a slightly more robust
+combined mask.</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Forgetting the /10000 rescale is the single most common way to feed a
+model garbage – raw Sentinel-2 L2A values (hundreds to thousands) are
+nowhere near the [0,1] range anything trained on simulated reflectance
+expects.</p></li>
+<li><p>Assuming <code class="docutils literal notranslate"><span class="pre">SCL</span></code> is directly usable after a <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code> composite –
+verified above to produce meaningless fractional class codes, not real
+classifications.</p></li>
+<li><p>A pixel-wise valid-range check (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">reflectance</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>) does <strong>not</strong>
+catch clouds – bright clouds are still valid, finite reflectance
+values, just physically the wrong signal. The brightness heuristic
+above is a real, if imperfect, improvement.</p></li>
+</ul>
+</section>
+<section id="next">
+<h2>Next<a class="headerlink" href="#next" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html"><span class="doc">18. Applying an Inversion Model Spatially</span></a> – running a trained inversion
+model over this prepared pixel array.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../../python/t16-retrieving-eo-data.html" class="btn btn-neutral float-left" title="16. Retrieving Real EO Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../../python/t18-applying-inversion-spatially.html" class="btn btn-neutral float-right" title="18. Applying an Inversion Model Spatially" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

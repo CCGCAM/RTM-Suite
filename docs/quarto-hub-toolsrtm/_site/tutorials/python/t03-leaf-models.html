@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>03. Leaf Radiative Transfer Models &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../python/_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../python/_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../python/_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../python/_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../python/_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../python/_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../python/genindex.html" />
+    <link rel="search" title="Search" href="../../../../python/search.html" />
+    <link rel="next" title="04. Canopy Radiative Transfer Models" href="../../../../python/t04-canopy-models.html" />
+    <link rel="prev" title="02. Parameters &amp; Traits" href="../../../../python/t02-parameters-traits.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../../../python/index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t01-getting-started.html">01. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t02-parameters-traits.html">02. Parameters &amp; Traits</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">03. Leaf Radiative Transfer Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next">Next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t04-canopy-models.html">04. Canopy Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t06-scope.html">06. SCOPE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t07-building-workflows.html">07. Building RTM Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t08-sensor-simulation.html">08. Sensor Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t09-spectral-indices.html">09. Spectral Indices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t10-sensitivity-analysis.html">10. Sensitivity Analysis</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t11-lut-generation.html">11. LUT Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t12-lut-inversion.html">12. LUT Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html">13. Machine-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t14-deep-learning-inversion.html">14. Deep-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t15-choosing-inversion-strategy.html">15. Choosing an Inversion Strategy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html">16. Retrieving Real EO Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t17-preparing-eo-observations.html">17. Preparing EO Observations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html">18. Applying an Inversion Model Spatially</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html">19. Trait Maps &amp; Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t20-end-to-end-workflow.html">20. End-to-End Workflow</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/models.html">Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/toolsrtm/index.html">toolsrtm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/scopeinpython/index.html">scopeinpython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../python/index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../python/index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">03. Leaf Radiative Transfer Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../python/_sources/t03-leaf-models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="leaf-radiative-transfer-models">
+<h1>03. Leaf Radiative Transfer Models<a class="headerlink" href="#leaf-radiative-transfer-models" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>What each of the four leaf models simulates, and the one structural
+difference that actually separates them.</p></li>
+<li><p>Which inputs matter for each.</p></li>
+<li><p>How to run, plot, and scientifically interpret all four side by side.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<p>A leaf model turns a handful of biochemical/structural traits into a
+reflectance and transmittance spectrum. All four models here share the
+same core idea (light absorbed by pigments/water/dry matter, scattered
+by internal cell-wall/air-space interfaces) but differ in exactly what
+they add on top of that core:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 45.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>What it simulates</p></th>
+<th class="head"><p>What makes it different</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PROSPECT-D</p></td>
+<td><p>Reflectance/transmittance from pigments (<code class="docutils literal notranslate"><span class="pre">Cab</span></code>/<code class="docutils literal notranslate"><span class="pre">Car</span></code>/<code class="docutils literal notranslate"><span class="pre">Anth</span></code>),
+water (<code class="docutils literal notranslate"><span class="pre">EWT</span></code>), and one lumped dry-matter term (<code class="docutils literal notranslate"><span class="pre">LMA</span></code>).</p></td>
+<td><p>The reference broadleaf model.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PROSPECT-PRO</p></td>
+<td><p>Same physics, but splits <code class="docutils literal notranslate"><span class="pre">LMA</span></code> into <code class="docutils literal notranslate"><span class="pre">Prot</span></code> (protein) +
+<code class="docutils literal notranslate"><span class="pre">CBC</span></code> (cellulose/lignin).</p></td>
+<td><p>Only the dry-matter parameterization differs.</p></td>
+</tr>
+<tr class="row-even"><td><p>Fluspect-B / Fluspect-Cx</p></td>
+<td><p>PROSPECT-D’s optics <em>plus</em> chlorophyll-fluorescence excitation-
+emission matrices; Fluspect-Cx additionally adds a
+photoprotection (<code class="docutils literal notranslate"><span class="pre">Cx</span></code>) term.</p></td>
+<td><p>Adds fluorescence – needed wherever solar-induced fluorescence
+(SIF) matters, e.g. <a class="reference internal" href="../../../../python/t06-scope.html"><span class="doc">06. SCOPE</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIBERTY</p></td>
+<td><p>Reflectance/transmittance for <strong>conifer needles</strong>, from explicit
+cell geometry instead of PROSPECT’s Fresnel-refraction layer.</p></td>
+<td><p>Not a PROSPECT variant – a structurally different model, built
+for needle anatomy.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="python-tools-used">
+<h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Key arguments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../../../../python/toolsrtm/leaf.html#toolsrtm.leaf.prospect_d" title="toolsrtm.leaf.prospect_d"><code class="xref py py-func docutils literal notranslate"><span class="pre">prospect_d()</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">N,</span> <span class="pre">Cab,</span> <span class="pre">Car,</span> <span class="pre">Anth,</span> <span class="pre">Cbrown,</span> <span class="pre">EWT,</span> <span class="pre">LMA,</span> <span class="pre">alpha</span></code> – see <a class="reference internal" href="../../../../python/t02-parameters-traits.html"><span class="doc">02. Parameters &amp; Traits</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../../../python/toolsrtm/leaf.html#toolsrtm.leaf.prospect_pro" title="toolsrtm.leaf.prospect_pro"><code class="xref py py-func docutils literal notranslate"><span class="pre">prospect_pro()</span></code></a></p></td>
+<td><p>Same as above but <code class="docutils literal notranslate"><span class="pre">LMA</span></code> replaced by <code class="docutils literal notranslate"><span class="pre">Prot,</span> <span class="pre">CBC</span></code> (pass <code class="docutils literal notranslate"><span class="pre">LMA=0.0</span></code> explicitly).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../../../python/toolsrtm/fluspect.html#toolsrtm.fluspect.fluspect_b" title="toolsrtm.fluspect.fluspect_b"><code class="xref py py-func docutils literal notranslate"><span class="pre">fluspect_b()</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Cab,</span> <span class="pre">Car,</span> <span class="pre">EWT,</span> <span class="pre">LMA,</span> <span class="pre">Cs,</span> <span class="pre">N,</span> <span class="pre">fqe,</span> <span class="pre">Cx</span></code> (positional) – returns
+<code class="docutils literal notranslate"><span class="pre">.MbI</span></code>/<code class="docutils literal notranslate"><span class="pre">.MbII</span></code> (211x351 excitation-emission matrices, PSI/PSII).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../../../python/toolsrtm/fluspect.html#toolsrtm.fluspect.fluspect_cx" title="toolsrtm.fluspect.fluspect_cx"><code class="xref py py-func docutils literal notranslate"><span class="pre">fluspect_cx()</span></code></a></p></td>
+<td><p>Adds <code class="docutils literal notranslate"><span class="pre">Prot,</span> <span class="pre">CBC,</span> <span class="pre">Anth</span></code> on top of <code class="docutils literal notranslate"><span class="pre">fluspect_b</span></code>’s arguments –
+returns a single combined <code class="docutils literal notranslate"><span class="pre">.Mb</span></code> (211x351) instead of separate PSI/PSII.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../../../python/toolsrtm/liberty.html#toolsrtm.liberty.liberty" title="toolsrtm.liberty.liberty"><code class="xref py py-func docutils literal notranslate"><span class="pre">liberty()</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cell_d,</span> <span class="pre">inter_c,</span> <span class="pre">baseline_abs,</span> <span class="pre">leaf_thick,</span> <span class="pre">albino_abs,</span> <span class="pre">Cab,</span> <span class="pre">EWT,</span> <span class="pre">lign_cell,</span> <span class="pre">Nitrogen</span></code>
+– see <a class="reference internal" href="../../../../python/t02-parameters-traits.html"><span class="doc">02. Parameters &amp; Traits</span></a>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">prospect_d</span><span class="p">,</span> <span class="n">prospect_pro</span><span class="p">,</span> <span class="n">liberty</span><span class="p">,</span> <span class="n">fluspect_b</span><span class="p">,</span> <span class="n">fluspect_cx</span>
+
+<span class="n">pro_d</span> <span class="o">=</span> <span class="n">prospect_d</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">pro_pro</span> <span class="o">=</span> <span class="n">prospect_pro</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Prot</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">CBC</span><span class="o">=</span><span class="mf">0.007</span><span class="p">)</span>
+<span class="n">lib</span> <span class="o">=</span> <span class="n">liberty</span><span class="p">(</span><span class="n">cell_d</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">inter_c</span><span class="o">=</span><span class="mf">0.045</span><span class="p">,</span> <span class="n">baseline_abs</span><span class="o">=</span><span class="mf">0.0006</span><span class="p">,</span> <span class="n">leaf_thick</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span>
+              <span class="n">albino_abs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lign_cell</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">Nitrogen</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">flu_b</span> <span class="o">=</span> <span class="n">fluspect_b</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">Cs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fqe</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">flu_cx</span> <span class="o">=</span> <span class="n">fluspect_cx</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Cab</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">Car</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Anth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">LMA</span><span class="o">=</span><span class="mf">0.009</span><span class="p">,</span> <span class="n">Cs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                      <span class="n">fqe</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">Prot</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">CBC</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PROSPECT-D  reflectance at 550nm:&quot;</span><span class="p">,</span> <span class="n">pro_d</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">150</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PROSPECT-PRO reflectance at 550nm:&quot;</span><span class="p">,</span> <span class="n">pro_pro</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">150</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LIBERTY     reflectance at 550nm:&quot;</span><span class="p">,</span> <span class="n">lib</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">150</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fluspect-B  reflectance at 550nm:&quot;</span><span class="p">,</span> <span class="n">flu_b</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">150</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fluspect-Cx reflectance at 550nm:&quot;</span><span class="p">,</span> <span class="n">flu_cx</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">150</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fluspect-B fluorescence matrix (MbI) shape:&quot;</span><span class="p">,</span> <span class="n">flu_b</span><span class="o">.</span><span class="n">MbI</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">pro_d</span><span class="p">,</span> <span class="s2">&quot;#0072B2&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;PROSPECT-PRO&quot;</span><span class="p">,</span> <span class="n">pro_pro</span><span class="p">,</span> <span class="s2">&quot;#D55E00&quot;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;LIBERTY&quot;</span><span class="p">,</span> <span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;#009E73&quot;</span><span class="p">)]:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">refl</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Wavelength (nm)&quot;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Reflectance&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<p>Printed output (exact, deterministic):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PROSPECT</span><span class="o">-</span><span class="n">D</span>  <span class="n">reflectance</span> <span class="n">at</span> <span class="mi">550</span><span class="n">nm</span><span class="p">:</span> <span class="mf">0.13359835005159199</span>
+<span class="n">PROSPECT</span><span class="o">-</span><span class="n">PRO</span> <span class="n">reflectance</span> <span class="n">at</span> <span class="mi">550</span><span class="n">nm</span><span class="p">:</span> <span class="mf">0.1340437450891865</span>
+<span class="n">LIBERTY</span>     <span class="n">reflectance</span> <span class="n">at</span> <span class="mi">550</span><span class="n">nm</span><span class="p">:</span> <span class="mf">0.062101770920629594</span>
+<span class="n">Fluspect</span><span class="o">-</span><span class="n">B</span>  <span class="n">reflectance</span> <span class="n">at</span> <span class="mi">550</span><span class="n">nm</span><span class="p">:</span> <span class="mf">0.15995957791874202</span>
+<span class="n">Fluspect</span><span class="o">-</span><span class="n">Cx</span> <span class="n">reflectance</span> <span class="n">at</span> <span class="mi">550</span><span class="n">nm</span><span class="p">:</span> <span class="mf">0.14156441320107857</span>
+<span class="n">Fluspect</span><span class="o">-</span><span class="n">B</span> <span class="n">fluorescence</span> <span class="n">matrix</span> <span class="p">(</span><span class="n">MbI</span><span class="p">)</span> <span class="n">shape</span><span class="p">:</span> <span class="p">(</span><span class="mi">211</span><span class="p">,</span> <span class="mi">351</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../../python/_images/t03_leaf_model_comparison.png"><img alt="PROSPECT-D vs PROSPECT-PRO vs LIBERTY leaf reflectance and transmittance, real output of the code above" src="../../../../python/_images/t03_leaf_model_comparison.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: PROSPECT-D and PROSPECT-PRO overlap almost everywhere (same underlying physics, same total dry matter – <code class="docutils literal notranslate"><span class="pre">LMA=0.009</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">Prot=0.002</span> <span class="pre">+</span> <span class="pre">CBC=0.007</span></code>); LIBERTY (needle anatomy) is visibly different in the NIR plateau and SWIR.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../../../../python/_images/fluspect_leaf.png"><img alt="Fluspect-B leaf optics and fluorescence excitation-emission matrix, real output" src="../../../../python/_images/fluspect_leaf.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: Fluspect-B’s reflectance/transmittance (left) and its backward chlorophyll-fluorescence excitation-emission matrix (right, <code class="docutils literal notranslate"><span class="pre">MbI</span></code>) – the two characteristic emission peaks near 685nm (PSII) and 740nm (PSI) are visible at both the blue (~440nm) and red (~660-680nm) chlorophyll excitation bands. No other leaf model on this page produces this second plot at all.</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../../../../python/_images/liberty_leaf.png"><img alt="LIBERTY conifer-needle leaf reflectance and 1-transmittance, real output" src="../../../../python/_images/liberty_leaf.png" style="width: 75%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: LIBERTY’s conifer-needle optics – flatter NIR plateau and different SWIR absorption shape than broadleaf PROSPECT, reflecting the needle-specific anatomy the model targets.</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>PROSPECT-D and PROSPECT-PRO track each other closely everywhere (0.1336
+vs. 0.1340 at 550nm) – expected, since <code class="docutils literal notranslate"><span class="pre">LMA=0.009</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Prot=0.002</span> <span class="pre">+</span> <span class="pre">CBC=0.007</span></code> represent the same total dry-matter mass
+through the same underlying absorption physics, just split two
+different ways. LIBERTY sits well below both at 550nm (0.062) and
+diverges further in the NIR/SWIR (see the figure) – a real anatomical
+difference, not a bug: conifer needles pack mesophyll cells more densely
+than broadleaf tissue, giving less internal air-space scattering and
+therefore a flatter, lower NIR plateau. Fluspect-B is close to but not
+identical to PROSPECT-D (0.160 vs. 0.134 at 550nm, within ~1% of each
+other by 800nm in the NIR plateau) – the two share the same absorption
+physics but not byte-identical coefficient tables, so expect small,
+mostly visible-region differences, not an exact match. Fluspect-Cx’s
+extra <code class="docutils literal notranslate"><span class="pre">Cx=0.3</span></code> term (partial photoprotection) shifts its 550nm value
+between Fluspect-B’s and PROSPECT-D’s, consistent with a small
+absorption change rather than a structural one.</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">Cx=1.0</span></code> (full photoprotection) on <code class="docutils literal notranslate"><span class="pre">fluspect_cx</span></code> and compare
+against <code class="docutils literal notranslate"><span class="pre">Cx=0</span></code>.</p></li>
+<li><p>Swap <code class="docutils literal notranslate"><span class="pre">lib</span></code>’s <code class="docutils literal notranslate"><span class="pre">inter_c</span></code> (intercellular air-space fraction) from
+0.045 to 0.06 and see how much closer the NIR plateau moves toward
+PROSPECT-D’s.</p></li>
+<li><p>Compute <code class="docutils literal notranslate"><span class="pre">flu_b.MbI.sum()</span></code> at a few different <code class="docutils literal notranslate"><span class="pre">fqe</span></code> values and
+check it scales linearly (it should – <code class="docutils literal notranslate"><span class="pre">fqe</span></code> is a quantum
+efficiency, a direct multiplier on emitted fluorescence).</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fluspect_b</span></code>/<code class="docutils literal notranslate"><span class="pre">fluspect_cx</span></code>’s arguments are largely positional –
+check the signature before assuming keyword order matches
+<code class="docutils literal notranslate"><span class="pre">prospect_d</span></code>’s.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fluspect_b</span></code> returns separate <code class="docutils literal notranslate"><span class="pre">.MbI</span></code>/<code class="docutils literal notranslate"><span class="pre">.MbII</span></code> (PSI/PSII);
+<code class="docutils literal notranslate"><span class="pre">fluspect_cx</span></code> returns one combined <code class="docutils literal notranslate"><span class="pre">.Mb</span></code> instead – not the same
+attribute name.</p></li>
+<li><p>LIBERTY’s inputs are real cell geometry (micrometers, fractions), not
+PROSPECT pigment concentrations – copying a PROSPECT trait value into
+LIBERTY’s similarly-named argument is not meaningful.</p></li>
+</ul>
+</section>
+<section id="next">
+<h2>Next<a class="headerlink" href="#next" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../../../../python/t04-canopy-models.html"><span class="doc">04. Canopy Radiative Transfer Models</span></a> – turning any of these leaf spectra into a
+canopy-level reflectance, and what changes between fourSAIL, fourSAIL2,
+and INFORM.</p>
+<hr class="docutils" />
+<p>Using R? -&gt; <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/t02-leaf-to-canopy.html">ToolsRTM Tutorial 02: From Leaf to Canopy Reflectance</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../../python/t02-parameters-traits.html" class="btn btn-neutral float-left" title="02. Parameters &amp; Traits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../../python/t04-canopy-models.html" class="btn btn-neutral float-right" title="04. Canopy Radiative Transfer Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

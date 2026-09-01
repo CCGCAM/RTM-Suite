@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>15. Choosing an Inversion Strategy &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../python/_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../python/_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../python/_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../python/_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../python/_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../python/_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../python/genindex.html" />
+    <link rel="search" title="Search" href="../../../../python/search.html" />
+    <link rel="next" title="16. Retrieving Real EO Data" href="../../../../python/t16-retrieving-eo-data.html" />
+    <link rel="prev" title="14. Deep-Learning Inversion" href="../../../../python/t14-deep-learning-inversion.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../../../python/index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t01-getting-started.html">01. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t02-parameters-traits.html">02. Parameters &amp; Traits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t03-leaf-models.html">03. Leaf Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t04-canopy-models.html">04. Canopy Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t06-scope.html">06. SCOPE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t07-building-workflows.html">07. Building RTM Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t08-sensor-simulation.html">08. Sensor Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t09-spectral-indices.html">09. Spectral Indices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t10-sensitivity-analysis.html">10. Sensitivity Analysis</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t11-lut-generation.html">11. LUT Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t12-lut-inversion.html">12. LUT Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html">13. Machine-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t14-deep-learning-inversion.html">14. Deep-Learning Inversion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">15. Choosing an Inversion Strategy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next">Next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html">16. Retrieving Real EO Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t17-preparing-eo-observations.html">17. Preparing EO Observations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html">18. Applying an Inversion Model Spatially</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html">19. Trait Maps &amp; Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t20-end-to-end-workflow.html">20. End-to-End Workflow</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/models.html">Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/toolsrtm/index.html">toolsrtm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/scopeinpython/index.html">scopeinpython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../python/index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../python/index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">15. Choosing an Inversion Strategy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../python/_sources/t15-choosing-inversion-strategy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="choosing-an-inversion-strategy">
+<h1>15. Choosing an Inversion Strategy<a class="headerlink" href="#choosing-an-inversion-strategy" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>A direct, at-a-glance comparison of LUT matching, machine learning,
+and deep learning on the same underlying retrieval problem.</p></li>
+<li><p>Data requirements, interpretability, and computational cost for each.</p></li>
+<li><p>Enough to pick a reasonable starting point without re-reading Chapters
+12-14 first.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 22.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Data needed</p></th>
+<th class="head"><p>Interpretability</p></th>
+<th class="head"><p>Compute cost</p></th>
+<th class="head"><p>Best when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../../../../python/t12-lut-inversion.html"><span class="doc">12. LUT Inversion</span></a> (merit function)</p></td>
+<td><p>A LUT, no training</p></td>
+<td><p>High (see the exact matching spectra)</p></td>
+<td><p>Cheap per call, no training step, but a full LUT scan every time</p></td>
+<td><p>Small LUT, want it fast and interpretable, no retraining hassle</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html"><span class="doc">13. Machine-Learning Inversion</span></a> (RF/PLSR/SVM/…)</p></td>
+<td><p>A LUT to train on once</p></td>
+<td><p>Medium (feature importance available)</p></td>
+<td><p>One training cost, then very cheap prediction</p></td>
+<td><p>Default choice for most trait-retrieval work</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../../../python/t14-deep-learning-inversion.html"><span class="doc">14. Deep-Learning Inversion</span></a> (Dense/1D-CNN)</p></td>
+<td><p>A larger LUT, more tuning</p></td>
+<td><p>Low (a black box, though loss curves show <em>if</em> it learned)</p></td>
+<td><p>Highest training cost (many epochs, optional GPU), cheap prediction</p></td>
+<td><p>Wide hyperspectral input, willing to tune a network, ML already
+tried and insufficient</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<p>The exact held-out results from Chapters 12-14, on the same 1000-row LUT
+(<a class="reference internal" href="../../../../python/t11-lut-generation.html"><span class="doc">11. LUT Generation</span></a>), Cab as the target trait:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LUT matching (t12)&quot;</span><span class="p">,</span> <span class="s2">&quot;Machine learning (t13, RF)&quot;</span><span class="p">,</span> <span class="s2">&quot;Deep learning (t14, Dense NN)&quot;</span><span class="p">]</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.997</span><span class="p">,</span> <span class="mf">0.995</span><span class="p">,</span> <span class="mf">0.948</span><span class="p">]</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">1.37</span><span class="p">,</span> <span class="mf">4.57</span><span class="p">]</span>   <span class="c1"># ug/cm2</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../../python/_images/t15_strategy_comparison.png"><img alt="R2 and RMSE for LUT matching, ML, and DL on the same retrieval problem, real output" src="../../../../python/_images/t15_strategy_comparison.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real numbers, taken directly from Chapters 12-14’s own evaluations.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>All three retrieve Cab well here (R2 &gt;= 0.95), but this comparison isn’t
+perfectly apples-to-apples and shouldn’t be read as “LUT matching beats
+DL”: Chapter 12 evaluated on 30 independently-simulated held-out
+observations, while Chapters 13-14 evaluated on a 300-row held-out split
+of the <em>same</em> 1000-row LUT – different test sets, different difficulty.
+The honest takeaway is qualitative, not a precise ranking: all three
+methods can retrieve a well-behaved trait like Cab from a clean,
+noise-free, same-distribution LUT to a similar standard, and the real
+differences between them show up in what Chapter 14 already flagged for
+DL specifically (mean-reversion at trait extremes, sensitivity to
+preprocessing mistakes) and in what only shows up once you leave this
+idealized setting – real sensor noise, real atmospheric/soil
+confounding, real out-of-distribution trait combinations
+(<a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html"><span class="doc">18. Applying an Inversion Model Spatially</span></a>).</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Re-run all three methods on the <em>same</em> 30 held-out observations from
+Chapter 12, for a genuinely apples-to-apples comparison.</p></li>
+<li><p>Re-run all three after adding <a class="reference internal" href="../../../../python/t11-lut-generation.html"><span class="doc">11. LUT Generation</span></a>’s noise step to
+both the LUT and the test observations, and see which method’s R2
+degrades the most.</p></li>
+<li><p>Time each method’s training + prediction step (<code class="docutils literal notranslate"><span class="pre">%%timeit</span></code> in a
+notebook) to get a feel for the real compute-cost gap the table above
+only describes qualitatively.</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Don’t pick DL by default “because it’s more advanced” – Chapter 14’s
+own guidance is to confirm ML doesn’t already solve the problem first,
+since it usually does, at a fraction of the tuning effort.</p></li>
+<li><p>A method’s R2 on clean simulated data is not a promise of the same R2
+on real observations – always budget for degradation once real noise
+and confounding enter (Part IV).</p></li>
+<li><p>Comparing methods evaluated on different held-out sets (as this
+chapter’s own numbers are) can be misleading – always compare on
+identical test data when the choice actually matters for a real
+project.</p></li>
+</ul>
+</section>
+<section id="next">
+<h2>Next<a class="headerlink" href="#next" title="Link to this heading"></a></h2>
+<p>Part IV starts here: <a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html"><span class="doc">16. Retrieving Real EO Data</span></a> – taking any of
+these trained inversion methods to a real satellite scene.</p>
+<hr class="docutils" />
+<p>Using R? -&gt; <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/t12-ml-inversion-comparison.html">ToolsRTM Tutorial 12: ML Inversion Comparison</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../../python/t14-deep-learning-inversion.html" class="btn btn-neutral float-left" title="14. Deep-Learning Inversion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../../python/t16-retrieving-eo-data.html" class="btn btn-neutral float-right" title="16. Retrieving Real EO Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>20. End-to-End Workflow &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../python/_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../python/_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../python/_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../python/_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../python/_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../python/_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../python/genindex.html" />
+    <link rel="search" title="Search" href="../../../../python/search.html" />
+    <link rel="next" title="Radiative Transfer Models" href="../../../../python/models.html" />
+    <link rel="prev" title="19. Trait Maps &amp; Uncertainty" href="../../../../python/t19-trait-maps-uncertainty.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../../../python/index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t01-getting-started.html">01. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t02-parameters-traits.html">02. Parameters &amp; Traits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t03-leaf-models.html">03. Leaf Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t04-canopy-models.html">04. Canopy Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t06-scope.html">06. SCOPE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t07-building-workflows.html">07. Building RTM Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t08-sensor-simulation.html">08. Sensor Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t09-spectral-indices.html">09. Spectral Indices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t10-sensitivity-analysis.html">10. Sensitivity Analysis</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t11-lut-generation.html">11. LUT Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t12-lut-inversion.html">12. LUT Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html">13. Machine-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t14-deep-learning-inversion.html">14. Deep-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t15-choosing-inversion-strategy.html">15. Choosing an Inversion Strategy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html">16. Retrieving Real EO Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t17-preparing-eo-observations.html">17. Preparing EO Observations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html">18. Applying an Inversion Model Spatially</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html">19. Trait Maps &amp; Uncertainty</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">20. End-to-End Workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/models.html">Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/toolsrtm/index.html">toolsrtm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/scopeinpython/index.html">scopeinpython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../python/index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../python/index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">20. End-to-End Workflow</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../python/_sources/t20-end-to-end-workflow.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="end-to-end-workflow">
+<h1>20. End-to-End Workflow<a class="headerlink" href="#end-to-end-workflow" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The complete path from RTM parameters to a real vegetation trait map,
+as one coherent pipeline – not 19 separate ideas.</p></li>
+<li><p>Where each earlier chapter’s piece fits into a single real project.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<p>Every chapter in this guide is one stage of a single real pipeline:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>RTM parameters (t02)
+     |
+     v
+LUT: sampled trait distributions, wide/realistic domain (t11)
+     |
+     v
+RTM simulation: one spectrum per LUT row (t03-t06)
+     |
+     v
+Sensor convolution: native spectrum -&gt; Sentinel-2 bands (t08)
+     |
+     v
+Inversion training: LUT bands -&gt; trait, held-out evaluated (t12-t15)
+     |
+     v
+Real satellite observation: retrieved via STAC (t16), prepared (t17)
+     |
+     v
+Trait map: trained model applied to every real pixel (t18)
+     |
+     v
+Evaluation / uncertainty: independent-signal cross-check (t19)
+</pre></div>
+</div>
+<p>This chapter is that chain, run once, end to end, over Loobos forest
+(NL-Loo), an ICOS eddy-covariance Scots pine site – one of this site’s
+two flagship real-data capstones (the other, Speulderbos/SCOPE/Actot,
+is <a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html"><span class="doc">19. Trait Maps &amp; Uncertainty</span></a>’s own result figure).</p>
+</section>
+<section id="python-tools-used">
+<h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
+<p>Every function from Chapters 02-19: <a class="reference internal" href="../../../../python/toolsrtm/canopy.html#toolsrtm.canopy.foursail" title="toolsrtm.canopy.foursail"><code class="xref py py-func docutils literal notranslate"><span class="pre">foursail()</span></code></a>,
+<a class="reference internal" href="../../../../python/toolsrtm/srf.html#toolsrtm.srf.spectral_convolution_srf" title="toolsrtm.srf.spectral_convolution_srf"><code class="xref py py-func docutils literal notranslate"><span class="pre">spectral_convolution_srf()</span></code></a>, <a class="reference internal" href="../../../../python/toolsrtm/indices.html#toolsrtm.indices.get_indices" title="toolsrtm.indices.get_indices"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_indices()</span></code></a>,
+<a class="reference internal" href="../../../../python/toolsrtm/inversion.html#toolsrtm.inversion.get_inversion" title="toolsrtm.inversion.get_inversion"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_inversion()</span></code></a>, <a class="reference internal" href="../../../../python/toolsrtm/satellite.html#toolsrtm.satellite.get_satellite_collection" title="toolsrtm.satellite.get_satellite_collection"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_satellite_collection()</span></code></a>/
+<a class="reference internal" href="../../../../python/toolsrtm/satellite.html#toolsrtm.satellite.get_sentinel2_cube" title="toolsrtm.satellite.get_sentinel2_cube"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_sentinel2_cube()</span></code></a>. Nothing new – this
+chapter is the composition, not new API surface.</p>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm</span><span class="w"> </span><span class="kn">import</span> <span class="n">foursail</span><span class="p">,</span> <span class="n">srf_sentinel2a</span><span class="p">,</span> <span class="n">spectral_convolution_srf</span><span class="p">,</span> <span class="n">get_indices</span><span class="p">,</span> <span class="n">get_inversion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">toolsrtm.satellite</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_satellite_collection</span><span class="p">,</span> <span class="n">get_sentinel2_cube</span>
+
+<span class="c1"># 1. LUT: wide domain (LAI down to 0.3, non-zero sun zenith, variable soil)</span>
+<span class="c1">#    so the simulated envelope actually covers real forest reflectance.</span>
+<span class="n">wl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">2501</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">LAI</span><span class="p">,</span> <span class="n">tts</span><span class="p">,</span> <span class="n">soil_b</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">Cab</span><span class="p">,</span> <span class="n">Car</span><span class="p">,</span> <span class="n">Anth</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">EWT</span><span class="p">,</span> <span class="n">LMA</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">LIDFa</span><span class="p">,</span> <span class="n">hspot</span><span class="p">,</span> <span class="n">tto</span><span class="p">,</span> <span class="n">psi</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># 2. RTM simulation, one native spectrum per row</span>
+<span class="n">refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span>
+    <span class="n">foursail</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Cab</span><span class="o">=</span><span class="n">Cab</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Car</span><span class="o">=</span><span class="n">Car</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Anth</span><span class="o">=</span><span class="n">Anth</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Cbrown</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">EWT</span><span class="o">=</span><span class="n">EWT</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">LMA</span><span class="o">=</span><span class="n">LMA</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                   <span class="n">alpha</span><span class="o">=</span><span class="mf">40.0</span><span class="p">,</span> <span class="n">LIDFa</span><span class="o">=</span><span class="n">LIDFa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">LIDFb</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">TypeLidf</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">LAI</span><span class="o">=</span><span class="n">LAI</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hspot</span><span class="o">=</span><span class="n">hspot</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                   <span class="n">tts</span><span class="o">=</span><span class="n">tts</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tto</span><span class="o">=</span><span class="n">tto</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">psi</span><span class="o">=</span><span class="n">psi</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">2101</span><span class="p">,</span> <span class="n">soil_b</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">leaf_model</span><span class="o">=</span><span class="s2">&quot;PROSPECT-D&quot;</span><span class="p">,</span> <span class="n">spectrum_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">rsot</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="p">])</span>
+
+<span class="c1"># 3. Sensor convolution: native 1nm -&gt; real Sentinel-2 bands</span>
+<span class="n">s2a</span> <span class="o">=</span> <span class="n">srf_sentinel2a</span><span class="p">()</span>
+<span class="n">real_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;B02&quot;</span><span class="p">,</span> <span class="s2">&quot;B03&quot;</span><span class="p">,</span> <span class="s2">&quot;B04&quot;</span><span class="p">,</span> <span class="s2">&quot;B05&quot;</span><span class="p">,</span> <span class="s2">&quot;B06&quot;</span><span class="p">,</span> <span class="s2">&quot;B07&quot;</span><span class="p">,</span> <span class="s2">&quot;B08&quot;</span><span class="p">,</span> <span class="s2">&quot;B8A&quot;</span><span class="p">,</span> <span class="s2">&quot;B11&quot;</span><span class="p">,</span> <span class="s2">&quot;B12&quot;</span><span class="p">]</span>
+<span class="n">keep</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;B2&quot;</span><span class="p">,</span> <span class="s2">&quot;B3&quot;</span><span class="p">,</span> <span class="s2">&quot;B4&quot;</span><span class="p">,</span> <span class="s2">&quot;B5&quot;</span><span class="p">,</span> <span class="s2">&quot;B6&quot;</span><span class="p">,</span> <span class="s2">&quot;B7&quot;</span><span class="p">,</span> <span class="s2">&quot;B8&quot;</span><span class="p">,</span> <span class="s2">&quot;B8A&quot;</span><span class="p">,</span> <span class="s2">&quot;B11&quot;</span><span class="p">,</span> <span class="s2">&quot;B12&quot;</span><span class="p">]</span>
+<span class="n">conv0</span> <span class="o">=</span> <span class="n">spectral_convolution_srf</span><span class="p">(</span><span class="n">wl</span><span class="p">,</span> <span class="n">refl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s2a</span><span class="p">)</span>
+<span class="n">keep_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">conv0</span><span class="o">.</span><span class="n">band_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keep</span><span class="p">]</span>
+<span class="n">band_refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">spectral_convolution_srf</span><span class="p">(</span><span class="n">wl</span><span class="p">,</span> <span class="n">refl</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">s2a</span><span class="p">)</span><span class="o">.</span><span class="n">rfl</span><span class="p">[</span><span class="n">keep_idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span>
+
+<span class="c1"># 4. Inversion training, held-out evaluated</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">band_refl</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">real_names</span><span class="p">);</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Cab&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Cab</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">get_inversion</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dep_var</span><span class="o">=</span><span class="s2">&quot;Cab&quot;</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">real_names</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;RF&quot;</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Held-out Cab R2:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">][</span><span class="s2">&quot;r2&quot;</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="c1"># 5. Real satellite observation: Loobos forest, July 2024</span>
+<span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">52.166447</span><span class="p">,</span> <span class="mf">5.74355</span><span class="p">,</span> <span class="mf">0.006</span>
+<span class="n">bbox</span> <span class="o">=</span> <span class="p">(</span><span class="n">lon</span> <span class="o">-</span> <span class="n">d</span><span class="p">,</span> <span class="n">lat</span> <span class="o">-</span> <span class="n">d</span><span class="p">,</span> <span class="n">lon</span> <span class="o">+</span> <span class="n">d</span><span class="p">,</span> <span class="n">lat</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span>
+<span class="n">coll</span> <span class="o">=</span> <span class="n">get_satellite_collection</span><span class="p">(</span><span class="n">bbox</span><span class="p">,</span> <span class="n">collection</span><span class="o">=</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span> <span class="n">date_range</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;2024-07-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-07-31&quot;</span><span class="p">),</span>
+                                 <span class="n">cloud_server</span><span class="o">=</span><span class="s2">&quot;microsoft&quot;</span><span class="p">,</span> <span class="n">n_limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">cloud_threshold</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">cube</span> <span class="o">=</span> <span class="n">get_sentinel2_cube</span><span class="p">(</span><span class="n">coll</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:32631&quot;</span><span class="p">,</span> <span class="n">aggregation_method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="p">{</span><span class="n">b</span><span class="p">:</span> <span class="n">cube</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">real_names</span><span class="p">}</span>   <span class="c1"># t17: reflectance scaling</span>
+
+<span class="c1"># 6. Trait map: trained model applied to every real pixel</span>
+<span class="n">pix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">r</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">real_names</span><span class="p">])</span>
+<span class="n">ok</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">pix</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">cab_pixels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">pix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="n">cab_pixels</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">pix</span><span class="p">[</span><span class="n">ok</span><span class="p">])</span>
+<span class="n">cab_map</span> <span class="o">=</span> <span class="n">cab_pixels</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;B04&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># 7. Evaluation / uncertainty: an independent index, computed a completely different way</span>
+<span class="n">band_wl</span> <span class="o">=</span> <span class="n">conv0</span><span class="o">.</span><span class="n">wl</span><span class="p">[</span><span class="n">keep_idx</span><span class="p">]</span>
+<span class="n">idx_rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_indices</span><span class="p">(</span><span class="n">band_wl</span><span class="p">,</span> <span class="n">band_refl</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">spectral_domain</span><span class="o">=</span><span class="s2">&quot;VNIR&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+<span class="n">cors</span> <span class="o">=</span> <span class="p">{</span><span class="n">nm</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="n">nm</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">idx_rows</span><span class="p">],</span> <span class="n">Cab</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">idx_rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="n">nm</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">idx_rows</span><span class="p">]))}</span>
+<span class="n">winning_index</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cors</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">cors</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Winning independent index:&quot;</span><span class="p">,</span> <span class="n">winning_index</span><span class="p">,</span> <span class="s2">&quot;|corr|=&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">cors</span><span class="p">[</span><span class="n">winning_index</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<p>Printed output (the LUT simulation and STAC retrieval are both real;
+your own re-run will match closely, not exactly, since the LUT uses
+random sampling and STAC returns whatever passed the cloud filter that
+day):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Held</span><span class="o">-</span><span class="n">out</span> <span class="n">Cab</span> <span class="n">R2</span><span class="p">:</span> <span class="mf">0.773</span>
+<span class="n">Winning</span> <span class="n">independent</span> <span class="n">index</span><span class="p">:</span> <span class="n">REP</span> <span class="o">|</span><span class="n">corr</span><span class="o">|=</span> <span class="mf">0.848</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../../python/_images/t18_python_capstone.png"><img alt="REP index map and RF-retrieved Cab map over the real Loobos Sentinel-2 scene, real output of the code above" src="../../../../python/_images/t18_python_capstone.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output: the complete pipeline’s final products – the winning independent index (REP, red-edge position) and the RF-retrieved Cab, both mapped over the same real Loobos scene, agreeing spatially (including a small shared patch near a visible track junction, top-left) despite being computed by entirely different methods.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>Every number here is real and traceable to a specific chapter: the LUT’s
+wide domain (step 1) is what <a class="reference internal" href="../../../../python/t11-lut-generation.html"><span class="doc">11. LUT Generation</span></a> argued for;
+R2=0.773 (step 4) is a real held-out evaluation exactly like
+<a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html"><span class="doc">13. Machine-Learning Inversion</span></a>’s – more modest than Chapter 13’s
+own 0.995, because this LUT’s domain is deliberately much wider (real
+sun-angle and soil-brightness variation included, not held fixed), the
+harder and more realistic version of the same problem; the STAC retrieval (step 5) and
+reflectance scaling (step 6) are <a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html"><span class="doc">16. Retrieving Real EO Data</span></a> and
+<a class="reference internal" href="../../../../python/t17-preparing-eo-observations.html"><span class="doc">17. Preparing EO Observations</span></a> verbatim; and the REP/Cab spatial
+agreement (step 7, the figure) is the same independent-signal check
+<a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html"><span class="doc">19. Trait Maps &amp; Uncertainty</span></a> explained in general. None of these
+pieces is new – what’s new is seeing them chained into one script that
+starts at “what does a leaf’s chlorophyll content do to reflectance” and
+ends at “here is a chlorophyll map of a real forest, cross-checked
+against an independent signal computed a completely different way.”</p>
+<p>One honest caveat about step 5, learned the hard way while building this
+exact page: this bbox/month only had 3 usable Sentinel-2 scenes, and one
+of them turned out to have a real cloud sitting over part of the site –
+its <em>whole-scene</em> cloud cover was actually the lowest of the three,
+which is exactly why a tile-wide <code class="docutils literal notranslate"><span class="pre">cloud_threshold</span></code> alone doesn’t catch
+everything for a small area. The figure above uses the two genuinely
+clean dates; re-running the code verbatim can land on a different mix
+of dates depending on what STAC returns that day, and isn’t guaranteed
+to be cloud-free by construction. <a class="reference internal" href="../../../../python/t17-preparing-eo-observations.html"><span class="doc">17. Preparing EO Observations</span></a>’s
+brightness-based flag (or inspecting individual dates’ true-colour crops
+before compositing, which is what actually caught this) is the real
+mitigation, not something this step’s simple three-line retrieval does
+for you automatically.</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Change the target trait from <code class="docutils literal notranslate"><span class="pre">Cab</span></code> to <code class="docutils literal notranslate"><span class="pre">LAI</span></code> (adjust step 4’s
+<code class="docutils literal notranslate"><span class="pre">dep_var</span></code>) and re-run steps 4-7 – does a different index win at
+step 7?</p></li>
+<li><p>Swap the target site’s <code class="docutils literal notranslate"><span class="pre">lat</span></code>/<code class="docutils literal notranslate"><span class="pre">lon</span></code> (step 5) for a different real
+forest and see whether the same LUT (not re-tuned for the new site)
+still produces a sensible map.</p></li>
+<li><p>Increase the LUT size <code class="docutils literal notranslate"><span class="pre">n</span></code> (step 1) from 500 to 2000 and check how
+much (if at all) the held-out R2 improves.</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Every step here depends on the previous one using <em>consistent</em> band
+names/order (<code class="docutils literal notranslate"><span class="pre">real_names</span></code>/<code class="docutils literal notranslate"><span class="pre">keep</span></code> appear in steps 3, 4, and 6) –
+a mismatch anywhere silently scrambles which real band feeds which
+trained predictor.</p></li>
+<li><p>This pipeline’s LUT (step 1) is deliberately wide – a narrower one
+copied from an earlier chapter’s simpler illustration
+(<a class="reference internal" href="../../../../python/t11-lut-generation.html"><span class="doc">11. LUT Generation</span></a>’s own example LUT) would likely fail on
+real data, for exactly the reason <a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html"><span class="doc">18. Applying an Inversion Model Spatially</span></a>
+explains.</p></li>
+<li><p>The whole pipeline runs in well under a minute end-to-end (excluding
+the live STAC network call) – if a similar real project takes hours,
+something upstream (LUT size, algorithm choice) is probably not scaled
+appropriately for the problem.</p></li>
+</ul>
+<hr class="docutils" />
+<p>Using R? -&gt; <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/toolsrtm/articles/t18-spatial-index-mapping.html">ToolsRTM Tutorial 18: Spatial Index Mapping</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../../python/t19-trait-maps-uncertainty.html" class="btn btn-neutral float-left" title="19. Trait Maps &amp; Uncertainty" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../../python/models.html" class="btn btn-neutral float-right" title="Radiative Transfer Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

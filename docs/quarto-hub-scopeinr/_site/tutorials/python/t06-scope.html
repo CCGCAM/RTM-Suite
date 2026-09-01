@@ -1,0 +1,346 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>06. SCOPE &mdash; 0-RTM-Suite Python port  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../python/_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../python/_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../python/_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../python/_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../python/_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../python/_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../python/_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../python/genindex.html" />
+    <link rel="search" title="Search" href="../../../../python/search.html" />
+    <link rel="next" title="07. Building RTM Workflows" href="../../../../python/t07-building-workflows.html" />
+    <link rel="prev" title="05. Soil &amp; Atmosphere" href="../../../../python/t05-soil-atmosphere.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: #2c3e50; padding: 6px 16px; font-size: 13px; text-align: center;">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.9; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+  <style>
+    .wy-nav-top, .wy-grid-for-nav { margin-top: 26px; }
+  </style>
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+  
+
+          
+          
+          <a href="../../../../python/index.html" class="icon icon-home">
+            0-RTM-Suite Python port
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+  <div style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.15);">
+    <a href="https://ccgcam.github.io/RTM-Suite/" style="color: #fff; opacity: 0.85; font-size: 12px; text-decoration: none;">&larr; Back to RTM-Suite</a>
+  </div>
+
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">LEARN -- I. Fundamentals &amp; RTM Simulation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t01-getting-started.html">01. Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t02-parameters-traits.html">02. Parameters &amp; Traits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t03-leaf-models.html">03. Leaf Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t04-canopy-models.html">04. Canopy Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t05-soil-atmosphere.html">05. Soil &amp; Atmosphere</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">06. SCOPE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-you-will-learn">What you will learn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept">Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-tools-used">Python tools used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-example">Run the example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation">Interpretation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#try-it-yourself">Try it yourself</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-mistakes">Common mistakes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next">Next</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- II. From Simulation to Observations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t07-building-workflows.html">07. Building RTM Workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t08-sensor-simulation.html">08. Sensor Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t09-spectral-indices.html">09. Spectral Indices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t10-sensitivity-analysis.html">10. Sensitivity Analysis</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- III. From Spectra to Traits</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t11-lut-generation.html">11. LUT Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t12-lut-inversion.html">12. LUT Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t13-machine-learning-inversion.html">13. Machine-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t14-deep-learning-inversion.html">14. Deep-Learning Inversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t15-choosing-inversion-strategy.html">15. Choosing an Inversion Strategy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LEARN -- IV. Real Earth Observation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t16-retrieving-eo-data.html">16. Retrieving Real EO Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t17-preparing-eo-observations.html">17. Preparing EO Observations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t18-applying-inversion-spatially.html">18. Applying an Inversion Model Spatially</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t19-trait-maps-uncertainty.html">19. Trait Maps &amp; Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/t20-end-to-end-workflow.html">20. End-to-End Workflow</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">REFERENCE</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/models.html">Radiative Transfer Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/toolsrtm/index.html">toolsrtm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/scopeinpython/index.html">scopeinpython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/verification.html">Numerical verification against R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../python/not_ported.html">Known limitations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../python/index.html">0-RTM-Suite Python port</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../python/index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">06. SCOPE</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../python/_sources/t06-scope.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scope">
+<h1>06. SCOPE<a class="headerlink" href="#scope" title="Link to this heading"></a></h1>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>What SCOPE adds on top of the leaf/canopy/soil/atmosphere models from
+Chapters 03-05.</p></li>
+<li><p>How to run a full SCOPE simulation and read reflectance, fluorescence,
+photosynthesis, and leaf/soil temperature from one result.</p></li>
+<li><p>Why SCOPE needs to <em>solve</em> for temperature rather than assume it.</p></li>
+</ul>
+</section>
+<section id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Link to this heading"></a></h2>
+<p>Every model in Chapters 03-05 computes reflectance alone, from <em>assumed</em>
+leaf/soil temperature (or no temperature at all). <code class="docutils literal notranslate"><span class="pre">scopeinpython</span></code>
+(SCOPE: Soil Canopy Observation, Photochemistry and Energy fluxes, van
+der Tol et al. 2009) does something structurally different: it
+<strong>iteratively solves</strong> leaf and soil temperature so absorbed radiation
+balances sensible + latent heat + photosynthesis (the energy balance),
+then derives fluorescence and carbon flux from that solved state. One
+call chains five components together:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>What it does</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Leaf optics (Fluspect-Cx variant)</p></td>
+<td><p>Reflectance/transmittance + fluorescence excitation-emission
+matrices, per canopy layer.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optical BRDF (RTMo)</p></td>
+<td><p>Same turbid-medium idea as fourSAIL, re-implemented to plug into
+the layers below.</p></td>
+</tr>
+<tr class="row-even"><td><p>Energy balance (ebal)</p></td>
+<td><p>Iterates leaf/soil temperature until the flux budget closes,
+calling the biochemistry model at every candidate temperature.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Photosynthesis (biochemical)</p></td>
+<td><p>Farquhar/Collatz photosynthesis + fluorescence yield, given a
+leaf micro-environment.</p></td>
+</tr>
+<tr class="row-even"><td><p>Fluorescence (RTMf, optional)</p></td>
+<td><p>Canopy-level fluorescence radiance/flux, derived from the
+already-solved energy balance.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="python-tools-used">
+<h2>Python tools used<a class="headerlink" href="#python-tools-used" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Key arguments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../../../../python/scopeinpython/scope.html#scopeinpython.scope.get_scope" title="scopeinpython.scope.get_scope"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_scope()</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">row</span></code> (one LUT row: leaf + canopy + soil + meteorology traits,
+see <a class="reference internal" href="../../../../python/t02-parameters-traits.html"><span class="doc">02. Parameters &amp; Traits</span></a>), <code class="docutils literal notranslate"><span class="pre">options</span></code> (an
+<a class="reference internal" href="../../../../python/scopeinpython/scope.html#scopeinpython.scope.ScopeOptions" title="scopeinpython.scope.ScopeOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScopeOptions</span></code></a>, e.g. <code class="docutils literal notranslate"><span class="pre">k_maxit</span></code>
+iteration limit, <code class="docutils literal notranslate"><span class="pre">maxEBer</span></code> energy-balance convergence
+tolerance). Returns a result whose <code class="docutils literal notranslate"><span class="pre">.rtmo</span></code> holds reflectance,
+<code class="docutils literal notranslate"><span class="pre">.ebal</span></code> holds energy balance/photosynthesis/temperature, and
+<code class="docutils literal notranslate"><span class="pre">.rtmf</span></code> holds fluorescence (<code class="docutils literal notranslate"><span class="pre">None</span></code> if not requested).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-the-example">
+<h2>Run the example<a class="headerlink" href="#run-the-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scopeinpython</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScopeOptions</span><span class="p">,</span> <span class="n">get_scope</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;SCOPEinR/inst/input/LUT_input.csv&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">get_scope</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">ScopeOptions</span><span class="p">(</span><span class="n">k_maxit</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">maxEBer</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Canopy layers:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">nlayers</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TOC reflectance at 550/700/850nm:&quot;</span><span class="p">,</span>
+      <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">rtmo</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">150</span><span class="p">]),</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">rtmo</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">300</span><span class="p">]),</span> <span class="mi">4</span><span class="p">),</span>
+      <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">rtmo</span><span class="o">.</span><span class="n">refl</span><span class="p">[</span><span class="mi">450</span><span class="p">]),</span> <span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Net radiation (Rntot):&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">ebal</span><span class="o">.</span><span class="n">Rntot</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;W/m2&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total photosynthesis (Actot):&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">ebal</span><span class="o">.</span><span class="n">Actot</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;umol CO2/m2/s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sunlit leaf temperature (Tcave):&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">ebal</span><span class="o">.</span><span class="n">Tcave</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;degC&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Soil temperature (Tsave):&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">ebal</span><span class="o">.</span><span class="n">Tsave</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;degC&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">rtmf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Emitted fluorescence (EoutF):&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">rtmf</span><span class="o">.</span><span class="n">EoutF</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;W/m2/sr&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading"></a></h2>
+<p>Printed output (exact, deterministic, from the package’s own bundled
+example LUT row):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Canopy</span> <span class="n">layers</span><span class="p">:</span> <span class="mi">30</span>
+<span class="n">TOC</span> <span class="n">reflectance</span> <span class="n">at</span> <span class="mi">550</span><span class="o">/</span><span class="mi">700</span><span class="o">/</span><span class="mi">850</span><span class="n">nm</span><span class="p">:</span> <span class="mf">0.0438</span> <span class="mf">0.0429</span> <span class="mf">0.3605</span>
+<span class="n">Net</span> <span class="n">radiation</span> <span class="p">(</span><span class="n">Rntot</span><span class="p">):</span> <span class="mf">495.45</span> <span class="n">W</span><span class="o">/</span><span class="n">m2</span>
+<span class="n">Total</span> <span class="n">photosynthesis</span> <span class="p">(</span><span class="n">Actot</span><span class="p">):</span> <span class="mf">19.89</span> <span class="n">umol</span> <span class="n">CO2</span><span class="o">/</span><span class="n">m2</span><span class="o">/</span><span class="n">s</span>
+<span class="n">Sunlit</span> <span class="n">leaf</span> <span class="n">temperature</span> <span class="p">(</span><span class="n">Tcave</span><span class="p">):</span> <span class="mf">22.04</span> <span class="n">degC</span>
+<span class="n">Soil</span> <span class="n">temperature</span> <span class="p">(</span><span class="n">Tsave</span><span class="p">):</span> <span class="mf">26.71</span> <span class="n">degC</span>
+<span class="n">Emitted</span> <span class="n">fluorescence</span> <span class="p">(</span><span class="n">EoutF</span><span class="p">):</span> <span class="mf">0.3889</span> <span class="n">W</span><span class="o">/</span><span class="n">m2</span><span class="o">/</span><span class="n">sr</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../../../../python/_images/scope_full.png"><img alt="Full SCOPE TOC reflectance and emitted SIF spectrum, real output of the code above" src="../../../../python/_images/scope_full.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Real output of the single <code class="docutils literal notranslate"><span class="pre">get_scope()</span></code> call above: TOC reflectance (left; the dashed gaps are the water-vapour-absorption wavelengths SCOPE itself leaves undefined) and the emitted SIF spectrum (right).</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="interpretation">
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading"></a></h2>
+<p>The TOC reflectance values (0.044 at 550nm, 0.043 at 700nm, 0.361 at
+850nm) follow the same visible-low/NIR-high vegetation pattern Chapters
+01 and 04 already established – SCOPE’s optical step is physically the
+same idea as fourSAIL, so this is a consistency check, not new physics.
+What’s genuinely new here: soil temperature (26.7degC) solved out warmer
+than sunlit leaf temperature (22.0degC) under this row’s meteorology –
+a real, physically sensible result (soil often runs warmer than
+transpiring, evaporatively-cooled foliage under sunny conditions), and
+not something any model in Chapters 03-05 could have told you, since
+none of them solve for temperature at all. Net radiation (495 W/m2) is
+the energy budget SCOPE balanced sensible + latent heat + photosynthesis
+against to reach that temperature; total photosynthesis (19.9 umol
+CO2/m2/s) and emitted fluorescence (0.39 W/m2/sr) are both downstream
+consequences of that same solved state, not independent calculations.</p>
+</section>
+<section id="try-it-yourself">
+<h2>Try it yourself<a class="headerlink" href="#try-it-yourself" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Compare <code class="docutils literal notranslate"><span class="pre">res.ebal.Tcave</span></code> against <code class="docutils literal notranslate"><span class="pre">row[&quot;Ta&quot;]</span></code> (input air
+temperature) – leaf temperature is usually within a few degrees of
+air temperature, not identical to it.</p></li>
+<li><p>Increase <code class="docutils literal notranslate"><span class="pre">Vcmax25</span></code> in <code class="docutils literal notranslate"><span class="pre">row</span></code> (simulating higher photosynthetic
+capacity) and check whether <code class="docutils literal notranslate"><span class="pre">Actot</span></code> rises as expected.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">maxEBer</span></code> tighter (e.g. <code class="docutils literal notranslate"><span class="pre">0.1</span></code>) and confirm the reflectance/
+temperature results barely change – a sign the default tolerance was
+already tight enough to trust.</p></li>
+</ul>
+</section>
+<section id="common-mistakes">
+<h2>Common mistakes<a class="headerlink" href="#common-mistakes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">res.rtmf</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> unless fluorescence output was actually
+requested/available for this run – always check before reading
+<code class="docutils literal notranslate"><span class="pre">.EoutF</span></code>.</p></li>
+<li><p>SCOPE’s reflectance spectrum has real gaps (undefined) at strong
+water-vapour wavelengths – the dashed breaks in the figure above are
+expected, not missing data you need to fix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_scope()</span></code> is far more expensive per call than
+<code class="docutils literal notranslate"><span class="pre">foursail()</span></code>/<code class="docutils literal notranslate"><span class="pre">spart_toa()</span></code> (it iterates an energy balance) – don’t
+casually call it thousands of times in a LUT loop without a compute
+budget in mind (<a class="reference internal" href="../../../../python/t11-lut-generation.html"><span class="doc">11. LUT Generation</span></a>).</p></li>
+</ul>
+</section>
+<section id="next">
+<h2>Next<a class="headerlink" href="#next" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="../../../../python/t07-building-workflows.html"><span class="doc">07. Building RTM Workflows</span></a> – Part II starts here: how the models
+from Chapters 03-06 chain together into the four standard simulation
+pipelines used throughout the rest of this site.</p>
+<hr class="docutils" />
+<p>Using R? -&gt; <a class="reference external" href="https://ccgcam.github.io/RTM-Suite/scopeinr/articles/t01-getting-started.html">SCOPEinR Tutorial 01: Getting Started</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../../python/t05-soil-atmosphere.html" class="btn btn-neutral float-left" title="05. Soil &amp; Atmosphere" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../../python/t07-building-workflows.html" class="btn btn-neutral float-right" title="07. Building RTM Workflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Wageningen University &amp; Research.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
