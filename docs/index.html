@@ -180,6 +180,7 @@ img.zoomable { cursor: zoom-in; }
       <a href="#examples">Examples</a>
       <a href="comparison.html">R vs Python</a>
       <a href="#related">R Ecosystem</a>
+      <a href="#development">Contributors</a>
       <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
     </nav>
   </div>
@@ -301,7 +302,7 @@ img.zoomable { cursor: zoom-in; }
     </p>
     <p class="section-subtitle" style="max-width: none; margin: 10px 0 0;">A sixth model chain, <strong>STEMMUS + SCOPE</strong> (soil water/heat/air transport coupled to SCOPE's canopy energy balance and fluorescence), is still in development: STEMMUS's own R-vs-Python cross-verification is already real and passing, but STEMMUS and STEMMUS + SCOPE aren't released R/Python packages yet — their exact package boundaries are still being decided, so there's no public interactive function explorer for them yet either.</p>
     <h3 style="font-size: 18px; color: var(--brand); margin: 20px 0 4px;">Same models, both languages — do they agree?</h3>
-    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python. <span style="color: var(--text-muted); font-style: italic;">STEMMUS R vs Python verification (draft preview, in development)</span></p>
+    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python. <a href="function-universe-stemmus-inprogress.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">STEMMUS R vs Python verification (draft preview, in development) &rarr;</a></p>
     <div class="shot-grid">
       <div class="shot-card">
         <img src="assets/comparison_allmodels_spectra_grid.png" alt="15-panel grid of simulated reflectance spectra, R (black) vs Python (red dashed) fully overlapping, one panel per leaf x canopy model combination">
@@ -1007,37 +1008,49 @@ for cab in np.linspace(10, 80, 20):
 <section id="collaborators" style="padding-top: 28px; padding-bottom: 28px;">
   <div class="section-inner">
     <div class="doc-lang-group">
-      <div class="doc-lang-header"><span>RTM-Suite Contributors &amp; Model Developers</span></div>
+      <div class="doc-lang-header"><span style="color: var(--brand-light);">RTM-Suite Contributors &amp; Model Developers</span></div>
       <div class="logo-grid" style="margin-top: 4px;">
         <div class="logo-item">
-          <a href="https://umr-tetis.cirad.fr/" target="_blank"><img src="assets/logo_tetis.png" alt="UMR TETIS" style="max-height: 100px; width: auto;"></a>
-          <div class="logo-caption">UMR TETIS / INRAE<br>J.-B. F&eacute;ret &mdash; leaf &amp; canopy model development (PROSPECT, PROSAIL)</div>
+          <a href="https://umr-tetis.cirad.fr/" target="_blank">
+            <img src="assets/logo_tetis.png" alt="UMR TETIS" style="max-height: 100px; width: auto;">
+            <div class="logo-caption">UMR TETIS / INRAE<br>J.-B. F&eacute;ret &mdash; leaf &amp; canopy model development (PROSPECT, PROSAIL)</div>
+          </a>
         </div>
         <div class="logo-item">
-          <a href="https://www.inrae.fr/" target="_blank"><img src="assets/logo_inrae.svg" alt="INRAE" style="max-height: 90px; width: auto;"></a>
-          <div class="logo-caption">INRAE</div>
+          <a href="https://www.inrae.fr/" target="_blank">
+            <img src="assets/logo_inrae.svg" alt="INRAE" style="max-height: 90px; width: auto;">
+            <div class="logo-caption">INRAE</div>
+          </a>
         </div>
         <div class="logo-item">
-          <a href="https://www.utwente.nl/en/itc/" target="_blank"><img src="assets/logo_ITC.png" alt="ITC Faculty, University of Twente" style="max-height: 60px; width: auto;"></a>
-          <div class="logo-caption">ITC, University of Twente<br>Y. Zeng &amp; Bob Su &mdash; STEMMUS-SCOPE developers</div>
+          <a href="https://www.utwente.nl/en/itc/" target="_blank">
+            <img src="assets/logo_ITC.png" alt="ITC Faculty, University of Twente" style="max-height: 60px; width: auto;">
+            <div class="logo-caption">ITC, University of Twente<br>Y. Zeng &amp; Bob Su &mdash; STEMMUS-SCOPE developers</div>
+          </a>
         </div>
       </div>
     </div>
 
     <div class="doc-lang-group" style="margin-top: 8px;">
-      <div class="doc-lang-header"><span>Research Collaborators &amp; Users</span></div>
+      <div class="doc-lang-header"><span style="color: var(--brand-light);">Research Collaborators &amp; Users</span></div>
       <div class="logo-grid" style="margin-top: 4px;">
         <div class="logo-item">
-          <a href="https://qaafi.uq.edu.au/" target="_blank"><img src="assets/UQ-QAAFI-wordmark-DAF-2019.jpg" alt="QAAFI, University of Queensland" style="max-height: 140px; width: auto;"></a>
-          <div class="logo-caption">QAAFI &mdash; University of Queensland</div>
+          <a href="https://qaafi.uq.edu.au/" target="_blank">
+            <img src="assets/UQ-QAAFI-wordmark-DAF-2019.jpg" alt="QAAFI, University of Queensland" style="max-height: 140px; width: auto;">
+            <div class="logo-caption">QAAFI &mdash; University of Queensland</div>
+          </a>
         </div>
         <div class="logo-item">
-          <a href="https://www.ias.csic.es/" target="_blank"><img src="assets/logo_IAS-CSIC.jpg" alt="IAS-CSIC" style="max-height: 140px; width: auto;"></a>
-          <div class="logo-caption">IAS-CSIC, C&oacute;rdoba, Spain</div>
+          <a href="https://www.ias.csic.es/" target="_blank">
+            <img src="assets/logo_IAS-CSIC.jpg" alt="IAS-CSIC" style="max-height: 140px; width: auto;">
+            <div class="logo-caption">IAS-CSIC, C&oacute;rdoba, Spain</div>
+          </a>
         </div>
         <div class="logo-item">
-          <a href="https://www.unileon.es/" target="_blank"><img src="assets/logo_ULeon.png" alt="Universidad de Le&oacute;n" style="max-height: 140px; width: auto;"></a>
-          <div class="logo-caption">Universidad de Le&oacute;n</div>
+          <a href="https://www.unileon.es/" target="_blank">
+            <img src="assets/logo_ULeon.png" alt="Universidad de Le&oacute;n" style="max-height: 140px; width: auto;">
+            <div class="logo-caption">Universidad de Le&oacute;n</div>
+          </a>
         </div>
       </div>
     </div>
