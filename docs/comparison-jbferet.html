@@ -118,7 +118,7 @@ PROSAIL rsot (canopy)        n=126060   RMSE=0.000e+00  maxdiff=0.000e+00  R2=1.
     <a href="#prospect-d">PROSPECT-D</a>
     <a href="#prospect-pro">PROSPECT-PRO</a>
     <a href="#prosail">PROSAIL (4SAIL)</a>
-    <a href="#pdb-vs-pro">dataSpec_PDB vs. PRO</a>
+    <a href="#pdb-vs-pro">dataSpec_PDB &amp; PRO contents</a>
     <a href="#sensitivity">Sensitivity check (Cab sweep)</a>
     <a href="#reproduce">Reproduce this yourself</a>
   </div>
@@ -192,21 +192,27 @@ PROSAIL rsot (canopy)        n=126060   RMSE=0.000e+00  maxdiff=0.000e+00  R2=1.
   </div>
   <p class="desc" style="margin-top: 10px;">Exact agreement across the full canopy chain, all 60 simulations.</p>
 
-  <h3 id="pdb-vs-pro">Another check: ToolsRTM's own dataSpec_PDB vs. dataSpec_PRO</h3>
-  <p class="desc">ToolsRTM actually ships <em>two</em> separate coefficient tables &mdash; <code>dataSpec_PDB</code> for PROSPECT-D and <code>dataSpec_PRO</code> for PROSPECT-PRO &mdash; sourced independently rather than one derived from the other. Comparing their shared physical columns wavelength-by-wavelength is a useful independent sanity check, unrelated to the jbferet comparison above:</p>
+  <h3 id="pdb-vs-pro">What's inside ToolsRTM's two coefficient tables: dataSpec_PDB vs. dataSpec_PRO</h3>
+  <p class="desc">ToolsRTM ships <em>two</em> separate coefficient tables, sourced independently rather than one derived from the other &mdash; <code>dataSpec_PDB</code> backs PROSPECT-D (and also bundles solar-irradiance and reference-soil spectra, used elsewhere), while <code>dataSpec_PRO</code> backs PROSPECT-PRO. Their parameter sets only partly overlap:</p>
   <div class="card">
     <table>
-      <tr><th>Shared column</th><th>Max abs diff</th><th>Mean abs diff</th></tr>
-      <tr><td>Refractive index</td><td>0.0</td><td>0.0</td></tr>
-      <tr><td>Cab coefficient</td><td>5.0 &times; 10<sup>-5</sup></td><td>3.2 &times; 10<sup>-6</sup></td></tr>
-      <tr><td>Car coefficient</td><td>5.0 &times; 10<sup>-4</sup></td><td>1.3 &times; 10<sup>-5</sup></td></tr>
-      <tr><td>Anth coefficient</td><td>5.0 &times; 10<sup>-5</sup></td><td>2.7 &times; 10<sup>-6</sup></td></tr>
-      <tr><td>Brown-pigment coefficient</td><td>5.0 &times; 10<sup>-4</sup></td><td>4.0 &times; 10<sup>-5</sup></td></tr>
-      <tr><td>EWT (water) coefficient</td><td>5.0 &times; 10<sup>-1</sup></td><td>1.8 &times; 10<sup>-2</sup></td></tr>
-      <tr><td>Dry-matter coefficient (<code>Cm</code>)</td><td>3.0 &times; 10<sup>-1</sup></td><td>7.5 &times; 10<sup>-3</sup></td></tr>
+      <tr><th><code>dataSpec_PDB</code> column</th><th>What it holds</th></tr>
+      <tr><td><code>wavelength</code>, <code>Refrac_leafm</code></td><td>Wavelength grid, leaf refractive index</td></tr>
+      <tr><td><code>SC_chl</code>, <code>SC_car</code>, <code>SC_Anth</code>, <code>SC_Brwon</code></td><td>Chlorophyll, carotenoid, anthocyanin, brown-pigment coefficients</td></tr>
+      <tr><td><code>SC_Cw</code>, <code>SC_Cm</code></td><td>Water and <strong>lumped</strong> dry-matter coefficients (PROSPECT-D style)</td></tr>
+      <tr><td><code>direct_light</code>, <code>diffuse_light</code></td><td>Solar irradiance spectra (not a leaf-optics coefficient)</td></tr>
+      <tr><td><code>dry_soil</code>, <code>wet_soil</code></td><td>Reference soil reflectance spectra (not a leaf-optics coefficient)</td></tr>
+    </table>
+    <table style="margin-top: 18px;">
+      <tr><th><code>dataSpec_PRO</code> column</th><th>What it holds</th></tr>
+      <tr><td><code>wave</code>, <code>RI_leafmaterial</code></td><td>Wavelength grid, leaf refractive index</td></tr>
+      <tr><td><code>spA_Cab</code>, <code>spA_Car</code>, <code>spA_Atn</code>, <code>spA_Br</code></td><td>Chlorophyll, carotenoid, anthocyanin, brown-pigment coefficients</td></tr>
+      <tr><td><code>spA_Cw</code></td><td>Water coefficient</td></tr>
+      <tr><td><code>spA_Cm</code></td><td>Legacy lumped dry-matter coefficient (kept for reference, unused in PRO mode)</td></tr>
+      <tr><td><code>spA_Protein</code>, <code>spA_nonPro</code></td><td><strong>Split</strong> dry-matter coefficients (PROSPECT-PRO style: protein + carbon-based constituents)</td></tr>
     </table>
   </div>
-  <p class="desc" style="margin-top: 10px;">All small &mdash; consistent with two independently-exported historical tables (different rounding/precision at their respective source). One thing that <em>isn't</em> directly comparable: PROSPECT-PRO's split of dry matter into protein + carbon-based coefficients (<code>spA_Protein + spA_nonPro</code>) doesn't line up wavelength-by-wavelength with PROSPECT-D's single <code>Cm</code> coefficient (they average the same total dry-matter absorption very differently across the spectrum) &mdash; an intentional difference between the two papers' parameterizations.</p>
+  <p class="desc" style="margin-top: 10px;">The pigment and refractive-index columns that both tables carry (refractive index, Cab, Car, Anth, Brown, EWT) agree to within &asymp;5&times;10<sup>-4</sup> or better &mdash; consistent with two independently-exported historical tables, not a shared error. The dry-matter side isn't a like-for-like comparison: PROSPECT-D's single <code>Cm</code> and PROSPECT-PRO's split <code>Protein</code>/<code>nonPro</code> are two different published parameterizations of the same physical absorption, not expected to match wavelength-by-wavelength.</p>
 
   <h2 id="sensitivity"><span class="kicker">Beyond one example point</span>Sensitivity check: sweeping chlorophyll (Cab)</h2>
   <p class="desc">The tables above compare 60 random simulations, but it's easy to wonder whether agreement holds only near the specific values those draws happened to land on. This sweeps chlorophyll content (Cab = 10, 25, 40, 55, 70 &mu;g/cm&sup2;) through PROSAIL end to end, everything else held fixed, ToolsRTM vs. jbferet's original at every value.</p>
