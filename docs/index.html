@@ -299,8 +299,9 @@ img.zoomable { cursor: zoom-in; }
     <p style="margin: 40px 0 4px;">
       <a href="https://doi.org/10.5281/zenodo.22134140" target="_blank"><img src="https://zenodo.org/badge/1321341046.svg" alt="DOI"></a>
     </p>
-    <h3 style="font-size: 18px; color: var(--brand); margin: 4px 0 4px;">Same models, both languages — do they agree?</h3>
-    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python. <a href="stemmus-verification.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">STEMMUS R vs Python verification (draft preview) &rarr;</a></p>
+    <p class="section-subtitle" style="max-width: none; margin: 10px 0 0;">A sixth model chain, <strong>STEMMUS + SCOPE</strong> (soil water/heat/air transport coupled to SCOPE's canopy energy balance and fluorescence), is still in development: STEMMUS's own R-vs-Python cross-verification is already real and passing, but STEMMUS and STEMMUS + SCOPE aren't released R/Python packages yet — their exact package boundaries are still being decided, so there's no public interactive function explorer for them yet either.</p>
+    <h3 style="font-size: 18px; color: var(--brand); margin: 20px 0 4px;">Same models, both languages — do they agree?</h3>
+    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python. <span style="color: var(--text-muted); font-style: italic;">STEMMUS R vs Python verification (draft preview, in development)</span></p>
     <div class="shot-grid">
       <div class="shot-card">
         <img src="assets/comparison_allmodels_spectra_grid.png" alt="15-panel grid of simulated reflectance spectra, R (black) vs Python (red dashed) fully overlapping, one panel per leaf x canopy model combination">
@@ -946,14 +947,38 @@ for cab in np.linspace(10, 80, 20):
   <div class="section-inner">
     <div class="section-kicker">R Ecosystem</div>
     <h2 class="section-title">Related Open-Source Tools</h2>
-    <p class="section-subtitle" style="max-width: none;">More R packages from the <a href="https://www.wur.nl/en/chair-groups/geo-information-science-and-remote-sensing" target="_blank">Laboratory of Geo-information Science and Remote Sensing</a>, Wageningen University.</p>
-    <div class="card-grid">
+    <p class="section-subtitle" style="max-width: none;">More R packages from the <a href="https://www.wur.nl/en/chair-groups/geo-information-science-and-remote-sensing" target="_blank">Laboratory of Geo-information Science and Remote Sensing</a>, Wageningen University, plus collaborator tools from <a href="https://jbferet.gitlab.io/" target="_blank">Jean-Baptiste F&eacute;ret</a> (<a href="https://umr-tetis.cirad.fr/" target="_blank">UMR TETIS</a>, INRAE) &mdash; with special thanks to Jean-Baptiste for his contributions to leaf and canopy model development, which RTM-Suite's own leaf and canopy models build on.</p>
+    <div class="card-grid" style="grid-template-columns: 1fr;">
       <div class="card">
         <div class="card-title">sfclust</div>
         <p>sfclust provides a Bayesian framework for clustering spatio-temporal data, supporting both Gaussian and non-Gaussian responses. The approach enforces spatial adjacency constraints, ensuring that clusters consist of neighboring regions with similar temporal dynamics. The package implements the methodology described in "Bayesian Spatial Functional Data Clustering: Applications in Disease Surveillance" (2026), published in <em>Statistics in Medicine</em> (<a href="https://doi.org/10.1002/sim.70597" target="_blank">doi:10.1002/sim.70597</a>). In addition to the core clustering algorithm, sfclust offers tools for model diagnostics, visualization, and result summarization. By Erick A. Chacón-Montalván.</p>
         <div class="card-links">
           <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
           <a class="badge-link" href="https://erickchacon.github.io/sfclust/index.html" target="_blank"><img src="https://img.shields.io/badge/docs-sfclust-blue" alt="sfclust documentation"></a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">prospect <span style="font-weight: 400; color: var(--text-muted); font-size: 12px;">(collaborator)</span></div>
+        <p>R implementation of the PROSPECT family of leaf optical property models (versions 4/5/D/PRO), by <a href="https://jbferet.gitlab.io/" target="_blank">Jean-Baptiste F&eacute;ret</a> (<a href="https://umr-tetis.cirad.fr/" target="_blank">UMR TETIS</a>, INRAE) &mdash; the original reference implementation behind the leaf models RTM-Suite also builds on.</p>
+        <div class="card-links">
+          <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
+          <a class="badge-link" href="https://github.com/jbferet/prospect" target="_blank"><img src="https://img.shields.io/badge/GitHub-prospect-181717?logo=github&logoColor=white" alt="prospect on GitHub"></a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">prosail <span style="font-weight: 400; color: var(--text-muted); font-size: 12px;">(collaborator)</span></div>
+        <p>R implementation of the PROSAIL canopy reflectance model (PROSPECT + 4SAIL), by <a href="https://jbferet.gitlab.io/" target="_blank">Jean-Baptiste F&eacute;ret</a> (<a href="https://umr-tetis.cirad.fr/" target="_blank">UMR TETIS</a>, INRAE) &mdash; the reference PROSAIL used alongside RTM-Suite's own fourSAIL/foursail2/INFORM implementations.</p>
+        <div class="card-links">
+          <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
+          <a class="badge-link" href="https://github.com/jbferet/prosail" target="_blank"><img src="https://img.shields.io/badge/GitHub-prosail-181717?logo=github&logoColor=white" alt="prosail on GitHub"></a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">biodivMapR <span style="font-weight: 400; color: var(--text-muted); font-size: 12px;">(collaborator)</span></div>
+        <p>R package for mapping taxonomic, functional and phylogenetic diversity from hyperspectral imagery via spectral species, by <a href="https://jbferet.gitlab.io/" target="_blank">Jean-Baptiste F&eacute;ret</a> (<a href="https://umr-tetis.cirad.fr/" target="_blank">UMR TETIS</a>, INRAE).</p>
+        <div class="card-links">
+          <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
+          <a class="badge-link" href="https://github.com/jbferet/biodivMapR" target="_blank"><img src="https://img.shields.io/badge/GitHub-biodivMapR-181717?logo=github&logoColor=white" alt="biodivMapR on GitHub"></a>
         </div>
       </div>
     </div>
@@ -981,18 +1006,43 @@ for cab in np.linspace(10, 80, 20):
 
 <section id="collaborators" style="padding-top: 28px; padding-bottom: 28px;">
   <div class="section-inner">
-    <div class="section-kicker">Research Collaborators &amp; Users</div>
-    <div class="logo-grid" style="margin-top: 20px;">
-      <div class="logo-item">
-        <img src="assets/UQ-QAAFI-wordmark-DAF-2019.jpg" alt="QAAFI, University of Queensland" style="max-height: 140px; width: auto;">
-        <div class="logo-caption">QAAFI &mdash; University of Queensland</div>
-      </div>
-      <div class="logo-item">
-        <img src="assets/logo_IAS-CSIC.jpg" alt="IAS-CSIC" style="max-height: 140px; width: auto;">
-        <div class="logo-caption">IAS-CSIC, C&oacute;rdoba, Spain</div>
+    <div class="doc-lang-group">
+      <div class="doc-lang-header"><span>RTM-Suite Contributors &amp; Model Developers</span></div>
+      <div class="logo-grid" style="margin-top: 4px;">
+        <div class="logo-item">
+          <a href="https://umr-tetis.cirad.fr/" target="_blank"><img src="assets/logo_tetis.png" alt="UMR TETIS" style="max-height: 100px; width: auto;"></a>
+          <div class="logo-caption">UMR TETIS / INRAE<br>J.-B. F&eacute;ret &mdash; leaf &amp; canopy model development (PROSPECT, PROSAIL)</div>
+        </div>
+        <div class="logo-item">
+          <a href="https://www.inrae.fr/" target="_blank"><img src="assets/logo_inrae.svg" alt="INRAE" style="max-height: 90px; width: auto;"></a>
+          <div class="logo-caption">INRAE</div>
+        </div>
+        <div class="logo-item">
+          <a href="https://www.utwente.nl/en/itc/" target="_blank"><img src="assets/logo_ITC.png" alt="ITC Faculty, University of Twente" style="max-height: 60px; width: auto;"></a>
+          <div class="logo-caption">ITC, University of Twente<br>Y. Zeng &amp; Bob Su &mdash; STEMMUS-SCOPE developers</div>
+        </div>
       </div>
     </div>
-    <p class="section-subtitle" style="max-width: none; margin-top: 26px;">Research groups collaborating in, testing, or applying RTM-Suite tools for radiative transfer modelling, model inversion and vegetation trait retrieval.</p>
+
+    <div class="doc-lang-group" style="margin-top: 8px;">
+      <div class="doc-lang-header"><span>Research Collaborators &amp; Users</span></div>
+      <div class="logo-grid" style="margin-top: 4px;">
+        <div class="logo-item">
+          <a href="https://qaafi.uq.edu.au/" target="_blank"><img src="assets/UQ-QAAFI-wordmark-DAF-2019.jpg" alt="QAAFI, University of Queensland" style="max-height: 140px; width: auto;"></a>
+          <div class="logo-caption">QAAFI &mdash; University of Queensland</div>
+        </div>
+        <div class="logo-item">
+          <a href="https://www.ias.csic.es/" target="_blank"><img src="assets/logo_IAS-CSIC.jpg" alt="IAS-CSIC" style="max-height: 140px; width: auto;"></a>
+          <div class="logo-caption">IAS-CSIC, C&oacute;rdoba, Spain</div>
+        </div>
+        <div class="logo-item">
+          <a href="https://www.unileon.es/" target="_blank"><img src="assets/logo_ULeon.png" alt="Universidad de Le&oacute;n" style="max-height: 140px; width: auto;"></a>
+          <div class="logo-caption">Universidad de Le&oacute;n</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-subtitle" style="max-width: none; margin-top: 10px;">RTM-Suite gratefully acknowledges the scientists and developers whose original models provide the scientific foundations of the suite. Special recognition goes to <a href="https://jbferet.gitlab.io/" target="_blank" style="color: var(--brand-light); font-weight: 600;">Jean-Baptiste F&eacute;ret</a> and colleagues for the development of <a href="https://github.com/jbferet/prospect" target="_blank" style="color: var(--brand-light); font-weight: 600;">PROSPECT, PROSPECT-PRO</a> and <a href="https://github.com/jbferet/prosail" target="_blank" style="color: var(--brand-light); font-weight: 600;">PROSAIL</a>, and to <a href="https://people.utwente.nl/y.zeng" target="_blank" style="color: var(--brand-light); font-weight: 600;">Yijian Zeng</a> and <a href="https://research.utwente.nl/en/persons/bob-su" target="_blank" style="color: var(--brand-light); font-weight: 600;">Bob Su</a> and colleagues for the development of <a href="https://github.com/EcoExtreML/STEMMUS_SCOPE" target="_blank" style="color: var(--brand-light); font-weight: 600;">STEMMUS-SCOPE</a>. We also gratefully acknowledge the developers of <a href="https://github.com/Christiaanvandertol/SCOPE" target="_blank" style="color: var(--brand-light); font-weight: 600;">Fluspect</a>, <a href="https://github.com/Christiaanvandertol/SCOPE" target="_blank" style="color: var(--brand-light); font-weight: 600;">SCOPE</a>, fourSAIL, INFORM, LIBERTY, MARMIT and <a href="https://github.com/peiqiyang/SPART" target="_blank" style="color: var(--brand-light); font-weight: 600;">SPART</a>, whose scientific contributions and model implementations underpin the modelling capabilities integrated into RTM-Suite.</p>
   </div>
 </section>
 

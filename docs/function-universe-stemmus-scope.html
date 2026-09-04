@@ -63,6 +63,9 @@ repeating-linear-gradient(90deg,transparent 0 24px,rgba(21,135,181,.18) 25px,tra
 /* ---------- steps board ---------- */
 .section-title{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--blue);margin:40px 0 6px;}
 .section-desc{color:var(--muted);font-size:13.5px;margin-bottom:16px;max-width:720px;}
+.logo-grid{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:8px 0;}
+.logo-item{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.logo-caption{font-size:11px;color:var(--muted);text-align:center;}
 .board{border:1px solid var(--line);border-radius:20px;background:var(--card-bg);box-shadow:var(--card-shadow);overflow-x:auto;padding:18px 14px;}
 .stages{display:grid;grid-template-columns:repeat(6,minmax(150px,1fr));gap:10px;min-width:960px;}
 .pipelineRegions{display:grid;grid-template-columns:repeat(6,minmax(150px,1fr));gap:10px;min-width:960px;margin-bottom:8px;}
@@ -280,6 +283,25 @@ repeating-linear-gradient(90deg,transparent 0 24px,rgba(21,135,181,.18) 25px,tra
 <div class="grid" id="tutgrid"></div>
 
 <div class="note">Design + interaction preview of the real Quarto site (docs/quarto-hub/) &mdash; every function name, signature and description here is real, checked against the ToolsRTM/SCOPEinR NAMESPACE exports and the toolsrtm/scopeinpython source. The tutorial cards link to placeholders in this preview only.</div>
+
+<div class="section-title" style="margin-top:26px">Development</div>
+<div class="logo-grid">
+  <div class="logo-item"><img src="assets/logo_WUR.svg" alt="Wageningen University &amp; Research" style="height:60px;"></div>
+  <div class="logo-item"><img src="assets/logo_CNR.png" alt="CNR-IBE, National Research Council of Italy" style="height:66px;"></div>
+  <div class="logo-item"><img src="assets/logo_Quantalab.png" alt="QuantaLab, IAS-CSIC" style="height:24px;"></div>
+</div>
+<div class="section-title" style="margin-top:26px">RTM-Suite Contributors &amp; Model Developers</div>
+<div class="logo-grid">
+  <div class="logo-item"><a href="https://umr-tetis.cirad.fr/" target="_blank"><img src="assets/logo_tetis.png" alt="UMR TETIS" style="max-height:80px;width:auto;"></a><div class="logo-caption">UMR TETIS / INRAE<br>J.-B. F&eacute;ret &mdash; leaf &amp; canopy model development (PROSPECT, PROSAIL)</div></div>
+  <div class="logo-item"><a href="https://www.inrae.fr/" target="_blank"><img src="assets/logo_inrae.svg" alt="INRAE" style="max-height:70px;width:auto;"></a><div class="logo-caption">INRAE</div></div>
+  <div class="logo-item"><a href="https://www.utwente.nl/en/itc/" target="_blank"><img src="assets/logo_ITC.png" alt="ITC Faculty, University of Twente" style="max-height:50px;width:auto;"></a><div class="logo-caption">ITC, University of Twente<br>Y. Zeng &amp; Bob Su &mdash; STEMMUS-SCOPE developers</div></div>
+</div>
+<div class="section-title" style="margin-top:26px">Research Collaborators &amp; Users</div>
+<div class="logo-grid">
+  <div class="logo-item"><a href="https://qaafi.uq.edu.au/" target="_blank"><img src="assets/UQ-QAAFI-wordmark-DAF-2019.jpg" alt="QAAFI, University of Queensland" style="max-height:100px;width:auto;"></a><div class="logo-caption">QAAFI &mdash; University of Queensland</div></div>
+  <div class="logo-item"><a href="https://www.ias.csic.es/" target="_blank"><img src="assets/logo_IAS-CSIC.jpg" alt="IAS-CSIC" style="max-height:100px;width:auto;"></a><div class="logo-caption">IAS-CSIC, C&oacute;rdoba, Spain</div></div>
+  <div class="logo-item"><a href="https://www.unileon.es/" target="_blank"><img src="assets/logo_ULeon.png" alt="Universidad de Le&oacute;n" style="max-height:100px;width:auto;"></a><div class="logo-caption">Universidad de Le&oacute;n</div></div>
+</div>
 </div>
 
 <script>
