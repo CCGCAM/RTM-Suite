@@ -114,12 +114,41 @@ PROSAIL rsot (canopy)        n=126060   RMSE=0.000e+00  maxdiff=0.000e+00  R2=1.
   </div>
 
   <div class="toc">
+    <a href="#lut">The LUT used</a>
     <a href="#prospect-d">PROSPECT-D</a>
     <a href="#prospect-pro">PROSPECT-PRO</a>
     <a href="#prosail">PROSAIL (4SAIL)</a>
     <a href="#pdb-vs-pro">dataSpec_PDB vs. PRO</a>
     <a href="#sensitivity">Sensitivity check (Cab sweep)</a>
     <a href="#reproduce">Reproduce this yourself</a>
+  </div>
+
+  <h2 id="lut"><span class="kicker">Same inputs, both packages</span>The LUT used: 60 simulations, ranges and fixed values</h2>
+  <p class="desc">One shared LUT, <code>getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 60, setseed = 42)</code> &mdash; every table above runs both packages from these same 60 rows. <code>inputsPROSAIL</code> allows wider nominal ranges for several parameters, but marks some of them "use default" instead of sampled; the ranges below are what the 60 rows actually realized, not the nominal spec.</p>
+  <div class="card">
+    <table>
+      <tr><th>Parameter</th><th>Realized range (60 sims)</th><th>Units</th></tr>
+      <tr><td>Cab (chlorophyll)</td><td>9.5 &ndash; 72.5</td><td>&micro;g/cm&sup2;</td></tr>
+      <tr><td>Car (carotenoid)</td><td>1.5 &ndash; 14.6</td><td>&micro;g/cm&sup2;</td></tr>
+      <tr><td>Anth (anthocyanin)</td><td>0.02 &ndash; 4.33</td><td>&micro;g/cm&sup2;</td></tr>
+      <tr><td>Cbrown (brown pigment)</td><td>0.08 &ndash; 0.96</td><td>arbitrary units</td></tr>
+      <tr><td>EWT (equivalent water thickness)</td><td>0.0010 &ndash; 0.0349</td><td>cm</td></tr>
+      <tr><td>Prot (protein)</td><td>0.0014 &ndash; 0.0291</td><td>g/cm&sup2;</td></tr>
+      <tr><td>CBC (carbon-based constituents)</td><td>0.0003 &ndash; 0.0298</td><td>g/cm&sup2;</td></tr>
+      <tr><td>N (leaf structure)</td><td>1.50 &ndash; 2.46</td><td>&mdash;</td></tr>
+      <tr><td>LIDFa (leaf angle distribution)</td><td>30.5 &ndash; 69.9</td><td>degree</td></tr>
+      <tr><td>LAI (leaf area index)</td><td>2.02 &ndash; 4.95</td><td>m&sup2;/m&sup2;</td></tr>
+      <tr><td>tto (view zenith angle)</td><td>15.1 &ndash; 29.8</td><td>degree</td></tr>
+    </table>
+    <table style="margin-top: 18px;">
+      <tr><th>Held fixed (all 60 sims)</th><th>Value</th><th>Why</th></tr>
+      <tr><td>LMA (lumped dry matter)</td><td>0</td><td>PRO mode: dry matter comes from Prot+CBC instead</td></tr>
+      <tr><td>alpha (incidence solid angle)</td><td>40&deg;</td><td>standard leaf-optics convention</td></tr>
+      <tr><td>LIDFb / TypeLidf</td><td>0 / 2</td><td>ellipsoidal LIDF (type 2), only LIDFa varies</td></tr>
+      <tr><td>hspot (hotspot parameter)</td><td>0</td><td>default</td></tr>
+      <tr><td>tts (sun zenith angle)</td><td>0&deg;</td><td>default</td></tr>
+      <tr><td>psi (relative azimuth)</td><td>0&deg;</td><td>default</td></tr>
+    </table>
   </div>
 
   <div class="summary-grid">
