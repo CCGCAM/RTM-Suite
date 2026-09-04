@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparing PROSPECT-D and PRO with the packages originally developed by Féret</title>
+<meta name="description" content="RTM-Suite's PROSPECT-D, PROSPECT-PRO and PROSAIL (4SAIL) compared numerically against Jean-Baptiste Féret's original R packages, across 60 shared random simulations.">
+<style>
+  :root { --brand:#0f3d5c; --brand-light:#1a6ea8; --text-muted:#5c6b76; --border-soft:#e1e7ea; --bg-light:#f5f8fa; --radius-lg:14px; --radius-sm:10px; --card-shadow:0 1px 3px rgba(15,61,92,0.08); }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; color: #1c2b33; background: #fff; line-height: 1.5; }
+  .navbar { position: sticky; top: 0; z-index: 999; background: var(--brand); color: #fff; }
+  .nav-container { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .nav-logo { font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+  .nav-logo span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); letter-spacing: 0.04em; }
+  .nav-links { display: flex; gap: 22px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; flex-wrap: wrap; }
+  .nav-links a { color: #fff; opacity: 0.85; transition: opacity 0.2s; }
+  .nav-links a:hover, .nav-links a.active { opacity: 1; }
+  .nav-links a.active { border-bottom: 2px solid #fff; }
+  .nav-cta { background: #2bb3a3; color: #fff !important; opacity: 1 !important; padding: 6px 16px; border-radius: 999px; font-weight: 600; transition: background 0.2s, transform 0.15s; }
+  .nav-cta:hover { background: #23998b; transform: translateY(-1px); }
+  .nav-toggle { display: none; background: none; border: 1px solid rgba(255,255,255,0.5); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 18px; line-height: 1; cursor: pointer; }
+  @media (max-width: 900px) {
+    .nav-toggle { display: block; }
+    .nav-links { display: none; width: 100%; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 0 16px; }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 8px 4px; width: 100%; }
+    .nav-links a.nav-cta { width: auto; margin-top: 6px; }
+  }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 40px 24px 80px; }
+  a { color: var(--brand-light); }
+  h1 { font-size: 26px; margin: 0 0 8px; color: var(--brand); }
+  .subtitle { color: var(--text-muted); font-size: 15px; max-width: 760px; margin-bottom: 22px; }
+  h2 { font-size: 21px; color: var(--brand); margin: 46px 0 6px; scroll-margin-top: 20px; }
+  h2 .kicker { display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-light); margin-bottom: 3px; }
+  h3 { font-size: 15.5px; color: var(--brand); margin: 22px 0 6px; }
+  .desc { color: var(--text-muted); font-size: 14px; max-width: 760px; margin-bottom: 18px; }
+  .card { background: #fff; border: 1px solid var(--border-soft); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); padding: 22px; margin-bottom: 10px; }
+  .card img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border-soft); }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+  td:first-child { color: var(--text-muted); }
+  code { background: var(--bg-light); padding: 1px 5px; border-radius: 4px; font-size: 0.92em; }
+  pre { background: #0b1720; color: #e5e7eb; border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 12.5px; line-height: 1.55; }
+  pre code { background: none; padding: 0; color: inherit; }
+  .back { display: inline-block; margin-bottom: 24px; font-size: 13px; }
+  .r2-badge { display: inline-block; background: #e8f5e9; color: #1b5e20; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; }
+  .r2-badge.warn { background: #fff3e0; color: #8a4b00; }
+  .fixed-banner { display: flex; gap: 12px; align-items: flex-start; background: #e8f5e9; border: 1px solid #b7e0bb; border-radius: 14px; padding: 16px 20px; margin: 18px 0 8px; }
+  .fixed-banner .icon { font-size: 20px; line-height: 1; }
+  .fixed-banner strong { color: #1b5e20; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+  .toc a { display: inline-block; background: var(--bg-light); border: 1px solid var(--border-soft); border-radius: 999px; padding: 6px 14px; font-size: 13px; color: var(--brand); text-decoration: none; }
+  .toc a:hover { border-color: var(--brand-light); }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 18px 0 8px; }
+  .stat-card { background: var(--bg-light); border-radius: var(--radius-sm); padding: 14px 16px; }
+  .stat-card .n { font-size: 22px; font-weight: 700; color: var(--brand); }
+  .stat-card .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">RTM-Suite<span>Radiative transfer modelling, R + Python</span></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html#packages">Packages</a>
+      <a href="index.html#docs">Documentation</a>
+      <a href="index.html#tutorials">Tutorials</a>
+      <a href="comparison.html">R vs Python</a>
+      <a href="comparison-jbferet.html" class="active">vs. jbferet originals</a>
+      <a href="index.html#related">R Ecosystem</a>
+      <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
+    </nav>
+  </div>
+</header>
+<script>
+  (function () {
+    var toggle = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    if (!toggle || !links) return;
+    toggle.addEventListener('click', function () {
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+</script>
+
+<div class="wrap">
+  <a class="back" href="index.html">&larr; RTM-Suite home</a>
+  <h1>Comparing PROSPECT-D and PRO with the packages originally developed by F&eacute;ret</h1>
+  <p class="subtitle">The <a href="comparison.html">R vs Python page</a> checks that RTM-Suite's own two language implementations agree with <em>each other</em>. This page asks a different question: do RTM-Suite's R ports of PROSPECT-D, PROSPECT-PRO and PROSAIL (4SAIL) agree with <strong>Jean-Baptiste F&eacute;ret's original reference R packages</strong> &mdash; <a href="https://github.com/jbferet/prospect" target="_blank"><code>prospect</code></a> and <a href="https://github.com/jbferet/prosail" target="_blank"><code>prosail</code></a> &mdash; that ToolsRTM's leaf and canopy models were originally ported from? 60 simulations, one shared randomly-sampled LUT (<code>getLUT(inputsPROSAIL)</code>, seed 42), both packages run independently from the same inputs.</p>
+
+  <div class="fixed-banner">
+    <span class="icon">&#9989;</span>
+    <div><strong>Comparison successful.</strong> Both PROSPECT leaf versions (D and PRO) and PROSAIL (4SAIL) match Jean-Baptiste F&eacute;ret's original packages &mdash; PROSPECT-PRO and PROSAIL to exact machine precision, PROSPECT-D to R&sup2;&gt;0.9999997. Verified in R, log below.</div>
+  </div>
+  <div class="card">
+<pre><code>&gt; source("compare_batch.R")   # 60 simulations, shared LUT, seed 42
+Valid sims -- D: 60 / 60  PRO: 60 / 60  Canopy: 60 / 60
+PROSPECT-D reflectance       n=126060   RMSE=8.0e-05  maxdiff=6.5e-04  R2=0.99999973
+PROSPECT-PRO reflectance     n=126060   RMSE=0.000e+00  maxdiff=0.000e+00  R2=1.00000000
+PROSPECT-PRO transmittance   n=126060   RMSE=0.000e+00  maxdiff=0.000e+00  R2=1.00000000
+PROSAIL rsot (canopy)        n=126060   RMSE=0.000e+00  maxdiff=0.000e+00  R2=1.00000000
+</code></pre>
+  </div>
+
+  <div class="toc">
+    <a href="#prospect-d">PROSPECT-D</a>
+    <a href="#prospect-pro">PROSPECT-PRO</a>
+    <a href="#prosail">PROSAIL (4SAIL)</a>
+    <a href="#pdb-vs-pro">dataSpec_PDB vs. PRO</a>
+    <a href="#sensitivity">Sensitivity check (Cab sweep)</a>
+    <a href="#reproduce">Reproduce this yourself</a>
+  </div>
+
+  <div class="summary-grid">
+    <div class="stat-card"><div class="n">R&sup2;=0.9999997</div><div class="lbl">PROSPECT-D reflectance, 60 sims &times; 2101 wavelengths</div></div>
+    <div class="stat-card"><div class="n">R&sup2;=1.0000000</div><div class="lbl">PROSPECT-PRO reflectance, 60 sims &times; 2101 wavelengths</div></div>
+    <div class="stat-card"><div class="n">R&sup2;=1.0000000</div><div class="lbl">PROSAIL (PROSPECT-PRO+4SAIL) rsot, 60 sims</div></div>
+    <div class="stat-card"><div class="n">60 / 60</div><div class="lbl">simulations valid on both sides, every comparison</div></div>
+  </div>
+
+  <h2 id="prospect-d"><span class="kicker">vs. jbferet <code>prospect</code></span>PROSPECT-D</h2>
+  <p class="desc">Leaf structure (<code>N</code>), chlorophyll, carotenoid, anthocyanin, brown pigment, water and lumped dry-matter (<code>LMA</code>) content &mdash; the classic PROSPECT-D parameterization, no protein/carbon split. ToolsRTM's <code>prospect_DB()</code> vs. jbferet's <code>prospect()</code> (with <code>prot=cbc=0</code>), same inputs, full 400&ndash;2500&nbsp;nm reflectance and transmittance.</p>
+  <div class="card">
+    <img src="assets/comparison_jbferet_prospect_d.png" alt="PROSPECT-D example spectrum: reflectance (lower curve, labeled) and 1-minus-transmittance (upper curve, labeled) -- ToolsRTM black solid vs jbferet original red dashed, fully overlapping -- plus a scatter plot of all 60 simulations tight on the 1:1 line">
+    <table>
+      <tr><th>Output</th><th>Valid sims</th><th>RMSE</th><th>Max abs diff</th><th>R&sup2;</th></tr>
+      <tr><td>Reflectance</td><td>60/60</td><td>8.0 &times; 10<sup>-5</sup></td><td>6.5 &times; 10<sup>-4</sup></td><td class="r2-badge">0.99999973</td></tr>
+      <tr><td>Transmittance</td><td>60/60</td><td>8.0 &times; 10<sup>-5</sup></td><td>6.4 &times; 10<sup>-4</sup></td><td class="r2-badge">0.99999962</td></tr>
+    </table>
+  </div>
+
+  <h2 id="prospect-pro"><span class="kicker">vs. jbferet <code>prospect</code></span>PROSPECT-PRO</h2>
+  <p class="desc">Same leaf model, but dry matter split into protein (<code>Prot</code>) and non-protein carbon-based constituents (<code>CBC</code>) instead of one lumped <code>LMA</code> term &mdash; ToolsRTM's <code>prospect_PRO()</code> vs. jbferet's <code>prospect()</code> (with <code>lma=0</code>, <code>prot</code>/<code>cbc</code> from the same LUT columns).</p>
+  <div class="card">
+    <img src="assets/comparison_jbferet_prospect_pro.png" alt="PROSPECT-PRO example spectrum: reflectance (lower curve, labeled) and 1-minus-transmittance (upper curve, labeled) -- ToolsRTM black solid vs jbferet original red dashed, fully overlapping -- plus a scatter plot of all 60 simulations tight on the 1:1 line">
+    <table>
+      <tr><th>Output</th><th>Valid sims</th><th>RMSE</th><th>Max abs diff</th><th>R&sup2;</th></tr>
+      <tr><td>Reflectance</td><td>60/60</td><td>0.0</td><td>0.0</td><td class="r2-badge">1.00000000</td></tr>
+      <tr><td>Transmittance</td><td>60/60</td><td>0.0</td><td>0.0</td><td class="r2-badge">1.00000000</td></tr>
+    </table>
+  </div>
+  <p class="desc" style="margin-top: 10px;">Exact machine-precision agreement across all 60 simulations.</p>
+
+  <h2 id="prosail"><span class="kicker">vs. jbferet <code>prosail</code></span>PROSAIL &mdash; PROSPECT-PRO + 4SAIL</h2>
+  <p class="desc">The full canopy chain: PROSPECT-PRO leaf optics feeding ToolsRTM's <code>foursail()</code> vs. jbferet's <code>prosail()</code> wrapper (which couples the same leaf model to its own <code>fourSAIL()</code>). Same LIDF, LAI, hotspot, sun/view geometry and a flat soil reflectance (0.15) on both sides; bi-directional reflectance factor (<code>rsot</code>) compared.</p>
+  <div class="card">
+    <img src="assets/comparison_jbferet_prosail.png" alt="PROSAIL example spectrum overlay, fully overlapping, and scatter plot of all 60 simulations tight on the 1:1 line">
+    <table>
+      <tr><th>Output</th><th>Valid sims</th><th>RMSE</th><th>Max abs diff</th><th>R&sup2;</th></tr>
+      <tr><td>rsot (bi-directional reflectance factor)</td><td>60/60</td><td>0.0</td><td>0.0</td><td class="r2-badge">1.00000000</td></tr>
+    </table>
+  </div>
+  <p class="desc" style="margin-top: 10px;">Exact agreement across the full canopy chain, all 60 simulations.</p>
+
+  <h3 id="pdb-vs-pro">Another check: ToolsRTM's own dataSpec_PDB vs. dataSpec_PRO</h3>
+  <p class="desc">ToolsRTM actually ships <em>two</em> separate coefficient tables &mdash; <code>dataSpec_PDB</code> for PROSPECT-D and <code>dataSpec_PRO</code> for PROSPECT-PRO &mdash; sourced independently rather than one derived from the other. Comparing their shared physical columns wavelength-by-wavelength is a useful independent sanity check, unrelated to the jbferet comparison above:</p>
+  <div class="card">
+    <table>
+      <tr><th>Shared column</th><th>Max abs diff</th><th>Mean abs diff</th></tr>
+      <tr><td>Refractive index</td><td>0.0</td><td>0.0</td></tr>
+      <tr><td>Cab coefficient</td><td>5.0 &times; 10<sup>-5</sup></td><td>3.2 &times; 10<sup>-6</sup></td></tr>
+      <tr><td>Car coefficient</td><td>5.0 &times; 10<sup>-4</sup></td><td>1.3 &times; 10<sup>-5</sup></td></tr>
+      <tr><td>Anth coefficient</td><td>5.0 &times; 10<sup>-5</sup></td><td>2.7 &times; 10<sup>-6</sup></td></tr>
+      <tr><td>Brown-pigment coefficient</td><td>5.0 &times; 10<sup>-4</sup></td><td>4.0 &times; 10<sup>-5</sup></td></tr>
+      <tr><td>EWT (water) coefficient</td><td>5.0 &times; 10<sup>-1</sup></td><td>1.8 &times; 10<sup>-2</sup></td></tr>
+      <tr><td>Dry-matter coefficient (<code>Cm</code>)</td><td>3.0 &times; 10<sup>-1</sup></td><td>7.5 &times; 10<sup>-3</sup></td></tr>
+    </table>
+  </div>
+  <p class="desc" style="margin-top: 10px;">All small &mdash; consistent with two independently-exported historical tables (different rounding/precision at their respective source). One thing that <em>isn't</em> directly comparable: PROSPECT-PRO's split of dry matter into protein + carbon-based coefficients (<code>spA_Protein + spA_nonPro</code>) doesn't line up wavelength-by-wavelength with PROSPECT-D's single <code>Cm</code> coefficient (they average the same total dry-matter absorption very differently across the spectrum) &mdash; an intentional difference between the two papers' parameterizations.</p>
+
+  <h2 id="sensitivity"><span class="kicker">Beyond one example point</span>Sensitivity check: sweeping chlorophyll (Cab)</h2>
+  <p class="desc">The tables above compare 60 random simulations, but it's easy to wonder whether agreement holds only near the specific values those draws happened to land on. This sweeps chlorophyll content (Cab = 10, 25, 40, 55, 70 &mu;g/cm&sup2;) through PROSAIL end to end, everything else held fixed, ToolsRTM vs. jbferet's original at every value.</p>
+  <div class="card">
+    <img src="assets/comparison_jbferet_sensitivity_cab.png" alt="PROSAIL sensitivity to chlorophyll (Cab), five values swept, each colored differently: ToolsRTM (solid) vs jbferet original (dashed, same color per Cab) exactly overlapping in a zoomed visible-NIR edge panel and across the full spectrum">
+  </div>
+  <p class="desc" style="margin-top: 10px;">Each Cab value gets its own color for both the solid (ToolsRTM) and dashed (jbferet) line, so a true per-Cab mismatch would show as a visible gap in its own color &mdash; there isn't one anywhere, including at the chlorophyll absorption peak (&asymp;550&ndash;680&nbsp;nm) where Cab's effect is strongest and any porting drift would show up most clearly.</p>
+
+  <h2 id="reproduce">Reproduce this yourself</h2>
+  <p class="desc">jbferet's original packages aren't on CRAN. <code>prospect</code> is installed for real (<code>devtools::install_local()</code>) since its <code>::</code>-qualified internal calls need it on the search path; <code>prosail</code> is only <code>source()</code>'d directly &mdash; its forward-simulation functions (<code>prosail()</code>, <code>fourSAIL()</code>) don't touch the package's heavier inversion/hybrid-ML dependencies (raster, terra, sf, mlr...), so a full install of <code>prosail</code> isn't necessary just to compare simulations.</p>
+  <div class="card" style="padding: 16px 22px;">
+    <code># Shell: get the source</code><br>
+    <code>git clone https://github.com/jbferet/prospect.git</code><br>
+    <code>git clone https://github.com/jbferet/prosail.git</code>
+  </div>
+  <div class="card">
+<pre><code>\# R: install prospect for real (needed so its internal `prospect::` calls resolve)
+install.packages("NlcOptim")  # only missing dependency; everything else Imports is on CRAN
+devtools::install_local("prospect", dependencies = FALSE, upgrade = "never")
+
+library(ToolsRTM)
+library(prospect)
+
+\# source prosail's R/ files directly -- no install needed for forward simulation
+prosail_dir <- "prosail"  # path to the cloned repo
+for (f in list.files(file.path(prosail_dir, "R"), pattern = "\\.R$", full.names = TRUE))
+  source(f)
+
+spec &lt;- prospect::spec_prospect_full_range
+lam  &lt;- spec$lambda
+
+\# one shared, randomly-sampled LUT -- same inputs feed both packages
+LUT &lt;- as.data.frame(getLUT(inputs = ToolsRTM::inputsPROSAIL, nLUT = 60, setseed = 42))
+rsoil &lt;- rep(0.15, length(lam))
+
+row &lt;- LUT[1, ]  # any row -- this repeats per simulation in the real comparison
+
+\# ---- PROSPECT-PRO: ToolsRTM vs. jbferet's prospect() ----
+rtm_leaf &lt;- prospect_PRO(N = row$N, Cab = row$Cab, Car = row$Car, Anth = row$Anth,
+                          Cbrown = row$Cbrown, EWT = row$EWT, LMA = 0,
+                          alpha = row$alpha, Prot = row$Prot, CBC = row$CBC)
+jb_leaf  &lt;- prospect::prospect(spec_prospect = spec, n_struct = row$N, chl = row$Cab,
+                          car = row$Car, ant = row$Anth, brown = row$Cbrown, ewt = row$EWT,
+                          lma = 0, prot = row$Prot, cbc = row$CBC, alpha = row$alpha)
+cat("Reflectance R2:", 1 - sum((rtm_leaf$refl - jb_leaf$reflectance)^2) /
+      sum((rtm_leaf$refl - mean(rtm_leaf$refl))^2), "\n")
+
+\# ---- PROSAIL: ToolsRTM's foursail() vs. jbferet's prosail() wrapper ----
+lut_row &lt;- row; lut_row$LMA &lt;- 0
+rtm_canopy &lt;- foursail(rsoil = rsoil, inputLUT = lut_row,
+                        LeafModel = "PROSPECT-PRO", spectrum.all = TRUE)
+input_prospect_jb &lt;- data.frame(n_struct = row$N, chl = row$Cab, car = row$Car,
+                        ant = row$Anth, brown = row$Cbrown, ewt = row$EWT, lma = 0,
+                        prot = row$Prot, cbc = row$CBC)
+jb_canopy &lt;- prosail(spec_sensor = spec, input_prospect = input_prospect_jb,
+                        alpha = row$alpha, type_lidf = 2, lidf_a = row$LIDFa,
+                        lai = row$LAI, hotspot = row$hspot, tts = row$tts,
+                        tto = row$tto, psi = row$psi, rsoil = rsoil, SAILversion = "4SAIL")
+plot(lam, rtm_canopy$rsot, type = "l", xlab = "Wavelength (nm)", ylab = "rsot")
+lines(lam, jb_canopy$rsot, col = "red", lty = 2)  # ToolsRTM vs. jbferet original
+</code></pre>
+  </div>
+  <p class="desc" style="margin-top: 10px;">Loop that over <code>seq_len(nrow(LUT))</code> and accumulate <code>rtm_*</code>/<code>jb_*</code> into vectors to reproduce the full 60-simulation tables above, or slice by wavelength (<code>lam &gt;= 1300 &amp; lam &lt; 1450</code>) to reproduce the per-wavelength SWIR breakdown.</p>
+
+  <p style="margin-top: 40px; font-size: 12.5px; color: var(--text-muted);">See also the <a href="index.html#related">R Ecosystem</a> section for direct links to <a href="https://github.com/jbferet/prospect" target="_blank">prospect</a>, <a href="https://github.com/jbferet/prosail" target="_blank">prosail</a> and <a href="https://github.com/jbferet/biodivMapR" target="_blank">biodivMapR</a>, and the <a href="index.html#collaborators">Contributors &amp; Collaborators</a> section for the collaboration with Jean-Baptiste F&eacute;ret (UMR TETIS, INRAE).</p>
+</div>
+</body>
+</html>

@@ -179,6 +179,7 @@ img.zoomable { cursor: zoom-in; }
       <a href="#tutorials">Tutorials</a>
       <a href="#examples">Examples</a>
       <a href="comparison.html">R vs Python</a>
+      <a href="comparison-jbferet.html">vs. jbferet originals</a>
       <a href="#related">R Ecosystem</a>
       <a href="#development">Contributors</a>
       <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
@@ -311,6 +312,15 @@ img.zoomable { cursor: zoom-in; }
       <div class="shot-card">
         <img src="assets/validation_prospectD_angers_examples.png" alt="Four example leaves spanning a wide chlorophyll range: measured (black) vs PROSPECT-D simulated (red) reflectance and 1-transmittance, closely overlapping">
         <div class="shot-caption">PROSPECT-D vs. <a href="comparison.html#real-data">308 real measured leaves</a> (Angers database) — validated against reality, not just against Python.</div>
+      </div>
+    </div>
+
+    <h3 style="font-size: 18px; color: var(--brand); margin: 30px 0 4px;">Comparing PROSPECT-D and PRO with the packages originally developed by F&eacute;ret</h3>
+    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">A different kind of check: not R vs. Python, but RTM-Suite's own leaf/canopy ports vs. <strong>Jean-Baptiste F&eacute;ret's original reference R packages</strong> (<code>prospect</code>, <code>prosail</code>) that ToolsRTM was originally ported from. <a href="comparison-jbferet.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">Comparing PROSPECT-D and PRO with the packages originally developed by F&eacute;ret &rarr;</a></p>
+    <div class="shot-grid">
+      <div class="shot-card">
+        <img src="assets/comparison_jbferet_sensitivity_cab.png" alt="PROSAIL sensitivity to chlorophyll (Cab), five values swept, each colored differently: ToolsRTM (solid) vs jbferet original (dashed, same color per Cab) exactly overlapping in a zoomed visible-NIR edge panel and across the full spectrum">
+        <div class="shot-caption">A chlorophyll (Cab) sensitivity sweep through PROSAIL — ToolsRTM and F&eacute;ret's original stay tightly matched across the whole trait range, not just at one example point. <a href="comparison-jbferet.html#prosail">See the full 60-simulation comparison &rarr;</a></div>
       </div>
     </div>
   </div>
@@ -964,6 +974,7 @@ for cab in np.linspace(10, 80, 20):
         <div class="card-links">
           <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
           <a class="badge-link" href="https://github.com/jbferet/prospect" target="_blank"><img src="https://img.shields.io/badge/GitHub-prospect-181717?logo=github&logoColor=white" alt="prospect on GitHub"></a>
+          <a class="badge-link" href="comparison-jbferet.html#prospect-d">Numeric comparison &rarr;</a>
         </div>
       </div>
       <div class="card">
@@ -972,6 +983,7 @@ for cab in np.linspace(10, 80, 20):
         <div class="card-links">
           <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white" alt="R">
           <a class="badge-link" href="https://github.com/jbferet/prosail" target="_blank"><img src="https://img.shields.io/badge/GitHub-prosail-181717?logo=github&logoColor=white" alt="prosail on GitHub"></a>
+          <a class="badge-link" href="comparison-jbferet.html#prosail">Numeric comparison &rarr;</a>
         </div>
       </div>
       <div class="card">
