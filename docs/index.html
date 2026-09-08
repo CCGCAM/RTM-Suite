@@ -178,8 +178,7 @@ img.zoomable { cursor: zoom-in; }
       <a href="#apps">Apps</a>
       <a href="#tutorials">Tutorials</a>
       <a href="#examples">Examples</a>
-      <a href="comparison.html">R vs Python</a>
-      <a href="comparison-jbferet.html">vs. jbferet originals</a>
+      <a href="#comparisons">Comparisons</a>
       <a href="#related">R Ecosystem</a>
       <a href="#development">Contributors</a>
       <a class="nav-cta" href="https://github.com/CCGCAM/RTM-Suite" target="_blank">GitHub</a>
@@ -302,27 +301,6 @@ img.zoomable { cursor: zoom-in; }
       <a href="https://doi.org/10.5281/zenodo.22134140" target="_blank"><img src="https://zenodo.org/badge/1321341046.svg" alt="DOI"></a>
     </p>
     <p class="section-subtitle" style="max-width: none; margin: 10px 0 0;">A sixth model chain, <strong>STEMMUS + SCOPE</strong> (soil water/heat/air transport coupled to SCOPE's canopy energy balance and fluorescence), is still in development: STEMMUS's own R-vs-Python cross-verification is already real and passing, but STEMMUS and STEMMUS + SCOPE aren't released R/Python packages yet — their exact package boundaries are still being decided, so there's no public interactive function explorer for them yet either.</p>
-    <h3 style="font-size: 18px; color: var(--brand); margin: 20px 0 4px;">Same models, both languages — do they agree?</h3>
-    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python. <a href="function-universe-stemmus-inprogress.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">STEMMUS R vs Python verification (draft preview, in development) &rarr;</a></p>
-    <div class="shot-grid">
-      <div class="shot-card">
-        <img src="assets/comparison_allmodels_spectra_grid.png" alt="15-panel grid of simulated reflectance spectra, R (black) vs Python (red dashed) fully overlapping, one panel per leaf x canopy model combination">
-        <div class="shot-caption">Simulated spectra, R vs. Python fully overlapping across every model pairing — <a href="comparison.html#leaf-canopy">see all 15, R&sup2;=1.00000000</a>.</div>
-      </div>
-      <div class="shot-card">
-        <img src="assets/validation_prospectD_angers_examples.png" alt="Four example leaves spanning a wide chlorophyll range: measured (black) vs PROSPECT-D simulated (red) reflectance and 1-transmittance, closely overlapping">
-        <div class="shot-caption">PROSPECT-D vs. <a href="comparison.html#real-data">308 real measured leaves</a> (Angers database) — validated against reality, not just against Python.</div>
-      </div>
-    </div>
-
-    <h3 style="font-size: 18px; color: var(--brand); margin: 30px 0 4px;">Comparing PROSPECT-D and PRO with the packages originally developed by F&eacute;ret</h3>
-    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">A different kind of check: not R vs. Python, but RTM-Suite's own leaf/canopy ports vs. <strong>Jean-Baptiste F&eacute;ret's original reference R packages</strong> (<code>prospect</code>, <code>prosail</code>) that ToolsRTM was originally ported from. <a href="comparison-jbferet.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">Comparing PROSPECT-D and PRO with the packages originally developed by F&eacute;ret &rarr;</a></p>
-    <div class="shot-grid">
-      <div class="shot-card">
-        <img src="assets/comparison_jbferet_sensitivity_cab.png" alt="PROSAIL sensitivity to chlorophyll (Cab), five values swept, each colored differently: ToolsRTM (solid) vs jbferet original (dashed, same color per Cab) exactly overlapping in a zoomed visible-NIR edge panel and across the full spectrum">
-        <div class="shot-caption">A chlorophyll (Cab) sensitivity sweep through PROSAIL — ToolsRTM and F&eacute;ret's original stay tightly matched across the whole trait range, not just at one example point. <a href="comparison-jbferet.html#prosail">See the full 60-simulation comparison &rarr;</a></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -951,6 +929,50 @@ for cab in np.linspace(10, 80, 20):
     </div>
     </div>
 
+  </div>
+</section>
+
+<section id="comparisons">
+  <div class="section-inner">
+    <div class="section-kicker">Verification</div>
+    <h2 class="section-title">Comparisons &amp; verification</h2>
+    <p class="section-subtitle" style="max-width: none;">Two independent checks that the models can be trusted &mdash; do the R and Python ports agree with each other, and do RTM-Suite's own leaf/canopy models agree with the original reference implementations they were ported from.</p>
+    <div class="doc-grid">
+      <a class="doc-card" href="comparison.html">
+        <h3>R vs Python &rarr;</h3>
+        <p>Independent simulations from shared LUTs through both implementations &mdash; all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 &mdash; plus PROSPECT-D validated against 308 real measured leaves (Angers database), not just against Python.</p>
+      </a>
+      <a class="doc-card" href="comparison-jbferet.html">
+        <h3>vs. jbferet originals &rarr;</h3>
+        <p>Not R vs. Python, but RTM-Suite's own PROSPECT-D/PRO and PROSAIL ports checked against <strong>Jean-Baptiste F&eacute;ret's</strong> original reference R packages (<code>prospect</code>, <code>prosail</code>) that ToolsRTM was originally ported from.</p>
+      </a>
+      <a class="doc-card" href="function-universe-stemmus-inprogress.html">
+        <h3>STEMMUS R vs Python &rarr; <span style="font-weight: 400; color: var(--text-muted); font-size: 12px;">(draft preview)</span></h3>
+        <p>STEMMUS's own R-vs-Python cross-verification is already real and passing, ahead of STEMMUS + SCOPE's public release as installable R/Python packages.</p>
+      </a>
+    </div>
+
+    <h3 style="font-size: 18px; color: var(--brand); margin: 36px 0 4px;">Same models, both languages — do they agree?</h3>
+    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">Every model above ships twice, in R and in Python. <a href="comparison.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">R vs Python: model comparison &amp; verification &rarr;</a> runs independent simulations from shared LUTs through both implementations — all 15 leaf&times;canopy combinations, SPART, MARMIT (both versions), full SCOPE 2.1 — plus one section that validates PROSPECT-D against 308 real measured leaves rather than against Python. <a href="function-universe-stemmus-inprogress.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">STEMMUS R vs Python verification (draft preview, in development) &rarr;</a></p>
+    <div class="shot-grid">
+      <div class="shot-card">
+        <img src="assets/comparison_allmodels_spectra_grid.png" alt="15-panel grid of simulated reflectance spectra, R (black) vs Python (red dashed) fully overlapping, one panel per leaf x canopy model combination">
+        <div class="shot-caption">Simulated spectra, R vs. Python fully overlapping across every model pairing — <a href="comparison.html#leaf-canopy">see all 15, R&sup2;=1.00000000</a>.</div>
+      </div>
+      <div class="shot-card">
+        <img src="assets/validation_prospectD_angers_examples.png" alt="Four example leaves spanning a wide chlorophyll range: measured (black) vs PROSPECT-D simulated (red) reflectance and 1-transmittance, closely overlapping">
+        <div class="shot-caption">PROSPECT-D vs. <a href="comparison.html#real-data">308 real measured leaves</a> (Angers database) — validated against reality, not just against Python.</div>
+      </div>
+    </div>
+
+    <h3 style="font-size: 18px; color: var(--brand); margin: 30px 0 4px;">Comparing PROSPECT-D and PRO with the packages originally developed by F&eacute;ret</h3>
+    <p class="section-subtitle" style="max-width: none; margin-bottom: 0;">A different kind of check: not R vs. Python, but RTM-Suite's own leaf/canopy ports vs. <strong>Jean-Baptiste F&eacute;ret's original reference R packages</strong> (<code>prospect</code>, <code>prosail</code>) that ToolsRTM was originally ported from. <a href="comparison-jbferet.html" style="color: var(--brand-light); font-weight: 600; text-decoration: underline;">Comparing PROSPECT-D and PRO with the packages originally developed by F&eacute;ret &rarr;</a></p>
+    <div class="shot-grid">
+      <div class="shot-card">
+        <img src="assets/comparison_jbferet_sensitivity_cab.png" alt="PROSAIL sensitivity to chlorophyll (Cab), five values swept, each colored differently: ToolsRTM (solid) vs jbferet original (dashed, same color per Cab) exactly overlapping in a zoomed visible-NIR edge panel and across the full spectrum">
+        <div class="shot-caption">A chlorophyll (Cab) sensitivity sweep through PROSAIL — ToolsRTM and F&eacute;ret's original stay tightly matched across the whole trait range, not just at one example point. <a href="comparison-jbferet.html#prosail">See the full 60-simulation comparison &rarr;</a></div>
+      </div>
+    </div>
   </div>
 </section>
 
