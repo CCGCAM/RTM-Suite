@@ -417,23 +417,32 @@ def _fit_algorithm(algorithm: str, X_train, y_train, inputs, seed: int):
         importance = {name: float(abs(c)) for name, c in zip(inputs, np.ravel(model.coef_))}
 
     elif algorithm == "SVM":
+        from sklearn.compose import TransformedTargetRegressor
         from sklearn.svm import SVR
         from sklearn.pipeline import make_pipeline
         from sklearn.preprocessing import StandardScaler
 
-        # R's e1071::svm() scales its inputs by default (scale=TRUE) -- this
-        # branch's gamma/C grid was chosen to match R's own tuning range
-        # assuming that same scaling, but originally fit a bare SVR with no
-        # scaling at all, so it was searching the right hyperparameter values
-        # for the wrong (unscaled reflectance-magnitude) input space and could
-        # fail to fit at all (e.g. R^2 near 0 on real reflectance data).
-        # StandardScaler here restores the R-equivalent behavior; matches the
-        # NN/BRNN branches below and Ensemble's own inner SVR, which already
-        # scale.
-        pipe = make_pipeline(StandardScaler(), SVR(kernel="rbf"))
-        grid = GridSearchCV(pipe,
-                             {"svr__gamma": [2.0 ** g for g in (-10, -8, -6, -4)],
-                              "svr__C": [2.0 ** c for c in (-5, -3, -1, 1)]},
+        # R's e1071::svm(scale=TRUE) -- the default, relied on (with a comment
+        # saying so) by both ToolsRTM::get.inversion and ::hybrid_inversion --
+        # scales BOTH x and y for regression. This branch's gamma/C grid was
+        # chosen to match R's own tuning range assuming that same scaling, but
+        # originally fit a bare SVR with neither x nor y scaled, so it was
+        # searching the right hyperparameter values for the wrong input space:
+        # unscaled reflectance features (R^2 could come out near 0) AND, for
+        # any trait with a small natural range (e.g. EWT ~0.001-0.035), SVR's
+        # default epsilon=0.1 alone exceeds the entire unscaled target range,
+        # so nothing outside a constant prediction could ever fall inside the
+        # epsilon-insensitive tube (R^2 ~= 0 regardless of the x-scaling fix
+        # above). StandardScaler on x (via the inner pipeline) plus
+        # TransformedTargetRegressor scaling y restores the R-equivalent
+        # scale=TRUE behavior; matches the NN/BRNN branches below and
+        # Ensemble's own inner SVR, which already scale their inputs (though,
+        # like R's own svmRadial step in those branches, not their target).
+        svr_pipe = make_pipeline(StandardScaler(), SVR(kernel="rbf"))
+        model_unfit = TransformedTargetRegressor(regressor=svr_pipe, transformer=StandardScaler())
+        grid = GridSearchCV(model_unfit,
+                             {"regressor__svr__gamma": [2.0 ** g for g in (-10, -8, -6, -4)],
+                              "regressor__svr__C": [2.0 ** c for c in (-5, -3, -1, 1)]},
                              cv=min(5, X_train.shape[0]), scoring="neg_root_mean_squared_error")
         grid.fit(X_train, y_train)
         model = grid.best_estimator_
