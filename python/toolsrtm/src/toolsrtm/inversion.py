@@ -418,9 +418,22 @@ def _fit_algorithm(algorithm: str, X_train, y_train, inputs, seed: int):
 
     elif algorithm == "SVM":
         from sklearn.svm import SVR
+        from sklearn.pipeline import make_pipeline
+        from sklearn.preprocessing import StandardScaler
 
-        grid = GridSearchCV(SVR(kernel="rbf"),
-                             {"gamma": [2.0 ** g for g in (-10, -8, -6, -4)], "C": [2.0 ** c for c in (-5, -3, -1, 1)]},
+        # R's e1071::svm() scales its inputs by default (scale=TRUE) -- this
+        # branch's gamma/C grid was chosen to match R's own tuning range
+        # assuming that same scaling, but originally fit a bare SVR with no
+        # scaling at all, so it was searching the right hyperparameter values
+        # for the wrong (unscaled reflectance-magnitude) input space and could
+        # fail to fit at all (e.g. R^2 near 0 on real reflectance data).
+        # StandardScaler here restores the R-equivalent behavior; matches the
+        # NN/BRNN branches below and Ensemble's own inner SVR, which already
+        # scale.
+        pipe = make_pipeline(StandardScaler(), SVR(kernel="rbf"))
+        grid = GridSearchCV(pipe,
+                             {"svr__gamma": [2.0 ** g for g in (-10, -8, -6, -4)],
+                              "svr__C": [2.0 ** c for c in (-5, -3, -1, 1)]},
                              cv=min(5, X_train.shape[0]), scoring="neg_root_mean_squared_error")
         grid.fit(X_train, y_train)
         model = grid.best_estimator_
